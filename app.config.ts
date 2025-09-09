@@ -16,7 +16,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   ios: {
     ...(config.ios ?? {}),
     supportsTablet: true,
-    bundleIdentifier: config.ios?.bundleIdentifier ?? "com.kiki.procrastination",
+    bundleIdentifier: "com.kkdigitalsolutions.procrastination",
     infoPlist: {
       ...(config.ios?.infoPlist ?? {}),
       ITSAppUsesNonExemptEncryption: false,
@@ -30,7 +30,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       backgroundColor: '#ffffff',
     },
     edgeToEdgeEnabled: true,
-    package: config.android?.package ?? "com.kiki.procrastination",
+    package: "com.kkdigitalsolutions.procrastination",
   },
 
   web: {
