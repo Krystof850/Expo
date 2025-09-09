@@ -56,6 +56,8 @@ const redirectUri = AuthSession.makeRedirectUri({
   scheme: 'myapp',
 });
 
+console.log('[Auth] Redirect URI:', redirectUri);
+
 export async function signInWithGoogle(): Promise<User> {
   try {
     console.log('[Auth] Starting Google Sign In...');
