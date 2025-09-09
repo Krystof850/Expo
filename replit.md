@@ -14,6 +14,9 @@ This is an Expo React Native application with Firebase Authentication integratio
 - ✅ Defensive error handling with AuthErrorBoundary
 - ✅ Smoke test documentation (docs/smoke-test.md)
 - ✅ Environment configuration working (Firebase keys loaded)
+- ✅ **NEW: Google Sign In integration** - Full OAuth flow with expo-auth-session
+- ✅ Google Sign In UI components in both sign-in and sign-up screens
+- ✅ Firebase credential integration for Google OAuth tokens
 
 # User Preferences
 
@@ -41,7 +44,10 @@ Preferred communication style: Simple, everyday language.
 - **Session Management**: initializeAuth with getReactNativePersistence using AsyncStorage
 - **Error Handling**: Custom Czech language error mapping for Firebase auth errors
 - **Form Validation**: Email format validation and password strength requirements (min 6 characters)
-- **Auth Flow**: Email/password sign-up, sign-in, and password reset functionality
+- **Auth Methods**: 
+  - Email/password sign-up, sign-in, and password reset functionality
+  - **Google Sign In**: OAuth flow using expo-auth-session with Firebase credential integration
+- **OAuth Configuration**: Google Client ID integration for seamless Google authentication
 
 ## Component Architecture
 - **Themed Components**: ThemedText and ThemedView components supporting light/dark modes
@@ -65,12 +71,16 @@ Preferred communication style: Simple, everyday language.
   - FIREBASE_STORAGE_BUCKET
   - FIREBASE_MESSAGING_SENDER_ID
   - FIREBASE_APP_ID
+  - **GOOGLE_CLIENT_ID** (for Google Sign In functionality)
 
 ## Core Libraries
 - **@react-native-async-storage/async-storage**: Local storage for session persistence
 - **formik**: Form state management and submission handling
 - **yup**: Schema validation for forms
 - **expo-constants**: Access to app configuration and environment variables
+- **expo-auth-session**: OAuth authentication flows for Google Sign In
+- **expo-web-browser**: Web browser integration for auth flows
+- **expo-crypto**: Cryptographic operations for OAuth PKCE flow
 
 ## Expo SDK Modules
 - **expo-router**: File-based navigation system
