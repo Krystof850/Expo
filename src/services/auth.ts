@@ -52,8 +52,8 @@ export async function sendResetEmail(email: string): Promise<void> {
 // Konfigurace pro Google OAuth
 WebBrowser.maybeCompleteAuthSession();
 
-// Přímo nastavíme redirect URI na hodnotu z Google Cloud Console
-const redirectUri = 'https://auth.expo.io/@anonymous/expo-on-replit';
+// Nastavíme redirect URI přímo
+const redirectUri = 'expo-on-replit://';
 
 console.log('[Auth] Redirect URI:', redirectUri);
 
