@@ -114,19 +114,36 @@ src/
 
 ### "Missing Firebase config" warning
 - Ujisti se, že máš vyplněné všechny FIREBASE_* proměnné v `.env` nebo EAS secrets
-- Restartuj Metro bundler: `r` v terminálu nebo `npx expo start --clear`
+- Restartuj Metro bundler: `r` v terminálu nebo `npm run reset`
+- **Debug**: Zavolej `logFirebaseConfigDebug()` v browser konzoli pro kontrolu runtime configu
 
 ### Auth persistence nefunguje
 - Ujistí se, že používáš `initializeAuth` s `getReactNativePersistence(AsyncStorage)`
 - Zkontroluj, že `@react-native-async-storage/async-storage` je správně nainstalovaný
+- Na webu funguje persistence jinak než v native aplikacích
 
 ### HMR problémy s Firebase auth
 - Firebase auth někdy potřebuje restart při HMR
-- Refreshni stránku nebo restartuj dev server
+- Refreshni stránku nebo restartuj dev server s `npm run reset`
+- Pokud vidíš "already initialized" chyby, restartuj úplně
 
 ### Type errors po updatech
 - Spusť `npx expo install --fix` pro opravu verzí balíčků
 - Případně smaž `node_modules` a spusť `npm install`
+
+### "storageBucket" s `.firebasestorage.app` doménou
+- **Je v pořádku!** Nová Firebase Storage doména `.firebasestorage.app` je validní
+- Stará doména `.appspot.com` také funguje
+
+### Environment variables se nenačítají
+- Zkontroluj, že `app.config.ts` obsahuje `import 'dotenv/config'` na začátku
+- V Replit secrets se proměnné načítají automaticky, `.env` není potřeba
+- Restartuj dev server po změně environment variables
+
+### ErrorBoundary se aktivuje
+- Zkontroluj browser console pro detailní error log
+- Obvykle problém s Firebase konfigurací nebo network
+- Použij "Zkusit znovu" tlačítko nebo restartuj aplikaci
 
 ## Další kroky (volitelné)
 

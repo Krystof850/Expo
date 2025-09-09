@@ -6,6 +6,7 @@ import * as Yup from "yup";
 import { signUpWithEmail } from "../../src/services/auth";
 import { useAuth } from "../../src/context/AuthContext";
 import { FirebaseConfigBanner } from "../../src/components/FirebaseConfigBanner";
+import { AuthErrorBoundary } from "../../src/components/AuthErrorBoundary";
 
 const schema = Yup.object({
   email: Yup.string().email("Neplatný email").required("Povinné"),
@@ -19,9 +20,10 @@ export default function SignUp() {
   if (user) return <Redirect href="/(protected)/" />;
 
   return (
-    <View style={{ flex: 1 }}>
-      <FirebaseConfigBanner />
-      <View style={{ flex: 1, padding: 16, gap: 12, justifyContent: "center" }}>
+    <AuthErrorBoundary>
+      <View style={{ flex: 1 }}>
+        <FirebaseConfigBanner />
+        <View style={{ flex: 1, padding: 16, gap: 12, justifyContent: "center" }}>
         <Text style={{ fontSize: 24, fontWeight: "600" }}>Registrace</Text>
       <Formik
         initialValues={{ email: "", password: "" }}
@@ -68,7 +70,8 @@ export default function SignUp() {
           </>
         )}
       </Formik>
+        </View>
       </View>
-    </View>
+    </AuthErrorBoundary>
   );
 }

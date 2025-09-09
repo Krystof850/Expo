@@ -8,27 +8,39 @@ import {
 
 export async function signUpWithEmail(email: string, password: string): Promise<User> {
   try {
+    console.log('[Auth] Attempting sign up for:', email);
     const cred = await createUserWithEmailAndPassword(auth, email, password);
+    console.log('[Auth] Sign up successful for:', email);
     return cred.user;
   } catch (e: any) {
-    throw new Error(mapAuthError(e));
+    console.error('[Auth] Sign up failed:', e);
+    const friendlyError = mapAuthError(e);
+    throw new Error(friendlyError);
   }
 }
 
 export async function signInWithEmail(email: string, password: string): Promise<User> {
   try {
+    console.log('[Auth] Attempting sign in for:', email);
     const cred = await signInWithEmailAndPassword(auth, email, password);
+    console.log('[Auth] Sign in successful for:', email);
     return cred.user;
   } catch (e: any) {
-    throw new Error(mapAuthError(e));
+    console.error('[Auth] Sign in failed:', e);
+    const friendlyError = mapAuthError(e);
+    throw new Error(friendlyError);
   }
 }
 
 export async function sendResetEmail(email: string): Promise<void> {
   try {
+    console.log('[Auth] Sending password reset email to:', email);
     await sendPasswordResetEmail(auth, email);
+    console.log('[Auth] Password reset email sent successfully');
   } catch (e: any) {
-    throw new Error(mapAuthError(e));
+    console.error('[Auth] Password reset failed:', e);
+    const friendlyError = mapAuthError(e);
+    throw new Error(friendlyError);
   }
 }
 
