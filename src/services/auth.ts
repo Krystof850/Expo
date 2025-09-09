@@ -53,7 +53,7 @@ export async function sendResetEmail(email: string): Promise<void> {
 WebBrowser.maybeCompleteAuthSession();
 
 const redirectUri = AuthSession.makeRedirectUri({
-  scheme: 'myapp',
+  useProxy: true,
 });
 
 console.log('[Auth] Redirect URI:', redirectUri);
