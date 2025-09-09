@@ -1,0 +1,108 @@
+Prompt pro Replit Agenta
+CÍL
+Opravit EAS konfiguraci tak, aby šel spustit iOS development build. Konkrétně:
+- nastavit EAS Project ID v app.config.ts (extra.eas.projectId),
+- přidat/opravit eas.json (cli.appVersionSource="remote", profily development/production),
+- zajistit ios.bundleIdentifier a android.package (jen pokud chybí),
+- přidat fallback .eas/project-id,
+- ověřit konfiguraci příkazem a spustit build,
+- vypsat jasný závěrečný report, co bylo změněno a co mám případně udělat manuálně.
+
+POZNÁMKA
+V logu z předchozího pokusu je EAS project ID: `73574106-d0df-4efd-ba6b-1e1dc7c865ce`. Použij ho jako fallback, pokud ho nezískáš z CLI.
+
+ÚKOLY (PROVEĎ V TOMTO POŘADÍ)
+
+1) Kontrola CLI a přihlášení
+- Přidej EAS CLI jako dev závislost (pro konzistentní verzi v CI/replit):
+  `npm i -D eas-cli`
+- Ověř přihlášení:
+  `npx eas whoami || true`
+  Pokud nejsem přihlášen, napiš do závěrečného reportu, že se mám přihlásit: `npx eas login`.
+
+2) Získání / nastavení EAS Project ID
+- Zkus získat projectId:
+  `npx eas project:info --json > .tmp_eas_info.json || true`
+  Pokud `.tmp_eas_info.json` existuje a obsahuje `projectId`, přečti ho a ulož do proměnné PROJECT_ID.
+- Pokud se nezdaří, nastav PROJECT_ID na:
+  `73574106-d0df-4efd-ba6b-1e1dc7c865ce`  (fallback z logu uživatele).
+- Vytvoř (nebo uprav) soubor `.eas/project-id` s hodnotou PROJECT_ID (idempotentně).
+
+3) app.config.ts – doplnění extra.eas.projectId
+- Otevři `app.config.ts` (pokud existuje `app.json` místo TS, proveď ekvivalentní úpravu v JSON pod "expo.extra.eas.projectId").
+- Zajisti, aby byla exportována struktura:
+  extra: {
+    ...,
+    eas: { projectId: "<PROJECT_ID>" }
+  }
+- Úprava musí být idempotentní: pokud `extra.eas.projectId` existuje, jen ho přepiš na PROJECT_ID.
+- Pokud chybí sekce `ios.bundleIdentifier` nebo `android.package`, doplň:
+  ios: { bundleIdentifier: "com.app.dev" }
+  android: { package: "com.app.dev" }
+  (Přidávat jen pokud chybí; nic nepřepisuj, když už tam je vlastní hodnota.)
+
+4) eas.json – vytvoření / úprava
+- V kořeni vytvoř nebo uprav `eas.json` na tento obsah (zachovej existující pole, pokud jsou navíc; ale ty níže musí být minimálně přítomné):
+
+{
+  "cli": {
+    "version": ">= 10.0.0",
+    "appVersionSource": "remote"
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "ios": { "resourceClass": "m-medium" },
+      "android": { "gradleCommand": ":app:assembleDebug" }
+    },
+    "production": {
+      "ios": { "autoIncrement": "buildNumber" },
+      "android": { "autoIncrement": "versionCode" }
+    }
+  },
+  "submit": {
+    "production": {}
+  }
+}
+
+5) Self-check konfigurace
+- Spusť:
+  `npx expo config --json > .tmp_expo_config.json`
+- Ověř, že v `.tmp_expo_config.json` je `extra.eas.projectId === PROJECT_ID`.
+- Vypiš krátký řádek do reportu s nalezenými hodnotami:
+  - PROJECT_ID
+  - ios.bundleIdentifier
+  - android.package
+
+6) Clean start (kvůli načtení nové config)
+- Spusť: `npx expo start -c` a zase proces ukonči (jen zatešť, že metro bez chyby načte config).
+  Pokud běh v tomto prostředí neumožňuje interaktivní server, přeskoč a pokračuj.
+
+7) Pokus o iOS development build
+- Spusť: `npx eas build -p ios --profile development`
+- Pokud EAS vyžádá Apple credentials a není přihlášení/napojení možné v tomto prostředí, build přeskoč a do závěrečného reportu napiš stručné manuální kroky:
+  - Přihlásit se `npx eas login`,
+  - Při prvním buildu zvolit „Let EAS manage credentials“,
+  - Přihlásit se do Apple Developer účtu,
+  - Build se spustí automaticky.
+
+8) Závěrečný REPORT
+Vypiš (do editoru i do konzole) souhrn:
+- [OK/FAIL] Nastaven PROJECT_ID (hodnota)
+- [OK/FAIL] Zapsán do `.eas/project-id`
+- [OK/FAIL] `extra.eas.projectId` v `app.config.ts`
+- [OK/FAIL] `eas.json` s `cli.appVersionSource="remote"`
+- [OK/FAIL] iOS bundleIdentifier / Android package (uved’ hodnoty)
+- Výsledek `eas build` (link na dashboard, pokud build odstartoval)
+- Pokud něco chybí manuálně, vypiš přesné příkazy pro mě (viz níže)
+
+DOPLŇUJÍCÍ POZNÁMKY PRO REPORT (pro uživatele)
+- Pokud build neodstartoval kvůli Apple přihlášení, napiš mi tyto jasné kroky:
+  1) `npx eas login`
+  2) `npx eas build -p ios --profile development`
+  3) Zvol „Let EAS manage credentials“
+  4) Přihlas se Apple ID (nutné členství v Apple Developer Program)
+  5) Po spuštění buildu sleduj link do EAS dashboardu
+
+— KONEC —
