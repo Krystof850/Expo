@@ -52,11 +52,8 @@ export async function sendResetEmail(email: string): Promise<void> {
 // Konfigurace pro Google OAuth
 WebBrowser.maybeCompleteAuthSession();
 
-// Používáme Expo auth proxy, který se automaticky přesměruje zpět do aplikace
-const redirectUri = AuthSession.makeRedirectUri({
-  scheme: 'expo-on-replit',
-  useProxy: true,
-});
+// Přímo nastavíme redirect URI na hodnotu z Google Cloud Console
+const redirectUri = 'https://auth.expo.io/@anonymous/expo-on-replit';
 
 console.log('[Auth] Redirect URI:', redirectUri);
 
