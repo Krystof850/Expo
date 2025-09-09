@@ -1,0 +1,76 @@
+CÍL (DELTA)
+Projekt už má základ: email/heslo auth, perzistenci přes AsyncStorage, protected routes, Formik/Yup, TS. Prosím proveď DO-KONFIGURACI a AUTOMATICKÉ SELF-CHECKY, aby bylo jisté, že vše běží i v novém prostředí, ať můžu rovnou přihlásit/registrovat.
+
+ÚKOLY
+
+A) Balíčky a skripty
+1) Ověř nainstalované balíčky a verze:
+   - firebase
+   - @react-native-async-storage/async-storage (přes `npx expo install` – musí sedět na RN verzi)
+   - formik, yup
+   - expo-router, react-native-safe-area-context, react-native-screens
+   - (pokud chybí) eslint, prettier
+2) Do package.json doplň/ověř skripty:
+   - "start": "expo start"
+   - "reset": "expo start -c"
+   - "web": "expo start --web"
+   - "lint": "eslint ."
+   - "format": "prettier -w ."
+
+B) ENV a app.config.ts → extra
+1) Založ `.env.example` (pokud není) s klíči:
+   FIREBASE_API_KEY=
+   FIREBASE_AUTH_DOMAIN=
+   FIREBASE_PROJECT_ID=
+   FIREBASE_STORAGE_BUCKET=
+   FIREBASE_MESSAGING_SENDER_ID=
+   FIREBASE_APP_ID=
+2) Zkontroluj `app.config.ts`, že exportuje `extra` s výše uvedenými hodnotami z `process.env` (import "dotenv/config";).
+3) Do `src/lib/firebase.ts` přidej guard-log:
+   - Při chybějících `apiKey/appId/projectId` spusť `console.warn("[Firebase] Missing config ...")` – ale neházej error, ať UI nespadne.
+
+C) Firebase inicializace (Expo perzistence)
+1) Ověř, že `src/lib/firebase.ts` používá:
+   - `initializeAuth(app, { persistence: getReactNativePersistence(AsyncStorage) })`
+   - pro HMR fallback na `getAuth()` (try/catch), aby se auth neinicoval vícekrát.
+2) Ověř exporty `auth`, `db`, `storage`.
+
+D) Router + AuthProvider drátování
+1) Ujisti se, že `app/_layout.tsx` wrapuje celou app do `<AuthProvider>` (z `src/context/AuthContext`).
+2) Ověř, že cesty odpovídají README:
+   - `app/(auth)/sign-in.tsx`, `sign-up.tsx`, `forgot.tsx`
+   - `app/(protected)/index.tsx`
+   - `src/components/Protected.tsx` používá `<Redirect href="/(auth)/sign-in" />`
+3) Do `app/(protected)/index.tsx` přidej tlačítko „Odhlásit“ s voláním `logout()` z `useAuth()`; pokud tam už je, ponech.
+
+E) Formy a validace
+1) Ověř, že Formik/Yup validace běží (min 6 znaků hesla; email email).
+2) Zaved’ mapování Firebase chyb v `src/services/auth.ts` (pokud není), např.:
+   - invalid-credential → „Špatný email nebo heslo“
+   - email-already-in-use → „Email je již registrován“
+   - user-not-found / wrong-password
+3) U `forgot` obrazovky zobraz po úspěchu Alert s potvrzením.
+
+F) Developer UX + Diagnostika
+1) Vytvoř util funkci `assertFirebaseConfig()` (třeba v `src/lib/firebase.ts`) a zavolej ji při mountu `sign-in` i `sign-up`; pokud chybí některá hodnota, ukaž nahoře neintruzivní banner (Text s varováním), co doplnit (jaká ENV).
+2) Do README doplň debug sekci:
+   - jak zobrazit `Constants.expoConfig.extra` v runtime (jednorázový log),
+   - co dělat při HMR auth konfliktu (restart/`reset` skript).
+
+G) Smoke test script
+Do `scripts/smoke.firebase.mdx` (nebo `docs/smoke.md`) přidej postup:
+   1) `cp .env.example .env` a vyplnit hodnoty,
+   2) `npm i`,
+   3) `npm run reset`,
+   4) otevřít `/ (auth) / sign-up` → založit účet,
+   5) app kill & reopen → session musí držet,
+   6) logout → redirect na sign-in.
+
+H) Volitelné
+1) Přidej defensive `try/catch` kolem `sendPasswordResetEmail` a `createUserWithEmailAndPassword` s přehlednými chybami.
+2) Přidej min. záchytný `ErrorBoundary` u auth obrazovek (zobrazit lidskou hlášku a `reportLog` do konzole).
+
+VÝSTUP
+- Všechny soubory uprav/ulož.
+- V README do sekce „Běžné problémy“ přidej, že `storageBucket` může mít doménu `*.firebasestorage.app` (je OK).
+- Napiš závěrečný krátký report co bylo změněno a kde.
