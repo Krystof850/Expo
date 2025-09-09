@@ -44,7 +44,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
           minSdkVersion: 26,
         },
         ios: {
-          deploymentTarget: '14.0',
+          deploymentTarget: '15.1',
         },
       },
     ],
