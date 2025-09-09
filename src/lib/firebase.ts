@@ -2,12 +2,14 @@ import { initializeApp, getApps, getApp } from "firebase/app";
 import {
   initializeAuth,
   getAuth,
+  getReactNativePersistence,
+  Auth,
 } from "firebase/auth";
-import { getReactNativePersistence } from "firebase/auth/react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 import Constants from "expo-constants";
+import { Platform } from "react-native";
 
 const extra = (Constants.expoConfig?.extra || {}) as Record<string, string>;
 
@@ -34,12 +36,20 @@ if (
 const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
 
 // initializeAuth musí být voláno před getAuth() pro RN/Expo perzistenci
-let auth;
+let auth: Auth;
 try {
   // Pokud už je inicializovaný, prostě ho získáme:
-  auth = getApps().length ? getAuth() : initializeAuth(app, {
-    persistence: getReactNativePersistence(AsyncStorage),
-  });
+  if (getApps().length) {
+    auth = getAuth();
+  } else {
+    if (Platform.OS === 'web') {
+      auth = initializeAuth(app);
+    } else {
+      auth = initializeAuth(app, {
+        persistence: getReactNativePersistence(AsyncStorage),
+      });
+    }
+  }
 } catch (e) {
   // Při HMR a opakovaném importu může být initializeAuth už hotové:
   auth = getAuth();
