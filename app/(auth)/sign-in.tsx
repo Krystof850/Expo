@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, Redirect } from "expo-router";
-import { View, Text, TextInput, Button, Alert } from "react-native";
+import { View, Text, TextInput, Button, Alert, TouchableOpacity, StyleSheet } from "react-native";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { signInWithEmail } from "../../src/services/auth";
@@ -23,8 +23,8 @@ export default function SignIn() {
     <AuthErrorBoundary>
       <View style={{ flex: 1 }}>
         <FirebaseConfigBanner />
-        <View style={{ flex: 1, padding: 16, gap: 12, justifyContent: "center" }}>
-        <Text style={{ fontSize: 24, fontWeight: "600" }}>Přihlášení</Text>
+        <View style={styles.container}>
+        <Text style={styles.title}>Přihlášení</Text>
       <Formik
         initialValues={{ email: "", password: "" }}
         validationSchema={schema}
@@ -48,9 +48,9 @@ export default function SignIn() {
               onChangeText={handleChange("email")}
               onBlur={handleBlur("email")}
               value={values.email}
-              style={{ borderWidth: 1, padding: 12, borderRadius: 8 }}
+              style={styles.input}
             />
-            {touched.email && errors.email ? <Text style={{ color: "red" }}>{errors.email}</Text> : null}
+            {touched.email && errors.email ? <Text style={styles.errorText}>{errors.email}</Text> : null}
 
             <TextInput
               placeholder="Heslo"
@@ -58,15 +58,37 @@ export default function SignIn() {
               onChangeText={handleChange("password")}
               onBlur={handleBlur("password")}
               value={values.password}
-              style={{ borderWidth: 1, padding: 12, borderRadius: 8 }}
+              style={styles.input}
             />
-            {touched.password && errors.password ? <Text style={{ color: "red" }}>{errors.password}</Text> : null}
+            {touched.password && errors.password ? <Text style={styles.errorText}>{errors.password}</Text> : null}
 
-            <Button title={submitting ? "Přihlašuji..." : "Přihlásit"} onPress={() => handleSubmit()} disabled={submitting} />
+            <TouchableOpacity 
+              style={[styles.primaryButton, submitting && styles.disabledButton]}
+              onPress={() => handleSubmit()}
+              disabled={submitting}
+            >
+              <Text style={styles.primaryButtonText}>
+                {submitting ? "Přihlašuji..." : "Přihlásit se"}
+              </Text>
+            </TouchableOpacity>
 
-            <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 12 }}>
-              <Link href="/(auth)/sign-up">Nemáš účet? Registrace</Link>
-              <Link href="/(auth)/forgot">Zapomenuté heslo</Link>
+            {/* Sekce pro registraci - velmi výrazná */}
+            <View style={styles.authAlternatives}>
+              <Text style={styles.alternativeText}>Nemáte ještě účet?</Text>
+              <Link href="/(auth)/sign-up" asChild>
+                <TouchableOpacity style={styles.secondaryButton}>
+                  <Text style={styles.secondaryButtonText}>Vytvořit nový účet</Text>
+                </TouchableOpacity>
+              </Link>
+            </View>
+
+            {/* Odkaz na zapomenuté heslo */}
+            <View style={styles.forgotSection}>
+              <Link href="/(auth)/forgot" asChild>
+                <TouchableOpacity style={styles.linkButton}>
+                  <Text style={styles.linkText}>Zapomněli jste heslo?</Text>
+                </TouchableOpacity>
+              </Link>
             </View>
           </>
         )}
@@ -76,3 +98,88 @@ export default function SignIn() {
     </AuthErrorBoundary>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+    justifyContent: 'center',
+    backgroundColor: '#f9f9f9',
+  },
+  title: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 30,
+    color: '#333',
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: '#ddd',
+    padding: 15,
+    borderRadius: 12,
+    backgroundColor: 'white',
+    fontSize: 16,
+    marginBottom: 10,
+  },
+  errorText: {
+    color: '#e74c3c',
+    fontSize: 14,
+    marginBottom: 10,
+  },
+  primaryButton: {
+    backgroundColor: '#3498db',
+    padding: 15,
+    borderRadius: 12,
+    alignItems: 'center',
+    marginTop: 10,
+    marginBottom: 20,
+  },
+  disabledButton: {
+    backgroundColor: '#bdc3c7',
+  },
+  primaryButtonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  authAlternatives: {
+    backgroundColor: '#e8f5e8',
+    padding: 20,
+    borderRadius: 12,
+    alignItems: 'center',
+    marginBottom: 15,
+    borderWidth: 1,
+    borderColor: '#2ecc71',
+  },
+  alternativeText: {
+    fontSize: 16,
+    color: '#333',
+    marginBottom: 10,
+    textAlign: 'center',
+  },
+  secondaryButton: {
+    backgroundColor: '#2ecc71',
+    padding: 12,
+    borderRadius: 8,
+    minWidth: 200,
+    alignItems: 'center',
+  },
+  secondaryButtonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  forgotSection: {
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  linkButton: {
+    padding: 10,
+  },
+  linkText: {
+    color: '#3498db',
+    fontSize: 16,
+    textDecorationLine: 'underline',
+  },
+});
