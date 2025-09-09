@@ -1,10 +1,10 @@
-import 'dotenv/config';
-import { ExpoConfig, ConfigContext } from 'expo/config';
+import "dotenv/config";
+import { ConfigContext, ExpoConfig } from "expo/config";
 
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
-  name: 'expo-on-replit',
-  slug: 'expo-on-replit',
+  name: config.name ?? "expo-on-replit",
+  slug: config.slug ?? "expo-on-replit",
   owner: 'krystof_kapka',
   version: '1.0.0',
   orientation: 'portrait',
@@ -12,18 +12,27 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   scheme: 'expo-on-replit',
   userInterfaceStyle: 'automatic',
   newArchEnabled: true,
+
   ios: {
+    ...(config.ios ?? {}),
     supportsTablet: true,
-    bundleIdentifier: 'com.app.dev',
+    bundleIdentifier: config.ios?.bundleIdentifier ?? "com.kiki.procrastination",
+    infoPlist: {
+      ...(config.ios?.infoPlist ?? {}),
+      ITSAppUsesNonExemptEncryption: false,
+    },
   },
+
   android: {
+    ...(config.android ?? {}),
     adaptiveIcon: {
       foregroundImage: './assets/images/adaptive-icon.png',
       backgroundColor: '#ffffff',
     },
     edgeToEdgeEnabled: true,
-    package: 'com.app.dev',
+    package: config.android?.package ?? "com.kiki.procrastination",
   },
+
   web: {
     bundler: 'metro',
     output: 'static',
@@ -55,7 +64,9 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   experiments: {
     typedRoutes: true,
   },
+
   extra: {
+    ...(config.extra ?? {}),
     FIREBASE_API_KEY: process.env.FIREBASE_API_KEY,
     FIREBASE_AUTH_DOMAIN: process.env.FIREBASE_AUTH_DOMAIN,
     FIREBASE_PROJECT_ID: process.env.FIREBASE_PROJECT_ID,
@@ -65,7 +76,8 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
     SUPERWALL_API_KEY: process.env.SUPERWALL_API_KEY,
     eas: {
-      projectId: '73574016-d0df-4efd-ba6b-1e1dc7c865ce',
+      ...(config.extra as any)?.eas,
+      projectId: "73574016-d0df-4efd-ba6b-1e1dc7c865ce",
     },
   },
 });
