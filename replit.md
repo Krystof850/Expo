@@ -4,12 +4,16 @@ This is an Expo React Native application with Firebase Authentication integratio
 
 **Recent Updates (Sep 9, 2025):**
 - ✅ Complete Firebase Auth implementation with email/password authentication
-- ✅ Session persistence using AsyncStorage for React Native
+- ✅ Session persistence using AsyncStorage for React Native  
 - ✅ Protected routes with automatic redirects
 - ✅ Auth screens: Sign In, Sign Up, Forgot Password
 - ✅ Form validation with Formik + Yup
 - ✅ Czech language error mapping for Firebase auth errors
 - ✅ Comprehensive README with Firebase setup instructions
+- ✅ Developer UX: Diagnostic banner and debug functions
+- ✅ Defensive error handling with AuthErrorBoundary
+- ✅ Smoke test documentation (docs/smoke-test.md)
+- ✅ Environment configuration working (Firebase keys loaded)
 
 # User Preferences
 
