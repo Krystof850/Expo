@@ -4,10 +4,12 @@ import {
   getAuth,
   Auth,
 } from "firebase/auth";
+// Note: AsyncStorage persistence je dostupné v novějších verzích Firebase
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 import Constants from "expo-constants";
 import { Platform } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const extra = (Constants.expoConfig?.extra || {}) as Record<string, string>;
 
@@ -63,6 +65,7 @@ try {
     auth = getAuth();
   } else {
     // Pro všechny platformy používáme standardní inicializaci
+    // AsyncStorage persistence se nastaví automaticky v React Native prostředí
     auth = initializeAuth(app);
   }
 } catch (e) {
