@@ -2,10 +2,8 @@ import { initializeApp, getApps, getApp } from "firebase/app";
 import {
   initializeAuth,
   getAuth,
-  getReactNativePersistence,
   Auth,
 } from "firebase/auth";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 import Constants from "expo-constants";
@@ -46,10 +44,13 @@ if (
   !firebaseConfig.appId ||
   !firebaseConfig.projectId
 ) {
-  // Neházej chybu při dev bez klíčů, jen varuj:
+  // Pokud chybí klíče, použij dummy hodnoty aby se aplikace nenasypala
   console.warn(
-    "[Firebase] Missing config. Fill FIREBASE_* in app.config.ts/.env before signing in."
+    "[Firebase] Missing config. Using dummy values. Firebase features won't work until you configure real keys."
   );
+  firebaseConfig.apiKey = firebaseConfig.apiKey || "dummy-api-key";
+  firebaseConfig.appId = firebaseConfig.appId || "1:123456789:web:dummy";
+  firebaseConfig.projectId = firebaseConfig.projectId || "dummy-project";
 }
 
 const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
@@ -61,13 +62,8 @@ try {
   if (getApps().length) {
     auth = getAuth();
   } else {
-    if (Platform.OS === 'web') {
-      auth = initializeAuth(app);
-    } else {
-      auth = initializeAuth(app, {
-        persistence: getReactNativePersistence(AsyncStorage),
-      });
-    }
+    // Pro všechny platformy používáme standardní inicializaci
+    auth = initializeAuth(app);
   }
 } catch (e) {
   // Při HMR a opakovaném importu může být initializeAuth už hotové:
