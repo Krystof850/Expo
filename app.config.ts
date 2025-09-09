@@ -37,6 +37,17 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
         backgroundColor: '#ffffff',
       },
     ],
+    [
+      'expo-build-properties',
+      {
+        android: {
+          minSdkVersion: 26,
+        },
+        ios: {
+          deploymentTarget: '14.0',
+        },
+      },
+    ],
   ],
   experiments: {
     typedRoutes: true,
@@ -49,5 +60,6 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     FIREBASE_MESSAGING_SENDER_ID: process.env.FIREBASE_MESSAGING_SENDER_ID,
     FIREBASE_APP_ID: process.env.FIREBASE_APP_ID,
     GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
+    SUPERWALL_API_KEY: process.env.SUPERWALL_API_KEY,
   },
 });
