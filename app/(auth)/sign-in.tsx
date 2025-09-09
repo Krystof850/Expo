@@ -5,6 +5,7 @@ import { Formik } from "formik";
 import * as Yup from "yup";
 import { signInWithEmail } from "../../src/services/auth";
 import { useAuth } from "../../src/context/AuthContext";
+import { FirebaseConfigBanner } from "../../src/components/FirebaseConfigBanner";
 
 const schema = Yup.object({
   email: Yup.string().email("Neplatný email").required("Povinné"),
@@ -18,8 +19,10 @@ export default function SignIn() {
   if (user) return <Redirect href="/(protected)/" />;
 
   return (
-    <View style={{ flex: 1, padding: 16, gap: 12, justifyContent: "center" }}>
-      <Text style={{ fontSize: 24, fontWeight: "600" }}>Přihlášení</Text>
+    <View style={{ flex: 1 }}>
+      <FirebaseConfigBanner />
+      <View style={{ flex: 1, padding: 16, gap: 12, justifyContent: "center" }}>
+        <Text style={{ fontSize: 24, fontWeight: "600" }}>Přihlášení</Text>
       <Formik
         initialValues={{ email: "", password: "" }}
         validationSchema={schema}
@@ -66,6 +69,7 @@ export default function SignIn() {
           </>
         )}
       </Formik>
+      </View>
     </View>
   );
 }

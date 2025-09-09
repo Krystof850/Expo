@@ -77,7 +77,7 @@ outputType = "webview"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "npx expo start --tunnel"
+args = "npx expo start --host tunnel"
 waitForPort = 5000
 
 [agent]

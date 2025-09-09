@@ -67,4 +67,30 @@ try {
 const db = getFirestore(app);
 const storage = getStorage(app);
 
+// Diagnostická funkce pro kontrolu Firebase konfigurace
+export function assertFirebaseConfig(): { isValid: boolean; missing: string[] } {
+  const missing: string[] = [];
+  
+  if (!firebaseConfig.apiKey) missing.push('FIREBASE_API_KEY');
+  if (!firebaseConfig.authDomain) missing.push('FIREBASE_AUTH_DOMAIN');
+  if (!firebaseConfig.projectId) missing.push('FIREBASE_PROJECT_ID');
+  if (!firebaseConfig.storageBucket) missing.push('FIREBASE_STORAGE_BUCKET');
+  if (!firebaseConfig.messagingSenderId) missing.push('FIREBASE_MESSAGING_SENDER_ID');
+  if (!firebaseConfig.appId) missing.push('FIREBASE_APP_ID');
+  
+  return {
+    isValid: missing.length === 0,
+    missing
+  };
+}
+
+// Debug funkce pro zobrazení runtime konfigurace
+export function logFirebaseConfigDebug(): void {
+  console.log('[Firebase Debug] Runtime config check:');
+  console.log('Constants.expoConfig.extra:', Constants.expoConfig?.extra);
+  console.log('Platform.OS:', Platform.OS);
+  console.log('process.env keys:', Object.keys(process.env || {}).filter(k => k.startsWith('FIREBASE_')));
+  console.log('Final firebaseConfig:', firebaseConfig);
+}
+
 export { app, auth, db, storage };
