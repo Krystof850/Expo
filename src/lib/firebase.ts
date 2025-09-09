@@ -31,6 +31,16 @@ console.log('[Firebase] Config loaded:', {
   authDomain: firebaseConfig.authDomain
 });
 
+// Přidáme ještě více debuggingu
+console.log('[Firebase] Raw config values:', {
+  apiKey: firebaseConfig.apiKey?.substring(0, 10) + '...',
+  projectId: firebaseConfig.projectId,
+  appId: firebaseConfig.appId?.substring(0, 10) + '...',
+  platform: Platform.OS,
+  hasExtra: !!extra,
+  extraKeys: Object.keys(extra)
+});
+
 if (
   !firebaseConfig.apiKey ||
   !firebaseConfig.appId ||
