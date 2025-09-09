@@ -17,6 +17,11 @@ This is an Expo React Native application with Firebase Authentication integratio
 - ✅ **NEW: Google Sign In integration** - Full OAuth flow with expo-auth-session
 - ✅ Google Sign In UI components in both sign-in and sign-up screens
 - ✅ Firebase credential integration for Google OAuth tokens
+- ✅ **NEW: Superwall Integration** - Complete paywall system integration
+- ✅ SuperwallProvider configured in root layout with API key management
+- ✅ Paywall hooks integrated in protected area with placement "campaign_trigger"
+- ✅ EAS Build configuration ready for development builds
+- ✅ expo-build-properties configured for iOS 14.0+ and Android SDK 26+
 
 # User Preferences
 
@@ -73,6 +78,13 @@ Preferred communication style: Simple, everyday language.
   - FIREBASE_APP_ID
   - **GOOGLE_CLIENT_ID** (for Google Sign In functionality)
 
+## Superwall Integration
+- **expo-superwall**: Paywall system for subscription management
+- **SuperwallProvider**: Configured at root level with loading states
+- **Placement Integration**: Uses "campaign_trigger" placement in protected area
+- **Configuration Required**:
+  - SUPERWALL_API_KEY (Public API Key from Superwall dashboard)
+
 ## Core Libraries
 - **@react-native-async-storage/async-storage**: Local storage for session persistence
 - **formik**: Form state management and submission handling
@@ -81,6 +93,8 @@ Preferred communication style: Simple, everyday language.
 - **expo-auth-session**: OAuth authentication flows for Google Sign In
 - **expo-web-browser**: Web browser integration for auth flows
 - **expo-crypto**: Cryptographic operations for OAuth PKCE flow
+- **expo-superwall**: Superwall SDK for paywall presentation and subscription management
+- **expo-build-properties**: Configuration plugin for minimum platform versions
 
 ## Expo SDK Modules
 - **expo-router**: File-based navigation system
