@@ -1,0 +1,494 @@
+CÍL
+Mám již existující Expo projekt. Zprovozni Firebase Auth (email+heslo) s perzistencí session v Expo (AsyncStorage), přidej jednoduché UI obrazovky (Sign In, Sign Up, Forgot Password) přes expo-router, kontext uživatele a ochranu chráněných rout. Přidej i README instrukce a TODO checklist pro kroky ve Firebase konzoli. Použij Firebase JS SDK (ne react-native-firebase).
+
+POŽADAVKY
+- Zachovej stávající Expo projekt (žádné přepisování app.json či existujících klíčových souborů).
+- Použij TypeScript (pokud projekt není TS-ready, přidej minimální tsconfig).
+- Autentizaci inicializuj přes initializeAuth + getReactNativePersistence(AsyncStorage) – jinak v Expo nebude persistentní session.
+- Přidej expo-router flow: public stack (sign-in, sign-up, forgot) a protected stack (home).
+- Validace formulářů: Formik + Yup.
+- Chyby mapuj na lidské texty (např. auth/invalid-credential, auth/email-already-in-use).
+- Žádné dead code, vše spustitelné i bez vyplněných klíčů (UI bez pádu; při absenci configu vypisuj jasný warning).
+- Vytvoř README s přesným postupem (Firebase konzole, Email/Password enable, kam vložit klíče atd.).
+
+KROK 1 — Instalace balíčků
+Spusť:
+- npx expo install @react-native-async-storage/async-storage
+- npm i firebase formik yup
+
+KROK 2 — ENV a app.config.ts
+1) Pokud existuje `app.config.ts` (nebo `app.config.js`), uprav ho tak, aby exportoval `extra` s těmito položkami načítanými z process.env (v dev) a aby šel bezpečně plnit přes EAS Secrets v CI:
+   - FIREBASE_API_KEY
+   - FIREBASE_AUTH_DOMAIN
+   - FIREBASE_PROJECT_ID
+   - FIREBASE_STORAGE_BUCKET
+   - FIREBASE_MESSAGING_SENDER_ID
+   - FIREBASE_APP_ID
+
+2) V kořeni projektu vytvoř `.env.example` s těmito klíči (prázdné hodnoty) a **NECOMMITUJ** `.env`:
+FIREBASE_API_KEY=
+FIREBASE_AUTH_DOMAIN=
+FIREBASE_PROJECT_ID=
+FIREBASE_STORAGE_BUCKET=
+FIREBASE_MESSAGING_SENDER_ID=
+FIREBASE_APP_ID=
+
+KROK 3 — Firebase inicializace
+Vytvoř `src/lib/firebase.ts`:
+
+```ts
+import { initializeApp, getApps, getApp } from "firebase/app";
+import {
+  initializeAuth,
+  getAuth,
+  getReactNativePersistence,
+} from "firebase/auth";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { getFirestore } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
+import Constants from "expo-constants";
+
+const extra = (Constants.expoConfig?.extra || {}) as Record<string, string>;
+
+const firebaseConfig = {
+  apiKey: extra.FIREBASE_API_KEY,
+  authDomain: extra.FIREBASE_AUTH_DOMAIN,
+  projectId: extra.FIREBASE_PROJECT_ID,
+  storageBucket: extra.FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: extra.FIREBASE_MESSAGING_SENDER_ID,
+  appId: extra.FIREBASE_APP_ID,
+};
+
+if (
+  !firebaseConfig.apiKey ||
+  !firebaseConfig.appId ||
+  !firebaseConfig.projectId
+) {
+  // Neházej chybu při dev bez klíčů, jen varuj:
+  console.warn(
+    "[Firebase] Missing config. Fill FIREBASE_* in app.config.ts/.env before signing in."
+  );
+}
+
+const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
+
+// initializeAuth musí být voláno před getAuth() pro RN/Expo perzistenci
+let auth = getApps().length ? getAuth() : undefined;
+try {
+  // Při HMR a opakovaném importu může být initializeAuth už hotové:
+  auth =
+    auth ||
+    initializeAuth(app, {
+      persistence: getReactNativePersistence(AsyncStorage),
+    });
+} catch (e) {
+  // Pokud už je inicializovaný, prostě ho získáme:
+  auth = getAuth();
+}
+
+const db = getFirestore(app);
+const storage = getStorage(app);
+
+export { app, auth, db, storage };
+KROK 4 — Auth service (email+heslo) + mapování chyb
+Vytvoř src/services/auth.ts:
+
+ts
+Copy code
+import { auth } from "../lib/firebase";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  sendPasswordResetEmail,
+  User,
+} from "firebase/auth";
+
+export async function signUpWithEmail(email: string, password: string): Promise<User> {
+  try {
+    const cred = await createUserWithEmailAndPassword(auth, email, password);
+    return cred.user;
+  } catch (e: any) {
+    throw new Error(mapAuthError(e));
+  }
+}
+
+export async function signInWithEmail(email: string, password: string): Promise<User> {
+  try {
+    const cred = await signInWithEmailAndPassword(auth, email, password);
+    return cred.user;
+  } catch (e: any) {
+    throw new Error(mapAuthError(e));
+  }
+}
+
+export async function sendResetEmail(email: string): Promise<void> {
+  try {
+    await sendPasswordResetEmail(auth, email);
+  } catch (e: any) {
+    throw new Error(mapAuthError(e));
+  }
+}
+
+function mapAuthError(e: any): string {
+  const code = e?.code || "";
+  if (code.includes("auth/invalid-credential")) return "Špatný email nebo heslo.";
+  if (code.includes("auth/user-not-found")) return "Účet s tímto emailem neexistuje.";
+  if (code.includes("auth/wrong-password")) return "Špatné heslo.";
+  if (code.includes("auth/email-already-in-use")) return "Email je již registrován.";
+  if (code.includes("auth/weak-password")) return "Heslo je příliš slabé (min. 6 znaků).";
+  if (code.includes("auth/invalid-email")) return "Neplatný formát emailu.";
+  return "Akce selhala. Zkus to znovu.";
+}
+KROK 5 — Auth Context (sledování stavu uživatele)
+Vytvoř src/context/AuthContext.tsx:
+
+tsx
+Copy code
+import React, { createContext, useContext, useEffect, useState } from "react";
+import { onAuthStateChanged, User, signOut } from "firebase/auth";
+import { auth } from "../lib/firebase";
+
+type AuthState = {
+  user: User | null;
+  loading: boolean;
+  logout: () => Promise<void>;
+};
+
+const AuthCtx = createContext<AuthState>({
+  user: null,
+  loading: true,
+  logout: async () => {},
+});
+
+export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const unsub = onAuthStateChanged(auth, (u) => {
+      setUser(u);
+      setLoading(false);
+    });
+    return unsub;
+  }, []);
+
+  async function logout() {
+    await signOut(auth);
+  }
+
+  return (
+    <AuthCtx.Provider value={{ user, loading, logout }}>
+      {children}
+    </AuthCtx.Provider>
+  );
+};
+
+export function useAuth() {
+  return useContext(AuthCtx);
+}
+KROK 6 — Router integrace + Protected gate
+Předpokládej, že používáme expo-router. Uprav app/_layout.tsx (nebo vytvoř pokud chybí) tak, aby wrapoval app do AuthProvider:
+
+tsx
+Copy code
+// app/_layout.tsx
+import { Stack } from "expo-router";
+import React from "react";
+import { AuthProvider } from "../src/context/AuthContext";
+import { SafeAreaView } from "react-native-safe-area-context";
+
+export default function RootLayout() {
+  return (
+    <AuthProvider>
+      <SafeAreaView style={{ flex: 1 }}>
+        <Stack screenOptions={{ headerShown: false }} />
+      </SafeAreaView>
+    </AuthProvider>
+  );
+}
+Vytvoř src/components/Protected.tsx:
+
+tsx
+Copy code
+import React from "react";
+import { Redirect } from "expo-router";
+import { useAuth } from "../context/AuthContext";
+import { ActivityIndicator, View } from "react-native";
+
+export const Protected: React.FC<React.PropsWithChildren> = ({ children }) => {
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return (
+      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+        <ActivityIndicator />
+      </View>
+    );
+  }
+  if (!user) {
+    return <Redirect href="/(auth)/sign-in" />;
+  }
+  return <>{children}</>;
+};
+Adresářová struktura pro router:
+
+app/(auth)/sign-in.tsx
+
+app/(auth)/sign-up.tsx
+
+app/(auth)/forgot.tsx
+
+app/(protected)/index.tsx
+
+KROK 7 — Obrazovky (Formik + Yup)
+Vytvoř app/(auth)/sign-in.tsx:
+
+tsx
+Copy code
+import React, { useState } from "react";
+import { Link, Redirect } from "expo-router";
+import { View, Text, TextInput, Button, Alert } from "react-native";
+import { Formik } from "formik";
+import * as Yup from "yup";
+import { signInWithEmail } from "../../src/services/auth";
+import { useAuth } from "../../src/context/AuthContext";
+
+const schema = Yup.object({
+  email: Yup.string().email("Neplatný email").required("Povinné"),
+  password: Yup.string().min(6, "Min. 6 znaků").required("Povinné"),
+});
+
+export default function SignIn() {
+  const { user } = useAuth();
+  const [submitting, setSubmitting] = useState(false);
+
+  if (user) return <Redirect href="/(protected)/" />;
+
+  return (
+    <View style={{ flex: 1, padding: 16, gap: 12, justifyContent: "center" }}>
+      <Text style={{ fontSize: 24, fontWeight: "600" }}>Přihlášení</Text>
+      <Formik
+        initialValues={{ email: "", password: "" }}
+        validationSchema={schema}
+        onSubmit={async ({ email, password }) => {
+          try {
+            setSubmitting(true);
+            await signInWithEmail(email.trim(), password);
+          } catch (e: any) {
+            Alert.alert("Chyba", e.message || "Nepodařilo se přihlásit.");
+          } finally {
+            setSubmitting(false);
+          }
+        }}
+      >
+        {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
+          <>
+            <TextInput
+              placeholder="Email"
+              autoCapitalize="none"
+              keyboardType="email-address"
+              onChangeText={handleChange("email")}
+              onBlur={handleBlur("email")}
+              value={values.email}
+              style={{ borderWidth: 1, padding: 12, borderRadius: 8 }}
+            />
+            {touched.email && errors.email ? <Text style={{ color: "red" }}>{errors.email}</Text> : null}
+
+            <TextInput
+              placeholder="Heslo"
+              secureTextEntry
+              onChangeText={handleChange("password")}
+              onBlur={handleBlur("password")}
+              value={values.password}
+              style={{ borderWidth: 1, padding: 12, borderRadius: 8 }}
+            />
+            {touched.password && errors.password ? <Text style={{ color: "red" }}>{errors.password}</Text> : null}
+
+            <Button title={submitting ? "Přihlašuji..." : "Přihlásit"} onPress={() => handleSubmit()} disabled={submitting} />
+
+            <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 12 }}>
+              <Link href="/(auth)/sign-up">Nemáš účet? Registrace</Link>
+              <Link href="/(auth)/forgot">Zapomenuté heslo</Link>
+            </View>
+          </>
+        )}
+      </Formik>
+    </View>
+  );
+}
+Vytvoř app/(auth)/sign-up.tsx (podobné, ale s signUpWithEmail):
+
+tsx
+Copy code
+import React, { useState } from "react";
+import { Link, Redirect } from "expo-router";
+import { View, Text, TextInput, Button, Alert } from "react-native";
+import { Formik } from "formik";
+import * as Yup from "yup";
+import { signUpWithEmail } from "../../src/services/auth";
+import { useAuth } from "../../src/context/AuthContext";
+
+const schema = Yup.object({
+  email: Yup.string().email("Neplatný email").required("Povinné"),
+  password: Yup.string().min(6, "Min. 6 znaků").required("Povinné"),
+});
+
+export default function SignUp() {
+  const { user } = useAuth();
+  const [submitting, setSubmitting] = useState(false);
+
+  if (user) return <Redirect href="/(protected)/" />;
+
+  return (
+    <View style={{ flex: 1, padding: 16, gap: 12, justifyContent: "center" }}>
+      <Text style={{ fontSize: 24, fontWeight: "600" }}>Registrace</Text>
+      <Formik
+        initialValues={{ email: "", password: "" }}
+        validationSchema={schema}
+        onSubmit={async ({ email, password }) => {
+          try {
+            setSubmitting(true);
+            await signUpWithEmail(email.trim(), password);
+          } catch (e: any) {
+            Alert.alert("Chyba", e.message || "Nepodařilo se vytvořit účet.");
+          } finally {
+            setSubmitting(false);
+          }
+        }}
+      >
+        {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
+          <>
+            <TextInput
+              placeholder="Email"
+              autoCapitalize="none"
+              keyboardType="email-address"
+              onChangeText={handleChange("email")}
+              onBlur={handleBlur("email")}
+              value={values.email}
+              style={{ borderWidth: 1, padding: 12, borderRadius: 8 }}
+            />
+            {touched.email && errors.email ? <Text style={{ color: "red" }}>{errors.email}</Text> : null}
+
+            <TextInput
+              placeholder="Heslo"
+              secureTextEntry
+              onChangeText={handleChange("password")}
+              onBlur={handleBlur("password")}
+              value={values.password}
+              style={{ borderWidth: 1, padding: 12, borderRadius: 8 }}
+            />
+            {touched.password && errors.password ? <Text style={{ color: "red" }}>{errors.password}</Text> : null}
+
+            <Button title={submitting ? "Zakládám..." : "Zaregistrovat"} onPress={() => handleSubmit()} disabled={submitting} />
+
+            <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 12 }}>
+              <Link href="/(auth)/sign-in">Už máš účet? Přihlásit</Link>
+            </View>
+          </>
+        )}
+      </Formik>
+    </View>
+  );
+}
+Vytvoř app/(auth)/forgot.tsx:
+
+tsx
+Copy code
+import React, { useState } from "react";
+import { Link } from "expo-router";
+import { View, Text, TextInput, Button, Alert } from "react-native";
+import { Formik } from "formik";
+import * as Yup from "yup";
+import { sendResetEmail } from "../../src/services/auth";
+
+const schema = Yup.object({
+  email: Yup.string().email("Neplatný email").required("Povinné"),
+});
+
+export default function Forgot() {
+  const [submitting, setSubmitting] = useState(false);
+
+  return (
+    <View style={{ flex: 1, padding: 16, gap: 12, justifyContent: "center" }}>
+      <Text style={{ fontSize: 24, fontWeight: "600" }}>Obnovení hesla</Text>
+      <Formik
+        initialValues={{ email: "" }}
+        validationSchema={schema}
+        onSubmit={async ({ email }) => {
+          try {
+            setSubmitting(true);
+            await sendResetEmail(email.trim());
+            Alert.alert("Hotovo", "Poslali jsme ti email s odkazem na obnovení hesla.");
+          } catch (e: any) {
+            Alert.alert("Chyba", e.message || "Nepodařilo se odeslat reset email.");
+          } finally {
+            setSubmitting(false);
+          }
+        }}
+      >
+        {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
+          <>
+            <TextInput
+              placeholder="Email"
+              autoCapitalize="none"
+              keyboardType="email-address"
+              onChangeText={handleChange("email")}
+              onBlur={handleBlur("email")}
+              value={values.email}
+              style={{ borderWidth: 1, padding: 12, borderRadius: 8 }}
+            />
+            {touched.email && errors.email ? <Text style={{ color: "red" }}>{errors.email}</Text> : null}
+            <Button title={submitting ? "Odesílám..." : "Odeslat reset email"} onPress={() => handleSubmit()} disabled={submitting} />
+            <Link href="/(auth)/sign-in" style={{ marginTop: 12 }}>Zpět na přihlášení</Link>
+          </>
+        )}
+      </Formik>
+    </View>
+  );
+}
+KROK 8 — Protected Home
+Vytvoř app/(protected)/index.tsx:
+
+tsx
+Copy code
+import React from "react";
+import { View, Text, Button } from "react-native";
+import { useAuth } from "../../src/context/AuthContext";
+import { Protected } from "../../src/components/Protected";
+
+export default function Home() {
+  const { user, logout } = useAuth();
+
+  return (
+    <Protected>
+      <View style={{ flex: 1, alignItems: "center", justifyContent: "center", gap: 12 }}>
+        <Text style={{ fontSize: 20 }}>Ahoj, {user?.email}</Text>
+        <Button title="Odhlásit" onPress={logout} />
+      </View>
+    </Protected>
+  );
+}
+KROK 9 — README
+V kořeni projektu vytvoř/aktualizuj README.md s těmito sekcemi:
+
+Co je hotové: Email+heslo sign-in, sign-up, forgot, perzistence session (AsyncStorage), protected routes.
+
+Instalace: npm i, npx expo start.
+
+Konfigurace Firebase:
+
+Vytvoř projekt ve Firebase Console.
+
+Přidej app (iOS/Android/Web klidně dummy pro získání configu).
+
+Zkopíruj hodnoty do .env a/nebo nastav do app.config.ts → extra.
+
+V Authentication → Sign-in method povol Email/Password.
+
+ENV: zkopíruj .env.example na .env a doplň klíče. V produkci použij EAS Secrets.
+
+Běžné chyby: mapping auth kódů, HMR restart, invalid config.
+
+Další kroky (volitelné): reCAPTCHA (pro phone auth, není potřeba pro email/heslo), App Check, Firestore Rules.
+
+KONEC
