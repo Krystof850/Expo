@@ -5,6 +5,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
   name: 'expo-on-replit',
   slug: 'expo-on-replit',
+  owner: 'krystof_kapka',
   version: '1.0.0',
   orientation: 'portrait',
   icon: './assets/images/icon.png',
