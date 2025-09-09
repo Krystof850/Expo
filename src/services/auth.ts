@@ -54,7 +54,6 @@ WebBrowser.maybeCompleteAuthSession();
 
 const redirectUri = AuthSession.makeRedirectUri({
   scheme: 'myapp',
-  useProxy: true,
 });
 
 export async function signInWithGoogle(): Promise<User> {
@@ -76,7 +75,6 @@ export async function signInWithGoogle(): Promise<User> {
       redirectUri,
       responseType: AuthSession.ResponseType.Code,
       extraParams: {},
-      additionalParameters: {},
     });
 
     // Připrav a spusť autentifikaci

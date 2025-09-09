@@ -3,7 +3,7 @@ import { Link, Redirect } from "expo-router";
 import { View, Text, TextInput, Button, Alert, TouchableOpacity, StyleSheet } from "react-native";
 import { Formik } from "formik";
 import * as Yup from "yup";
-import { signInWithEmail } from "../../src/services/auth";
+import { signInWithEmail, signInWithGoogle } from "../../src/services/auth";
 import { useAuth } from "../../src/context/AuthContext";
 import { FirebaseConfigBanner } from "../../src/components/FirebaseConfigBanner";
 import { AuthErrorBoundary } from "../../src/components/AuthErrorBoundary";
@@ -16,6 +16,18 @@ const schema = Yup.object({
 export default function SignIn() {
   const { user } = useAuth();
   const [submitting, setSubmitting] = useState(false);
+  const [googleLoading, setGoogleLoading] = useState(false);
+
+  const handleGoogleSignIn = async () => {
+    try {
+      setGoogleLoading(true);
+      await signInWithGoogle();
+    } catch (e: any) {
+      Alert.alert("Chyba", e.message || "Nepodařilo se přihlásit přes Google.");
+    } finally {
+      setGoogleLoading(false);
+    }
+  };
 
   if (user) return <Redirect href="/(protected)/" />;
 
@@ -69,6 +81,25 @@ export default function SignIn() {
             >
               <Text style={styles.primaryButtonText}>
                 {submitting ? "Přihlašuji..." : "Přihlásit se"}
+              </Text>
+            </TouchableOpacity>
+
+            {/* Oddělovač */}
+            <View style={styles.divider}>
+              <View style={styles.dividerLine} />
+              <Text style={styles.dividerText}>nebo</Text>
+              <View style={styles.dividerLine} />
+            </View>
+
+            {/* Google Sign In tlačítko */}
+            <TouchableOpacity 
+              style={[styles.googleButton, googleLoading && styles.disabledButton]}
+              onPress={handleGoogleSignIn}
+              disabled={googleLoading || submitting}
+            >
+              <Text style={styles.googleIcon}>G</Text>
+              <Text style={styles.googleButtonText}>
+                {googleLoading ? "Přihlašuji přes Google..." : "Přihlásit se přes Google"}
               </Text>
             </TouchableOpacity>
 
@@ -181,5 +212,52 @@ const styles = StyleSheet.create({
     color: '#3498db',
     fontSize: 16,
     textDecorationLine: 'underline',
+  },
+  divider: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 20,
+  },
+  dividerLine: {
+    flex: 1,
+    height: 1,
+    backgroundColor: '#ddd',
+  },
+  dividerText: {
+    marginHorizontal: 15,
+    color: '#666',
+    fontSize: 14,
+  },
+  googleButton: {
+    backgroundColor: 'white',
+    padding: 15,
+    borderRadius: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 20,
+    borderWidth: 1,
+    borderColor: '#ddd',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  googleIcon: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#4285f4',
+    marginRight: 10,
+    width: 20,
+    textAlign: 'center',
+  },
+  googleButtonText: {
+    color: '#333',
+    fontSize: 16,
+    fontWeight: '500',
   },
 });
