@@ -3,8 +3,13 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   sendPasswordResetEmail,
+  signInWithCredential,
+  GoogleAuthProvider,
   User,
 } from "firebase/auth";
+import * as AuthSession from 'expo-auth-session';
+import * as WebBrowser from 'expo-web-browser';
+import Constants from 'expo-constants';
 
 export async function signUpWithEmail(email: string, password: string): Promise<User> {
   try {
@@ -44,13 +49,96 @@ export async function sendResetEmail(email: string): Promise<void> {
   }
 }
 
+// Konfigurace pro Google OAuth
+WebBrowser.maybeCompleteAuthSession();
+
+const redirectUri = AuthSession.makeRedirectUri({
+  scheme: 'myapp',
+  useProxy: true,
+});
+
+export async function signInWithGoogle(): Promise<User> {
+  try {
+    console.log('[Auth] Starting Google Sign In...');
+    
+    // Získej Google Client ID z konfigurace
+    const extra = (Constants.expoConfig?.extra || {}) as Record<string, string>;
+    const googleClientId = extra.GOOGLE_CLIENT_ID || process.env.GOOGLE_CLIENT_ID;
+    
+    if (!googleClientId) {
+      throw new Error("Google Client ID není nakonfigurovaný. Přidejte GOOGLE_CLIENT_ID do app.config.ts");
+    }
+
+    // Vytvoř Auth Request
+    const request = new AuthSession.AuthRequest({
+      clientId: googleClientId,
+      scopes: ['openid', 'profile', 'email'],
+      redirectUri,
+      responseType: AuthSession.ResponseType.Code,
+      extraParams: {},
+      additionalParameters: {},
+    });
+
+    // Připrav a spusť autentifikaci
+    const result = await request.promptAsync({
+      authorizationEndpoint: 'https://accounts.google.com/o/oauth2/v2/auth',
+    });
+
+    if (result.type === 'success') {
+      console.log('[Auth] Google auth success, exchanging code for token...');
+      
+      // Vyměň authorization code za access token
+      const tokenResult = await AuthSession.exchangeCodeAsync(
+        {
+          clientId: googleClientId,
+          code: result.params.code,
+          extraParams: {
+            code_verifier: request.codeVerifier || '',
+          },
+          redirectUri,
+        },
+        {
+          tokenEndpoint: 'https://oauth2.googleapis.com/token',
+        }
+      );
+
+      console.log('[Auth] Got access token, creating Firebase credential...');
+      
+      // Vytvoř Firebase credential z Google tokenu
+      const credential = GoogleAuthProvider.credential(
+        tokenResult.idToken,
+        tokenResult.accessToken
+      );
+
+      // Přihlaš se do Firebase
+      const firebaseResult = await signInWithCredential(auth, credential);
+      console.log('[Auth] Google Sign In successful for:', firebaseResult.user.email);
+      
+      return firebaseResult.user;
+    } else {
+      throw new Error("Přihlášení přes Google bylo zrušeno");
+    }
+  } catch (e: any) {
+    console.error('[Auth] Google Sign In failed:', e);
+    const friendlyError = mapAuthError(e);
+    throw new Error(friendlyError);
+  }
+}
+
 function mapAuthError(e: any): string {
   const code = e?.code || "";
+  const message = e?.message || "";
+  
   if (code.includes("auth/invalid-credential")) return "Špatný email nebo heslo.";
   if (code.includes("auth/user-not-found")) return "Účet s tímto emailem neexistuje.";
   if (code.includes("auth/wrong-password")) return "Špatné heslo.";
   if (code.includes("auth/email-already-in-use")) return "Email je již registrován.";
   if (code.includes("auth/weak-password")) return "Heslo je příliš slabé (min. 6 znaků).";
   if (code.includes("auth/invalid-email")) return "Neplatný formát emailu.";
-  return "Akce selhala. Zkus to znovu.";
+  if (code.includes("auth/account-exists-with-different-credential")) {
+    return "Účet s tímto emailem již existuje s jinou metodou přihlášení.";
+  }
+  if (message.includes("Client ID")) return "Google přihlášení není správně nakonfigurováno.";
+  
+  return e?.message || "Akce selhala. Zkus to znovu.";
 }
