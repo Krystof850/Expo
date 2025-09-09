@@ -85,37 +85,59 @@ export async function signInWithGoogle(): Promise<User> {
 
     if (result.type === 'success') {
       console.log('[Auth] Google auth success, exchanging code for token...');
+      console.log('[Auth] Authorization code received:', result.params.code?.substring(0, 10) + '...');
       
-      // Vyměň authorization code za access token
-      const tokenResult = await AuthSession.exchangeCodeAsync(
-        {
-          clientId: googleClientId,
-          code: result.params.code,
-          extraParams: {
-            code_verifier: request.codeVerifier || '',
+      try {
+        // Vyměň authorization code za access token
+        const tokenResult = await AuthSession.exchangeCodeAsync(
+          {
+            clientId: googleClientId,
+            code: result.params.code,
+            extraParams: {
+              code_verifier: request.codeVerifier || '',
+            },
+            redirectUri,
           },
-          redirectUri,
-        },
-        {
-          tokenEndpoint: 'https://oauth2.googleapis.com/token',
+          {
+            tokenEndpoint: 'https://oauth2.googleapis.com/token',
+          }
+        );
+
+        console.log('[Auth] Token exchange successful');
+        console.log('[Auth] Has ID token:', !!tokenResult.idToken);
+        console.log('[Auth] Has access token:', !!tokenResult.accessToken);
+        
+        if (!tokenResult.idToken) {
+          throw new Error("Google neposkytl ID token");
         }
-      );
 
-      console.log('[Auth] Got access token, creating Firebase credential...');
-      
-      // Vytvoř Firebase credential z Google tokenu
-      const credential = GoogleAuthProvider.credential(
-        tokenResult.idToken,
-        tokenResult.accessToken
-      );
+        console.log('[Auth] Creating Firebase credential...');
+        
+        // Vytvoř Firebase credential z Google tokenu
+        const credential = GoogleAuthProvider.credential(
+          tokenResult.idToken,
+          tokenResult.accessToken
+        );
 
-      // Přihlaš se do Firebase
-      const firebaseResult = await signInWithCredential(auth, credential);
-      console.log('[Auth] Google Sign In successful for:', firebaseResult.user.email);
-      
-      return firebaseResult.user;
+        console.log('[Auth] Firebase credential created, signing in...');
+
+        // Přihlaš se do Firebase
+        const firebaseResult = await signInWithCredential(auth, credential);
+        console.log('[Auth] Google Sign In successful for:', firebaseResult.user.email);
+        
+        return firebaseResult.user;
+        
+      } catch (tokenError: any) {
+        console.error('[Auth] Token exchange or Firebase sign-in failed:', tokenError);
+        throw tokenError;
+      }
     } else {
-      throw new Error("Přihlášení přes Google bylo zrušeno");
+      console.log('[Auth] Google auth result type:', result.type);
+      if (result.type === 'cancel') {
+        throw new Error("Přihlášení přes Google bylo zrušeno");
+      } else {
+        throw new Error(`Google přihlášení selhalo: ${result.type}`);
+      }
     }
   } catch (e: any) {
     console.error('[Auth] Google Sign In failed:', e);
