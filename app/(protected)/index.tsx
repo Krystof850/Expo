@@ -39,9 +39,9 @@ export default function Home() {
 
   const handleShowPaywall = async () => {
     try {
-      console.log("[Superwall] Registering placement: example-paywall-e1c0-2025-06-16");
+      console.log("[Superwall] Registering placement: zario-template-3a85-2025-09-10");
       await registerPlacement({ 
-        placement: "example-paywall-e1c0-2025-06-16",
+        placement: "zario-template-3a85-2025-09-10",
         params: { 
           feature: "premium_access",
           userId: user?.uid || "anonymous",
@@ -69,12 +69,12 @@ export default function Home() {
             Získejte přístup k pokročilým funkcím pro zvýšení produktivity.
           </Text>
           <Button 
-            title="Zobrazit Example Paywall" 
+            title="Zobrazit Zario Template Paywall" 
             onPress={handleShowPaywall}
             color="#007AFF"
           />
           <Text style={styles.templateInfo}>
-            Paywall: example-paywall-e1c0-2025-06-16
+            Kampaň: zario-template-3a85-2025-09-10
           </Text>
         </View>
         
