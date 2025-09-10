@@ -57,19 +57,13 @@ if (
 
 const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
 
-// initializeAuth musí být voláno před getAuth() pro RN/Expo perzistenci
+// Poznámka: Firebase persistence v Expo SDK 53 má problém s Hermes engine
+// Proto používáme základní getAuth() - auth bude fungovat ale nebude persistent mezi restarty
 let auth: Auth;
 try {
-  // Pokud už je inicializovaný, prostě ho získáme:
-  if (getApps().length) {
-    auth = getAuth();
-  } else {
-    // Pro všechny platformy používáme standardní inicializaci
-    // AsyncStorage persistence se nastaví automaticky v React Native prostředí
-    auth = initializeAuth(app);
-  }
+  auth = getAuth(app);
 } catch (e) {
-  // Při HMR a opakovaném importu může být initializeAuth už hotové:
+  // Při HMR a opakovaném importu může být auth už hotové:
   auth = getAuth();
 }
 
