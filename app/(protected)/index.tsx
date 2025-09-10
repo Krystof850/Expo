@@ -2,59 +2,18 @@ import React from "react";
 import { View, Text, Button, StyleSheet, Alert } from "react-native";
 import { useAuth } from "../../src/context/AuthContext";
 import { Protected } from "../../src/components/Protected";
-import { usePlacement, useSuperwallEvents } from "expo-superwall";
 
 export default function Home() {
   const { user, logout } = useAuth();
-  
-  // Hook pro zobrazení paywallu
-  const { registerPlacement, state } = usePlacement({
-    onError: (error) => {
-      console.error("[Superwall] Placement error:", error);
-      Alert.alert("Chyba", "Nepodařilo se zobrazit paywall.");
-    },
-    onPresent: (info) => {
-      console.log("[Superwall] Paywall presented:", info);
-    },
-    onDismiss: (info, result) => {
-      console.log("[Superwall] Paywall dismissed:", info, result);
-      
-      if (result.purchased) {
-        Alert.alert("Děkujeme za nákup!", "Nyní máte přístup ke všem prémiových funkcím!");
-      } else if (result.restored) {
-        Alert.alert("Nákup obnoven", "Vaše předplatné bylo úspěšně obnoveno!");
-      }
-    }
-  });
-  
-  // Listener pro obecné Superwall events
-  useSuperwallEvents({
-    onSuperwallEvent: (eventInfo) => {
-      console.log("[Superwall] Event:", eventInfo.event, eventInfo.params);
-    },
-    onSubscriptionStatusChange: (newStatus) => {
-      console.log("[Superwall] Subscription status changed:", newStatus.status);
-    }
-  });
 
-  const handleShowPaywall = async () => {
-    try {
-      console.log("[Superwall] Registering placement: zario-template-3a85-2025-09-10");
-      await registerPlacement({ 
-        placement: "zario-template-3a85-2025-09-10",
-        params: { 
-          feature: "premium_access",
-          userId: user?.uid || "anonymous",
-          userEmail: user?.email || "anonymous"
-        }
-      });
-    } catch (error) {
-      console.error("[Superwall] Error registering placement:", error);
-      Alert.alert(
-        "Chyba", 
-        "Nepodařilo se zobrazit paywall. Zkontrolujte konzoli pro více informací."
-      );
-    }
+  const handleShowPaywall = () => {
+    Alert.alert(
+      "Paywall", 
+      "Pro Expo Go verzi je paywall zakázán. Používejte development build pro plnou funkcionalitat.",
+      [
+        { text: "OK", style: "default" }
+      ]
+    );
   };
 
   return (
@@ -69,12 +28,12 @@ export default function Home() {
             Získejte přístup k pokročilým funkcím pro zvýšení produktivity.
           </Text>
           <Button 
-            title="Zobrazit Zario Template Paywall" 
+            title="Zobrazit Paywall (Demo)" 
             onPress={handleShowPaywall}
             color="#007AFF"
           />
           <Text style={styles.templateInfo}>
-            Kampaň: zario-template-3a85-2025-09-10
+            Pozn.: Paywall je zakázán v Expo Go
           </Text>
         </View>
         

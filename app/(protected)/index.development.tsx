@@ -1,41 +1,20 @@
 import React from "react";
 import { View, Text, Button, StyleSheet, Alert } from "react-native";
-import { usePlacement } from "expo-superwall";
 import { useAuth } from "../../src/context/AuthContext";
 import { Protected } from "../../src/components/Protected";
 
 export default function Home() {
   const { user, logout } = useAuth();
-  
-  const { registerPlacement, state: placementState } = usePlacement({
-    onError: (err) => {
-      console.error("Superwall Placement Error:", err);
-      Alert.alert("Chyba", "Nepodařilo se načíst paywall");
-    },
-    onPresent: (info) => {
-      console.log("Paywall Presented:", info);
-    },
-    onDismiss: (info, result) => {
-      console.log("Paywall Dismissed:", info, "Result:", result);
-      if (result?.type === 'purchased') {
-        Alert.alert("Gratulujeme!", "Předplatné bylo úspěšně aktivováno!");
-      }
-    },
-  });
 
-  const handleShowPaywall = async () => {
-    try {
-      console.log("Triggering Superwall placement...");
-      await registerPlacement({
-        placement: "campaign_trigger",
-        feature() {
-          Alert.alert("Přístup povolen!", "Nyní máte přístup k prémiové funkci!");
-        },
-      });
-    } catch (error) {
-      console.error("Error showing paywall:", error);
-      Alert.alert("Chyba", "Nepodařilo se zobrazit paywall");
-    }
+  const handleShowPaywall = () => {
+    Alert.alert(
+      "Paywall Demo", 
+      "Toto je demo verze. Pro plnou funkcionalnost s paywallem použijte development build.",
+      [
+        { text: "Simulovat nákup", onPress: () => Alert.alert("Simulace", "Předplatné aktivováno!") },
+        { text: "Zrušit", style: "cancel" }
+      ]
+    );
   };
 
   return (
@@ -50,20 +29,18 @@ export default function Home() {
             Pro přístup k prémiové funkcím potřebujete předplatné.
           </Text>
           <Button 
-            title="Zobrazit prémiové funkce" 
+            title="Demo prémiové funkce" 
             onPress={handleShowPaywall}
             color="#007AFF"
           />
         </View>
 
-        {placementState && (
-          <View style={styles.debugInfo}>
-            <Text style={styles.debugTitle}>Debug Info:</Text>
-            <Text style={styles.debugText}>
-              {JSON.stringify(placementState, null, 2)}
-            </Text>
-          </View>
-        )}
+        <View style={styles.debugInfo}>
+          <Text style={styles.debugTitle}>Expo Go verze:</Text>
+          <Text style={styles.debugText}>
+            Paywall je zakázán pro kompatibilitu s Expo Go
+          </Text>
+        </View>
         
         <View style={styles.logoutSection}>
           <Button title="Odhlásit se" onPress={logout} color="#FF3B30" />
