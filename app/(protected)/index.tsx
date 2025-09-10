@@ -2,15 +2,58 @@ import React from "react";
 import { View, Text, Button, StyleSheet, Alert } from "react-native";
 import { useAuth } from "../../src/context/AuthContext";
 import { Protected } from "../../src/components/Protected";
+import { usePlacement, useSuperwallEvents } from "expo-superwall";
 
 export default function Home() {
   const { user, logout } = useAuth();
+  
+  // Hook pro zobrazení paywallu
+  const { registerPlacement, state } = usePlacement({
+    onError: (error) => {
+      console.error("[Superwall] Placement error:", error);
+      Alert.alert("Chyba", "Nepodařilo se zobrazit paywall.");
+    },
+    onPresent: (info) => {
+      console.log("[Superwall] Paywall presented:", info);
+    },
+    onDismiss: (info, result) => {
+      console.log("[Superwall] Paywall dismissed:", info, result);
+      
+      if (result.purchased) {
+        Alert.alert("Děkujeme za nákup!", "Nyní máte přístup ke všem prémiových funkcím!");
+      } else if (result.restored) {
+        Alert.alert("Nákup obnoven", "Vaše předplatné bylo úspěšně obnoveno!");
+      }
+    }
+  });
+  
+  // Listener pro obecné Superwall events
+  useSuperwallEvents({
+    onSuperwallEvent: (eventInfo) => {
+      console.log("[Superwall] Event:", eventInfo.event, eventInfo.params);
+    },
+    onSubscriptionStatusChange: (newStatus) => {
+      console.log("[Superwall] Subscription status changed:", newStatus.status);
+    }
+  });
 
-  const handleShowPaywall = () => {
-    Alert.alert(
-      "Development Build nutný!", 
-      "Superwall paywall funguje pouze v development buildu, ne v Expo Go. Vytvořte development build pro testování paywallu."
-    );
+  const handleShowPaywall = async () => {
+    try {
+      console.log("[Superwall] Registering placement: campaign_trigger");
+      await registerPlacement({ 
+        placement: "campaign_trigger",
+        params: { 
+          feature: "premium_access",
+          userId: user?.uid || "anonymous"
+        }
+      });
+    } catch (error) {
+      console.error("[Superwall] Error registering placement:", error);
+      Alert.alert(
+        "Chyba", 
+        "Nepodařilo se zobrazit paywall. Zkontrolujte konzoli pro více informací."
+      );
+    }
   };
 
   return (
@@ -22,10 +65,10 @@ export default function Home() {
         <View style={styles.paywallSection}>
           <Text style={styles.subtitle}>Prémiové funkce</Text>
           <Text style={styles.description}>
-            Pro testování paywallu potřebujete development build.
+            Získejte přístup k pokročilým funkcím pro zvýšení produktivity.
           </Text>
           <Button 
-            title="Zobrazit prémiové funkce" 
+            title="Zobrazit Superwall Paywall" 
             onPress={handleShowPaywall}
             color="#007AFF"
           />
