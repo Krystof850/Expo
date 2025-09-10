@@ -1,0 +1,69 @@
+Cíl:
+Připrav a zkontroluj Expo/React Native projekt pro iOS development build se simulátorem a dev-clientem. Použij bundleIdentifier: com.kkdigitalsolutions.procrastination. Přidej EAS konfiguraci pro profil "development", oprav run skripty, a ověř, že projekt jde spustit lokálně v iOS simulátoru a že je připravený i pro StoreKit Testing.
+
+Kroky úprav:
+1) Balíčky
+   - Zkontroluj a případně nainstaluj: expo, react-native, expo-dev-client, expo-updates, react-native-ios, expo-application, expo-build-properties.
+   - Ujisti se, že verze expo odpovídá verzi SDK v projektu (neprováděj major upgrade bez nutnosti).
+
+2) app.json / app.config.(js|ts)
+   - Přidej/ujisti se:
+     {
+       "expo": {
+         "name": "Procrastination App",
+         "scheme": "procrastination",
+         "ios": {
+           "bundleIdentifier": "com.kkdigitalsolutions.procrastination",
+           "supportsTablet": false,
+           "infoPlist": {
+             "ITSAppUsesNonExemptEncryption": false
+           }
+         }
+       }
+     }
+   - Pokud je config v JS/TS, nastav stejné hodnoty.
+
+3) eas.json
+   - Vytvoř nebo doplň s profily:
+     {
+       "cli": { "requireCommit": false },
+       "build": {
+         "development": {
+           "developmentClient": true,
+           "distribution": "internal",
+           "ios": { "simulator": true }
+         }
+       },
+       "submit": {}
+     }
+
+4) Skripty v package.json
+   - Přidej/ujisti se:
+     "scripts": {
+       "start": "expo start",
+       "ios": "expo run:ios",
+       "build:ios:dev:local": "eas build -p ios --profile development --local",
+       "prebuild:ios": "expo prebuild -p ios --clean"
+     }
+
+5) Prebuild iOS
+   - Spusť `npx expo prebuild -p ios` (nebo připrav příkaz, ale nespouštěj běhy které by spadly v CI; hlavním cílem je mít ios/ složku a .xcworkspace).
+
+6) iOS specifika
+   - Pokud je v projektu CocoaPods, ověř, že ios/Podfile je konzistentní a že je v rootu skript `npx pod-install`.
+   - Přidej README sekci s instrukcí: `cd ios && pod install`.
+
+7) StoreKit Testing – příprava
+   - V kořeni založ složku `storekit/` a vlož placeholder soubor `README-StoreKit.md` s návodem, jak v Xcode vytvořit `StoreKit.storekit` a přidat Auto-Renewable Subscriptions s Product ID např. `Annual_S` a `Monthly_S`.
+   - (Samotný .storekit negeneruj – ten se vytváří v Xcode GUI.)
+
+8) Kontrola Superwall
+   - Neprováděj žádné změny Superwall SDK; jen ověř, že Store Product IDs v appce jsou čtené z konstant a odpovídají hodnotám v dashboardu (např. `Annual_S`, `Monthly_S`). Pokud konstanty nejsou, vytvoř `src/config/iap.ts`:
+     export const IAP_IDS = { ANNUAL: "Annual_S", MONTHLY: "Monthly_S" };
+
+9) Výstup
+   - Vypiš přesné příkazy, které má uživatel spustit lokálně (Mac) pro: 
+     a) lokální dev build pro simulátor,
+     b) otevření Xcode a spuštění appky v simulátoru,
+     c) rychlé spuštění přes `expo run:ios`.
+   - Pokud chybí EAS Project ID, inicializuj pomocí `eas init --id` pouze pokud je známé; jinak uveď do README, že uživatel to doplní později.
