@@ -3,19 +3,19 @@ import { ConfigContext, ExpoConfig } from "expo/config";
 
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
-  name: "Procrastination App",
-  slug: "procrastination-app",
+  name: config.name ?? "expo-on-replit",
+  slug: config.slug ?? "expo-on-replit",
   owner: 'krystof_kapka',
   version: '1.0.0',
   orientation: 'portrait',
   icon: './assets/images/icon.png',
-  scheme: 'procrastination',
+  scheme: 'expo-on-replit',
   userInterfaceStyle: 'automatic',
   newArchEnabled: true,
 
   ios: {
     ...(config.ios ?? {}),
-    supportsTablet: false,
+    supportsTablet: true,
     bundleIdentifier: "com.kkdigitalsolutions.procrastination",
     infoPlist: {
       ...(config.ios?.infoPlist ?? {}),
@@ -40,8 +40,6 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   },
   plugins: [
     'expo-router',
-    'expo-updates',
-    'expo-application',
     [
       'expo-splash-screen',
       {
