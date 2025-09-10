@@ -39,12 +39,13 @@ export default function Home() {
 
   const handleShowPaywall = async () => {
     try {
-      console.log("[Superwall] Registering placement: campaign_trigger");
+      console.log("[Superwall] Registering placement: zario-template-3a85-2025-09-10");
       await registerPlacement({ 
-        placement: "campaign_trigger",
+        placement: "zario-template-3a85-2025-09-10",
         params: { 
           feature: "premium_access",
-          userId: user?.uid || "anonymous"
+          userId: user?.uid || "anonymous",
+          userEmail: user?.email || "anonymous"
         }
       });
     } catch (error) {
@@ -68,10 +69,13 @@ export default function Home() {
             Získejte přístup k pokročilým funkcím pro zvýšení produktivity.
           </Text>
           <Button 
-            title="Zobrazit Superwall Paywall" 
+            title="Zobrazit Zario Template Paywall" 
             onPress={handleShowPaywall}
             color="#007AFF"
           />
+          <Text style={styles.templateInfo}>
+            Template: zario-template-3a85-2025-09-10
+          </Text>
         </View>
         
         <View style={styles.logoutSection}>
@@ -116,6 +120,13 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginBottom: 16,
     color: "#666",
+  },
+  templateInfo: {
+    fontSize: 12,
+    color: "#999",
+    marginTop: 8,
+    textAlign: "center",
+    fontStyle: "italic",
   },
   logoutSection: {
     marginTop: 20,
