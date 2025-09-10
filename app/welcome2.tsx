@@ -14,7 +14,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const { width, height } = Dimensions.get('window');
 
-export default function WelcomeScreen() {
+export default function WelcomeScreen2() {
   // Animace pro floating elementy
   const float1 = useRef(new Animated.Value(0)).current;
   const float2 = useRef(new Animated.Value(0)).current;
@@ -49,11 +49,11 @@ export default function WelcomeScreen() {
 
   const handleGetStarted = async () => {
     try {
-      await AsyncStorage.setItem('hasSeenFirstWelcome', 'true');
-      router.push('/welcome2');
+      await AsyncStorage.setItem('hasSeenBothWelcomes', 'true');
+      router.push('/(auth)/sign-in');
     } catch (error) {
       console.log('Error saving welcome status:', error);
-      router.push('/welcome2');
+      router.push('/(auth)/sign-in');
     }
   };
 
@@ -61,7 +61,7 @@ export default function WelcomeScreen() {
     <View style={styles.container}>
       <StatusBar style="light" />
       <LinearGradient
-        colors={['#052e16', '#15803d', '#14532d']}
+        colors={['#3B82F6', '#1E40AF', '#1E3A8A']}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={styles.gradient}
@@ -216,7 +216,7 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontSize: 18,
-    color: '#bbf7d0',
+    color: '#BFDBFE',
     textAlign: 'center',
     maxWidth: 320,
     lineHeight: 26,
@@ -228,7 +228,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   button: {
-    backgroundColor: '#ffffff',
+    backgroundColor: '#60A5FA',
     paddingVertical: 16,
     paddingHorizontal: 32,
     borderRadius: 50,
@@ -242,15 +242,15 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#15803d',
+    color: '#1E3A8A',
   },
   footerText: {
     fontSize: 12,
-    color: '#86efac',
+    color: '#93C5FD',
     textAlign: 'center',
     marginTop: 16,
   },
-  // Floating background elementy
+  // Floating background elementy s modrými barvami
   floatingElement1: {
     position: 'absolute',
     left: -width * 0.33,
@@ -258,7 +258,7 @@ const styles = StyleSheet.create({
     width: 600,
     height: 600,
     borderRadius: 300,
-    backgroundColor: 'rgba(34, 197, 94, 0.1)',
+    backgroundColor: 'rgba(59, 130, 246, 0.1)',
     opacity: 0.6,
   },
   floatingElement2: {
@@ -268,7 +268,7 @@ const styles = StyleSheet.create({
     width: 700,
     height: 700,
     borderRadius: 350,
-    backgroundColor: 'rgba(16, 185, 129, 0.12)',
+    backgroundColor: 'rgba(37, 99, 235, 0.12)',
     opacity: 0.5,
   },
   floatingElement3: {
@@ -278,7 +278,7 @@ const styles = StyleSheet.create({
     width: 256,
     height: 256,
     borderRadius: 128,
-    backgroundColor: 'rgba(15, 118, 110, 0.15)',
+    backgroundColor: 'rgba(30, 64, 175, 0.15)',
   },
   floatingElement4: {
     position: 'absolute',
@@ -287,6 +287,6 @@ const styles = StyleSheet.create({
     width: 224,
     height: 224,
     borderRadius: 112,
-    backgroundColor: 'rgba(21, 128, 61, 0.15)',
+    backgroundColor: 'rgba(30, 58, 138, 0.15)',
   },
 });

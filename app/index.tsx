@@ -6,7 +6,7 @@ import { useState } from 'react';
 
 export default function Index() {
   const { user, loading } = useAuth();
-  const [hasSeenWelcome, setHasSeenWelcome] = useState<boolean | null>(null);
+  const [hasSeenBothWelcomes, setHasSeenBothWelcomes] = useState<boolean | null>(null);
 
   useEffect(() => {
     checkWelcomeStatus();
@@ -14,21 +14,21 @@ export default function Index() {
 
   const checkWelcomeStatus = async () => {
     try {
-      const welcomed = await AsyncStorage.getItem('hasSeenWelcome');
-      setHasSeenWelcome(welcomed === 'true');
+      const welcomed = await AsyncStorage.getItem('hasSeenBothWelcomes');
+      setHasSeenBothWelcomes(welcomed === 'true');
     } catch (error) {
       console.log('Error checking welcome status:', error);
-      setHasSeenWelcome(false);
+      setHasSeenBothWelcomes(false);
     }
   };
 
   // Zobrazit loading dokud se nenačte auth stav a welcome status
-  if (loading || hasSeenWelcome === null) {
+  if (loading || hasSeenBothWelcomes === null) {
     return null;
   }
 
-  // Pokud uživatel ještě neviděl welcome screen
-  if (!hasSeenWelcome) {
+  // Pokud uživatel ještě neviděl obě welcome screens
+  if (!hasSeenBothWelcomes) {
     return <Redirect href="/welcome" />;
   }
 
