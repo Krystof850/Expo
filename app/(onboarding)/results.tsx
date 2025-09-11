@@ -10,10 +10,13 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
-import OnboardingHeader from '@/components/OnboardingHeader';
+import { Ionicons } from '@expo/vector-icons';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { COLORS, SPACING } from '@/constants/theme';
 
 export default function ResultsScreen() {
+  const insets = useSafeAreaInsets();
+
   const handleContinue = () => {
     // Pro teď přejdeme na auth screens
     router.push('/(auth)/sign-in');
@@ -27,10 +30,12 @@ export default function ResultsScreen() {
         colors={[COLORS.gradientStart, COLORS.gradientMiddle, COLORS.gradientEnd]}
         style={styles.gradient}
       >
-        <OnboardingHeader 
-          onBack={() => router.back()}
-          showProgress={false}
-        />
+        {/* Simple Header with Back Button */}
+        <View style={[styles.header, { paddingTop: insets.top }]}>
+          <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
+            <Ionicons name="arrow-back" size={24} color={COLORS.mainText} />
+          </TouchableOpacity>
+        </View>
 
         <ScrollView 
           style={styles.scrollContainer}
@@ -110,6 +115,15 @@ const styles = StyleSheet.create({
   },
   gradient: {
     flex: 1,
+  },
+  header: {
+    paddingHorizontal: SPACING.page,
+    paddingBottom: SPACING.small,
+    zIndex: 10,
+  },
+  backButton: {
+    padding: 8,
+    alignSelf: 'flex-start',
   },
   scrollContainer: {
     flex: 1,
