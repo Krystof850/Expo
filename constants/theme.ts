@@ -1,19 +1,28 @@
-// Theme colors matching the HTML template CSS variables
+// Theme colors podle screenshotu - modrý gradient design
 export const COLORS = {
-  // CSS variables from the HTML template
-  primaryAction: '#38BDF8',      // --primary-action: sky-400
-  secondaryBackground: '#1E3A8A', // --secondary-background: blue-900
-  mainText: '#FFFFFF',           // --main-text: white
-  ctaText: '#0F172A',           // --cta-text: slate-900
-  accentGreen: '#34D399',       // --accent-green: emerald-400
-  defaultBg: '#0B1120',         // --default-bg: very dark blue
+  // Hlavní barvy podle screenshotu
+  mainText: '#FFFFFF',                    // Bílý text
+  ctaText: '#1a1a1a',                    // Tmavý text pro Next tlačítko
   
-  // Additional colors for UI states
-  questionLabel: 'rgba(125, 211, 252, 0.8)', // sky-300/80 from template
-  progressTrack: 'rgba(255, 255, 255, 0.2)',  // white/20 for progress bar background
-  answerButton: 'rgba(56, 189, 248, 0.2)',    // sky-400/20 from template
-  answerButtonBorder: 'rgba(56, 189, 248, 0.5)', // sky-400/50 from template  
-  answerButtonHover: 'rgba(56, 189, 248, 0.4)',  // sky-400/40 hover state
+  // Progress bar - teal/cyan barva ze screenshotu
+  progressFill: '#4DD0E1',               // Světlá cyan barva
+  progressTrack: 'rgba(255, 255, 255, 0.2)', // Bílý track s průhledností
+  
+  // Question label - světlejší text
+  questionLabel: 'rgba(255, 255, 255, 0.7)', // Bílá s průhledností
+  
+  // Answer buttons - poloprůhledné tlačítka
+  answerButton: 'rgba(255, 255, 255, 0.15)',     // Poloprůhledná bílá
+  answerButtonBorder: 'rgba(255, 255, 255, 0.3)', // Jemný bílý okraj
+  answerButtonSelected: 'rgba(255, 255, 255, 0.25)', // Zvýrazněný stav
+  
+  // Next button - bílé tlačítko
+  nextButton: '#FFFFFF',                  // Bílé pozadí
+  
+  // Gradient barvy pro pozadí (z světlé k tmavé modré)
+  gradientStart: '#6BB6FF',              // Světlá modrá nahoře
+  gradientMiddle: '#5B9BD5',             // Střední modrá
+  gradientEnd: '#4682B4',                // Tmavá modrá dole
 } as const;
 
 export const SPACING = {
@@ -47,12 +56,15 @@ export const TYPOGRAPHY = {
   },
 } as const;
 
-// Gradient definitions matching the template
+// Gradient definice podle screenshotu
 export const GRADIENTS = {
-  progress: ['#38BDF8', '#34D399'], // sky-400 to emerald-400
+  // Progress bar - jednoduchý cyan gradient
+  progress: [COLORS.progressFill, COLORS.progressFill], 
+  
+  // Background - modrý gradient ze světlé k tmavé
   background: [
-    'rgba(49, 46, 129, 0.7)',   // indigo-900/70
-    'rgba(30, 58, 138, 0.6)',   // blue-900/60  
-    'rgba(15, 23, 42, 0.8)',    // slate-900/80
+    COLORS.gradientStart,    // Světlá modrá nahoře
+    COLORS.gradientMiddle,   // Střední modrá
+    COLORS.gradientEnd,      // Tmavá modrá dole
   ],
 } as const;

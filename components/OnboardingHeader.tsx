@@ -32,10 +32,7 @@ export function OnboardingHeader({ step, total, questionLabel }: OnboardingHeade
         
         <View style={styles.progressContainer}>
           <View style={styles.progressTrack}>
-            <LinearGradient
-              colors={GRADIENTS.progress}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 0 }}
+            <View
               style={[styles.progressFill, { width: `${progressPercentage}%` }]}
             />
           </View>
@@ -75,12 +72,13 @@ const styles = StyleSheet.create({
   },
   progressFill: {
     height: '100%',
+    backgroundColor: COLORS.progressFill,
     borderRadius: 5,
-    shadowColor: COLORS.primaryAction,
+    shadowColor: COLORS.progressFill,
     shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.8,
-    shadowRadius: 10,
-    elevation: 5,
+    shadowOpacity: 0.6,
+    shadowRadius: 8,
+    elevation: 4,
   },
   questionLabel: {
     fontSize: 20,

@@ -183,45 +183,19 @@ const styles = StyleSheet.create({
     flex: 1,
     position: 'relative',
   },
-  // Floating background elementy podle HTML template
+  // Floating background elementy - jemné modré tvary pro gradient efekt
   floatingElement1: {
     position: 'absolute',
-    left: -width * 0.33,
-    top: -height * 0.25,
-    width: 650,
-    height: 650,
-    borderRadius: 325,
-    backgroundColor: `${COLORS.primaryAction}40`, // sky-400/40
-    opacity: 0.6,
+    left: -width * 0.3,
+    top: -height * 0.2,
+    width: 500,
+    height: 500,
+    borderRadius: 250,
+    backgroundColor: 'rgba(255, 255, 255, 0.05)', // Jemný bílý efekt
+    opacity: 0.4,
   },
   floatingElement2: {
     position: 'absolute',
-    right: -width * 0.25,
-    bottom: -height * 0.45,
-    width: 750,
-    height: 750,
-    borderRadius: 375,
-    backgroundColor: `${COLORS.secondaryBackground}40`, // blue-700/40
-    opacity: 0.5,
-  },
-  floatingElement3: {
-    position: 'absolute',
-    bottom: height * 0.33,
-    right: width * 0.25,
-    width: 288, // 72 * 4 = 288px (w-72)
-    height: 288,
-    borderRadius: 144,
-    backgroundColor: `${COLORS.primaryAction}33`, // primaryAction/20
-    opacity: 1,
-  },
-  floatingElement4: {
-    position: 'absolute',
-    left: width * 0.25,
-    top: height * 0.33,
-    width: 256, // 64 * 4 = 256px (w-64)
-    height: 256,
-    borderRadius: 128,
-    backgroundColor: `${COLORS.accentGreen}33`, // accentGreen/20
-    opacity: 1,
-  },
+    right: -width * 0.2,
+    bottom: -he
 });
