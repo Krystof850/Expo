@@ -152,10 +152,11 @@ export default function OnboardingLayout() {
         screenOptions={{
           headerShown: false,
           contentStyle: {
-            backgroundColor: 'transparent',
+            backgroundColor: '#1E3A8A',
           },
           animation: 'slide_from_right',
-          animationDuration: 400,
+          gestureEnabled: true,
+          detachPreviousScreen: true,
         }}
       >
         <Stack.Screen name="question1" />
