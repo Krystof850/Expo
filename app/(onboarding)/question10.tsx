@@ -7,6 +7,8 @@ import {
   StyleSheet,
   BackHandler,
   Platform,
+  KeyboardAvoidingView,
+  ScrollView,
 } from 'react-native';
 import { router, useFocusEffect } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -54,41 +56,52 @@ export default function OnboardingQuestion10() {
   const isFormValid = name.trim().length > 0 && age.trim().length > 0;
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView 
+      style={styles.container}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={0}
+    >
       <OnboardingHeader 
         step={10} 
         total={10} 
         questionLabel="Question 10"
       />
       
-      <View style={styles.content}>
-        <View style={styles.questionSection}>
-          <Text style={styles.titleText}>Finally</Text>
-          <Text style={styles.subtitleText}>A little more about you</Text>
-        </View>
-        
-        <View style={styles.inputsSection}>
-          <TextInput
-            style={styles.input}
-            placeholder="Name"
-            placeholderTextColor={COLORS.questionLabel}
-            value={name}
-            onChangeText={setName}
-            autoCapitalize="words"
-            maxLength={50}
-          />
+      <ScrollView 
+        style={styles.scrollContainer}
+        contentContainerStyle={styles.scrollContent}
+        keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={styles.content}>
+          <View style={styles.questionSection}>
+            <Text style={styles.titleText}>Finally</Text>
+            <Text style={styles.subtitleText}>A little more about you</Text>
+          </View>
           
-          <TextInput
-            style={styles.input}
-            placeholder="Age"
-            placeholderTextColor={COLORS.questionLabel}
-            value={age}
-            onChangeText={setAge}
-            keyboardType="numeric"
-            maxLength={3}
-          />
+          <View style={styles.inputsSection}>
+            <TextInput
+              style={styles.input}
+              placeholder="Name"
+              placeholderTextColor={COLORS.questionLabel}
+              value={name}
+              onChangeText={setName}
+              autoCapitalize="words"
+              maxLength={50}
+            />
+            
+            <TextInput
+              style={styles.input}
+              placeholder="Age"
+              placeholderTextColor={COLORS.questionLabel}
+              value={age}
+              onChangeText={setAge}
+              keyboardType="numeric"
+              maxLength={3}
+            />
+          </View>
         </View>
-      </View>
+      </ScrollView>
       
       <View style={[styles.nextContainer, { paddingBottom: insets.bottom + SPACING.page }]}>
         <TouchableOpacity 
@@ -102,21 +115,28 @@ export default function OnboardingQuestion10() {
           <Text style={styles.nextButtonText}>Complete Quiz</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'space-between',
+  },
+  scrollContainer: {
+    flex: 1,
+  },
+  scrollContent: {
+    flexGrow: 1,
+    justifyContent: 'center',
+    minHeight: '100%',
   },
   content: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: SPACING.page,
-    marginTop: -64,
+    paddingTop: 20,
   },
   questionSection: {
     width: '100%',
