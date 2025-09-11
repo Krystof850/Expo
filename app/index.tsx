@@ -3,50 +3,63 @@ import { Redirect } from 'expo-router';
 import { useAuth } from '../src/context/AuthContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useState } from 'react';
-// TEMPORARY reset completed - cleaned app data
+// Debug routing logic with console logs
 
 export default function Index() {
   const { user, loading } = useAuth();
-  const [hasSeenAllWelcomes, setHasSeenAllWelcomes] = useState<boolean | null>(null);
-  const [hasCompletedOnboarding, setHasCompletedOnboarding] = useState<boolean | null>(null);
+  const [appStep, setAppStep] = useState<'loading' | 'welcome' | 'onboarding' | 'auth' | 'protected'>('loading');
 
   useEffect(() => {
-    checkAppStatus();
+    determineAppStep();
   }, []);
 
-  const checkAppStatus = async () => {
+  const determineAppStep = async () => {
     try {
-      const welcomed = await AsyncStorage.getItem('hasSeenAllWelcomes');
-      const onboardingCompleted = await AsyncStorage.getItem('onboarding_complete');
-      setHasSeenAllWelcomes(welcomed === 'true');
-      setHasCompletedOnboarding(onboardingCompleted === 'true');
+      console.log('📥 FORCE RESET: Clearing old flow data...');
+      
+      // VYMAZAT VŠECHNA STARÁ DATA - každý user začíná od začátku
+      await AsyncStorage.multiRemove([
+        'hasSeenAllWelcomes',
+        'hasSeenSecondWelcome', 
+        'onboarding_complete',
+        'onboarding_gender',
+        'onboarding_age'
+      ]);
+      
+      console.log('✅ All flow data cleared - starting fresh!');
+      console.log('🌟 EVERY USER MUST START FROM WELCOME');
+      
+      // KAŽDÝ uživatel VZDY začíná od welcome
+      setAppStep('welcome');
+      
     } catch (error) {
-      console.log('Error checking app status:', error);
-      setHasSeenAllWelcomes(false);
-      setHasCompletedOnboarding(false);
+      console.log('Error clearing app data:', error);
+      // Při chybě začni od welcome
+      setAppStep('welcome');
     }
   };
 
-  // Zobrazit loading dokud se nenačte auth stav a status
-  if (loading || hasSeenAllWelcomes === null || hasCompletedOnboarding === null) {
+  // Zobrazit loading dokud se neurčí krok
+  if (loading || appStep === 'loading') {
     return null;
   }
 
-  // Pokud uživatel ještě neviděl všechny welcome screens
-  if (!hasSeenAllWelcomes) {
-    return <Redirect href="/welcome" />;
+  // PEVNÝ FLOW - každý musí projít vše po pořadě
+  switch (appStep) {
+    case 'welcome':
+      return <Redirect href="/welcome" />;
+    
+    case 'onboarding':
+      return <Redirect href="/(onboarding)/question1" />;
+    
+    case 'auth':
+      return <Redirect href="/(auth)/sign-in" />;
+    
+    case 'protected':
+      return <Redirect href="/(protected)" />;
+    
+    default:
+      // Fallback na začátek
+      return <Redirect href="/welcome" />;
   }
-
-  // Pokud uživatel neviděl onboarding, přesměruj tam
-  if (!hasCompletedOnboarding) {
-    return <Redirect href="/(onboarding)/question1" />;
-  }
-
-  // Pokud je uživatel přihlášený, přesměruj na protected area
-  if (user) {
-    return <Redirect href="/(protected)" />;
-  }
-
-  // Jinak přesměruj na přihlášení
-  return <Redirect href="/(auth)/sign-in" />;
 }
