@@ -3,6 +3,7 @@ import { Stack } from 'expo-router';
 import { View, StyleSheet, Dimensions, Animated } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { StatusBar } from 'expo-status-bar';
+import { COLORS, GRADIENTS } from '../../constants/theme';
 
 const { width, height } = Dimensions.get('window');
 
@@ -32,18 +33,18 @@ function SharedBackground() {
       );
     };
 
-    // Spuštění animací s různými délkami a zpožděními
-    setTimeout(() => createFloatingAnimation(float1, 4000).start(), 0);
-    setTimeout(() => createFloatingAnimation(float2, 5000).start(), 1000);
-    setTimeout(() => createFloatingAnimation(float3, 6000).start(), 2000);
-    setTimeout(() => createFloatingAnimation(float4, 4500).start(), 3000);
+    // Spuštění animací podle HTML template (9-13s durations)
+    setTimeout(() => createFloatingAnimation(float1, 9000).start(), 0);
+    setTimeout(() => createFloatingAnimation(float2, 11000).start(), 1000);
+    setTimeout(() => createFloatingAnimation(float3, 13000).start(), 2000);
+    setTimeout(() => createFloatingAnimation(float4, 10000).start(), 4000);
   }, []);
 
   return (
     <View style={styles.backgroundContainer}>
       <StatusBar style="light" />
       <LinearGradient
-        colors={['#3B82F6', '#1E40AF', '#1E3A8A']}
+        colors={GRADIENTS.background}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={styles.gradient}
@@ -152,10 +153,10 @@ export default function OnboardingLayout() {
         screenOptions={{
           headerShown: false,
           contentStyle: {
-            backgroundColor: '#4F85F6',
+            backgroundColor: 'transparent',
           },
           animation: 'slide_from_right',
-          gestureEnabled: true,
+          gestureEnabled: false,
           detachPreviousScreen: true,
         }}
       >
@@ -182,43 +183,45 @@ const styles = StyleSheet.create({
     flex: 1,
     position: 'relative',
   },
-  // Floating background elementy
+  // Floating background elementy podle HTML template
   floatingElement1: {
     position: 'absolute',
-    left: -width * 0.3,
-    top: -height * 0.2,
-    width: 500,
-    height: 500,
-    borderRadius: 250,
-    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+    left: -width * 0.33,
+    top: -height * 0.25,
+    width: 650,
+    height: 650,
+    borderRadius: 325,
+    backgroundColor: `${COLORS.primaryAction}40`, // sky-400/40
     opacity: 0.6,
   },
   floatingElement2: {
     position: 'absolute',
-    right: -width * 0.2,
-    bottom: -height * 0.3,
-    width: 600,
-    height: 600,
-    borderRadius: 300,
-    backgroundColor: 'rgba(30, 64, 175, 0.15)',
+    right: -width * 0.25,
+    bottom: -height * 0.45,
+    width: 750,
+    height: 750,
+    borderRadius: 375,
+    backgroundColor: `${COLORS.secondaryBackground}40`, // blue-700/40
     opacity: 0.5,
   },
   floatingElement3: {
     position: 'absolute',
-    bottom: height * 0.3,
-    right: width * 0.2,
-    width: 200,
-    height: 200,
-    borderRadius: 100,
-    backgroundColor: 'rgba(30, 58, 138, 0.2)',
+    bottom: height * 0.33,
+    right: width * 0.25,
+    width: 288, // 72 * 4 = 288px (w-72)
+    height: 288,
+    borderRadius: 144,
+    backgroundColor: `${COLORS.primaryAction}33`, // primaryAction/20
+    opacity: 1,
   },
   floatingElement4: {
     position: 'absolute',
-    left: width * 0.2,
-    top: height * 0.35,
-    width: 180,
-    height: 180,
-    borderRadius: 90,
-    backgroundColor: 'rgba(59, 130, 246, 0.18)',
+    left: width * 0.25,
+    top: height * 0.33,
+    width: 256, // 64 * 4 = 256px (w-64)
+    height: 256,
+    borderRadius: 128,
+    backgroundColor: `${COLORS.accentGreen}33`, // accentGreen/20
+    opacity: 1,
   },
 });

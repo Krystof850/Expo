@@ -4,12 +4,30 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
+  BackHandler,
 } from 'react-native';
-import { router } from 'expo-router';
+import { router, useFocusEffect } from 'expo-router';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { OnboardingHeader } from '../../components/OnboardingHeader';
+import { COLORS, TYPOGRAPHY, SPACING } from '../../constants/theme';
 
 export default function OnboardingQuestion1() {
+  const insets = useSafeAreaInsets();
   const [selectedGender, setSelectedGender] = useState<string>('');
+
+  // Blokování hardware back button
+  useFocusEffect(
+    React.useCallback(() => {
+      const onBackPress = () => {
+        return true; // Blokuje hardware back
+      };
+
+      BackHandler.addEventListener('hardwareBackPress', onBackPress);
+
+      return () => BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+    }, [])
+  );
 
   const handleGenderSelect = (gender: string) => {
     setSelectedGender(gender);
@@ -31,68 +49,53 @@ export default function OnboardingQuestion1() {
 
   return (
     <View style={styles.container}>
-      {/* Hlavní obsah */}
+      <OnboardingHeader 
+        step={1} 
+        total={2} 
+        questionLabel="Question 1"
+      />
+      
       <View style={styles.content}>
-          {/* Otázka */}
-          <View style={styles.questionContainer}>
-            <Text style={styles.questionLabel}>Question 1</Text>
-            <Text style={styles.questionText}>What is your gender?</Text>
-          </View>
+        <View style={styles.questionContainer}>
+          <Text style={styles.questionText}>What is your gender?</Text>
+        </View>
+        
+        <View style={styles.answersContainer}>
+          <TouchableOpacity
+            style={[
+              styles.answerButton,
+              selectedGender === 'Male' && styles.answerButtonSelected
+            ]}
+            onPress={() => handleGenderSelect('Male')}
+            activeOpacity={0.8}
+          >
+            <Text style={styles.answerText}>Male</Text>
+          </TouchableOpacity>
 
-          {/* Odpovědi */}
-          <View style={styles.answersContainer}>
-            <TouchableOpacity
-              style={[
-                styles.answerButton,
-                selectedGender === 'Male' && styles.answerButtonSelected
-              ]}
-              onPress={() => handleGenderSelect('Male')}
-              activeOpacity={0.8}
-            >
-              <Text style={[
-                styles.answerText,
-                selectedGender === 'Male' && styles.answerTextSelected
-              ]}>
-                Male
-              </Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={[
-                styles.answerButton,
-                selectedGender === 'Female' && styles.answerButtonSelected
-              ]}
-              onPress={() => handleGenderSelect('Female')}
-              activeOpacity={0.8}
-            >
-              <Text style={[
-                styles.answerText,
-                selectedGender === 'Female' && styles.answerTextSelected
-              ]}>
-                Female
-              </Text>
-            </TouchableOpacity>
-          </View>
-
-          {/* Next tlačítko */}
-          <View style={styles.nextContainer}>
-            <TouchableOpacity
-              style={[
-                styles.nextButton,
-                !selectedGender && styles.nextButtonDisabled
-              ]}
-              onPress={handleNext}
-              disabled={!selectedGender}
-              activeOpacity={0.9}
-            >
-              <Text style={[
-                styles.nextButtonText,
-                !selectedGender && styles.nextButtonTextDisabled
-              ]}>
-                Next
-              </Text>
-            </TouchableOpacity>
-          </View>
+          <TouchableOpacity
+            style={[
+              styles.answerButton,
+              selectedGender === 'Female' && styles.answerButtonSelected
+            ]}
+            onPress={() => handleGenderSelect('Female')}
+            activeOpacity={0.8}
+          >
+            <Text style={styles.answerText}>Female</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+      
+      <View style={[styles.nextContainer, { bottom: insets.bottom + SPACING.page }]}>
+        <TouchableOpacity 
+          style={[
+            styles.nextButton,
+            !selectedGender && styles.nextButtonDisabled
+          ]}
+          onPress={handleNext}
+          disabled={!selectedGender}
+        >
+          <Text style={styles.nextButtonText}>Next</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -104,84 +107,66 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    justifyContent: 'space-between',
-    paddingHorizontal: 32,
-    paddingTop: 120,
-    paddingBottom: 60,
+    justifyContent: 'center',
+    paddingHorizontal: SPACING.page,
+    marginTop: -64, // Offset to center content properly
   },
   questionContainer: {
     alignItems: 'center',
-    marginBottom: 80,
-  },
-  questionLabel: {
-    fontSize: 16,
-    fontWeight: '400',
-    color: 'rgba(255, 255, 255, 0.7)',
-    textAlign: 'center',
-    marginBottom: 8,
+    marginBottom: 32,
   },
   questionText: {
     fontSize: 28,
     fontWeight: '700',
-    color: '#ffffff',
+    color: COLORS.mainText,
     textAlign: 'center',
     lineHeight: 32,
     letterSpacing: -0.5,
+    textShadowColor: 'rgba(0, 0, 0, 0.4)',
+    textShadowOffset: { width: 0, height: 3 },
+    textShadowRadius: 6,
   },
   answersContainer: {
-    justifyContent: 'center',
-    gap: 20,
-    paddingHorizontal: 20,
-    marginBottom: 40,
+    gap: SPACING.small,
+    paddingHorizontal: 0,
   },
   answerButton: {
-    backgroundColor: 'rgba(255, 255, 255, 0.15)',
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.3)',
-    paddingVertical: 18,
+    backgroundColor: COLORS.answerButton,
+    borderWidth: 2,
+    borderColor: COLORS.answerButtonBorder,
+    paddingVertical: 16,
     paddingHorizontal: 32,
     borderRadius: 50,
     alignItems: 'center',
   },
   answerButtonSelected: {
-    backgroundColor: 'rgba(255, 255, 255, 0.25)',
-    borderColor: 'rgba(255, 255, 255, 0.5)',
+    backgroundColor: COLORS.answerButtonHover,
+    borderColor: COLORS.primaryAction,
   },
   answerText: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#ffffff',
-  },
-  answerTextSelected: {
-    color: '#ffffff',
-    fontWeight: '700',
+    ...TYPOGRAPHY.answerText,
   },
   nextContainer: {
-    marginTop: 60,
+    position: 'absolute',
+    left: SPACING.page,
+    right: SPACING.page,
   },
   nextButton: {
-    backgroundColor: '#ffffff',
+    backgroundColor: COLORS.mainText,
     paddingVertical: 16,
     paddingHorizontal: 32,
     borderRadius: 50,
     alignItems: 'center',
-    shadowColor: '#000',
+    shadowColor: 'rgba(255, 255, 255, 0.2)',
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 8,
-    elevation: 4,
+    shadowOpacity: 1,
+    shadowRadius: 20,
+    elevation: 8,
   },
   nextButtonDisabled: {
-    backgroundColor: 'rgba(255, 255, 255, 0.3)',
-    shadowOpacity: 0,
-    elevation: 0,
+    opacity: 0.5,
   },
   nextButtonText: {
-    fontSize: 18,
-    fontWeight: '700',
-    color: '#1E40AF',
-  },
-  nextButtonTextDisabled: {
-    color: 'rgba(30, 64, 175, 0.5)',
+    ...TYPOGRAPHY.nextButton,
   },
 });
