@@ -29,7 +29,7 @@ const PROCRASTINATION_GOALS: Goal[] = [
   { id: 'better_focus', text: 'Lepší koncentrace a soustředění', icon: 'eye-outline', color: '#ED8936' },
   { id: 'goal_achievement', text: 'Dosahování osobních cílů', icon: 'trophy-outline', color: '#9F7AEA' },
   { id: 'self_discipline', text: 'Posílení sebedisciplíny', icon: 'shield-checkmark-outline', color: '#38B2AC' },
-  { id: 'work_life_balance', text: 'Lepší work-life balance', icon: 'scales-outline', color: '#68D391' },
+  { id: 'work_life_balance', text: 'Lepší work-life balance', icon: 'library-outline', color: '#68D391' },
 ];
 
 export default function GoalsScreen() {
@@ -52,12 +52,12 @@ export default function GoalsScreen() {
       await AsyncStorage.setItem('selected_goals', JSON.stringify(selectedGoals));
       console.log('🎯 Goals saved:', selectedGoals);
       
-      // Pokračovat na auth
-      router.push('/(auth)/sign-in');
+      // Pokračovat na referral
+      router.push('/(onboarding)/referral');
     } catch (error) {
       console.log('Error saving goals:', error);
-      // I při chybě pokračovat
-      router.push('/(auth)/sign-in');
+      // I při chybě pokračovat na referral
+      router.push('/(onboarding)/referral');
     }
   };
 
