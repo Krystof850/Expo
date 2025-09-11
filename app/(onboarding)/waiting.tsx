@@ -68,13 +68,13 @@ export default function OnboardingWaiting() {
       try {
         // Označit onboarding jako dokončený
         await AsyncStorage.setItem('onboarding_complete', 'true');
-        console.log('📝 Onboarding completed - navigating to auth...');
-        // Přejít na auth
-        router.replace('/(auth)/sign-in');
+        console.log('📝 Onboarding completed - navigating to results...');
+        // Přejít na výsledky
+        router.push('/(onboarding)/results');
       } catch (error) {
         console.log('Error completing onboarding:', error);
-        // I při chybě pokračovat
-        router.replace('/(auth)/sign-in');
+        // I při chybě pokračovat na výsledky
+        router.push('/(onboarding)/results');
       }
     }, duration);
 
@@ -121,8 +121,8 @@ export default function OnboardingWaiting() {
 
         {/* Text content */}
         <View style={styles.textSection}>
-          <Text style={styles.titleText}>Calculating</Text>
-          <Text style={styles.subtitleText}>Learning relapse triggers</Text>
+          <Text style={styles.titleText}>Vyhodnocování</Text>
+          <Text style={styles.subtitleText}>Analyzujeme vaše prokrastinační vzory</Text>
         </View>
       </View>
     </View>
