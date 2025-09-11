@@ -50,10 +50,10 @@ export default function WelcomeScreen3() {
   const handleGetStarted = async () => {
     try {
       await AsyncStorage.setItem('hasSeenAllWelcomes', 'true');
-      router.push('/(auth)/sign-in');
+      router.push('/(onboarding)/question1');
     } catch (error) {
       console.log('Error saving welcome status:', error);
-      router.push('/(auth)/sign-in');
+      router.push('/(onboarding)/question1');
     }
   };
 
