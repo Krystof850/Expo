@@ -18,8 +18,8 @@ export default function ResultsScreen() {
   const insets = useSafeAreaInsets();
 
   const handleContinue = () => {
-    // Pro teď přejdeme na auth screens
-    router.push('/(auth)/sign-in');
+    // Přejít na symptoms screen
+    router.push('/(onboarding)/symptoms');
   };
 
   return (
