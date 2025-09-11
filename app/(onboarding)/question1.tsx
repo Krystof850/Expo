@@ -35,7 +35,8 @@ export default function OnboardingQuestion1() {
       <View style={styles.content}>
           {/* Otázka */}
           <View style={styles.questionContainer}>
-            <Text style={styles.questionText}>Question 1: What is your gender?</Text>
+            <Text style={styles.questionLabel}>Question 1</Text>
+            <Text style={styles.questionText}>What is your gender?</Text>
           </View>
 
           {/* Odpovědi */}
@@ -52,7 +53,7 @@ export default function OnboardingQuestion1() {
                 styles.answerText,
                 selectedGender === 'Male' && styles.answerTextSelected
               ]}>
-                1. Male
+                Male
               </Text>
             </TouchableOpacity>
 
@@ -68,7 +69,7 @@ export default function OnboardingQuestion1() {
                 styles.answerText,
                 selectedGender === 'Female' && styles.answerTextSelected
               ]}>
-                2. Female
+                Female
               </Text>
             </TouchableOpacity>
           </View>
@@ -104,43 +105,47 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     justifyContent: 'space-between',
-    paddingHorizontal: 24,
-    paddingTop: 100,
-    paddingBottom: 50,
+    paddingHorizontal: 32,
+    paddingTop: 120,
+    paddingBottom: 60,
   },
   questionContainer: {
     alignItems: 'center',
-    marginBottom: 60,
+    marginBottom: 80,
+  },
+  questionLabel: {
+    fontSize: 16,
+    fontWeight: '400',
+    color: 'rgba(255, 255, 255, 0.7)',
+    textAlign: 'center',
+    marginBottom: 8,
   },
   questionText: {
-    fontSize: 32,
-    fontWeight: '800',
+    fontSize: 28,
+    fontWeight: '700',
     color: '#ffffff',
     textAlign: 'center',
-    lineHeight: 40,
-    letterSpacing: -0.8,
-    textShadowColor: 'rgba(0, 0, 0, 0.4)',
-    textShadowOffset: { width: 0, height: 3 },
-    textShadowRadius: 6,
+    lineHeight: 32,
+    letterSpacing: -0.5,
   },
   answersContainer: {
-    flex: 1,
     justifyContent: 'center',
-    gap: 32,
-    paddingHorizontal: 32,
+    gap: 20,
+    paddingHorizontal: 20,
+    marginBottom: 40,
   },
   answerButton: {
-    backgroundColor: 'rgba(56, 189, 248, 0.2)',
-    borderWidth: 2,
-    borderColor: 'rgba(56, 189, 248, 0.5)',
-    paddingVertical: 16,
+    backgroundColor: 'rgba(255, 255, 255, 0.15)',
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.3)',
+    paddingVertical: 18,
     paddingHorizontal: 32,
     borderRadius: 50,
     alignItems: 'center',
   },
   answerButtonSelected: {
-    backgroundColor: 'rgba(56, 189, 248, 0.4)',
-    borderColor: 'rgba(56, 189, 248, 0.8)',
+    backgroundColor: 'rgba(255, 255, 255, 0.25)',
+    borderColor: 'rgba(255, 255, 255, 0.5)',
   },
   answerText: {
     fontSize: 18,
@@ -152,7 +157,7 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   nextContainer: {
-    marginTop: 40,
+    marginTop: 60,
   },
   nextButton: {
     backgroundColor: '#ffffff',
