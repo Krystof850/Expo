@@ -86,8 +86,6 @@ const styles = StyleSheet.create({
     color: COLORS.questionLabel,
     textAlign: 'center',
     marginTop: SPACING.small,
-    textShadowColor: 'rgba(0, 0, 0, 0.3)',
-    textShadowOffset: { width: 0, height: 2 },
-    textShadowRadius: 4,
+    // Removed textShadow for better web compatibility
   },
 });

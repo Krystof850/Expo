@@ -129,9 +129,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     lineHeight: 32,
     letterSpacing: -0.5,
-    textShadowColor: 'rgba(0, 0, 0, 0.4)',
-    textShadowOffset: { width: 0, height: 3 },
-    textShadowRadius: 6,
+    // Removed textShadow for better web compatibility
   },
   answersSection: {
     width: '100%',

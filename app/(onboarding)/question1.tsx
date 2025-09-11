@@ -123,15 +123,13 @@ const styles = StyleSheet.create({
     marginBottom: 32, // space-y-8 = 32px
   },
   questionText: {
-    fontSize: 28, // text-3xl
-    fontWeight: '700', // font-bold
+    fontSize: 28,
+    fontWeight: '700',
     color: COLORS.mainText,
     textAlign: 'center',
-    lineHeight: 32, // leading-tight
-    letterSpacing: -0.5, // tracking-tight
-    textShadowColor: 'rgba(0, 0, 0, 0.4)',
-    textShadowOffset: { width: 0, height: 3 },
-    textShadowRadius: 6,
+    lineHeight: 32,
+    letterSpacing: -0.5,
+    // Removed textShadow for better web compatibility
   },
   answersSection: {
     width: '100%',
