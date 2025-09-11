@@ -51,12 +51,12 @@ export default function SymptomsScreen() {
       await AsyncStorage.setItem('selected_symptoms', JSON.stringify(selectedSymptoms));
       console.log('💾 Symptoms saved:', selectedSymptoms);
       
-      // Pokračovat na auth
-      router.push('/(auth)/sign-in');
+      // Pokračovat na goals
+      router.push('/(onboarding)/goals');
     } catch (error) {
       console.log('Error saving symptoms:', error);
-      // I při chybě pokračovat
-      router.push('/(auth)/sign-in');
+      // I při chybě pokračovat na goals
+      router.push('/(onboarding)/goals');
     }
   };
 

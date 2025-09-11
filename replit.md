@@ -14,7 +14,8 @@ This is an Expo React Native application with Firebase Authentication integratio
 - ✅ Hardware back button blocking on Android for forced linear progression
 - ✅ AsyncStorage persistence for all 10 assessment responses with dedicated keys including user name and age
 - ✅ **NEW: Symptoms Selection Screen** - Multi-select symptoms interface for procrastination assessment
-- ✅ Complete onboarding flow: Assessment → Waiting → Results → Symptoms → Authentication
+- ✅ **NEW: Goals Selection Screen** - Multi-select goals interface for tracking personal objectives
+- ✅ Complete onboarding flow: Assessment → Waiting → Results → Symptoms → Goals → Authentication
 - ✅ Complete Firebase Auth implementation with email/password authentication
 - ✅ Session persistence using AsyncStorage for React Native  
 - ✅ Protected routes with automatic redirects
