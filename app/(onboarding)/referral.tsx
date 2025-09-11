@@ -31,12 +31,12 @@ export default function ReferralScreen() {
         console.log('🔗 No referral code provided');
       }
       
-      // Pokračovat na auth
-      router.push('/(auth)/sign-in');
+      // Pokračovat na rating
+      router.push('/(onboarding)/rating');
     } catch (error) {
       console.log('Error saving referral code:', error);
-      // I při chybě pokračovat
-      router.push('/(auth)/sign-in');
+      // I při chybě pokračovat na rating
+      router.push('/(onboarding)/rating');
     }
   };
 

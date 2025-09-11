@@ -16,7 +16,8 @@ This is an Expo React Native application with Firebase Authentication integratio
 - ✅ **NEW: Symptoms Selection Screen** - Multi-select symptoms interface for procrastination assessment
 - ✅ **NEW: Goals Selection Screen** - Multi-select goals interface for tracking personal objectives
 - ✅ **NEW: Referral Code Screen** - Optional referral code input with skip functionality
-- ✅ Complete onboarding flow: Assessment → Waiting → Results → Symptoms → Goals → Referral → Authentication
+- ✅ **NEW: Rating Screen** - Social proof with 3 client testimonials and 5-star rating display
+- ✅ Complete onboarding flow: Assessment → Waiting → Results → Symptoms → Goals → Referral → Rating → Authentication
 - ✅ Complete Firebase Auth implementation with email/password authentication
 - ✅ Session persistence using AsyncStorage for React Native  
 - ✅ Protected routes with automatic redirects
