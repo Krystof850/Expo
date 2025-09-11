@@ -97,21 +97,21 @@ export default function RatingScreen() {
                 Ohodnoťte nás
               </Text>
               
-              {/* Stars with decoration */}
+              {/* Stars with elegant decoration */}
               <View style={styles.starsContainer}>
-                <Text style={styles.starDecoration}>🌟</Text>
+                <View style={styles.starDecoration} />
                 <View style={styles.starsRow}>
                   {Array.from({ length: 5 }, (_, index) => (
                     <Ionicons
                       key={index}
                       name="star"
-                      size={32}
+                      size={36}
                       color="#FFD700"
-                      style={{ marginHorizontal: 2 }}
+                      style={styles.starIcon}
                     />
                   ))}
                 </View>
-                <Text style={styles.starDecoration}>🌟</Text>
+                <View style={styles.starDecoration} />
               </View>
             </View>
 
@@ -124,11 +124,17 @@ export default function RatingScreen() {
               {/* User avatars and count */}
               <View style={styles.usersContainer}>
                 <View style={styles.avatarsRow}>
-                  <Text style={styles.avatar}>👨‍💻</Text>
-                  <Text style={styles.avatar}>👩‍🎓</Text>
-                  <Text style={styles.avatar}>👨‍💼</Text>
+                  <View style={styles.avatarCircle}>
+                    <Text style={styles.avatarEmoji}>👨‍💻</Text>
+                  </View>
+                  <View style={styles.avatarCircle}>
+                    <Text style={styles.avatarEmoji}>👩‍🎓</Text>
+                  </View>
+                  <View style={styles.avatarCircle}>
+                    <Text style={styles.avatarEmoji}>👨‍💼</Text>
+                  </View>
                 </View>
-                <Text style={styles.usersCount}>+ 50 000 lidí</Text>
+                <Text style={styles.usersCount}>+ 50,000 lidí</Text>
               </View>
             </View>
 
@@ -207,30 +213,45 @@ const styles = StyleSheet.create({
   },
   titleSection: {
     alignItems: 'center',
-    marginBottom: 32,
+    marginBottom: 40,
+    paddingTop: 20,
   },
   titleText: {
-    fontSize: 32,
+    fontSize: 36,
     fontWeight: '700',
     color: COLORS.mainText,
     textAlign: 'center',
-    marginBottom: 24,
-    letterSpacing: -0.5,
+    marginBottom: 32,
+    letterSpacing: -0.8,
   },
   starsContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 16,
+    justifyContent: 'center',
+    paddingHorizontal: 40,
   },
   starDecoration: {
-    fontSize: 24,
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    backgroundColor: 'rgba(255, 255, 255, 0.3)',
+    marginHorizontal: 16,
   },
   starsRow: {
     flexDirection: 'row',
+    alignItems: 'center',
+  },
+  starIcon: {
+    marginHorizontal: 1,
+    shadowColor: '#FFD700',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.8,
+    shadowRadius: 10,
+    elevation: 5,
   },
   descriptionSection: {
     alignItems: 'center',
-    marginBottom: 32,
+    marginBottom: 40,
   },
   descriptionText: {
     fontSize: 20,
@@ -238,66 +259,87 @@ const styles = StyleSheet.create({
     color: COLORS.questionLabel,
     textAlign: 'center',
     lineHeight: 26,
-    marginBottom: 20,
+    marginBottom: 24,
   },
   usersContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
+    gap: 16,
   },
   avatarsRow: {
     flexDirection: 'row',
-    gap: -8,
+    marginLeft: -8,
   },
-  avatar: {
-    fontSize: 32,
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    borderRadius: 20,
-    width: 40,
-    height: 40,
-    textAlign: 'center',
-    lineHeight: 40,
-    borderWidth: 2,
-    borderColor: 'rgba(255, 255, 255, 0.3)',
+  avatarCircle: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: 'rgba(255, 255, 255, 0.15)',
+    borderWidth: 3,
+    borderColor: COLORS.gradientMiddle,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginLeft: -8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 4,
+  },
+  avatarEmoji: {
+    fontSize: 22,
   },
   usersCount: {
-    fontSize: 16,
+    fontSize: 17,
     fontWeight: '600',
     color: COLORS.questionLabel,
+    opacity: 0.8,
   },
   reviewsSection: {
-    gap: 16,
+    gap: 20,
+    marginBottom: 20,
   },
   reviewCard: {
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-    borderWidth: 2,
-    borderColor: 'rgba(255, 255, 255, 0.2)',
-    borderRadius: 20,
-    padding: 20,
+    backgroundColor: 'rgba(255, 255, 255, 0.08)',
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.15)',
+    borderRadius: 24,
+    padding: 24,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 4,
   },
   reviewHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 16,
+    alignItems: 'flex-start',
+    marginBottom: 18,
   },
   reviewUserInfo: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
+    gap: 14,
+    flex: 1,
   },
   avatarContainer: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    width: 52,
+    height: 52,
+    borderRadius: 26,
+    backgroundColor: 'rgba(255, 255, 255, 0.12)',
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 2,
-    borderColor: 'rgba(255, 255, 255, 0.3)',
+    borderColor: 'rgba(255, 255, 255, 0.2)',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.15,
+    shadowRadius: 4,
+    elevation: 3,
   },
   reviewAvatar: {
-    fontSize: 24,
+    fontSize: 26,
   },
   userDetails: {
     flex: 1,
@@ -306,22 +348,25 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '700',
     color: COLORS.mainText,
-    marginBottom: 2,
+    marginBottom: 4,
   },
   userHandle: {
     fontSize: 14,
     fontWeight: '500',
     color: COLORS.questionLabel,
+    opacity: 0.7,
   },
   ratingContainer: {
     flexDirection: 'row',
+    alignItems: 'center',
   },
   reviewText: {
     fontSize: 16,
     fontWeight: '500',
     color: COLORS.mainText,
-    lineHeight: 22,
+    lineHeight: 24,
     fontStyle: 'italic',
+    opacity: 0.95,
   },
   buttonContainer: {
     paddingHorizontal: SPACING.page,
