@@ -13,9 +13,17 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { OnboardingHeader } from '../../components/OnboardingHeader';
 import { COLORS, TYPOGRAPHY, SPACING } from '../../constants/theme';
 
-export default function OnboardingQuestion1() {
+export default function OnboardingQuestion3() {
   const insets = useSafeAreaInsets();
-  const [selectedGender, setSelectedGender] = useState<string>('');
+  const [selectedFrequency, setSelectedFrequency] = useState<string>('');
+
+  const frequencyOptions = [
+    { label: 'Never', value: 'never' },
+    { label: 'Rarely', value: 'rarely' },
+    { label: 'Sometimes', value: 'sometimes' },
+    { label: 'Often', value: 'often' },
+    { label: 'Almost always', value: 'almost_always' }
+  ];
 
   // Blokování hardware back button pouze na Androidu
   useFocusEffect(
@@ -34,73 +42,65 @@ export default function OnboardingQuestion1() {
     }, [])
   );
 
-  const handleGenderSelect = (gender: string) => {
-    setSelectedGender(gender);
+  const handleFrequencySelect = (frequency: string) => {
+    setSelectedFrequency(frequency);
   };
 
   const handleNext = async () => {
-    if (!selectedGender) return;
+    if (!selectedFrequency) return;
     
     try {
       // Uložit odpověď
-      await AsyncStorage.setItem('onboarding_gender', selectedGender);
-      // Přejít na další otázku
-      router.push('/(onboarding)/question2');
+      await AsyncStorage.setItem('onboarding_procrastination', selectedFrequency);
+      // Označit onboarding jako dokončený
+      await AsyncStorage.setItem('onboarding_completed', 'true');
+      // Přejít na auth
+      router.replace('/(auth)/sign-in');
     } catch (error) {
-      console.log('Error saving gender:', error);
-      router.push('/(onboarding)/question2');
+      console.log('Error saving procrastination frequency:', error);
+      // I při chybě pokračovat
+      router.replace('/(auth)/sign-in');
     }
   };
 
   return (
     <View style={styles.container}>
-      {/* Header s progress barem */}
       <OnboardingHeader 
-        step={1} 
+        step={3} 
         total={3} 
-        questionLabel="Question 1"
+        questionLabel="Question 3"
       />
       
-      {/* Střední obsah - otázka a odpovědi */}
       <View style={styles.content}>
         <View style={styles.questionSection}>
-          <Text style={styles.questionText}>What is your gender?</Text>
+          <Text style={styles.questionText}>How often do you procrastinate on important tasks?</Text>
         </View>
         
         <View style={styles.answersSection}>
-          <TouchableOpacity
-            style={[
-              styles.answerButton,
-              selectedGender === 'Male' && styles.answerButtonSelected
-            ]}
-            onPress={() => handleGenderSelect('Male')}
-            activeOpacity={0.8}
-          >
-            <Text style={styles.answerText}>Male</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[
-              styles.answerButton,
-              selectedGender === 'Female' && styles.answerButtonSelected
-            ]}
-            onPress={() => handleGenderSelect('Female')}
-            activeOpacity={0.8}
-          >
-            <Text style={styles.answerText}>Female</Text>
-          </TouchableOpacity>
+          {frequencyOptions.map((option) => (
+            <TouchableOpacity
+              key={option.value}
+              style={[
+                styles.answerButton,
+                selectedFrequency === option.value && styles.answerButtonSelected
+              ]}
+              onPress={() => handleFrequencySelect(option.value)}
+              activeOpacity={0.8}
+            >
+              <Text style={styles.answerText}>{option.label}</Text>
+            </TouchableOpacity>
+          ))}
         </View>
       </View>
       
-      {/* Next tlačítko dole */}
       <View style={[styles.nextContainer, { paddingBottom: insets.bottom + SPACING.page }]}>
         <TouchableOpacity 
           style={[
             styles.nextButton,
-            !selectedGender && styles.nextButtonDisabled
+            !selectedFrequency && styles.nextButtonDisabled
           ]}
           onPress={handleNext}
-          disabled={!selectedGender}
+          disabled={!selectedFrequency}
         >
           <Text style={styles.nextButtonText}>Next</Text>
         </TouchableOpacity>
@@ -143,12 +143,12 @@ const styles = StyleSheet.create({
     paddingTop: 16, // pt-4
   },
   answerButton: {
-    backgroundColor: COLORS.answerButton, // bg-sky-400/20
+    backgroundColor: COLORS.answerButton,
     borderWidth: 2,
-    borderColor: COLORS.answerButtonBorder, // border-sky-400/50
-    paddingVertical: 16, // py-4
-    paddingHorizontal: 32, // px-8
-    borderRadius: 50, // rounded-full
+    borderColor: COLORS.answerButtonBorder,
+    paddingVertical: 16,
+    paddingHorizontal: 32,
+    borderRadius: 50,
     alignItems: 'center',
   },
   answerButtonSelected: {

@@ -52,14 +52,11 @@ export default function OnboardingQuestion2() {
     try {
       // Uložit odpověď
       await AsyncStorage.setItem('onboarding_age', selectedAge);
-      // Označit onboarding jako dokončený
-      await AsyncStorage.setItem('onboarding_completed', 'true');
-      // Přejít na auth
-      router.replace('/(auth)/sign-in');
+      // Přejít na další otázku
+      router.push('/(onboarding)/question3');
     } catch (error) {
       console.log('Error saving age:', error);
-      // I při chybě pokračovat
-      router.replace('/(auth)/sign-in');
+      router.push('/(onboarding)/question3');
     }
   };
 
@@ -67,7 +64,7 @@ export default function OnboardingQuestion2() {
     <View style={styles.container}>
       <OnboardingHeader 
         step={2} 
-        total={2} 
+        total={3} 
         questionLabel="Question 2"
       />
       
