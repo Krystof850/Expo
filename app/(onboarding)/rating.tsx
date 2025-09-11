@@ -54,8 +54,8 @@ export default function RatingScreen() {
   const insets = useSafeAreaInsets();
 
   const handleContinue = () => {
-    // Pokračovat na auth
-    router.push('/(auth)/sign-in');
+    // Pokračovat na signature
+    router.push('/(onboarding)/signature');
   };
 
   const renderStars = (rating: number) => {
