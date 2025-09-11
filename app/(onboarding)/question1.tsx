@@ -149,8 +149,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   answerButtonSelected: {
-    backgroundColor: COLORS.answerButtonHover, // hover:bg-sky-400/40
-    borderColor: COLORS.primaryAction,
+    backgroundColor: COLORS.answerButtonSelected,
+    borderColor: COLORS.answerButtonBorder,
   },
   answerText: {
     ...TYPOGRAPHY.answerText,
@@ -160,17 +160,17 @@ const styles = StyleSheet.create({
     zIndex: 10,
   },
   nextButton: {
-    backgroundColor: COLORS.mainText, // bg-white
-    paddingVertical: 16, // py-4
-    paddingHorizontal: 32, // px-8
-    borderRadius: 50, // rounded-full
+    backgroundColor: COLORS.nextButton,
+    paddingVertical: 16,
+    paddingHorizontal: 32,
+    borderRadius: 50,
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: 'rgba(255, 255, 255, 0.2)',
-    shadowOffset: { width: 0, height: 4 },
+    shadowColor: 'rgba(0, 0, 0, 0.1)',
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 1,
-    shadowRadius: 20,
-    elevation: 8,
+    shadowRadius: 8,
+    elevation: 4,
   },
   nextButtonDisabled: {
     opacity: 0.5,

@@ -45,8 +45,9 @@ function SharedBackground() {
       <StatusBar style="light" />
       <LinearGradient
         colors={GRADIENTS.background}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
+        start={{ x: 0.5, y: 0 }}
+        end={{ x: 0.5, y: 1 }}
+        locations={[0, 0.5, 1]}
         style={styles.gradient}
       >
         {/* Floating background elementy */}
@@ -196,6 +197,32 @@ const styles = StyleSheet.create({
   },
   floatingElement2: {
     position: 'absolute',
-    right: -width * 0.2,
-    bottom: -he
+    right: -width * 0.3,
+    bottom: -height * 0.2,
+    width: 500,
+    height: 500,
+    borderRadius: 250,
+    backgroundColor: 'rgba(255, 255, 255, 0.02)',
+    opacity: 1,
+  },
+  floatingElement3: {
+    position: 'absolute',
+    bottom: height * 0.4,
+    right: width * 0.1,
+    width: 150,
+    height: 150,
+    borderRadius: 75,
+    backgroundColor: 'rgba(255, 255, 255, 0.02)',
+    opacity: 1,
+  },
+  floatingElement4: {
+    position: 'absolute',
+    left: width * 0.1,
+    top: height * 0.4,
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    backgroundColor: 'rgba(255, 255, 255, 0.01)',
+    opacity: 1,
+  },
 });
