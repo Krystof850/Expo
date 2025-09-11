@@ -13,9 +13,16 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { OnboardingHeader } from '../../components/OnboardingHeader';
 import { COLORS, TYPOGRAPHY, SPACING } from '../../constants/theme';
 
-export default function OnboardingQuestion3() {
+export default function OnboardingQuestion7() {
   const insets = useSafeAreaInsets();
-  const [selectedAnswer, setSelectedAnswer] = useState<string>('');
+  const [selectedTrigger, setSelectedTrigger] = useState<string>('');
+
+  const triggerOptions = [
+    { label: "Don't know where to start", value: 'no_start_place' },
+    { label: "Don't have the energy", value: 'no_energy' },
+    { label: "Don't know how to start", value: 'no_know_how' },
+    { label: 'Other reasons', value: 'other' }
+  ];
 
   // Blokování hardware back button pouze na Androidu
   useFocusEffect(
@@ -34,59 +41,51 @@ export default function OnboardingQuestion3() {
     }, [])
   );
 
-  const handleAnswerSelect = (answer: string) => {
-    setSelectedAnswer(answer);
+  const handleTriggerSelect = (trigger: string) => {
+    setSelectedTrigger(trigger);
   };
 
   const handleNext = async () => {
-    if (!selectedAnswer) return;
+    if (!selectedTrigger) return;
     
     try {
       // Uložit odpověď
-      await AsyncStorage.setItem('onboarding_stuck_cycle', selectedAnswer);
+      await AsyncStorage.setItem('onboarding_main_trigger', selectedTrigger);
       // Přejít na další otázku
-      router.push('/(onboarding)/question4');
+      router.push('/(onboarding)/question8');
     } catch (error) {
-      console.log('Error saving stuck cycle answer:', error);
-      router.push('/(onboarding)/question4');
+      console.log('Error saving main trigger answer:', error);
+      router.push('/(onboarding)/question8');
     }
   };
 
   return (
     <View style={styles.container}>
       <OnboardingHeader 
-        step={3} 
+        step={7} 
         total={9} 
-        questionLabel="Question 3"
+        questionLabel="Question 7"
       />
       
       <View style={styles.content}>
         <View style={styles.questionSection}>
-          <Text style={styles.questionText}>Do you feel stuck in a cycle that makes you lose control over your life?</Text>
+          <Text style={styles.questionText}>What do you think is your main trigger to start procrastinating?</Text>
         </View>
         
         <View style={styles.answersSection}>
-          <TouchableOpacity
-            style={[
-              styles.answerButton,
-              selectedAnswer === 'Yes' && styles.answerButtonSelected
-            ]}
-            onPress={() => handleAnswerSelect('Yes')}
-            activeOpacity={0.8}
-          >
-            <Text style={styles.answerText}>Yes</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[
-              styles.answerButton,
-              selectedAnswer === 'No' && styles.answerButtonSelected
-            ]}
-            onPress={() => handleAnswerSelect('No')}
-            activeOpacity={0.8}
-          >
-            <Text style={styles.answerText}>No</Text>
-          </TouchableOpacity>
+          {triggerOptions.map((option) => (
+            <TouchableOpacity
+              key={option.value}
+              style={[
+                styles.answerButton,
+                selectedTrigger === option.value && styles.answerButtonSelected
+              ]}
+              onPress={() => handleTriggerSelect(option.value)}
+              activeOpacity={0.8}
+            >
+              <Text style={styles.answerText}>{option.label}</Text>
+            </TouchableOpacity>
+          ))}
         </View>
       </View>
       
@@ -94,10 +93,10 @@ export default function OnboardingQuestion3() {
         <TouchableOpacity 
           style={[
             styles.nextButton,
-            !selectedAnswer && styles.nextButtonDisabled
+            !selectedTrigger && styles.nextButtonDisabled
           ]}
           onPress={handleNext}
-          disabled={!selectedAnswer}
+          disabled={!selectedTrigger}
         >
           <Text style={styles.nextButtonText}>Next</Text>
         </TouchableOpacity>

@@ -27,20 +27,19 @@ export default function RootLayout() {
   const enforceRootNavigation = async () => {
     try {
       const pathname = window?.location?.pathname || '/';
-      const welcomed = await AsyncStorage.getItem('hasSeenAllWelcomes');
       const onboardingCompleted = await AsyncStorage.getItem('onboarding_complete');
       
-      console.log('🔧 Layout: Checking flow...', { pathname, welcomed, onboardingCompleted });
+      console.log('🔧 Layout: Checking flow...', { pathname, onboardingCompleted });
       
       // Povolené routes pro nekompletní flow
       const allowedRoutes = [
-        '/', '/welcome', '/welcome2', '/welcome3'
+        '/'
       ];
       const isOnboardingRoute = pathname.startsWith('/(onboarding)') || pathname.includes('/question');
       const isAllowedRoute = allowedRoutes.includes(pathname) || isOnboardingRoute;
       
       // Pokud flow není dokončený a user není na povolené route
-      const flowIncomplete = !welcomed || welcomed !== 'true' || !onboardingCompleted || onboardingCompleted !== 'true';
+      const flowIncomplete = !onboardingCompleted || onboardingCompleted !== 'true';
       
       if (flowIncomplete && !isAllowedRoute) {
         console.log('🚫 Layout: Flow incomplete, user on forbidden route, redirecting to /');
@@ -71,9 +70,6 @@ export default function RootLayout() {
             gestureDirection: 'horizontal',
           }}
         >
-          <Stack.Screen name="welcome" options={{ headerShown: false }} />
-          <Stack.Screen name="welcome2" options={{ headerShown: false }} />
-          <Stack.Screen name="welcome3" options={{ headerShown: false }} />
           <Stack.Screen name="(onboarding)" options={{ headerShown: false }} />
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           <Stack.Screen name="(auth)" options={{ headerShown: false }} />

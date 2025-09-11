@@ -15,15 +15,7 @@ import { COLORS, TYPOGRAPHY, SPACING } from '../../constants/theme';
 
 export default function OnboardingQuestion2() {
   const insets = useSafeAreaInsets();
-  const [selectedAge, setSelectedAge] = useState<string>('');
-
-  const ageOptions = [
-    { label: '18-25', value: '18-25' },
-    { label: '26-35', value: '26-35' },
-    { label: '36-45', value: '36-45' },
-    { label: '46-55', value: '46-55' },
-    { label: '56+', value: '56+' }
-  ];
+  const [selectedAnswer, setSelectedAnswer] = useState<string>('');
 
   // Blokování hardware back button pouze na Androidu
   useFocusEffect(
@@ -42,20 +34,20 @@ export default function OnboardingQuestion2() {
     }, [])
   );
 
-  const handleAgeSelect = (age: string) => {
-    setSelectedAge(age);
+  const handleAnswerSelect = (answer: string) => {
+    setSelectedAnswer(answer);
   };
 
   const handleNext = async () => {
-    if (!selectedAge) return;
+    if (!selectedAnswer) return;
     
     try {
       // Uložit odpověď
-      await AsyncStorage.setItem('onboarding_age', selectedAge);
+      await AsyncStorage.setItem('onboarding_scroll_distract', selectedAnswer);
       // Přejít na další otázku
       router.push('/(onboarding)/question3');
     } catch (error) {
-      console.log('Error saving age:', error);
+      console.log('Error saving scroll distract answer:', error);
       router.push('/(onboarding)/question3');
     }
   };
@@ -64,29 +56,37 @@ export default function OnboardingQuestion2() {
     <View style={styles.container}>
       <OnboardingHeader 
         step={2} 
-        total={4} 
+        total={9} 
         questionLabel="Question 2"
       />
       
       <View style={styles.content}>
         <View style={styles.questionSection}>
-          <Text style={styles.questionText}>How old are you?</Text>
+          <Text style={styles.questionText}>Do you often scroll, game, or distract yourself instead of doing something important?</Text>
         </View>
         
         <View style={styles.answersSection}>
-          {ageOptions.map((option) => (
-            <TouchableOpacity
-              key={option.value}
-              style={[
-                styles.answerButton,
-                selectedAge === option.value && styles.answerButtonSelected
-              ]}
-              onPress={() => handleAgeSelect(option.value)}
-              activeOpacity={0.8}
-            >
-              <Text style={styles.answerText}>{option.label}</Text>
-            </TouchableOpacity>
-          ))}
+          <TouchableOpacity
+            style={[
+              styles.answerButton,
+              selectedAnswer === 'Yes' && styles.answerButtonSelected
+            ]}
+            onPress={() => handleAnswerSelect('Yes')}
+            activeOpacity={0.8}
+          >
+            <Text style={styles.answerText}>Yes</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[
+              styles.answerButton,
+              selectedAnswer === 'No' && styles.answerButtonSelected
+            ]}
+            onPress={() => handleAnswerSelect('No')}
+            activeOpacity={0.8}
+          >
+            <Text style={styles.answerText}>No</Text>
+          </TouchableOpacity>
         </View>
       </View>
       
@@ -94,10 +94,10 @@ export default function OnboardingQuestion2() {
         <TouchableOpacity 
           style={[
             styles.nextButton,
-            !selectedAge && styles.nextButtonDisabled
+            !selectedAnswer && styles.nextButtonDisabled
           ]}
           onPress={handleNext}
-          disabled={!selectedAge}
+          disabled={!selectedAnswer}
         >
           <Text style={styles.nextButtonText}>Next</Text>
         </TouchableOpacity>
@@ -109,20 +109,20 @@ export default function OnboardingQuestion2() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'space-between', // justify-between z HTML
+    justifyContent: 'space-between',
   },
   content: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: SPACING.page,
-    marginTop: -64, // -mt-16 z HTML
+    marginTop: -64,
   },
   questionSection: {
     width: '100%',
-    maxWidth: 384, // max-w-sm (384px)
+    maxWidth: 384,
     alignItems: 'center',
-    marginBottom: 32, // space-y-8 = 32px
+    marginBottom: 32,
   },
   questionText: {
     fontSize: 28,
@@ -131,13 +131,12 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     lineHeight: 32,
     letterSpacing: -0.5,
-    // Removed textShadow for better web compatibility
   },
   answersSection: {
     width: '100%',
-    maxWidth: 384, // max-w-sm
-    gap: 16, // space-y-4
-    paddingTop: 16, // pt-4
+    maxWidth: 384,
+    gap: 16,
+    paddingTop: 16,
   },
   answerButton: {
     backgroundColor: COLORS.answerButton,

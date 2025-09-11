@@ -13,7 +13,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { OnboardingHeader } from '../../components/OnboardingHeader';
 import { COLORS, TYPOGRAPHY, SPACING } from '../../constants/theme';
 
-export default function OnboardingQuestion3() {
+export default function OnboardingQuestion5() {
   const insets = useSafeAreaInsets();
   const [selectedAnswer, setSelectedAnswer] = useState<string>('');
 
@@ -43,26 +43,26 @@ export default function OnboardingQuestion3() {
     
     try {
       // Uložit odpověď
-      await AsyncStorage.setItem('onboarding_stuck_cycle', selectedAnswer);
+      await AsyncStorage.setItem('onboarding_task_difficulty', selectedAnswer);
       // Přejít na další otázku
-      router.push('/(onboarding)/question4');
+      router.push('/(onboarding)/question6');
     } catch (error) {
-      console.log('Error saving stuck cycle answer:', error);
-      router.push('/(onboarding)/question4');
+      console.log('Error saving task difficulty answer:', error);
+      router.push('/(onboarding)/question6');
     }
   };
 
   return (
     <View style={styles.container}>
       <OnboardingHeader 
-        step={3} 
+        step={5} 
         total={9} 
-        questionLabel="Question 3"
+        questionLabel="Question 5"
       />
       
       <View style={styles.content}>
         <View style={styles.questionSection}>
-          <Text style={styles.questionText}>Do you feel stuck in a cycle that makes you lose control over your life?</Text>
+          <Text style={styles.questionText}>Do you find it harder now to finish simple tasks that used to feel easy?</Text>
         </View>
         
         <View style={styles.answersSection}>

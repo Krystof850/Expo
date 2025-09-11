@@ -165,6 +165,11 @@ export default function OnboardingLayout() {
         <Stack.Screen name="question2" />
         <Stack.Screen name="question3" />
         <Stack.Screen name="question4" />
+        <Stack.Screen name="question5" />
+        <Stack.Screen name="question6" />
+        <Stack.Screen name="question7" />
+        <Stack.Screen name="question8" />
+        <Stack.Screen name="question9" />
       </Stack>
     </View>
   );

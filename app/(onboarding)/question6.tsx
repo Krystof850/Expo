@@ -13,9 +13,16 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { OnboardingHeader } from '../../components/OnboardingHeader';
 import { COLORS, TYPOGRAPHY, SPACING } from '../../constants/theme';
 
-export default function OnboardingQuestion3() {
+export default function OnboardingQuestion6() {
   const insets = useSafeAreaInsets();
-  const [selectedAnswer, setSelectedAnswer] = useState<string>('');
+  const [selectedFrequency, setSelectedFrequency] = useState<string>('');
+
+  const frequencyOptions = [
+    { label: '1-2 times', value: '1-2' },
+    { label: '3-5 times', value: '3-5' },
+    { label: '6-10 times', value: '6-10' },
+    { label: 'More than 10 times', value: '10+' }
+  ];
 
   // Blokování hardware back button pouze na Androidu
   useFocusEffect(
@@ -34,59 +41,51 @@ export default function OnboardingQuestion3() {
     }, [])
   );
 
-  const handleAnswerSelect = (answer: string) => {
-    setSelectedAnswer(answer);
+  const handleFrequencySelect = (frequency: string) => {
+    setSelectedFrequency(frequency);
   };
 
   const handleNext = async () => {
-    if (!selectedAnswer) return;
+    if (!selectedFrequency) return;
     
     try {
       // Uložit odpověď
-      await AsyncStorage.setItem('onboarding_stuck_cycle', selectedAnswer);
+      await AsyncStorage.setItem('onboarding_delay_frequency', selectedFrequency);
       // Přejít na další otázku
-      router.push('/(onboarding)/question4');
+      router.push('/(onboarding)/question7');
     } catch (error) {
-      console.log('Error saving stuck cycle answer:', error);
-      router.push('/(onboarding)/question4');
+      console.log('Error saving delay frequency answer:', error);
+      router.push('/(onboarding)/question7');
     }
   };
 
   return (
     <View style={styles.container}>
       <OnboardingHeader 
-        step={3} 
+        step={6} 
         total={9} 
-        questionLabel="Question 3"
+        questionLabel="Question 6"
       />
       
       <View style={styles.content}>
         <View style={styles.questionSection}>
-          <Text style={styles.questionText}>Do you feel stuck in a cycle that makes you lose control over your life?</Text>
+          <Text style={styles.questionText}>On average, how many times do you delay a task before finally starting it?</Text>
         </View>
         
         <View style={styles.answersSection}>
-          <TouchableOpacity
-            style={[
-              styles.answerButton,
-              selectedAnswer === 'Yes' && styles.answerButtonSelected
-            ]}
-            onPress={() => handleAnswerSelect('Yes')}
-            activeOpacity={0.8}
-          >
-            <Text style={styles.answerText}>Yes</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[
-              styles.answerButton,
-              selectedAnswer === 'No' && styles.answerButtonSelected
-            ]}
-            onPress={() => handleAnswerSelect('No')}
-            activeOpacity={0.8}
-          >
-            <Text style={styles.answerText}>No</Text>
-          </TouchableOpacity>
+          {frequencyOptions.map((option) => (
+            <TouchableOpacity
+              key={option.value}
+              style={[
+                styles.answerButton,
+                selectedFrequency === option.value && styles.answerButtonSelected
+              ]}
+              onPress={() => handleFrequencySelect(option.value)}
+              activeOpacity={0.8}
+            >
+              <Text style={styles.answerText}>{option.label}</Text>
+            </TouchableOpacity>
+          ))}
         </View>
       </View>
       
@@ -94,10 +93,10 @@ export default function OnboardingQuestion3() {
         <TouchableOpacity 
           style={[
             styles.nextButton,
-            !selectedAnswer && styles.nextButtonDisabled
+            !selectedFrequency && styles.nextButtonDisabled
           ]}
           onPress={handleNext}
-          disabled={!selectedAnswer}
+          disabled={!selectedFrequency}
         >
           <Text style={styles.nextButtonText}>Next</Text>
         </TouchableOpacity>

@@ -10,21 +10,18 @@ import {
 import { router, useFocusEffect } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
 import { OnboardingHeader } from '../../components/OnboardingHeader';
 import { COLORS, TYPOGRAPHY, SPACING } from '../../constants/theme';
 
 export default function OnboardingQuestion4() {
   const insets = useSafeAreaInsets();
-  const [selectedSource, setSelectedSource] = useState<string>('');
+  const [selectedFrequency, setSelectedFrequency] = useState<string>('');
 
-  const sourceOptions = [
-    { label: 'Instagram', value: 'instagram', iconFamily: 'AntDesign', iconName: 'instagram' },
-    { label: 'TikTok', value: 'tiktok', iconFamily: 'MaterialCommunityIcons', iconName: 'music-note' },
-    { label: 'Facebook', value: 'facebook', iconFamily: 'AntDesign', iconName: 'facebook-square' },
-    { label: 'X', value: 'x', iconFamily: 'AntDesign', iconName: 'twitter' },
-    { label: 'Google', value: 'google', iconFamily: 'AntDesign', iconName: 'google' },
-    { label: 'TV', value: 'tv', iconFamily: 'MaterialCommunityIcons', iconName: 'television' }
+  const frequencyOptions = [
+    { label: 'Never', value: 'never' },
+    { label: '1-3 times', value: '1-3' },
+    { label: '4-7 times', value: '4-7' },
+    { label: '8+ times', value: '8+' }
   ];
 
   // Blokování hardware back button pouze na Androidu
@@ -44,40 +41,21 @@ export default function OnboardingQuestion4() {
     }, [])
   );
 
-  const handleSourceSelect = (source: string) => {
-    setSelectedSource(source);
-  };
-
-  const renderIcon = (iconFamily: string, iconName: string) => {
-    const iconProps = {
-      name: iconName as any,
-      size: 24,
-      color: COLORS.mainText,
-    };
-
-    if (iconFamily === 'AntDesign') {
-      return <AntDesign {...iconProps} />;
-    } else if (iconFamily === 'MaterialCommunityIcons') {
-      return <MaterialCommunityIcons {...iconProps} />;
-    }
-    
-    return null;
+  const handleFrequencySelect = (frequency: string) => {
+    setSelectedFrequency(frequency);
   };
 
   const handleNext = async () => {
-    if (!selectedSource) return;
+    if (!selectedFrequency) return;
     
     try {
       // Uložit odpověď
-      await AsyncStorage.setItem('onboarding_source', selectedSource);
-      // Označit onboarding jako dokončený
-      await AsyncStorage.setItem('onboarding_completed', 'true');
-      // Přejít na auth
-      router.replace('/(auth)/sign-in');
+      await AsyncStorage.setItem('onboarding_daily_procrastination', selectedFrequency);
+      // Přejít na další otázku
+      router.push('/(onboarding)/question5');
     } catch (error) {
-      console.log('Error saving source:', error);
-      // I při chybě pokračovat
-      router.replace('/(auth)/sign-in');
+      console.log('Error saving daily procrastination frequency:', error);
+      router.push('/(onboarding)/question5');
     }
   };
 
@@ -85,30 +63,27 @@ export default function OnboardingQuestion4() {
     <View style={styles.container}>
       <OnboardingHeader 
         step={4} 
-        total={4} 
+        total={9} 
         questionLabel="Question 4"
       />
       
       <View style={styles.content}>
         <View style={styles.questionSection}>
-          <Text style={styles.questionText}>Where did you hear about us?</Text>
+          <Text style={styles.questionText}>How many times a day do you catch yourself procrastinating on tasks that matter?</Text>
         </View>
         
         <View style={styles.answersSection}>
-          {sourceOptions.map((option) => (
+          {frequencyOptions.map((option) => (
             <TouchableOpacity
               key={option.value}
               style={[
                 styles.answerButton,
-                selectedSource === option.value && styles.answerButtonSelected
+                selectedFrequency === option.value && styles.answerButtonSelected
               ]}
-              onPress={() => handleSourceSelect(option.value)}
+              onPress={() => handleFrequencySelect(option.value)}
               activeOpacity={0.8}
             >
-              <View style={styles.answerButtonContent}>
-                {renderIcon(option.iconFamily, option.iconName)}
-                <Text style={styles.answerText}>{option.label}</Text>
-              </View>
+              <Text style={styles.answerText}>{option.label}</Text>
             </TouchableOpacity>
           ))}
         </View>
@@ -118,10 +93,10 @@ export default function OnboardingQuestion4() {
         <TouchableOpacity 
           style={[
             styles.nextButton,
-            !selectedSource && styles.nextButtonDisabled
+            !selectedFrequency && styles.nextButtonDisabled
           ]}
           onPress={handleNext}
-          disabled={!selectedSource}
+          disabled={!selectedFrequency}
         >
           <Text style={styles.nextButtonText}>Next</Text>
         </TouchableOpacity>
@@ -133,20 +108,20 @@ export default function OnboardingQuestion4() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'space-between', // justify-between z HTML
+    justifyContent: 'space-between',
   },
   content: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: SPACING.page,
-    marginTop: -64, // -mt-16 z HTML
+    marginTop: -64,
   },
   questionSection: {
     width: '100%',
-    maxWidth: 384, // max-w-sm (384px)
+    maxWidth: 384,
     alignItems: 'center',
-    marginBottom: 32, // space-y-8 = 32px
+    marginBottom: 32,
   },
   questionText: {
     fontSize: 28,
@@ -155,13 +130,12 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     lineHeight: 32,
     letterSpacing: -0.5,
-    // Removed textShadow for better web compatibility
   },
   answersSection: {
     width: '100%',
-    maxWidth: 384, // max-w-sm
-    gap: 16, // space-y-4
-    paddingTop: 16, // pt-4
+    maxWidth: 384,
+    gap: 16,
+    paddingTop: 16,
   },
   answerButton: {
     backgroundColor: COLORS.answerButton,
@@ -175,11 +149,6 @@ const styles = StyleSheet.create({
   answerButtonSelected: {
     backgroundColor: COLORS.answerButtonSelected,
     borderColor: COLORS.answerButtonBorder,
-  },
-  answerButtonContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
   },
   answerText: {
     ...TYPOGRAPHY.answerText,

@@ -7,7 +7,7 @@ import { useState } from 'react';
 
 export default function Index() {
   const { user, loading } = useAuth();
-  const [appStep, setAppStep] = useState<'loading' | 'welcome' | 'onboarding' | 'auth' | 'protected'>('loading');
+  const [appStep, setAppStep] = useState<'loading' | 'onboarding' | 'auth' | 'protected'>('loading');
 
   useEffect(() => {
     determineAppStep();
@@ -19,23 +19,28 @@ export default function Index() {
       
       // VYMAZAT VŠECHNA STARÁ DATA - každý user začíná od začátku
       await AsyncStorage.multiRemove([
-        'hasSeenAllWelcomes',
-        'hasSeenSecondWelcome', 
         'onboarding_complete',
         'onboarding_gender',
-        'onboarding_age'
+        'onboarding_scroll_distract',
+        'onboarding_stuck_cycle',
+        'onboarding_daily_procrastination',
+        'onboarding_task_difficulty',
+        'onboarding_delay_frequency',
+        'onboarding_main_trigger',
+        'onboarding_self_worth',
+        'onboarding_life_improvement'
       ]);
       
       console.log('✅ All flow data cleared - starting fresh!');
-      console.log('🌟 EVERY USER MUST START FROM WELCOME');
+      console.log('🌟 EVERY USER MUST START FROM ONBOARDING');
       
-      // KAŽDÝ uživatel VZDY začíná od welcome
-      setAppStep('welcome');
+      // KAŽDÝ uživatel VZDY začíná od onboarding
+      setAppStep('onboarding');
       
     } catch (error) {
       console.log('Error clearing app data:', error);
-      // Při chybě začni od welcome
-      setAppStep('welcome');
+      // Při chybě začni od onboarding
+      setAppStep('onboarding');
     }
   };
 
@@ -46,9 +51,6 @@ export default function Index() {
 
   // PEVNÝ FLOW - každý musí projít vše po pořadě
   switch (appStep) {
-    case 'welcome':
-      return <Redirect href="/welcome" />;
-    
     case 'onboarding':
       return <Redirect href="/(onboarding)/question1" />;
     
@@ -60,6 +62,6 @@ export default function Index() {
     
     default:
       // Fallback na začátek
-      return <Redirect href="/welcome" />;
+      return <Redirect href="/(onboarding)/question1" />;
   }
 }

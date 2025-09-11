@@ -13,7 +13,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { OnboardingHeader } from '../../components/OnboardingHeader';
 import { COLORS, TYPOGRAPHY, SPACING } from '../../constants/theme';
 
-export default function OnboardingQuestion3() {
+export default function OnboardingQuestion9() {
   const insets = useSafeAreaInsets();
   const [selectedAnswer, setSelectedAnswer] = useState<string>('');
 
@@ -43,26 +43,29 @@ export default function OnboardingQuestion3() {
     
     try {
       // Uložit odpověď
-      await AsyncStorage.setItem('onboarding_stuck_cycle', selectedAnswer);
-      // Přejít na další otázku
-      router.push('/(onboarding)/question4');
+      await AsyncStorage.setItem('onboarding_life_improvement', selectedAnswer);
+      // Označit onboarding jako dokončený
+      await AsyncStorage.setItem('onboarding_complete', 'true');
+      // Přejít na auth
+      router.replace('/(auth)/sign-in');
     } catch (error) {
-      console.log('Error saving stuck cycle answer:', error);
-      router.push('/(onboarding)/question4');
+      console.log('Error completing onboarding:', error);
+      // I při chybě pokračovat
+      router.replace('/(auth)/sign-in');
     }
   };
 
   return (
     <View style={styles.container}>
       <OnboardingHeader 
-        step={3} 
+        step={9} 
         total={9} 
-        questionLabel="Question 3"
+        questionLabel="Question 9"
       />
       
       <View style={styles.content}>
         <View style={styles.questionSection}>
-          <Text style={styles.questionText}>Do you feel stuck in a cycle that makes you lose control over your life?</Text>
+          <Text style={styles.questionText}>Do you believe beating procrastination would make your life better and happier?</Text>
         </View>
         
         <View style={styles.answersSection}>
@@ -99,7 +102,7 @@ export default function OnboardingQuestion3() {
           onPress={handleNext}
           disabled={!selectedAnswer}
         >
-          <Text style={styles.nextButtonText}>Next</Text>
+          <Text style={styles.nextButtonText}>Complete</Text>
         </TouchableOpacity>
       </View>
     </View>
