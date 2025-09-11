@@ -67,11 +67,11 @@ export default function OnboardingQuestion2() {
       />
       
       <View style={styles.content}>
-        <View style={styles.questionContainer}>
+        <View style={styles.questionSection}>
           <Text style={styles.questionText}>How old are you?</Text>
         </View>
         
-        <View style={styles.answersContainer}>
+        <View style={styles.answersSection}>
           {ageOptions.map((option) => (
             <TouchableOpacity
               key={option.value}
@@ -88,7 +88,7 @@ export default function OnboardingQuestion2() {
         </View>
       </View>
       
-      <View style={[styles.nextContainer, { bottom: insets.bottom + SPACING.page }]}>
+      <View style={[styles.nextContainer, { paddingBottom: insets.bottom + SPACING.page }]}>
         <TouchableOpacity 
           style={[
             styles.nextButton,
@@ -107,16 +107,20 @@ export default function OnboardingQuestion2() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    justifyContent: 'space-between', // justify-between z HTML
   },
   content: {
     flex: 1,
     justifyContent: 'center',
-    paddingHorizontal: SPACING.page,
-    marginTop: -64, // Offset to center content properly
-  },
-  questionContainer: {
     alignItems: 'center',
-    marginBottom: 32,
+    paddingHorizontal: SPACING.page,
+    marginTop: -64, // -mt-16 z HTML
+  },
+  questionSection: {
+    width: '100%',
+    maxWidth: 384, // max-w-sm (384px)
+    alignItems: 'center',
+    marginBottom: 32, // space-y-8 = 32px
   },
   questionText: {
     fontSize: 28,
@@ -129,9 +133,11 @@ const styles = StyleSheet.create({
     textShadowOffset: { width: 0, height: 3 },
     textShadowRadius: 6,
   },
-  answersContainer: {
-    gap: SPACING.small,
-    paddingHorizontal: 0,
+  answersSection: {
+    width: '100%',
+    maxWidth: 384, // max-w-sm
+    gap: 16, // space-y-4
+    paddingTop: 16, // pt-4
   },
   answerButton: {
     backgroundColor: COLORS.answerButton,
@@ -150,16 +156,16 @@ const styles = StyleSheet.create({
     ...TYPOGRAPHY.answerText,
   },
   nextContainer: {
-    position: 'absolute',
-    left: SPACING.page,
-    right: SPACING.page,
+    paddingHorizontal: SPACING.page,
+    zIndex: 10,
   },
   nextButton: {
-    backgroundColor: COLORS.mainText,
-    paddingVertical: 16,
-    paddingHorizontal: 32,
-    borderRadius: 50,
+    backgroundColor: COLORS.mainText, // bg-white
+    paddingVertical: 16, // py-4
+    paddingHorizontal: 32, // px-8
+    borderRadius: 50, // rounded-full
     alignItems: 'center',
+    justifyContent: 'center',
     shadowColor: 'rgba(255, 255, 255, 0.2)',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 1,
