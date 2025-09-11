@@ -23,7 +23,7 @@ export default function CommitmentSignatureScreen() {
 
   const handleOK = async (signature: string) => {
     try {
-      // Uložit podpis
+      // Save signature
       await AsyncStorage.setItem('commitment_signature', signature);
       console.log('✍️ Signature saved');
       setHasSignature(true);
@@ -43,17 +43,33 @@ export default function CommitmentSignatureScreen() {
   };
 
   const handleFinish = async () => {
-    if (!hasSignature) {
+    // Try to read signature directly from canvas
+    signatureRef.current?.readSignature();
+  };
+
+  const handleSignatureCapture = async (signature: string) => {
+    try {
+      if (signature) {
+        await AsyncStorage.setItem('commitment_signature', signature);
+        console.log('✍️ Signature captured and saved');
+        setHasSignature(true);
+        // Navigate to auth after successful signature capture
+        router.push('/(auth)/sign-in');
+      } else {
+        Alert.alert(
+          'Signature Missing',
+          'Please sign your commitment before continuing.',
+          [{ text: 'OK', style: 'default' }]
+        );
+      }
+    } catch (error) {
+      console.log('Error saving signature:', error);
       Alert.alert(
-        'Podpis chybí',
-        'Prosím podepište svůj závazek před pokračováním.',
+        'Error',
+        'Failed to save signature. Please try again.',
         [{ text: 'OK', style: 'default' }]
       );
-      return;
     }
-
-    // Pokračovat na auth
-    router.push('/(auth)/sign-in');
   };
 
   const signatureStyle = `
@@ -84,11 +100,11 @@ export default function CommitmentSignatureScreen() {
           {/* Title Section */}
           <View style={styles.titleSection}>
             <Text style={styles.titleText}>
-              Podepište svůj závazek
+              Sign your commitment
             </Text>
             <Text style={styles.commitmentText}>
-              Konečně se zavazuji, že budu pracovat{'\n'}
-              na překonání své prokrastinace.
+              Finally, promise yourself that you will{'\n'}
+              work to overcome your procrastination.
             </Text>
           </View>
 
@@ -97,7 +113,7 @@ export default function CommitmentSignatureScreen() {
             <View style={styles.canvasContainer}>
               <SignatureScreen
                 ref={signatureRef}
-                onOK={handleOK}
+                onOK={handleSignatureCapture}
                 onEmpty={handleEmpty}
                 descriptionText=""
                 clearText=""
@@ -114,14 +130,14 @@ export default function CommitmentSignatureScreen() {
               style={styles.clearButton}
               activeOpacity={0.7}
             >
-              <Text style={styles.clearButtonText}>Vymazat</Text>
+              <Text style={styles.clearButtonText}>Clear</Text>
             </TouchableOpacity>
           </View>
 
           {/* Instructions */}
           <View style={styles.instructionsSection}>
             <Text style={styles.instructionsText}>
-              Nakreslete svůj podpis do pole výše
+              Draw on the open space above
             </Text>
           </View>
         </View>
@@ -129,18 +145,12 @@ export default function CommitmentSignatureScreen() {
         {/* Finish Button */}
         <View style={styles.buttonContainer}>
           <TouchableOpacity 
-            style={[
-              styles.finishButton,
-              !hasSignature && styles.disabledButton
-            ]}
+            style={styles.finishButton}
             onPress={handleFinish}
             activeOpacity={0.8}
           >
-            <Text style={[
-              styles.finishButtonText,
-              !hasSignature && styles.disabledButtonText
-            ]}>
-              Dokončit
+            <Text style={styles.finishButtonText}>
+              Finish
             </Text>
           </TouchableOpacity>
         </View>
@@ -252,17 +262,10 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 8,
   },
-  disabledButton: {
-    backgroundColor: 'rgba(74, 144, 226, 0.5)',
-    shadowOpacity: 0.1,
-  },
   finishButtonText: {
     fontSize: 18,
     fontWeight: '700',
     color: 'white',
     textAlign: 'center',
-  },
-  disabledButtonText: {
-    color: 'rgba(255, 255, 255, 0.7)',
   },
 });

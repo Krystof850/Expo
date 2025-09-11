@@ -22,15 +22,15 @@ export default function OnboardingWaiting() {
   const progressAnimation = useRef(new Animated.Value(0)).current;
   const strokeDashoffset = useRef(new Animated.Value(CIRCUMFERENCE)).current;
 
-  // Blokování hardware back button pouze na Androidu
+  // Block hardware back button on Android only
   useFocusEffect(
     React.useCallback(() => {
       if (Platform.OS !== 'android') {
-        return; // BackHandler funguje pouze na Androidu
+        return; // BackHandler only works on Android
       }
       
       const onBackPress = () => {
-        return true; // Blokuje hardware back - uživatel nemůže jít zpět během loading
+        return true; // Block hardware back - user cannot go back during loading
       };
 
       const subscription = BackHandler.addEventListener('hardwareBackPress', onBackPress);
@@ -40,40 +40,40 @@ export default function OnboardingWaiting() {
   );
 
   useEffect(() => {
-    // Animace progress baru a procentuální hodnoty
+    // Progress bar and percentage animation
     const startTime = Date.now();
-    const duration = 10000; // 10 sekund
+    const duration = 10000; // 10 seconds
 
-    // Animace stroke-dashoffset pro circular progress
+    // Stroke-dashoffset animation for circular progress
     Animated.timing(strokeDashoffset, {
       toValue: 0,
       duration: duration,
       useNativeDriver: false,
     }).start();
 
-    // Animace progress pro zobrazení procent
+    // Progress animation for percentage display
     Animated.timing(progressAnimation, {
       toValue: 100,
       duration: duration,
       useNativeDriver: false,
     }).start();
 
-    // Listener pro aktualizaci progress textu
+    // Listener for progress text updates
     const progressListener = progressAnimation.addListener(({ value }) => {
       setProgress(Math.round(value));
     });
 
-    // Timeout pro dokončení
+    // Timeout for completion
     const completionTimer = setTimeout(async () => {
       try {
-        // Označit onboarding jako dokončený
+        // Mark onboarding as completed
         await AsyncStorage.setItem('onboarding_complete', 'true');
         console.log('📝 Onboarding completed - navigating to results...');
-        // Přejít na výsledky
+        // Navigate to results
         router.push('/(onboarding)/results');
       } catch (error) {
         console.log('Error completing onboarding:', error);
-        // I při chybě pokračovat na výsledky
+        // Continue to results even on error
         router.push('/(onboarding)/results');
       }
     }, duration);
@@ -121,8 +121,8 @@ export default function OnboardingWaiting() {
 
         {/* Text content */}
         <View style={styles.textSection}>
-          <Text style={styles.titleText}>Vyhodnocování</Text>
-          <Text style={styles.subtitleText}>Analyzujeme vaše prokrastinační vzory</Text>
+          <Text style={styles.titleText}>Processing</Text>
+          <Text style={styles.subtitleText}>Analyzing your procrastination patterns</Text>
         </View>
       </View>
     </View>

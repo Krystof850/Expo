@@ -23,7 +23,7 @@ export default function ReferralScreen() {
 
   const handleContinue = async () => {
     try {
-      // Uložit referral kód (i když je prázdný)
+      // Save referral code (even if empty)
       if (referralCode.trim()) {
         await AsyncStorage.setItem('referral_code', referralCode.trim());
         console.log('🔗 Referral code saved:', referralCode.trim());
@@ -35,7 +35,7 @@ export default function ReferralScreen() {
       router.push('/(onboarding)/rating');
     } catch (error) {
       console.log('Error saving referral code:', error);
-      // I při chybě pokračovat na rating
+      // Continue to rating even on error
       router.push('/(onboarding)/rating');
     }
   };
@@ -63,17 +63,17 @@ export default function ReferralScreen() {
           <View style={styles.content}>
             <View style={styles.textSection}>
               <Text style={styles.titleText}>
-                Máte referral kód?
+                Do you have a referral code?
               </Text>
               <Text style={styles.subtitleText}>
-                Tento krok můžete přeskočit.
+                You can skip this step.
               </Text>
             </View>
 
             <View style={styles.inputSection}>
               <TextInput
                 style={styles.input}
-                placeholder="Referral kód"
+                placeholder="Referral code"
                 placeholderTextColor="rgba(255, 255, 255, 0.6)"
                 value={referralCode}
                 onChangeText={setReferralCode}
@@ -92,7 +92,7 @@ export default function ReferralScreen() {
               activeOpacity={0.8}
             >
               <Text style={styles.continueButtonText}>
-                Další
+                Next
               </Text>
             </TouchableOpacity>
           </View>

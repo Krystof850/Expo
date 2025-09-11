@@ -23,13 +23,13 @@ interface Goal {
 }
 
 const PROCRASTINATION_GOALS: Goal[] = [
-  { id: 'better_time_management', text: 'Lepší řízení času', icon: 'time-outline', color: '#E53E3E' },
-  { id: 'increased_productivity', text: 'Zvýšená produktivita', icon: 'trending-up-outline', color: '#4A90E2' },
-  { id: 'reduced_stress', text: 'Snížený stres a úzkost', icon: 'happy-outline', color: '#F6E05E' },
-  { id: 'better_focus', text: 'Lepší koncentrace a soustředění', icon: 'eye-outline', color: '#ED8936' },
-  { id: 'goal_achievement', text: 'Dosahování osobních cílů', icon: 'trophy-outline', color: '#9F7AEA' },
-  { id: 'self_discipline', text: 'Posílení sebedisciplíny', icon: 'shield-checkmark-outline', color: '#38B2AC' },
-  { id: 'work_life_balance', text: 'Lepší work-life balance', icon: 'library-outline', color: '#68D391' },
+  { id: 'better_time_management', text: 'Better time management', icon: 'time-outline', color: '#E53E3E' },
+  { id: 'increased_productivity', text: 'Increased productivity', icon: 'trending-up-outline', color: '#4A90E2' },
+  { id: 'reduced_stress', text: 'Reduced stress and anxiety', icon: 'happy-outline', color: '#F6E05E' },
+  { id: 'better_focus', text: 'Better concentration and focus', icon: 'eye-outline', color: '#ED8936' },
+  { id: 'goal_achievement', text: 'Achieving personal goals', icon: 'trophy-outline', color: '#9F7AEA' },
+  { id: 'self_discipline', text: 'Strengthening self-discipline', icon: 'shield-checkmark-outline', color: '#38B2AC' },
+  { id: 'work_life_balance', text: 'Better work-life balance', icon: 'library-outline', color: '#68D391' },
 ];
 
 export default function GoalsScreen() {
@@ -48,7 +48,7 @@ export default function GoalsScreen() {
 
   const handleContinue = async () => {
     try {
-      // Uložit vybrané cíle
+      // Save selected goals
       await AsyncStorage.setItem('selected_goals', JSON.stringify(selectedGoals));
       console.log('🎯 Goals saved:', selectedGoals);
       
@@ -56,7 +56,7 @@ export default function GoalsScreen() {
       router.push('/(onboarding)/referral');
     } catch (error) {
       console.log('Error saving goals:', error);
-      // I při chybě pokračovat na referral
+      // Continue to referral even on error
       router.push('/(onboarding)/referral');
     }
   };
@@ -74,7 +74,7 @@ export default function GoalsScreen() {
           <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
             <Ionicons name="arrow-back" size={24} color={COLORS.mainText} />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>Vyberte své cíle</Text>
+          <Text style={styles.headerTitle}>Select Your Goals</Text>
         </View>
 
         <ScrollView 
@@ -85,7 +85,7 @@ export default function GoalsScreen() {
           <View style={styles.content}>
             {/* Instructions */}
             <Text style={styles.instructionText}>
-              Vyberte cíle, které chcete sledovat během{'\n'}vaší cesty za změnou.
+              Select the goals you want to track during{'\n'}your journey to change.
             </Text>
 
             {/* Goals */}
@@ -139,7 +139,7 @@ export default function GoalsScreen() {
               styles.continueButtonText,
               selectedGoals.length === 0 && styles.disabledButtonText
             ]}>
-              Sledovat tyto cíle
+              Track These Goals
             </Text>
           </TouchableOpacity>
         </View>
@@ -172,7 +172,7 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: COLORS.mainText,
     textAlign: 'center',
-    marginRight: 40, // Kompenzace pro back button
+    marginRight: 40, // Compensation for back button
   },
   scrollContainer: {
     flex: 1,

@@ -18,7 +18,7 @@ export default function ResultsScreen() {
   const insets = useSafeAreaInsets();
 
   const handleContinue = () => {
-    // Přejít na symptoms screen
+    // Navigate to symptoms screen
     router.push('/(onboarding)/symptoms');
   };
 
@@ -46,18 +46,18 @@ export default function ResultsScreen() {
             {/* Header Section */}
             <View style={styles.headerSection}>
               <Text style={styles.titleText}>
-                Analýza dokončena ✓
+                Analysis Complete ✓
               </Text>
               <Text style={styles.subtitleText}>
-                Máme pro vás některé poznatky...
+                We have some insights for you...
               </Text>
             </View>
 
             {/* Result Statement */}
             <View style={styles.resultSection}>
               <Text style={styles.resultText}>
-                Vaše odpovědi ukazují na{'\n'}
-                <Text style={styles.highlightText}>významnou tendenci k prokrastinaci*</Text>
+                Your answers indicate{'\n'}
+                <Text style={styles.highlightText}>significant tendency to procrastinate*</Text>
               </Text>
             </View>
 
@@ -68,25 +68,25 @@ export default function ResultsScreen() {
                   <View style={[styles.bar, styles.yourScoreBar]}>
                     <Text style={styles.barPercentage}>78%</Text>
                   </View>
-                  <Text style={styles.barLabel}>Vaše skóre</Text>
+                  <Text style={styles.barLabel}>Your Score</Text>
                 </View>
                 
                 <View style={styles.barContainer}>
                   <View style={[styles.bar, styles.averageBar]}>
                     <Text style={styles.barPercentage}>45%</Text>
                   </View>
-                  <Text style={styles.barLabel}>Průměr</Text>
+                  <Text style={styles.barLabel}>Average</Text>
                 </View>
               </View>
               
               <Text style={styles.comparisonText}>
-                <Text style={styles.percentageHighlight}>78%</Text> vyšší tendence k prokrastinaci 📊
+                <Text style={styles.percentageHighlight}>78%</Text> higher tendency to procrastinate 📊
               </Text>
             </View>
 
             {/* Disclaimer */}
             <Text style={styles.disclaimerText}>
-              * Tento výsledek je pouze orientační, nejedná se o lékařskou diagnózu.
+              * This result is for guidance only, it is not a medical diagnosis.
             </Text>
           </View>
         </ScrollView>
@@ -99,7 +99,7 @@ export default function ResultsScreen() {
             activeOpacity={0.8}
           >
             <Text style={styles.continueButtonText}>
-              Zjistěte více o vašich návycích
+              Learn More About Your Habits
             </Text>
           </TouchableOpacity>
         </View>

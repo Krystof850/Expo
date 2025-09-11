@@ -21,14 +21,14 @@ interface Symptom {
 }
 
 const PROCRASTINATION_SYMPTOMS: Symptom[] = [
-  { id: 'overwhelmed', text: 'Cítím se zahlcený úkoly' },
-  { id: 'lack_motivation', text: 'Nedostatek motivace začít projekty' },
-  { id: 'difficulty_concentrating', text: 'Obtížné soustředění na důležitou práci' },
-  { id: 'easy_tasks_priority', text: 'Dávám přednost snadným úkolům před důležitými' },
-  { id: 'guilt_feelings', text: 'Chronické pocity viny kvůli odložené práci' },
-  { id: 'perfectionism', text: 'Perfekcionismus vedoucí k odkladům' },
-  { id: 'fear_of_failure', text: 'Strach z neúspěchu brání jednání' },
-  { id: 'time_management', text: 'Obtíže s řízením času' },
+  { id: 'overwhelmed', text: 'I feel overwhelmed by tasks' },
+  { id: 'lack_motivation', text: 'Lack of motivation to start projects' },
+  { id: 'difficulty_concentrating', text: 'Difficulty concentrating on important work' },
+  { id: 'easy_tasks_priority', text: 'I prioritize easy tasks over important ones' },
+  { id: 'guilt_feelings', text: 'Chronic feelings of guilt about postponed work' },
+  { id: 'perfectionism', text: 'Perfectionism leading to delays' },
+  { id: 'fear_of_failure', text: 'Fear of failure preventing action' },
+  { id: 'time_management', text: 'Difficulties with time management' },
 ];
 
 export default function SymptomsScreen() {
@@ -47,15 +47,15 @@ export default function SymptomsScreen() {
 
   const handleContinue = async () => {
     try {
-      // Uložit vybrané symptomy
+      // Save selected symptoms
       await AsyncStorage.setItem('selected_symptoms', JSON.stringify(selectedSymptoms));
       console.log('💾 Symptoms saved:', selectedSymptoms);
       
-      // Pokračovat na goals
+      // Continue to goals
       router.push('/(onboarding)/goals');
     } catch (error) {
       console.log('Error saving symptoms:', error);
-      // I při chybě pokračovat na goals
+      // Continue to goals even on error
       router.push('/(onboarding)/goals');
     }
   };
@@ -73,7 +73,7 @@ export default function SymptomsScreen() {
           <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
             <Ionicons name="arrow-back" size={24} color={COLORS.mainText} />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>Symptomy</Text>
+          <Text style={styles.headerTitle}>Symptoms</Text>
         </View>
 
         <ScrollView 
@@ -85,18 +85,18 @@ export default function SymptomsScreen() {
             {/* Info Box */}
             <View style={styles.infoBox}>
               <Text style={styles.infoText}>
-                Prokrastinace může mít negativní dopady na váš osobní a profesní život.
+                Procrastination can have negative impacts on your personal and professional life.
               </Text>
             </View>
 
             {/* Instructions */}
             <Text style={styles.instructionText}>
-              Vyberte jakékoliv symptomy níže:
+              Select any symptoms below:
             </Text>
 
             {/* Mental Section */}
             <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Mentální</Text>
+              <Text style={styles.sectionTitle}>Mental</Text>
               
               <View style={styles.symptomsContainer}>
                 {PROCRASTINATION_SYMPTOMS.map((symptom) => (
@@ -138,7 +138,7 @@ export default function SymptomsScreen() {
             activeOpacity={0.8}
           >
             <Text style={styles.continueButtonText}>
-              Restartovat můj mozek
+              Restart My Brain
             </Text>
           </TouchableOpacity>
         </View>
@@ -171,7 +171,7 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: COLORS.mainText,
     textAlign: 'center',
-    marginRight: 40, // Kompenzace pro back button
+    marginRight: 40, // Compensation for back button
   },
   scrollContainer: {
     flex: 1,

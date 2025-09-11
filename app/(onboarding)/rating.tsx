@@ -26,27 +26,27 @@ interface Review {
 const CLIENT_REVIEWS: Review[] = [
   {
     id: '1',
-    name: 'Jakub Novák',
-    username: '@jakub_novak',
+    name: 'Jake Newman',
+    username: '@jake_newman',
     avatar: '👨‍💻',
     rating: 5,
-    review: 'Tato aplikace mi změnila život! Už 2 měsíce dokážu dokončovat projekty na čas. Systém sledování prokrastinace mi pomohl pochopit moje návyky.'
+    review: 'This app changed my life! I\'ve been able to complete projects on time for 2 months now. The procrastination tracking system helped me understand my habits.'
   },
   {
     id: '2', 
-    name: 'Anna Svobodová',
+    name: 'Anna Stevens',
     username: '@anna_codes',
     avatar: '👩‍🎓',
     rating: 5,
-    review: 'Zpočátku jsem byla skeptická, ale funkce pro boj s prokrastinací skutečně fungují. Konečně dokážu psát diplomku bez nekonečného odkládání!'
+    review: 'I was skeptical at first, but the anti-procrastination features really work. I can finally write my thesis without endless postponing!'
   },
   {
     id: '3',
-    name: 'Tomáš Černý',
+    name: 'Tom Collins',
     username: '@tomas_productivity',
     avatar: '👨‍💼',
     rating: 5,
-    review: 'Nejlepší investice do mé produktivity. Aplikace mi pomohla identifikovat mé prokrastinační vzory a vybudovat lepší pracovní návyky.'
+    review: 'Best investment in my productivity. The app helped me identify my procrastination patterns and build better work habits.'
   }
 ];
 
@@ -54,7 +54,7 @@ export default function RatingScreen() {
   const insets = useSafeAreaInsets();
 
   const handleContinue = () => {
-    // Pokračovat na signature
+    // Continue to signature
     router.push('/(onboarding)/signature');
   };
 
@@ -94,7 +94,7 @@ export default function RatingScreen() {
             {/* Title Section */}
             <View style={styles.titleSection}>
               <Text style={styles.titleText}>
-                Ohodnoťte nás
+                Rate Us
               </Text>
               
               {/* Stars with elegant decoration */}
@@ -118,7 +118,7 @@ export default function RatingScreen() {
             {/* Description */}
             <View style={styles.descriptionSection}>
               <Text style={styles.descriptionText}>
-                Tato aplikace byla navržena pro lidi{'\n'}jako jste vy.
+                This app was designed for people{'\n'}like you.
               </Text>
               
               {/* User avatars and count */}
@@ -134,7 +134,7 @@ export default function RatingScreen() {
                     <Text style={styles.avatarEmoji}>👨‍💼</Text>
                   </View>
                 </View>
-                <Text style={styles.usersCount}>+ 50,000 lidí</Text>
+                <Text style={styles.usersCount}>+ 50,000 people</Text>
               </View>
             </View>
 
@@ -174,7 +174,7 @@ export default function RatingScreen() {
             activeOpacity={0.8}
           >
             <Text style={styles.continueButtonText}>
-              Další
+              Next
             </Text>
           </TouchableOpacity>
         </View>
