@@ -56,7 +56,7 @@ export default function OnboardingQuestion5() {
     <View style={styles.container}>
       <OnboardingHeader 
         step={5} 
-        total={9} 
+        total={10} 
         questionLabel="Question 5"
       />
       

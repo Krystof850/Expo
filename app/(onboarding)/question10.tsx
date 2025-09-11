@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import {
   View,
   Text,
+  TextInput,
   TouchableOpacity,
   StyleSheet,
   BackHandler,
@@ -13,9 +14,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { OnboardingHeader } from '../../components/OnboardingHeader';
 import { COLORS, TYPOGRAPHY, SPACING } from '../../constants/theme';
 
-export default function OnboardingQuestion3() {
+export default function OnboardingQuestion10() {
   const insets = useSafeAreaInsets();
-  const [selectedAnswer, setSelectedAnswer] = useState<string>('');
+  const [name, setName] = useState<string>('');
+  const [age, setAge] = useState<string>('');
 
   // Blokování hardware back button pouze na Androidu
   useFocusEffect(
@@ -34,59 +36,57 @@ export default function OnboardingQuestion3() {
     }, [])
   );
 
-  const handleAnswerSelect = (answer: string) => {
-    setSelectedAnswer(answer);
-  };
-
-  const handleNext = async () => {
-    if (!selectedAnswer) return;
+  const handleComplete = async () => {
+    if (!name.trim() || !age.trim()) return;
     
     try {
-      // Uložit odpověď
-      await AsyncStorage.setItem('onboarding_stuck_cycle', selectedAnswer);
-      // Přejít na další otázku
-      router.push('/(onboarding)/question4');
+      // Uložit odpovědi
+      await AsyncStorage.setItem('onboarding_name', name.trim());
+      await AsyncStorage.setItem('onboarding_age', age.trim());
+      // Přejít na waiting screen
+      router.push('/(onboarding)/waiting');
     } catch (error) {
-      console.log('Error saving stuck cycle answer:', error);
-      router.push('/(onboarding)/question4');
+      console.log('Error saving name and age:', error);
+      router.push('/(onboarding)/waiting');
     }
   };
+
+  const isFormValid = name.trim().length > 0 && age.trim().length > 0;
 
   return (
     <View style={styles.container}>
       <OnboardingHeader 
-        step={3} 
+        step={10} 
         total={10} 
-        questionLabel="Question 3"
+        questionLabel="Question 10"
       />
       
       <View style={styles.content}>
         <View style={styles.questionSection}>
-          <Text style={styles.questionText}>Do you feel stuck in a cycle that makes you lose control over your life?</Text>
+          <Text style={styles.titleText}>Finally</Text>
+          <Text style={styles.subtitleText}>A little more about you</Text>
         </View>
         
-        <View style={styles.answersSection}>
-          <TouchableOpacity
-            style={[
-              styles.answerButton,
-              selectedAnswer === 'Yes' && styles.answerButtonSelected
-            ]}
-            onPress={() => handleAnswerSelect('Yes')}
-            activeOpacity={0.8}
-          >
-            <Text style={styles.answerText}>Yes</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[
-              styles.answerButton,
-              selectedAnswer === 'No' && styles.answerButtonSelected
-            ]}
-            onPress={() => handleAnswerSelect('No')}
-            activeOpacity={0.8}
-          >
-            <Text style={styles.answerText}>No</Text>
-          </TouchableOpacity>
+        <View style={styles.inputsSection}>
+          <TextInput
+            style={styles.input}
+            placeholder="Name"
+            placeholderTextColor={COLORS.questionLabel}
+            value={name}
+            onChangeText={setName}
+            autoCapitalize="words"
+            maxLength={50}
+          />
+          
+          <TextInput
+            style={styles.input}
+            placeholder="Age"
+            placeholderTextColor={COLORS.questionLabel}
+            value={age}
+            onChangeText={setAge}
+            keyboardType="numeric"
+            maxLength={3}
+          />
         </View>
       </View>
       
@@ -94,12 +94,12 @@ export default function OnboardingQuestion3() {
         <TouchableOpacity 
           style={[
             styles.nextButton,
-            !selectedAnswer && styles.nextButtonDisabled
+            !isFormValid && styles.nextButtonDisabled
           ]}
-          onPress={handleNext}
-          disabled={!selectedAnswer}
+          onPress={handleComplete}
+          disabled={!isFormValid}
         >
-          <Text style={styles.nextButtonText}>Next</Text>
+          <Text style={styles.nextButtonText}>Complete Quiz</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -122,37 +122,39 @@ const styles = StyleSheet.create({
     width: '100%',
     maxWidth: 384,
     alignItems: 'center',
-    marginBottom: 32,
+    marginBottom: 48,
   },
-  questionText: {
-    fontSize: 28,
+  titleText: {
+    fontSize: 32,
     fontWeight: '700',
     color: COLORS.mainText,
     textAlign: 'center',
-    lineHeight: 32,
+    marginBottom: 8,
     letterSpacing: -0.5,
   },
-  answersSection: {
+  subtitleText: {
+    fontSize: 20,
+    fontWeight: '500',
+    color: COLORS.questionLabel,
+    textAlign: 'center',
+    lineHeight: 24,
+  },
+  inputsSection: {
     width: '100%',
     maxWidth: 384,
-    gap: 16,
-    paddingTop: 16,
+    gap: 20,
   },
-  answerButton: {
-    backgroundColor: COLORS.answerButton,
+  input: {
+    backgroundColor: 'rgba(255, 255, 255, 0.15)',
     borderWidth: 2,
-    borderColor: COLORS.answerButtonBorder,
+    borderColor: 'rgba(255, 255, 255, 0.3)',
+    borderRadius: 25,
     paddingVertical: 16,
-    paddingHorizontal: 32,
-    borderRadius: 50,
-    alignItems: 'center',
-  },
-  answerButtonSelected: {
-    backgroundColor: COLORS.answerButtonSelected,
-    borderColor: COLORS.answerButtonBorder,
-  },
-  answerText: {
-    ...TYPOGRAPHY.answerText,
+    paddingHorizontal: 24,
+    fontSize: 18,
+    fontWeight: '600',
+    color: COLORS.mainText,
+    textAlign: 'left',
   },
   nextContainer: {
     paddingHorizontal: SPACING.page,

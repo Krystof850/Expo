@@ -44,14 +44,11 @@ export default function OnboardingQuestion9() {
     try {
       // Uložit odpověď
       await AsyncStorage.setItem('onboarding_life_improvement', selectedAnswer);
-      // Označit onboarding jako dokončený
-      await AsyncStorage.setItem('onboarding_complete', 'true');
-      // Přejít na auth
-      router.replace('/(auth)/sign-in');
+      // Přejít na další otázku
+      router.push('/(onboarding)/question10');
     } catch (error) {
-      console.log('Error completing onboarding:', error);
-      // I při chybě pokračovat
-      router.replace('/(auth)/sign-in');
+      console.log('Error saving life improvement answer:', error);
+      router.push('/(onboarding)/question10');
     }
   };
 
@@ -59,7 +56,7 @@ export default function OnboardingQuestion9() {
     <View style={styles.container}>
       <OnboardingHeader 
         step={9} 
-        total={9} 
+        total={10} 
         questionLabel="Question 9"
       />
       
