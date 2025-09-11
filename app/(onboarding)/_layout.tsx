@@ -154,8 +154,8 @@ export default function OnboardingLayout() {
           contentStyle: {
             backgroundColor: 'transparent',
           },
-          animation: 'fade',
-          animationDuration: 300,
+          animation: 'slide_from_right',
+          animationDuration: 400,
         }}
       >
         <Stack.Screen name="question1" />

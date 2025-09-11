@@ -62,7 +62,15 @@ export default function RootLayout() {
   const AppContent = () => (
     <AuthProvider>
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-        <Stack>
+        <Stack
+          screenOptions={{
+            headerShown: false,
+            animation: 'slide_from_right',
+            animationDuration: 300,
+            fullScreenGestureEnabled: true,
+            gestureDirection: 'horizontal',
+          }}
+        >
           <Stack.Screen name="welcome" options={{ headerShown: false }} />
           <Stack.Screen name="welcome2" options={{ headerShown: false }} />
           <Stack.Screen name="welcome3" options={{ headerShown: false }} />
