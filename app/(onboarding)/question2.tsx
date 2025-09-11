@@ -31,32 +31,38 @@ export default function OnboardingQuestion2() {
     }
   };
 
-  const ageOptions = ['18-25', '26-35', '36-45', '46-55', '56+'];
+  const ageOptions = [
+    { label: '1. 18-25', value: '18-25' },
+    { label: '2. 26-35', value: '26-35' },
+    { label: '3. 36-45', value: '36-45' },
+    { label: '4. 46-55', value: '46-55' },
+    { label: '5. 56+', value: '56+' }
+  ];
 
   return (
     <View style={styles.container}>
       {/* Hlavní obsah */}
       <View style={styles.content}>
           <View style={styles.questionContainer}>
-            <Text style={styles.questionText}>How old are you?</Text>
+            <Text style={styles.questionText}>Question 2: How old are you?</Text>
           </View>
 
           <View style={styles.answersContainer}>
-            {ageOptions.map((age) => (
+            {ageOptions.map((ageOption) => (
               <TouchableOpacity
-                key={age}
+                key={ageOption.value}
                 style={[
                   styles.answerButton,
-                  selectedAge === age && styles.answerButtonSelected
+                  selectedAge === ageOption.value && styles.answerButtonSelected
                 ]}
-                onPress={() => handleAgeSelect(age)}
+                onPress={() => handleAgeSelect(ageOption.value)}
                 activeOpacity={0.8}
               >
                 <Text style={[
                   styles.answerText,
-                  selectedAge === age && styles.answerTextSelected
+                  selectedAge === ageOption.value && styles.answerTextSelected
                 ]}>
-                  {age}
+                  {ageOption.label}
                 </Text>
               </TouchableOpacity>
             ))}
@@ -101,47 +107,42 @@ const styles = StyleSheet.create({
     marginBottom: 60,
   },
   questionText: {
-    fontSize: 28,
-    fontWeight: '700',
+    fontSize: 32,
+    fontWeight: '800',
     color: '#ffffff',
     textAlign: 'center',
-    lineHeight: 36,
-    letterSpacing: -0.5,
+    lineHeight: 40,
+    letterSpacing: -0.8,
+    textShadowColor: 'rgba(0, 0, 0, 0.4)',
+    textShadowOffset: { width: 0, height: 3 },
+    textShadowRadius: 6,
   },
   answersContainer: {
     flex: 1,
     justifyContent: 'center',
-    gap: 16,
-    paddingHorizontal: 20,
+    gap: 32,
+    paddingHorizontal: 32,
   },
   answerButton: {
-    backgroundColor: '#ffffff',
+    backgroundColor: 'rgba(56, 189, 248, 0.2)',
     borderWidth: 2,
-    borderColor: 'rgba(255, 255, 255, 0.8)',
+    borderColor: 'rgba(56, 189, 248, 0.5)',
     paddingVertical: 16,
     paddingHorizontal: 32,
     borderRadius: 50,
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
   },
   answerButtonSelected: {
-    backgroundColor: '#ffffff',
-    borderColor: '#ffffff',
-    shadowOpacity: 0.2,
-    shadowRadius: 6,
-    elevation: 4,
+    backgroundColor: 'rgba(56, 189, 248, 0.4)',
+    borderColor: 'rgba(56, 189, 248, 0.8)',
   },
   answerText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#1E40AF',
+    color: '#ffffff',
   },
   answerTextSelected: {
-    color: '#1E40AF',
+    color: '#ffffff',
     fontWeight: '700',
   },
   nextContainer: {

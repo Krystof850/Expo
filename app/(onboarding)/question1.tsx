@@ -35,7 +35,7 @@ export default function OnboardingQuestion1() {
       <View style={styles.content}>
           {/* Otázka */}
           <View style={styles.questionContainer}>
-            <Text style={styles.questionText}>What is your gender?</Text>
+            <Text style={styles.questionText}>Question 1: What is your gender?</Text>
           </View>
 
           {/* Odpovědi */}
@@ -52,7 +52,7 @@ export default function OnboardingQuestion1() {
                 styles.answerText,
                 selectedGender === 'Male' && styles.answerTextSelected
               ]}>
-                Male
+                1. Male
               </Text>
             </TouchableOpacity>
 
@@ -68,7 +68,7 @@ export default function OnboardingQuestion1() {
                 styles.answerText,
                 selectedGender === 'Female' && styles.answerTextSelected
               ]}>
-                Female
+                2. Female
               </Text>
             </TouchableOpacity>
           </View>
@@ -113,47 +113,42 @@ const styles = StyleSheet.create({
     marginBottom: 60,
   },
   questionText: {
-    fontSize: 28,
-    fontWeight: '700',
+    fontSize: 32,
+    fontWeight: '800',
     color: '#ffffff',
     textAlign: 'center',
-    lineHeight: 36,
-    letterSpacing: -0.5,
+    lineHeight: 40,
+    letterSpacing: -0.8,
+    textShadowColor: 'rgba(0, 0, 0, 0.4)',
+    textShadowOffset: { width: 0, height: 3 },
+    textShadowRadius: 6,
   },
   answersContainer: {
     flex: 1,
     justifyContent: 'center',
-    gap: 20,
-    paddingHorizontal: 20,
+    gap: 32,
+    paddingHorizontal: 32,
   },
   answerButton: {
-    backgroundColor: '#ffffff',
+    backgroundColor: 'rgba(56, 189, 248, 0.2)',
     borderWidth: 2,
-    borderColor: 'rgba(255, 255, 255, 0.8)',
-    paddingVertical: 18,
+    borderColor: 'rgba(56, 189, 248, 0.5)',
+    paddingVertical: 16,
     paddingHorizontal: 32,
     borderRadius: 50,
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
   },
   answerButtonSelected: {
-    backgroundColor: '#ffffff',
-    borderColor: '#ffffff',
-    shadowOpacity: 0.2,
-    shadowRadius: 6,
-    elevation: 4,
+    backgroundColor: 'rgba(56, 189, 248, 0.4)',
+    borderColor: 'rgba(56, 189, 248, 0.8)',
   },
   answerText: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#1E40AF',
+    color: '#ffffff',
   },
   answerTextSelected: {
-    color: '#1E40AF',
+    color: '#ffffff',
     fontWeight: '700',
   },
   nextContainer: {
