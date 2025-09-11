@@ -3,13 +3,15 @@
 This is an Expo React Native application with Firebase Authentication integration. The app implements email/password authentication with persistent user sessions using AsyncStorage. It features a clean TypeScript architecture with protected routes, form validation, and Czech language error mapping. The application uses expo-router for navigation and includes both public authentication screens and protected user areas.
 
 **Recent Updates (Sep 11, 2025):**
-- ✅ **NEW: 9-Question Procrastination Assessment System** - Complete onboarding redesign
+- ✅ **NEW: 10-Question Procrastination Assessment System** - Complete onboarding redesign
 - ✅ Removed welcome screens - Direct flow from app start to procrastination assessment
 - ✅ 9 focused procrastination questions with progressive difficulty and relevance
+- ✅ Final data collection screen with name and age input fields
+- ✅ Animated waiting screen with 10-second calculation timer
 - ✅ Blue gradient design system maintained across all onboarding screens (COLORS, TYPOGRAPHY, SPACING)
-- ✅ Progress tracking (1/9 through 9/9) with cyan progress bar and back arrow navigation
+- ✅ Progress tracking (1/10 through 10/10) with cyan progress bar and back arrow navigation
 - ✅ Hardware back button blocking on Android for forced linear progression
-- ✅ AsyncStorage persistence for all 9 assessment responses with dedicated keys
+- ✅ AsyncStorage persistence for all 10 assessment responses with dedicated keys including user name and age
 - ✅ Completion logic that sets onboarding_complete and redirects to authentication
 - ✅ Complete Firebase Auth implementation with email/password authentication
 - ✅ Session persistence using AsyncStorage for React Native  
@@ -42,19 +44,21 @@ Preferred communication style: Simple, everyday language.
 - **Persistence**: AsyncStorage for maintaining user sessions across app restarts
 
 ## Route Structure
-- **Onboarding Routes**: `(onboarding)` stack with 9-question procrastination assessment (question1-question9)
+- **Onboarding Routes**: `(onboarding)` stack with 10-question procrastination assessment (question1-question10, waiting screen)
 - **Public Routes**: `(auth)` stack containing sign-in, sign-up, and forgot password screens
 - **Protected Routes**: `(protected)` stack for authenticated user content
 - **Tab Navigation**: `(tabs)` stack with home and explore screens
 - **Route Protection**: Automatic redirects based on onboarding completion and authentication state
 
 ## Onboarding Assessment System
-- **Purpose**: 9-question procrastination assessment to understand user behavioral patterns
+- **Purpose**: 10-question procrastination assessment to understand user behavioral patterns
 - **Design**: Blue gradient background (#6BB6FF → #5B9BD5 → #4682B4) with cyan progress bar (#4DD0E1)
 - **Navigation**: Linear progression with hardware back blocking, only back arrow navigation allowed
 - **Questions**: Gender, scrolling habits, control cycles, daily procrastination frequency, task difficulty, delay patterns, triggers, self-worth impact, life improvement beliefs
-- **Persistence**: Each response stored in AsyncStorage with dedicated keys (onboarding_gender, onboarding_scroll_distract, etc.)
-- **Completion**: Sets onboarding_complete='true' and redirects to authentication after question 9
+- **Data Collection**: Final screen collects user name and age with input validation
+- **Processing Screen**: 10-second animated waiting screen with circular progress bar and "Calculating" message
+- **Persistence**: Each response stored in AsyncStorage with dedicated keys (onboarding_gender, onboarding_scroll_distract, onboarding_name, onboarding_age, etc.)
+- **Completion**: Sets onboarding_complete='true' and redirects to authentication after waiting screen
 
 ## Authentication System
 - **Provider**: Firebase Auth v12.2.1 with React Native persistence
