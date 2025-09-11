@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   BackHandler,
+  Platform,
 } from 'react-native';
 import { router, useFocusEffect } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -16,16 +17,20 @@ export default function OnboardingQuestion1() {
   const insets = useSafeAreaInsets();
   const [selectedGender, setSelectedGender] = useState<string>('');
 
-  // Blokování hardware back button
+  // Blokování hardware back button pouze na Androidu
   useFocusEffect(
     React.useCallback(() => {
+      if (Platform.OS !== 'android') {
+        return; // BackHandler funguje pouze na Androidu
+      }
+      
       const onBackPress = () => {
         return true; // Blokuje hardware back
       };
 
-      BackHandler.addEventListener('hardwareBackPress', onBackPress);
+      const subscription = BackHandler.addEventListener('hardwareBackPress', onBackPress);
 
-      return () => BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+      return () => subscription?.remove();
     }, [])
   );
 
