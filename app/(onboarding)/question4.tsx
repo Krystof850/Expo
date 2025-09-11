@@ -10,19 +10,21 @@ import {
 import { router, useFocusEffect } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
 import { OnboardingHeader } from '../../components/OnboardingHeader';
 import { COLORS, TYPOGRAPHY, SPACING } from '../../constants/theme';
 
-export default function OnboardingQuestion3() {
+export default function OnboardingQuestion4() {
   const insets = useSafeAreaInsets();
-  const [selectedFrequency, setSelectedFrequency] = useState<string>('');
+  const [selectedSource, setSelectedSource] = useState<string>('');
 
-  const frequencyOptions = [
-    { label: 'Never', value: 'never' },
-    { label: 'Rarely', value: 'rarely' },
-    { label: 'Sometimes', value: 'sometimes' },
-    { label: 'Often', value: 'often' },
-    { label: 'Almost always', value: 'almost_always' }
+  const sourceOptions = [
+    { label: 'Instagram', value: 'instagram', iconFamily: 'AntDesign', iconName: 'instagram' },
+    { label: 'TikTok', value: 'tiktok', iconFamily: 'MaterialCommunityIcons', iconName: 'music-note' },
+    { label: 'Facebook', value: 'facebook', iconFamily: 'AntDesign', iconName: 'facebook-square' },
+    { label: 'X', value: 'x', iconFamily: 'AntDesign', iconName: 'twitter' },
+    { label: 'Google', value: 'google', iconFamily: 'AntDesign', iconName: 'google' },
+    { label: 'TV', value: 'tv', iconFamily: 'MaterialCommunityIcons', iconName: 'television' }
   ];
 
   // Blokování hardware back button pouze na Androidu
@@ -42,49 +44,71 @@ export default function OnboardingQuestion3() {
     }, [])
   );
 
-  const handleFrequencySelect = (frequency: string) => {
-    setSelectedFrequency(frequency);
+  const handleSourceSelect = (source: string) => {
+    setSelectedSource(source);
+  };
+
+  const renderIcon = (iconFamily: string, iconName: string) => {
+    const iconProps = {
+      name: iconName as any,
+      size: 24,
+      color: COLORS.mainText,
+    };
+
+    if (iconFamily === 'AntDesign') {
+      return <AntDesign {...iconProps} />;
+    } else if (iconFamily === 'MaterialCommunityIcons') {
+      return <MaterialCommunityIcons {...iconProps} />;
+    }
+    
+    return null;
   };
 
   const handleNext = async () => {
-    if (!selectedFrequency) return;
+    if (!selectedSource) return;
     
     try {
       // Uložit odpověď
-      await AsyncStorage.setItem('onboarding_procrastination', selectedFrequency);
-      // Přejít na další otázku
-      router.push('/(onboarding)/question4');
+      await AsyncStorage.setItem('onboarding_source', selectedSource);
+      // Označit onboarding jako dokončený
+      await AsyncStorage.setItem('onboarding_completed', 'true');
+      // Přejít na auth
+      router.replace('/(auth)/sign-in');
     } catch (error) {
-      console.log('Error saving procrastination frequency:', error);
-      router.push('/(onboarding)/question4');
+      console.log('Error saving source:', error);
+      // I při chybě pokračovat
+      router.replace('/(auth)/sign-in');
     }
   };
 
   return (
     <View style={styles.container}>
       <OnboardingHeader 
-        step={3} 
+        step={4} 
         total={4} 
-        questionLabel="Question 3"
+        questionLabel="Question 4"
       />
       
       <View style={styles.content}>
         <View style={styles.questionSection}>
-          <Text style={styles.questionText}>How often do you procrastinate on important tasks?</Text>
+          <Text style={styles.questionText}>Where did you hear about us?</Text>
         </View>
         
         <View style={styles.answersSection}>
-          {frequencyOptions.map((option) => (
+          {sourceOptions.map((option) => (
             <TouchableOpacity
               key={option.value}
               style={[
                 styles.answerButton,
-                selectedFrequency === option.value && styles.answerButtonSelected
+                selectedSource === option.value && styles.answerButtonSelected
               ]}
-              onPress={() => handleFrequencySelect(option.value)}
+              onPress={() => handleSourceSelect(option.value)}
               activeOpacity={0.8}
             >
-              <Text style={styles.answerText}>{option.label}</Text>
+              <View style={styles.answerButtonContent}>
+                {renderIcon(option.iconFamily, option.iconName)}
+                <Text style={styles.answerText}>{option.label}</Text>
+              </View>
             </TouchableOpacity>
           ))}
         </View>
@@ -94,10 +118,10 @@ export default function OnboardingQuestion3() {
         <TouchableOpacity 
           style={[
             styles.nextButton,
-            !selectedFrequency && styles.nextButtonDisabled
+            !selectedSource && styles.nextButtonDisabled
           ]}
           onPress={handleNext}
-          disabled={!selectedFrequency}
+          disabled={!selectedSource}
         >
           <Text style={styles.nextButtonText}>Next</Text>
         </TouchableOpacity>
@@ -151,6 +175,11 @@ const styles = StyleSheet.create({
   answerButtonSelected: {
     backgroundColor: COLORS.answerButtonSelected,
     borderColor: COLORS.answerButtonBorder,
+  },
+  answerButtonContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
   },
   answerText: {
     ...TYPOGRAPHY.answerText,

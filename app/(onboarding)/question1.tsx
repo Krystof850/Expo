@@ -57,7 +57,7 @@ export default function OnboardingQuestion1() {
       {/* Header s progress barem */}
       <OnboardingHeader 
         step={1} 
-        total={3} 
+        total={4} 
         questionLabel="Question 1"
       />
       
