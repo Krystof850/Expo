@@ -1,103 +1,227 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
   View,
   Text,
   TouchableOpacity,
   StatusBar,
   StyleSheet,
-  ScrollView,
-  SafeAreaView,
+  Animated,
+  Dimensions,
 } from 'react-native';
 import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { TitleText, DescriptionText } from '../../components/Text';
-import { NextButton } from '../../components/Button';
+import { LinearGradient } from 'expo-linear-gradient';
+import Svg, { Circle, Defs, LinearGradient as SvgLinearGradient, Stop } from 'react-native-svg';
 import AppBackground from '../../components/AppBackground';
 import { COLORS, SPACING } from '@/constants/theme';
 
+const { width } = Dimensions.get('window');
+const GAUGE_SIZE = 200;
+const GAUGE_STROKE_WIDTH = 12;
+const GAUGE_RADIUS = (GAUGE_SIZE - GAUGE_STROKE_WIDTH) / 2;
+const CIRCUMFERENCE = 2 * Math.PI * GAUGE_RADIUS;
+
 export default function ResultsScreen() {
-  const insets = useSafeAreaInsets();
+  const gaugeProgress = useRef(new Animated.Value(0)).current;
+  const yourBarHeight = useRef(new Animated.Value(0)).current;
+  const averageBarHeight = useRef(new Animated.Value(0)).current;
+  const emojiScale = useRef(new Animated.Value(0)).current;
+  const emojiRotation = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    // Start animations after component mounts
+    const animationDelay = 500;
+
+    // Animate gauge progress to 73%
+    setTimeout(() => {
+      Animated.timing(gaugeProgress, {
+        toValue: 0.73,
+        duration: 2000,
+        useNativeDriver: false,
+      }).start();
+    }, animationDelay);
+
+    // Animate bars
+    setTimeout(() => {
+      Animated.parallel([
+        Animated.timing(yourBarHeight, {
+          toValue: 1,
+          duration: 1500,
+          useNativeDriver: false,
+        }),
+        Animated.timing(averageBarHeight, {
+          toValue: 1,
+          duration: 1500,
+          useNativeDriver: false,
+        }),
+      ]).start();
+    }, animationDelay + 1000);
+
+    // Animate emoji with scale and rotation
+    setTimeout(() => {
+      Animated.parallel([
+        Animated.spring(emojiScale, {
+          toValue: 1,
+          tension: 100,
+          friction: 8,
+          useNativeDriver: true,
+        }),
+        Animated.timing(emojiRotation, {
+          toValue: 1,
+          duration: 2000,
+          useNativeDriver: true,
+        }),
+      ]).start();
+    }, animationDelay + 200);
+  }, []);
+
+  const strokeDashoffset = gaugeProgress.interpolate({
+    inputRange: [0, 1],
+    outputRange: [CIRCUMFERENCE, 0],
+  });
+
+  const yourBarAnimatedHeight = yourBarHeight.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0, 200], // 78% height representation
+  });
+
+  const averageBarAnimatedHeight = averageBarHeight.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0, 56], // 22% height representation
+  });
+
+  const emojiTransform = [{
+    scale: emojiScale
+  }, {
+    rotate: emojiRotation.interpolate({
+      inputRange: [0, 0.5, 1],
+      outputRange: ['15deg', '-5deg', '0deg']
+    })
+  }];
 
   const handleContinue = () => {
-    // Navigate to symptoms screen
     router.push('/(onboarding)/symptoms');
   };
 
   return (
     <AppBackground>
-      <SafeAreaView style={styles.container}>
-        <StatusBar barStyle="light-content" backgroundColor={COLORS.gradientStart} />
-        {/* Simple Header with Back Button */}
-        <View style={[styles.header, { paddingTop: insets.top }]}>
+      <View style={styles.container}>
+        <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
+        
+        {/* Header */}
+        <View style={styles.header}>
           <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
             <Ionicons name="arrow-back" size={24} color={COLORS.mainText} />
           </TouchableOpacity>
         </View>
 
-        <ScrollView 
-          style={styles.scrollContainer}
-          contentContainerStyle={styles.scrollContent}
-          showsVerticalScrollIndicator={false}
-        >
-          <View style={styles.content}>
-            {/* Header Section */}
-            <View style={styles.headerSection}>
-              <TitleText animated={false} style={styles.titleText}>
-                Analysis Complete ✓
-              </TitleText>
-              <DescriptionText animated={false} style={styles.subtitleText}>
-                We have some insights for you...
-              </DescriptionText>
-            </View>
+        {/* Title */}
+        <View style={styles.titleContainer}>
+          <Text style={styles.titleText}>Your Analysis is Complete</Text>
+        </View>
 
-            {/* Result Statement */}
-            <View style={styles.resultSection}>
-              <Text style={styles.resultText}>
-                Your answers indicate{'\n'}
-                <Text style={styles.highlightText}>significant tendency to procrastinate*</Text>
-              </Text>
+        {/* Main Content */}
+        <View style={styles.contentContainer}>
+          {/* Circular Gauge */}
+          <View style={styles.gaugeContainer}>
+            <Svg width={GAUGE_SIZE} height={GAUGE_SIZE} style={styles.gauge}>
+              <Defs>
+                <SvgLinearGradient id="gaugeGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <Stop offset="0%" stopColor="#34D399" />
+                  <Stop offset="50%" stopColor="#FBBF24" />
+                  <Stop offset="100%" stopColor="#EF4444" />
+                </SvgLinearGradient>
+              </Defs>
+              {/* Background circle */}
+              <Circle
+                cx={GAUGE_SIZE / 2}
+                cy={GAUGE_SIZE / 2}
+                r={GAUGE_RADIUS}
+                stroke="rgba(255, 255, 255, 0.1)"
+                strokeWidth={GAUGE_STROKE_WIDTH}
+                fill="none"
+              />
+              {/* Progress circle */}
+              <Animated.View>
+                <Svg width={GAUGE_SIZE} height={GAUGE_SIZE} style={{ position: 'absolute' }}>
+                  <Circle
+                    cx={GAUGE_SIZE / 2}
+                    cy={GAUGE_SIZE / 2}
+                    r={GAUGE_RADIUS}
+                    stroke="url(#gaugeGradient)"
+                    strokeWidth={GAUGE_STROKE_WIDTH}
+                    fill="none"
+                    strokeDasharray={CIRCUMFERENCE}
+                    strokeDashoffset={strokeDashoffset}
+                    strokeLinecap="round"
+                    transform={`rotate(-90 ${GAUGE_SIZE / 2} ${GAUGE_SIZE / 2})`}
+                  />
+                </Svg>
+              </Animated.View>
+            </Svg>
+            
+            {/* Center content */}
+            <View style={styles.gaugeCenter}>
+              <Animated.Text style={[styles.emoji, { transform: emojiTransform }]}>
+                😕
+              </Animated.Text>
+              <Text style={styles.gaugeCenterText}>Your productivity is low</Text>
             </View>
+          </View>
 
-            {/* Chart Section */}
-            <View style={styles.chartSection}>
-              <View style={styles.chartContainer}>
-                <View style={styles.barContainer}>
-                  <View style={[styles.bar, styles.yourScoreBar]}>
-                    <Text style={styles.barPercentage}>78%</Text>
-                  </View>
-                  <Text style={styles.barLabel}>Your Score</Text>
-                </View>
-                
-                <View style={styles.barContainer}>
-                  <View style={[styles.bar, styles.averageBar]}>
-                    <Text style={styles.barPercentage}>45%</Text>
-                  </View>
-                  <Text style={styles.barLabel}>Average</Text>
-                </View>
-              </View>
-              
-              <Text style={styles.comparisonText}>
-                <Text style={styles.percentageHighlight}>78%</Text> higher tendency to procrastinate 📊
-              </Text>
-            </View>
-
-            {/* Disclaimer */}
-            <Text style={styles.disclaimerText}>
-              * This result is for guidance only, it is not a medical diagnosis.
+          {/* Headline */}
+          <View style={styles.headlineContainer}>
+            <Text style={styles.headlineText}>Oof. That's rough.</Text>
+            <Text style={styles.descriptionText}>
+              You're procrastinating more than <Text style={styles.percentageHighlight}>78%</Text> of people your age. But hey, that's why you're here, right?
             </Text>
           </View>
-        </ScrollView>
 
-        {/* Continue Button */}
-        <View style={styles.buttonContainer}>
-          <NextButton
-            title="Learn More About Your Habits"
-            onPress={handleContinue}
-            style={styles.continueButton}
-          />
+          {/* Bar Comparison Chart */}
+          <View style={styles.chartContainer}>
+            <View style={styles.barsContainer}>
+              {/* Your Bar */}
+              <View style={styles.barColumn}>
+                <Text style={styles.barLabel}>YOU</Text>
+                <View style={styles.barWrapper}>
+                  <Animated.View style={[styles.barBackground, { height: yourBarAnimatedHeight }]}>
+                    <LinearGradient
+                      colors={['#EF4444', '#F97316', '#EAB308']}
+                      style={styles.barGradient}
+                      start={{ x: 0, y: 1 }}
+                      end={{ x: 0, y: 0 }}
+                    />
+                  </Animated.View>
+                </View>
+                <Text style={styles.barPercentage}>78%</Text>
+              </View>
+
+              {/* Average Bar */}
+              <View style={styles.barColumn}>
+                <Text style={styles.barLabel}>AVERAGE</Text>
+                <View style={styles.barWrapper}>
+                  <Animated.View style={[styles.barBackground, { height: averageBarAnimatedHeight }]}>
+                    <LinearGradient
+                      colors={['#22D3EE', '#06B6D4']}
+                      style={styles.barGradient}
+                      start={{ x: 0, y: 1 }}
+                      end={{ x: 0, y: 0 }}
+                    />
+                  </Animated.View>
+                </View>
+                <Text style={styles.barPercentage}>22%</Text>
+              </View>
+            </View>
+          </View>
         </View>
-      </SafeAreaView>
+
+        {/* CTA Button */}
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity style={styles.ctaButton} onPress={handleContinue}>
+            <Text style={styles.ctaButtonText}>Let's Fix This!</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
     </AppBackground>
   );
 }
@@ -105,163 +229,158 @@ export default function ResultsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.gradientStart,
-  },
-  gradient: {
-    flex: 1,
+    paddingTop: 60,
+    paddingBottom: 32,
+    paddingHorizontal: 32,
   },
   header: {
-    paddingHorizontal: SPACING.page,
-    paddingBottom: SPACING.small,
-    zIndex: 10,
+    marginBottom: 20,
   },
   backButton: {
     padding: 8,
     alignSelf: 'flex-start',
   },
-  scrollContainer: {
-    flex: 1,
-  },
-  scrollContent: {
-    flexGrow: 1,
-    justifyContent: 'flex-start',
-  },
-  content: {
+  titleContainer: {
     alignItems: 'center',
-    paddingHorizontal: SPACING.page,
-    paddingTop: 16, // Reduced top padding
-    paddingBottom: 40, // Increased bottom padding
-  },
-  headerSection: {
-    width: '100%',
-    maxWidth: 384,
-    alignItems: 'center',
-    marginBottom: 40, // Increased margin to prevent overlap
-    paddingHorizontal: 16, // Add padding to prevent edge overlap
+    marginBottom: 40,
   },
   titleText: {
-    fontSize: 26, // Reduced size to prevent overlap
+    fontSize: 28,
     fontWeight: '700',
     color: COLORS.mainText,
     textAlign: 'center',
-    marginBottom: 16, // Increased margin to prevent overlap
     letterSpacing: -0.5,
-    lineHeight: 32, // Added line height for better spacing
+    textShadowColor: 'rgba(0, 0, 0, 0.4)',
+    textShadowOffset: { width: 0, height: 3 },
+    textShadowRadius: 6,
   },
-  subtitleText: {
-    fontSize: 16, // Slightly smaller to prevent overlap
-    fontWeight: '500',
-    color: COLORS.questionLabel,
-    textAlign: 'center',
-    lineHeight: 22, // Adjusted line height
-    marginBottom: 8, // Added margin for extra spacing
-  },
-  resultSection: {
-    width: '100%',
-    maxWidth: 384,
+  contentContainer: {
+    flex: 1,
     alignItems: 'center',
-    marginBottom: 40, // Slightly reduced but still good spacing
-    paddingHorizontal: 16, // Add padding to prevent edge overlap
+    justifyContent: 'center',
   },
-  resultText: {
-    fontSize: 18, // Slightly smaller to prevent overlap
-    fontWeight: '600',
-    color: COLORS.mainText,
+  gaugeContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 40,
+    position: 'relative',
+  },
+  gauge: {
+    transform: [{ scaleY: -1 }],
+  },
+  gaugeCenter: {
+    position: 'absolute',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  emoji: {
+    fontSize: 48,
+    textShadowColor: 'rgba(0, 0, 0, 0.4)',
+    textShadowOffset: { width: 0, height: 3 },
+    textShadowRadius: 6,
+  },
+  gaugeCenterText: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: 'rgba(186, 230, 253, 0.8)', // sky-200/80
+    marginTop: 8,
     textAlign: 'center',
-    lineHeight: 26, // Adjusted line height
   },
-  highlightText: {
+  headlineContainer: {
+    alignItems: 'center',
+    marginBottom: 40,
+    maxWidth: width - 64,
+  },
+  headlineText: {
+    fontSize: 28,
     fontWeight: '700',
     color: COLORS.mainText,
+    textAlign: 'center',
+    marginBottom: 12,
+    letterSpacing: -0.5,
+    textShadowColor: 'rgba(0, 0, 0, 0.4)',
+    textShadowOffset: { width: 0, height: 3 },
+    textShadowRadius: 6,
   },
-  chartSection: {
-    width: '100%',
-    maxWidth: 280,
-    alignItems: 'center',
-    marginBottom: 24, // Reduced margin to save space
-    paddingHorizontal: 16, // Add padding to prevent edge overlap
+  descriptionText: {
+    fontSize: 16,
+    fontWeight: '400',
+    color: 'rgba(186, 230, 253, 0.8)', // sky-200/80
+    textAlign: 'center',
+    lineHeight: 24,
+    textShadowColor: 'rgba(0, 0, 0, 0.2)',
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 4,
+  },
+  percentageHighlight: {
+    fontWeight: '700',
+    color: COLORS.mainText,
   },
   chartContainer: {
+    marginBottom: 40,
+  },
+  barsContainer: {
     flexDirection: 'row',
     alignItems: 'flex-end',
     justifyContent: 'center',
-    gap: 32,
-    marginBottom: 24,
-    height: 200,
+    gap: 48,
+    height: 240,
   },
-  barContainer: {
+  barColumn: {
     alignItems: 'center',
-    flex: 1,
-  },
-  bar: {
-    width: 60,
-    borderRadius: 8,
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-    paddingVertical: 12,
-    marginBottom: 12,
-  },
-  yourScoreBar: {
-    height: 156, // 78% of 200px
-    backgroundColor: '#E53E3E', // Red color for higher score
-  },
-  averageBar: {
-    height: 90, // 45% of 200px  
-    backgroundColor: '#38A169', // Green color for average
-  },
-  barPercentage: {
-    fontSize: 18,
-    fontWeight: '700',
-    color: 'white',
-    textAlign: 'center',
   },
   barLabel: {
-    fontSize: 16,
+    fontSize: 12,
     fontWeight: '600',
-    color: COLORS.questionLabel,
-    textAlign: 'center',
+    color: 'rgba(103, 232, 249, 0.8)', // sky-300/80
+    letterSpacing: 1,
+    marginBottom: 12,
   },
-  comparisonText: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: COLORS.questionLabel,
-    textAlign: 'center',
-    lineHeight: 24,
+  barWrapper: {
+    width: 48,
+    height: 200,
+    justifyContent: 'flex-end',
+    marginBottom: 12,
   },
-  percentageHighlight: {
-    color: '#E53E3E',
-    fontWeight: '700',
-  },
-  disclaimerText: {
-    fontSize: 14,
-    fontWeight: '500',
-    color: 'rgba(255, 255, 255, 0.7)',
-    textAlign: 'center',
-    lineHeight: 20,
-    marginTop: 16,
-    fontStyle: 'italic',
-  },
-  buttonContainer: {
-    paddingHorizontal: SPACING.page,
-    paddingBottom: 40,
-    zIndex: 10,
-  },
-  continueButton: {
-    backgroundColor: '#4A90E2',
-    borderRadius: 25,
-    paddingVertical: 18,
-    paddingHorizontal: 32,
-    alignItems: 'center',
+  barBackground: {
+    width: '100%',
+    borderRadius: 8,
+    overflow: 'hidden',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 8,
     elevation: 8,
   },
-  continueButtonText: {
+  barGradient: {
+    flex: 1,
+    borderRadius: 8,
+  },
+  barPercentage: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: COLORS.mainText,
+    textAlign: 'center',
+  },
+  buttonContainer: {
+    width: '100%',
+  },
+  ctaButton: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 25,
+    paddingVertical: 16,
+    paddingHorizontal: 32,
+    alignItems: 'center',
+    shadowColor: 'rgba(255, 255, 255, 0.2)',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 1,
+    shadowRadius: 16,
+    elevation: 8,
+  },
+  ctaButtonText: {
     fontSize: 18,
     fontWeight: '700',
-    color: 'white',
+    color: '#0B1120',
     textAlign: 'center',
   },
 });
