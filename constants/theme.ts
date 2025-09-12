@@ -102,10 +102,10 @@ export const TYPOGRAPHY = {
   // Main question title - "What is your gender?"
   title: {
     fontFamily: FONTS.bold,
-    fontSize: 30,                          // text-3xl  
+    fontSize: 24,                          // text-2xl (reduced from 30)
     fontWeight: '700' as const,
     color: COLORS.mainText,
-    lineHeight: 36,                        // leading-tight
+    lineHeight: 30,                        // leading-tight (adjusted proportionally)
     textAlign: 'center' as const,
     ...SHADOWS.text,                       // text shadow
   },
