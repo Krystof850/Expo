@@ -126,13 +126,13 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-start',
     paddingHorizontal: SPACING.page,
-    paddingTop: 40, // Reduced from 60 - moves main content higher up the page
+    paddingTop: 30, // Further reduced - much higher content positioning
   },
   questionSection: {
     width: '100%',
     maxWidth: 384, // max-w-sm (384px)
     alignItems: 'flex-start',
-    marginBottom: 8, // space-y-8 = 32px
+    marginBottom: 4, // Minimal space between question and answers
   },
   subtextStyle: {
     marginTop: 8, // Professional spacing below main question
@@ -151,8 +151,8 @@ const styles = StyleSheet.create({
   answersSection: {
     width: '80%',
     alignSelf: 'center',
-    gap: 16, // space-y-4
-    paddingTop: 4, // Further reduced from 8 - prevents overlap with Next button on 4-answer questions
+    gap: 12, // Reduced gap between cards to save space
+    paddingTop: 0, // No padding - answers start immediately after subtext
   },
   nextContainer: {
     paddingHorizontal: SPACING.page,
