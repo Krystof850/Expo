@@ -137,7 +137,6 @@ const styles = StyleSheet.create({
   },
   answersSection: {
     width: '100%',
-    maxWidth: 384,
     gap: 16,
     paddingTop: 16,
   },
