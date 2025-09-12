@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-start',
     paddingHorizontal: SPACING.page,
-    paddingTop: 60, // Fixed positioning from top for consistent layout
+    paddingTop: 40, // Reduced from 60 - moves main content higher up the page
   },
   questionSection: {
     width: '100%',
