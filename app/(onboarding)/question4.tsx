@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
     width: '100%',
     maxWidth: 384,
     alignItems: 'flex-start',
-    marginBottom: 4, // Minimal space between question and answers
+    marginBottom: -4, // RAPID reduction - negative margin to pull answers closer
   },
   fullBleed: {
     marginHorizontal: -SPACING.page, // Cancel parent padding to achieve full screen width
