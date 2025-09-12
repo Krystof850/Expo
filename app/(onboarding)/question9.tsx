@@ -103,22 +103,21 @@ export default function OnboardingQuestion9() {
           </AnimatedContent>
         </View>
         
-        {/* Next tlačítko dole s animací */}
-        <AnimatedContent delay={500}>
-          <View style={[styles.nextContainer, { paddingBottom: insets.bottom + SPACING.page }]}>
-            <TouchableOpacity 
-              style={[
-                styles.nextButton,
-                !selectedAnswer && styles.nextButtonDisabled
-              ]}
-              onPress={handleNext}
-              disabled={!selectedAnswer}
-            >
-              <Text style={styles.nextButtonText}>Next</Text>
-            </TouchableOpacity>
-          </View>
-        </AnimatedContent>
       </AnimatedQuestionPage>
+      
+      {/* Next button - OUTSIDE of animation wrapper */}
+      <View style={[styles.nextContainer, { paddingBottom: insets.bottom + SPACING.page }]}>
+        <TouchableOpacity 
+          style={[
+            styles.nextButton,
+            !selectedAnswer && styles.nextButtonDisabled
+          ]}
+          onPress={handleNext}
+          disabled={!selectedAnswer}
+        >
+          <Text style={styles.nextButtonText}>Next</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
@@ -133,7 +132,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: SPACING.page,
-    marginTop: -64,
   },
   questionSection: {
     width: '100%',

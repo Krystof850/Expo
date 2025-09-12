@@ -66,9 +66,8 @@ export default function OnboardingQuestion1() {
         questionLabel="Question 1"
       />
       
-      {/* Animated page wrapper for smooth transitions */}
+      {/* Animated content wrapper for smooth transitions */}
       <AnimatedQuestionPage ref={animationRef}>
-        {/* Střední obsah - otázka a odpovědi s animací */}
         <View style={styles.content}>
           <AnimatedContent delay={100}>
             <View style={styles.questionSection}>
@@ -102,23 +101,21 @@ export default function OnboardingQuestion1() {
             </View>
           </AnimatedContent>
         </View>
-        
-        {/* Next tlačítko dole s animací */}
-        <AnimatedContent delay={500}>
-          <View style={[styles.nextContainer, { paddingBottom: insets.bottom + SPACING.page }]}>
-            <TouchableOpacity 
-              style={[
-                styles.nextButton,
-                !selectedGender && styles.nextButtonDisabled
-              ]}
-              onPress={handleNext}
-              disabled={!selectedGender}
-            >
-              <Text style={styles.nextButtonText}>Next</Text>
-            </TouchableOpacity>
-          </View>
-        </AnimatedContent>
       </AnimatedQuestionPage>
+      
+      {/* Next button - OUTSIDE of animation wrapper */}
+      <View style={[styles.nextContainer, { paddingBottom: insets.bottom + SPACING.page }]}>
+        <TouchableOpacity 
+          style={[
+            styles.nextButton,
+            !selectedGender && styles.nextButtonDisabled
+          ]}
+          onPress={handleNext}
+          disabled={!selectedGender}
+        >
+          <Text style={styles.nextButtonText}>Next</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
@@ -126,14 +123,13 @@ export default function OnboardingQuestion1() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'space-between', // justify-between z HTML
+    justifyContent: 'space-between',
   },
   content: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: SPACING.page,
-    marginTop: -64, // -mt-16 z HTML
   },
   questionSection: {
     width: '100%',

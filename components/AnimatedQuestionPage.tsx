@@ -1,5 +1,6 @@
 import React, { useEffect, useImperativeHandle, forwardRef } from 'react';
 import { View, StyleSheet } from 'react-native';
+import { useFocusEffect } from 'expo-router';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -47,6 +48,16 @@ export const AnimatedQuestionPage = forwardRef<AnimatedQuestionPageRef, Animated
         }
       });
     }, []);
+
+    // Reset animation values when screen comes back into focus
+    useFocusEffect(
+      React.useCallback(() => {
+        // Reset animation values to initial state to prevent blank screen on back navigation
+        opacity.value = 1;
+        scale.value = 1;
+        translateY.value = 0;
+      }, [opacity, scale, translateY])
+    );
 
     // Expose exit animation method
     useImperativeHandle(ref, () => ({

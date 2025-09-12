@@ -115,22 +115,21 @@ export default function OnboardingQuestion10() {
           </View>
         </ScrollView>
         
-        {/* Next tlačítko dole s animací */}
-        <AnimatedContent delay={500}>
-          <View style={[styles.nextContainer, { paddingBottom: insets.bottom + SPACING.page }]}>
-            <TouchableOpacity 
-              style={[
-                styles.nextButton,
-                !isFormValid && styles.nextButtonDisabled
-              ]}
-              onPress={handleComplete}
-              disabled={!isFormValid}
-            >
-              <Text style={styles.nextButtonText}>Complete Quiz</Text>
-            </TouchableOpacity>
-          </View>
-        </AnimatedContent>
       </AnimatedQuestionPage>
+      
+      {/* Next button - OUTSIDE of animation wrapper */}
+      <View style={[styles.nextContainer, { paddingBottom: insets.bottom + SPACING.page }]}>
+        <TouchableOpacity 
+          style={[
+            styles.nextButton,
+            !isFormValid && styles.nextButtonDisabled
+          ]}
+          onPress={handleComplete}
+          disabled={!isFormValid}
+        >
+          <Text style={styles.nextButtonText}>Complete Quiz</Text>
+        </TouchableOpacity>
+      </View>
     </KeyboardAvoidingView>
   );
 }
@@ -138,6 +137,7 @@ export default function OnboardingQuestion10() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    justifyContent: 'space-between',
   },
   scrollContainer: {
     flex: 1,

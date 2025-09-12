@@ -23,31 +23,29 @@ export function OnboardingHeader({ step, total, questionLabel }: OnboardingHeade
   const insets = useSafeAreaInsets();
   const router = useRouter();
   
-  // Animated progress value
-  const progressValue = useSharedValue(0);
+  // Animated progress value (fraction 0-1)
+  const progressFraction = useSharedValue(0);
   const questionOpacity = useSharedValue(0);
   
-  // Calculate target progress percentage
-  const progressPercentage = (step / total) * 100;
+  // Calculate target progress fraction
+  const targetFraction = step / total;
 
   // Animate progress when step changes
   useEffect(() => {
-    progressValue.value = withSpring(progressPercentage, {
-      damping: 15,
-      stiffness: 150,
-      mass: 1,
+    progressFraction.value = withTiming(targetFraction, {
+      duration: 250,
     });
     
     // Animate question label appearance
     questionOpacity.value = withTiming(1, {
       duration: 300,
     });
-  }, [step, progressPercentage]);
+  }, [step, targetFraction]);
 
   // Animated styles for progress bar
   const progressAnimatedStyle = useAnimatedStyle(() => {
     return {
-      width: `${progressValue.value}%`,
+      width: `${progressFraction.value * 100}%`,
     };
   });
 
