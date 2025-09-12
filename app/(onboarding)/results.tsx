@@ -129,42 +129,46 @@ const styles = StyleSheet.create({
   content: {
     alignItems: 'center',
     paddingHorizontal: SPACING.page,
-    paddingTop: 20,
-    paddingBottom: 20,
+    paddingTop: 16, // Reduced top padding
+    paddingBottom: 40, // Increased bottom padding
   },
   headerSection: {
     width: '100%',
     maxWidth: 384,
     alignItems: 'center',
-    marginBottom: 32,
+    marginBottom: 40, // Increased margin to prevent overlap
+    paddingHorizontal: 16, // Add padding to prevent edge overlap
   },
   titleText: {
-    fontSize: 32,
+    fontSize: 26, // Reduced size to prevent overlap
     fontWeight: '700',
     color: COLORS.mainText,
     textAlign: 'center',
-    marginBottom: 8,
+    marginBottom: 16, // Increased margin to prevent overlap
     letterSpacing: -0.5,
+    lineHeight: 32, // Added line height for better spacing
   },
   subtitleText: {
-    fontSize: 18,
+    fontSize: 16, // Slightly smaller to prevent overlap
     fontWeight: '500',
     color: COLORS.questionLabel,
     textAlign: 'center',
-    lineHeight: 24,
+    lineHeight: 22, // Adjusted line height
+    marginBottom: 8, // Added margin for extra spacing
   },
   resultSection: {
     width: '100%',
     maxWidth: 384,
     alignItems: 'center',
-    marginBottom: 48,
+    marginBottom: 40, // Slightly reduced but still good spacing
+    paddingHorizontal: 16, // Add padding to prevent edge overlap
   },
   resultText: {
-    fontSize: 20,
+    fontSize: 18, // Slightly smaller to prevent overlap
     fontWeight: '600',
     color: COLORS.mainText,
     textAlign: 'center',
-    lineHeight: 28,
+    lineHeight: 26, // Adjusted line height
   },
   highlightText: {
     fontWeight: '700',
@@ -174,7 +178,8 @@ const styles = StyleSheet.create({
     width: '100%',
     maxWidth: 280,
     alignItems: 'center',
-    marginBottom: 32,
+    marginBottom: 24, // Reduced margin to save space
+    paddingHorizontal: 16, // Add padding to prevent edge overlap
   },
   chartContainer: {
     flexDirection: 'row',

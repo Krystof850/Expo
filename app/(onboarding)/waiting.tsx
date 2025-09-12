@@ -155,7 +155,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: SPACING.page,
   },
   progressContainer: {
-    marginBottom: 48,
+    marginBottom: 64, // Increased spacing to prevent text overlap
   },
   circleContainer: {
     width: SVG_SIZE,
@@ -181,13 +181,14 @@ const styles = StyleSheet.create({
   textSection: {
     alignItems: 'center',
     maxWidth: 320,
+    paddingHorizontal: 16, // Add padding to prevent edge overlap
   },
   titleText: {
-    fontSize: 32,
+    fontSize: 28, // Slightly smaller to prevent overlap
     fontWeight: '700',
     color: COLORS.mainText,
     textAlign: 'center',
-    marginBottom: 8,
+    marginBottom: 16, // Increased margin to prevent overlap
     letterSpacing: -0.5,
   },
   subtitleText: {
