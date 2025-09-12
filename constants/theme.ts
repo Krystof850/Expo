@@ -1,70 +1,193 @@
-// Theme colors podle screenshotu - modrý gradient design
+// Design System podle HTML reference - Poppins + blue gradient theme
 export const COLORS = {
-  // Hlavní barvy podle screenshotu
-  mainText: '#FFFFFF',                    // Bílý text
-  ctaText: '#1a1a1a',                    // Tmavý text pro Next tlačítko
+  // Core color palette z HTML reference
+  primaryAction: '#38BDF8',              // sky-400 - primary cyan/blue
+  secondaryBackground: '#1E3A8A',        // blue-800 - dark blue
+  mainText: '#FFFFFF',                   // white text
+  ctaText: '#0F172A',                    // slate-900 - dark text for white buttons
+  accentGreen: '#34D399',                // emerald-400 - accent color
+  defaultBg: '#0B1120',                  // very dark background
   
-  // Progress bar - teal/cyan barva ze screenshotu
-  progressFill: '#4DD0E1',               // Světlá cyan barva
-  progressTrack: 'rgba(255, 255, 255, 0.2)', // Bílý track s průhledností
+  // Progress bar colors
+  progressFill: '#38BDF8',               // sky-400 gradient with glow
+  progressTrack: 'rgba(255, 255, 255, 0.2)', // white/20 backdrop
   
-  // Question label - světlejší text
-  questionLabel: 'rgba(255, 255, 255, 0.7)', // Bílá s průhledností
+  // Text colors podle HTML
+  questionLabel: '#7DD3FC',              // sky-300/80 - light blue for question labels
+  descriptionText: '#BAE6FD',            // sky-200/80 - lighter blue for descriptions
   
-  // Answer buttons - poloprůhledné tlačítka
-  answerButton: 'rgba(255, 255, 255, 0.15)',     // Poloprůhledná bílá
-  answerButtonBorder: 'rgba(255, 255, 255, 0.3)', // Jemný bílý okraj
-  answerButtonSelected: 'rgba(255, 255, 255, 0.25)', // Zvýrazněný stav
+  // Button colors podle HTML reference
+  selectButton: {
+    background: 'rgba(56, 189, 248, 0.2)',      // sky-400/20 
+    border: 'rgba(56, 189, 248, 0.5)',          // sky-400/50
+    hover: 'rgba(56, 189, 248, 0.4)',           // sky-400/40
+  },
   
-  // Next button - bílé tlačítko
-  nextButton: '#FFFFFF',                  // Bílé pozadí
+  nextButton: {
+    background: '#FFFFFF',                        // white background
+    text: '#0F172A',                             // slate-900 text
+    shadow: 'rgba(255, 255, 255, 0.2)',         // white/20 shadow
+  },
   
-  // Gradient barvy pro pozadí (z světlé k tmavé modré)
-  gradientStart: '#6BB6FF',              // Světlá modrá nahoře
-  gradientMiddle: '#5B9BD5',             // Střední modrá
-  gradientEnd: '#4682B4',                // Tmavá modrá dole
+  // Gradient colors z HTML reference  
+  gradientStart: '#6366F1',              // indigo-500 top-left
+  gradientMiddle: '#3B82F6',             // blue-500 middle
+  gradientEnd: '#1E293B',                // slate-800 bottom-right
+  
+  // Floating blur ball colors
+  blurBall1: 'rgba(56, 189, 248, 0.4)',         // sky-400/40
+  blurBall2: 'rgba(30, 58, 138, 0.4)',          // blue-800/40  
+  blurBall3: 'rgba(56, 189, 248, 0.2)',         // sky-400/20
+  blurBall4: 'rgba(52, 211, 153, 0.2)',         // emerald-400/20
 } as const;
 
 export const SPACING = {
-  page: 32,      // p-8 equivalent (32px)
-  gap: 20,       // standard gap between elements
-  small: 16,     // smaller spacing
-  large: 40,     // larger spacing
+  page: 32,      // p-8 equivalent (32px) - main container padding
+  gap: 20,       // space-y-8 equivalent - gap between elements  
+  small: 16,     // gap-4 equivalent - smaller spacing
+  large: 40,     // larger spacing for sections
+  button: 16,    // py-4 equivalent - button padding
+  content: 32,   // space-y-8 equivalent - content spacing
+} as const;
+
+export const RADIUS = {
+  button: 50,    // rounded-full for buttons
+  card: 16,      // rounded-xl for cards
+  small: 8,      // rounded-lg for small elements
+} as const;
+
+export const SHADOWS = {
+  button: {
+    shadowColor: COLORS.nextButton.shadow,
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 1,
+    shadowRadius: 24,
+    elevation: 8,
+  },
+  progress: {
+    shadowColor: COLORS.progressFill,
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.8,
+    shadowRadius: 10,
+    elevation: 4,
+  },
+  text: {
+    // Text shadow values for iOS/Android (web fallback needed)
+    textShadowColor: 'rgba(0, 0, 0, 0.4)',
+    textShadowOffset: { width: 0, height: 3 },
+    textShadowRadius: 6,
+  },
+} as const;
+
+// Poppins font family variants
+export const FONTS = {
+  regular: 'Poppins_400Regular',
+  medium: 'Poppins_500Medium', 
+  semibold: 'Poppins_600SemiBold',
+  bold: 'Poppins_700Bold',
+  extrabold: 'Poppins_800ExtraBold',
 } as const;
 
 export const TYPOGRAPHY = {
+  // Question label - "Question 1" text
   questionLabel: {
-    fontSize: 20,
+    fontFamily: FONTS.medium,
+    fontSize: 20,                          // text-xl
     fontWeight: '500' as const,
     color: COLORS.questionLabel,
+    textAlign: 'center' as const,
+    ...SHADOWS.text,                       // text shadow
   },
-  questionText: {
-    fontSize: 28,
+  
+  // Main question title - "What is your gender?"
+  title: {
+    fontFamily: FONTS.bold,
+    fontSize: 30,                          // text-3xl  
     fontWeight: '700' as const,
     color: COLORS.mainText,
-    lineHeight: 32,
+    lineHeight: 36,                        // leading-tight
+    textAlign: 'center' as const,
+    ...SHADOWS.text,                       // text shadow
   },
-  answerText: {
-    fontSize: 18,
+  
+  // Description text - "This helps us..."
+  description: {
+    fontFamily: FONTS.regular,
+    fontSize: 16,                          // text-base
+    fontWeight: '400' as const,
+    color: COLORS.descriptionText,
+    lineHeight: 24,
+    textAlign: 'center' as const,
+    ...SHADOWS.text,                       // subtle text shadow
+  },
+  
+  // Selection button text - "Male", "Female"
+  buttonSelect: {
+    fontFamily: FONTS.semibold,
+    fontSize: 18,                          // text-lg
     fontWeight: '600' as const,
     color: COLORS.mainText,
+    textAlign: 'center' as const,
   },
-  nextButton: {
-    fontSize: 18,
+  
+  // Next button text
+  buttonNext: {
+    fontFamily: FONTS.bold,
+    fontSize: 18,                          // text-lg
     fontWeight: '700' as const,
-    color: COLORS.ctaText,
+    color: COLORS.nextButton.text,
+    textAlign: 'center' as const,
+  },
+  
+  // Auth form labels
+  formLabel: {
+    fontFamily: FONTS.medium,
+    fontSize: 16,
+    fontWeight: '500' as const,
+    color: COLORS.mainText,
+  },
+  
+  // Input text
+  input: {
+    fontFamily: FONTS.regular,
+    fontSize: 16,
+    fontWeight: '400' as const,
+    color: COLORS.mainText,
   },
 } as const;
 
-// Gradient definice podle screenshotu
+// Gradient definitions podle HTML reference
 export const GRADIENTS = {
-  // Progress bar - jednoduchý cyan gradient
-  progress: [COLORS.progressFill, COLORS.progressFill], 
-  
-  // Background - modrý gradient ze světlé k tmavé
+  // Main background gradient - blue theme
   background: [
-    COLORS.gradientStart,    // Světlá modrá nahoře
-    COLORS.gradientMiddle,   // Střední modrá
-    COLORS.gradientEnd,      // Tmavá modrá dole
+    COLORS.gradientStart,    // indigo-500 top-left
+    COLORS.gradientMiddle,   // blue-500 middle  
+    COLORS.gradientEnd,      // slate-800 bottom-right
   ],
+  
+  // Progress bar gradient with glow effect
+  progress: [
+    '#06B6D4',              // cyan-500
+    '#22D3EE',              // cyan-400  
+  ],
+  
+  // Button gradients
+  selectButton: [
+    'rgba(56, 189, 248, 0.2)',  // sky-400/20
+    'rgba(56, 189, 248, 0.1)',  // sky-400/10
+  ],
+} as const;
+
+// Animation durations podle HTML reference
+export const ANIMATIONS = {
+  gradient: 15000,          // 15s ease infinite
+  blurBall1: 9000,          // 9s ease-in-out infinite
+  blurBall2: 11000,         // 11s ease-in-out infinite  
+  blurBall3: 13000,         // 13s ease-in-out infinite
+  blurBall4: 10000,         // 10s ease-in-out infinite
+  transition: 300,          // standard transition duration
+  spring: {
+    damping: 12,
+    stiffness: 100,
+  },
 } as const;
