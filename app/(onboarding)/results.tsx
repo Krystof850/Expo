@@ -210,7 +210,6 @@ export default function ResultsScreen() {
             <View style={styles.percentagesContainer}>
               <Text style={styles.barPercentageBelow}>78%</Text>
               <Text style={styles.barPercentageBelow}>22%</Text>
-              </View>
             </View>
           </View>
         </View>
