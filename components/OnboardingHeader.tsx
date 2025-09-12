@@ -1,5 +1,5 @@
 import React, { useEffect, useImperativeHandle, forwardRef } from 'react';
-import { View, TouchableOpacity, StyleSheet, Text } from 'react-native';
+import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -12,7 +12,8 @@ import Animated, {
   interpolate,
   runOnJS
 } from 'react-native-reanimated';
-import { COLORS, GRADIENTS, SPACING } from '../constants/theme';
+import { COLORS, GRADIENTS, SPACING, SHADOWS, TYPOGRAPHY } from '../constants/theme';
+import { QuestionLabelText } from './Text';
 
 interface OnboardingHeaderProps {
   step: number;
@@ -104,18 +105,25 @@ export const OnboardingHeader = forwardRef<OnboardingHeaderRef, OnboardingHeader
           
           <View style={styles.progressContainer}>
             <View style={styles.progressTrack}>
-              <Animated.View
-                style={[styles.progressFill, progressAnimatedStyle]}
-              />
+              <Animated.View style={[styles.progressGradient, progressAnimatedStyle]}>
+                <LinearGradient
+                  colors={GRADIENTS.progress}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 0 }}
+                  style={styles.progressFill}
+                />
+              </Animated.View>
             </View>
           </View>
         </View>
         
         {/* Question label */}
         {questionLabel && (
-          <Animated.Text style={[styles.questionLabel, questionAnimatedStyle]}>
-            {questionLabel}
-          </Animated.Text>
+          <Animated.View style={questionAnimatedStyle}>
+            <QuestionLabelText animated={false} style={styles.questionLabelOverride}>
+              {questionLabel}
+            </QuestionLabelText>
+          </Animated.View>
         )}
       </View>
     );
@@ -145,22 +153,16 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     overflow: 'hidden',
   },
+  progressGradient: {
+    height: '100%',
+    borderRadius: 5,
+    ...SHADOWS.progress,
+  },
   progressFill: {
     height: '100%',
-    backgroundColor: COLORS.progressFill,
     borderRadius: 5,
-    shadowColor: COLORS.progressFill,
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.6,
-    shadowRadius: 8,
-    elevation: 4,
   },
-  questionLabel: {
-    fontSize: 20,
-    fontWeight: '500',
-    color: COLORS.questionLabel,
-    textAlign: 'center',
+  questionLabelOverride: {
     marginTop: SPACING.small,
-    // Removed textShadow for better web compatibility
   },
 });
