@@ -122,7 +122,6 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
     paddingHorizontal: SPACING.page,
   },
   questionSection: {
@@ -133,6 +132,7 @@ const styles = StyleSheet.create({
   },
   fullBleed: {
     marginHorizontal: -SPACING.page, // Cancel parent padding to achieve full screen width
+    alignSelf: 'stretch',
   },
   answersSection: {
     width: '80%',
