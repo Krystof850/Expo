@@ -106,7 +106,7 @@ export const TYPOGRAPHY = {
     fontWeight: '700' as const,
     color: COLORS.mainText,
     lineHeight: 30,                        // leading-tight (adjusted proportionally)
-    textAlign: 'center' as const,
+    textAlign: 'left' as const,
     ...SHADOWS.text,                       // text shadow
   },
   
