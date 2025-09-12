@@ -205,13 +205,14 @@ export default function ResultsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 80, // More top padding since no header
+    paddingTop: 60, // Reduced top padding
     paddingBottom: 32,
     paddingHorizontal: 32,
   },
   titleContainer: {
     alignItems: 'center',
-    marginBottom: 80, // Much more spacing to prevent overlap with gauge
+    marginBottom: 120, // Extra large spacing to completely prevent overlap with gauge
+    paddingTop: 20, // Add top padding for better spacing
   },
   titleText: {
     fontSize: 28,
@@ -227,12 +228,12 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-start', // Changed to flex-start for better spacing control
-    paddingTop: 20, // Add top padding
+    paddingTop: 0, // No top padding to give more space for title
   },
   gaugeContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 48, // More spacing after gauge
+    marginBottom: 60, // Much more spacing after gauge
     position: 'relative',
   },
   gauge: {
@@ -287,7 +288,7 @@ const styles = StyleSheet.create({
     color: COLORS.mainText,
   },
   chartContainer: {
-    marginBottom: 48, // More spacing after chart
+    marginBottom: 20, // Less spacing to make room for percentages
   },
   barsContainer: {
     flexDirection: 'row',
@@ -329,15 +330,16 @@ const styles = StyleSheet.create({
   percentagesContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
-    gap: 48, // Match the gap between bars
-    marginTop: 12, // Space between bars and percentages
+    gap: 48, // Match the exact gap between bars
+    marginTop: 16, // Space between bars and percentages
+    marginBottom: 32, // Add bottom margin for better spacing
   },
   barPercentageBelow: {
     fontSize: 16,
     fontWeight: '700',
     color: COLORS.mainText,
     textAlign: 'center',
-    width: 48, // Match bar width to center align
+    minWidth: 48, // Minimum width to ensure proper alignment
   },
   buttonContainer: {
     width: '100%',
