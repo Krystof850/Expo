@@ -88,12 +88,12 @@ export default function ResultsScreen() {
 
   const yourBarAnimatedHeight = yourBarHeight.interpolate({
     inputRange: [0, 1],
-    outputRange: [0, 256], // 78% representation - tall bar
+    outputRange: [0, 160], // 78% representation - smaller tall bar
   });
 
   const averageBarAnimatedHeight = averageBarHeight.interpolate({
     inputRange: [0, 1],
-    outputRange: [0, 96], // 22% representation - shorter bar
+    outputRange: [0, 60], // 22% representation - smaller shorter bar
   });
 
   const handleContinue = () => {
@@ -180,16 +180,16 @@ export default function ResultsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 60,
-    paddingBottom: 32,
+    paddingTop: 40,
+    paddingBottom: 24,
     paddingHorizontal: 32,
   },
   titleContainer: {
     alignItems: 'center',
-    marginBottom: 40,
+    marginBottom: 20,
   },
   titleText: {
-    fontSize: 30,
+    fontSize: 24,
     fontWeight: '700',
     color: COLORS.mainText,
     textAlign: 'center',
@@ -197,26 +197,26 @@ const styles = StyleSheet.create({
     textShadowColor: 'rgba(0, 0, 0, 0.4)',
     textShadowOffset: { width: 0, height: 3 },
     textShadowRadius: 6,
-    lineHeight: 38,
+    lineHeight: 30,
   },
   contentContainer: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'space-around',
+    justifyContent: 'flex-start',
   },
   emojiSection: {
     alignItems: 'center',
-    marginBottom: 20,
+    marginBottom: 16,
   },
   largeEmoji: {
-    fontSize: 128, // text-8xl equivalent
+    fontSize: 80, // Smaller emoji to fit better
     textShadowColor: 'rgba(0, 0, 0, 0.4)',
     textShadowOffset: { width: 0, height: 3 },
     textShadowRadius: 6,
-    marginBottom: 16,
+    marginBottom: 8,
   },
   productivityText: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: '500',
     color: 'rgba(186, 230, 253, 0.8)', // sky-200/80
     textAlign: 'center',
@@ -224,25 +224,26 @@ const styles = StyleSheet.create({
   headlineSection: {
     alignItems: 'center',
     maxWidth: width - 64,
-    marginBottom: 20,
+    marginBottom: 16,
+    marginTop: 16,
   },
   headlineText: {
-    fontSize: 30,
+    fontSize: 24,
     fontWeight: '700',
     color: COLORS.mainText,
     textAlign: 'center',
-    marginBottom: 12,
+    marginBottom: 8,
     letterSpacing: -0.8,
     textShadowColor: 'rgba(0, 0, 0, 0.4)',
     textShadowOffset: { width: 0, height: 3 },
     textShadowRadius: 6,
   },
   descriptionText: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: '400',
     color: 'rgba(186, 230, 253, 0.8)', // sky-200/80
     textAlign: 'center',
-    lineHeight: 24,
+    lineHeight: 20,
     textShadowColor: 'rgba(0, 0, 0, 0.2)',
     textShadowOffset: { width: 0, height: 2 },
     textShadowRadius: 4,
@@ -253,52 +254,53 @@ const styles = StyleSheet.create({
   },
   chartSection: {
     alignItems: 'center',
-    marginBottom: 20,
+    marginBottom: 16,
+    marginTop: 20,
   },
   barsContainer: {
     flexDirection: 'row',
     alignItems: 'flex-end',
     justifyContent: 'center',
-    gap: 64, // More spacing between bars
-    height: 320, // Taller container for bigger bars
+    gap: 48, // Reduced spacing between bars
+    height: 200, // Smaller container
   },
   barColumn: {
     alignItems: 'center',
   },
   barLabel: {
-    fontSize: 12,
+    fontSize: 11,
     fontWeight: '600',
     color: 'rgba(103, 232, 249, 0.8)', // sky-300/80
     letterSpacing: 1.2,
-    marginBottom: 16,
+    marginBottom: 12,
     textTransform: 'uppercase',
   },
   barWrapper: {
-    width: 64, // Wider bars
-    height: 256,
+    width: 48, // Smaller bars
+    height: 160,
     justifyContent: 'flex-end',
-    marginBottom: 16,
+    marginBottom: 12,
   },
   barBackground: {
     width: '100%',
-    borderRadius: 12,
+    borderRadius: 8,
     overflow: 'hidden',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 8 },
+    shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.25,
-    shadowRadius: 12,
-    elevation: 12,
+    shadowRadius: 8,
+    elevation: 8,
   },
   barGradient: {
     flex: 1,
-    borderRadius: 12,
+    borderRadius: 8,
   },
   barPercentage: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: '700',
     color: COLORS.mainText,
     textAlign: 'center',
-    marginTop: 8,
+    marginTop: 6,
   },
   buttonContainer: {
     width: '100%',
