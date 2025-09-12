@@ -158,7 +158,7 @@ const styles = StyleSheet.create({
     width: '80%',
     alignSelf: 'center',
     gap: 16,
-    paddingTop: 8, // Reduced from 16 - less space between subtext and first answer card
+    paddingTop: 4, // Further reduced from 8 - prevents overlap with Next button on 4-answer questions
   },
   nextContainer: {
     paddingHorizontal: SPACING.page,
