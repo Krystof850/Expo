@@ -123,13 +123,14 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-start',
     paddingHorizontal: SPACING.page,
-    paddingTop: 30, // Further reduced - much higher content positioning
+    paddingTop: 8, // RAPID reduction - move everything up
+    paddingBottom: 120, // Space for Next button to prevent overlap
   },
   questionSection: {
     width: '100%',
     maxWidth: 384,
     alignItems: 'flex-start',
-    marginBottom: -4, // RAPID reduction - negative margin to pull answers closer
+    marginBottom: 0, // No margin - immediate transition to answers
   },
   fullBleed: {
     marginHorizontal: -SPACING.page, // Cancel parent padding to achieve full screen width
