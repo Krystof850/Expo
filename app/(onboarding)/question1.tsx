@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import {
   View,
   Text,
@@ -11,11 +11,13 @@ import { router, useFocusEffect } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { OnboardingHeader } from '../../components/OnboardingHeader';
+import { AnimatedQuestionPage, AnimatedContent, AnimatedQuestionPageRef } from '../../components/AnimatedQuestionPage';
 import { COLORS, TYPOGRAPHY, SPACING } from '../../constants/theme';
 
 export default function OnboardingQuestion1() {
   const insets = useSafeAreaInsets();
   const [selectedGender, setSelectedGender] = useState<string>('');
+  const animationRef = useRef<AnimatedQuestionPageRef>(null);
 
   // Blokování hardware back button pouze na Androidu
   useFocusEffect(
@@ -41,70 +43,82 @@ export default function OnboardingQuestion1() {
   const handleNext = async () => {
     if (!selectedGender) return;
     
-    try {
-      // Uložit odpověď
-      await AsyncStorage.setItem('onboarding_gender', selectedGender);
-      // Přejít na další otázku
-      router.push('/(onboarding)/question2');
-    } catch (error) {
-      console.log('Error saving gender:', error);
-      router.push('/(onboarding)/question2');
-    }
+    // Run exit animation before navigation
+    animationRef.current?.runExitAnimation(async () => {
+      try {
+        // Uložit odpověď
+        await AsyncStorage.setItem('onboarding_gender', selectedGender);
+        // Přejít na další otázku
+        router.push('/(onboarding)/question2');
+      } catch (error) {
+        console.log('Error saving gender:', error);
+        router.push('/(onboarding)/question2');
+      }
+    });
   };
 
   return (
     <View style={styles.container}>
-      {/* Header s progress barem */}
+      {/* Header s progress barem - static, no animation */}
       <OnboardingHeader 
         step={1} 
         total={10} 
         questionLabel="Question 1"
       />
       
-      {/* Střední obsah - otázka a odpovědi */}
-      <View style={styles.content}>
-        <View style={styles.questionSection}>
-          <Text style={styles.questionText}>What is your gender?</Text>
+      {/* Animated page wrapper for smooth transitions */}
+      <AnimatedQuestionPage ref={animationRef}>
+        {/* Střední obsah - otázka a odpovědi s animací */}
+        <View style={styles.content}>
+          <AnimatedContent delay={100}>
+            <View style={styles.questionSection}>
+              <Text style={styles.questionText}>What is your gender?</Text>
+            </View>
+          </AnimatedContent>
+          
+          <AnimatedContent delay={300}>
+            <View style={styles.answersSection}>
+              <TouchableOpacity
+                style={[
+                  styles.answerButton,
+                  selectedGender === 'Male' && styles.answerButtonSelected
+                ]}
+                onPress={() => handleGenderSelect('Male')}
+                activeOpacity={0.8}
+              >
+                <Text style={styles.answerText}>Male</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={[
+                  styles.answerButton,
+                  selectedGender === 'Female' && styles.answerButtonSelected
+                ]}
+                onPress={() => handleGenderSelect('Female')}
+                activeOpacity={0.8}
+              >
+                <Text style={styles.answerText}>Female</Text>
+              </TouchableOpacity>
+            </View>
+          </AnimatedContent>
         </View>
         
-        <View style={styles.answersSection}>
-          <TouchableOpacity
-            style={[
-              styles.answerButton,
-              selectedGender === 'Male' && styles.answerButtonSelected
-            ]}
-            onPress={() => handleGenderSelect('Male')}
-            activeOpacity={0.8}
-          >
-            <Text style={styles.answerText}>Male</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[
-              styles.answerButton,
-              selectedGender === 'Female' && styles.answerButtonSelected
-            ]}
-            onPress={() => handleGenderSelect('Female')}
-            activeOpacity={0.8}
-          >
-            <Text style={styles.answerText}>Female</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-      
-      {/* Next tlačítko dole */}
-      <View style={[styles.nextContainer, { paddingBottom: insets.bottom + SPACING.page }]}>
-        <TouchableOpacity 
-          style={[
-            styles.nextButton,
-            !selectedGender && styles.nextButtonDisabled
-          ]}
-          onPress={handleNext}
-          disabled={!selectedGender}
-        >
-          <Text style={styles.nextButtonText}>Next</Text>
-        </TouchableOpacity>
-      </View>
+        {/* Next tlačítko dole s animací */}
+        <AnimatedContent delay={500}>
+          <View style={[styles.nextContainer, { paddingBottom: insets.bottom + SPACING.page }]}>
+            <TouchableOpacity 
+              style={[
+                styles.nextButton,
+                !selectedGender && styles.nextButtonDisabled
+              ]}
+              onPress={handleNext}
+              disabled={!selectedGender}
+            >
+              <Text style={styles.nextButtonText}>Next</Text>
+            </TouchableOpacity>
+          </View>
+        </AnimatedContent>
+      </AnimatedQuestionPage>
     </View>
   );
 }

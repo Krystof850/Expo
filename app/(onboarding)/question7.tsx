@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import {
   View,
   Text,
@@ -11,11 +11,13 @@ import { router, useFocusEffect } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { OnboardingHeader } from '../../components/OnboardingHeader';
+import { AnimatedQuestionPage, AnimatedContent, AnimatedQuestionPageRef } from '../../components/AnimatedQuestionPage';
 import { COLORS, TYPOGRAPHY, SPACING } from '../../constants/theme';
 
 export default function OnboardingQuestion7() {
   const insets = useSafeAreaInsets();
   const [selectedTrigger, setSelectedTrigger] = useState<string>('');
+  const animationRef = useRef<AnimatedQuestionPageRef>(null);
 
   const triggerOptions = [
     { label: "Don't know where to start", value: 'no_start_place' },
@@ -48,59 +50,74 @@ export default function OnboardingQuestion7() {
   const handleNext = async () => {
     if (!selectedTrigger) return;
     
-    try {
-      // Uložit odpověď
-      await AsyncStorage.setItem('onboarding_main_trigger', selectedTrigger);
-      // Přejít na další otázku
-      router.push('/(onboarding)/question8');
-    } catch (error) {
-      console.log('Error saving main trigger answer:', error);
-      router.push('/(onboarding)/question8');
-    }
+    // Run exit animation before navigation
+    animationRef.current?.runExitAnimation(async () => {
+      try {
+        // Uložit odpověď
+        await AsyncStorage.setItem('onboarding_main_trigger', selectedTrigger);
+        // Přejít na další otázku
+        router.push('/(onboarding)/question8');
+      } catch (error) {
+        console.log('Error saving main trigger answer:', error);
+        router.push('/(onboarding)/question8');
+      }
+    });
   };
 
   return (
     <View style={styles.container}>
+      {/* Header s progress barem - static, no animation */}
       <OnboardingHeader 
         step={7} 
         total={10} 
         questionLabel="Question 7"
       />
       
-      <View style={styles.content}>
-        <View style={styles.questionSection}>
-          <Text style={styles.questionText}>What do you think is your main trigger to start procrastinating?</Text>
+      {/* Animated page wrapper for smooth transitions */}
+      <AnimatedQuestionPage ref={animationRef}>
+        {/* Střední obsah - otázka a odpovědi s animací */}
+        <View style={styles.content}>
+          <AnimatedContent delay={100}>
+            <View style={styles.questionSection}>
+              <Text style={styles.questionText}>What do you think is your main trigger to start procrastinating?</Text>
+            </View>
+          </AnimatedContent>
+          
+          <AnimatedContent delay={300}>
+            <View style={styles.answersSection}>
+              {triggerOptions.map((option) => (
+                <TouchableOpacity
+                  key={option.value}
+                  style={[
+                    styles.answerButton,
+                    selectedTrigger === option.value && styles.answerButtonSelected
+                  ]}
+                  onPress={() => handleTriggerSelect(option.value)}
+                  activeOpacity={0.8}
+                >
+                  <Text style={styles.answerText}>{option.label}</Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </AnimatedContent>
         </View>
         
-        <View style={styles.answersSection}>
-          {triggerOptions.map((option) => (
-            <TouchableOpacity
-              key={option.value}
+        {/* Next tlačítko dole s animací */}
+        <AnimatedContent delay={500}>
+          <View style={[styles.nextContainer, { paddingBottom: insets.bottom + SPACING.page }]}>
+            <TouchableOpacity 
               style={[
-                styles.answerButton,
-                selectedTrigger === option.value && styles.answerButtonSelected
+                styles.nextButton,
+                !selectedTrigger && styles.nextButtonDisabled
               ]}
-              onPress={() => handleTriggerSelect(option.value)}
-              activeOpacity={0.8}
+              onPress={handleNext}
+              disabled={!selectedTrigger}
             >
-              <Text style={styles.answerText}>{option.label}</Text>
+              <Text style={styles.nextButtonText}>Next</Text>
             </TouchableOpacity>
-          ))}
-        </View>
-      </View>
-      
-      <View style={[styles.nextContainer, { paddingBottom: insets.bottom + SPACING.page }]}>
-        <TouchableOpacity 
-          style={[
-            styles.nextButton,
-            !selectedTrigger && styles.nextButtonDisabled
-          ]}
-          onPress={handleNext}
-          disabled={!selectedTrigger}
-        >
-          <Text style={styles.nextButtonText}>Next</Text>
-        </TouchableOpacity>
-      </View>
+          </View>
+        </AnimatedContent>
+      </AnimatedQuestionPage>
     </View>
   );
 }

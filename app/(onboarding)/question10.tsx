@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import {
   View,
   Text,
@@ -14,12 +14,14 @@ import { router, useFocusEffect } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { OnboardingHeader } from '../../components/OnboardingHeader';
+import { AnimatedQuestionPage, AnimatedContent, AnimatedQuestionPageRef } from '../../components/AnimatedQuestionPage';
 import { COLORS, TYPOGRAPHY, SPACING } from '../../constants/theme';
 
 export default function OnboardingQuestion10() {
   const insets = useSafeAreaInsets();
   const [name, setName] = useState<string>('');
   const [age, setAge] = useState<string>('');
+  const animationRef = useRef<AnimatedQuestionPageRef>(null);
 
   // Blokování hardware back button pouze na Androidu
   useFocusEffect(
@@ -41,16 +43,19 @@ export default function OnboardingQuestion10() {
   const handleComplete = async () => {
     if (!name.trim() || !age.trim()) return;
     
-    try {
-      // Uložit odpovědi
-      await AsyncStorage.setItem('onboarding_name', name.trim());
-      await AsyncStorage.setItem('onboarding_age', age.trim());
-      // Přejít na waiting screen
-      router.push('/(onboarding)/waiting');
-    } catch (error) {
-      console.log('Error saving name and age:', error);
-      router.push('/(onboarding)/waiting');
-    }
+    // Run exit animation before navigation
+    animationRef.current?.runExitAnimation(async () => {
+      try {
+        // Uložit odpovědi
+        await AsyncStorage.setItem('onboarding_name', name.trim());
+        await AsyncStorage.setItem('onboarding_age', age.trim());
+        // Přejít na waiting screen
+        router.push('/(onboarding)/waiting');
+      } catch (error) {
+        console.log('Error saving name and age:', error);
+        router.push('/(onboarding)/waiting');
+      }
+    });
   };
 
   const isFormValid = name.trim().length > 0 && age.trim().length > 0;
@@ -61,60 +66,71 @@ export default function OnboardingQuestion10() {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       keyboardVerticalOffset={0}
     >
+      {/* Header s progress barem - static, no animation */}
       <OnboardingHeader 
         step={10} 
         total={10} 
         questionLabel="Question 10"
       />
       
-      <ScrollView 
-        style={styles.scrollContainer}
-        contentContainerStyle={styles.scrollContent}
-        keyboardShouldPersistTaps="handled"
-        showsVerticalScrollIndicator={false}
-      >
-        <View style={styles.content}>
-          <View style={styles.questionSection}>
-            <Text style={styles.titleText}>Finally</Text>
-            <Text style={styles.subtitleText}>A little more about you</Text>
-          </View>
-          
-          <View style={styles.inputsSection}>
-            <TextInput
-              style={styles.input}
-              placeholder="Name"
-              placeholderTextColor={COLORS.questionLabel}
-              value={name}
-              onChangeText={setName}
-              autoCapitalize="words"
-              maxLength={50}
-            />
-            
-            <TextInput
-              style={styles.input}
-              placeholder="Age"
-              placeholderTextColor={COLORS.questionLabel}
-              value={age}
-              onChangeText={setAge}
-              keyboardType="numeric"
-              maxLength={3}
-            />
-          </View>
-        </View>
-      </ScrollView>
-      
-      <View style={[styles.nextContainer, { paddingBottom: insets.bottom + SPACING.page }]}>
-        <TouchableOpacity 
-          style={[
-            styles.nextButton,
-            !isFormValid && styles.nextButtonDisabled
-          ]}
-          onPress={handleComplete}
-          disabled={!isFormValid}
+      {/* Animated page wrapper for smooth transitions */}
+      <AnimatedQuestionPage ref={animationRef}>
+        <ScrollView 
+          style={styles.scrollContainer}
+          contentContainerStyle={styles.scrollContent}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
         >
-          <Text style={styles.nextButtonText}>Complete Quiz</Text>
-        </TouchableOpacity>
-      </View>
+          <View style={styles.content}>
+            <AnimatedContent delay={100}>
+              <View style={styles.questionSection}>
+                <Text style={styles.titleText}>Finally</Text>
+                <Text style={styles.subtitleText}>A little more about you</Text>
+              </View>
+            </AnimatedContent>
+            
+            <AnimatedContent delay={300}>
+              <View style={styles.inputsSection}>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Name"
+                  placeholderTextColor={COLORS.questionLabel}
+                  value={name}
+                  onChangeText={setName}
+                  autoCapitalize="words"
+                  maxLength={50}
+                />
+                
+                <TextInput
+                  style={styles.input}
+                  placeholder="Age"
+                  placeholderTextColor={COLORS.questionLabel}
+                  value={age}
+                  onChangeText={setAge}
+                  keyboardType="numeric"
+                  maxLength={3}
+                />
+              </View>
+            </AnimatedContent>
+          </View>
+        </ScrollView>
+        
+        {/* Next tlačítko dole s animací */}
+        <AnimatedContent delay={500}>
+          <View style={[styles.nextContainer, { paddingBottom: insets.bottom + SPACING.page }]}>
+            <TouchableOpacity 
+              style={[
+                styles.nextButton,
+                !isFormValid && styles.nextButtonDisabled
+              ]}
+              onPress={handleComplete}
+              disabled={!isFormValid}
+            >
+              <Text style={styles.nextButtonText}>Complete Quiz</Text>
+            </TouchableOpacity>
+          </View>
+        </AnimatedContent>
+      </AnimatedQuestionPage>
     </KeyboardAvoidingView>
   );
 }

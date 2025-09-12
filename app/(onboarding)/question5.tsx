@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import {
   View,
   Text,
@@ -11,11 +11,13 @@ import { router, useFocusEffect } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { OnboardingHeader } from '../../components/OnboardingHeader';
+import { AnimatedQuestionPage, AnimatedContent, AnimatedQuestionPageRef } from '../../components/AnimatedQuestionPage';
 import { COLORS, TYPOGRAPHY, SPACING } from '../../constants/theme';
 
 export default function OnboardingQuestion5() {
   const insets = useSafeAreaInsets();
   const [selectedAnswer, setSelectedAnswer] = useState<string>('');
+  const animationRef = useRef<AnimatedQuestionPageRef>(null);
 
   // Blokování hardware back button pouze na Androidu
   useFocusEffect(
@@ -41,67 +43,82 @@ export default function OnboardingQuestion5() {
   const handleNext = async () => {
     if (!selectedAnswer) return;
     
-    try {
-      // Uložit odpověď
-      await AsyncStorage.setItem('onboarding_task_difficulty', selectedAnswer);
-      // Přejít na další otázku
-      router.push('/(onboarding)/question6');
-    } catch (error) {
-      console.log('Error saving task difficulty answer:', error);
-      router.push('/(onboarding)/question6');
-    }
+    // Run exit animation before navigation
+    animationRef.current?.runExitAnimation(async () => {
+      try {
+        // Uložit odpověď
+        await AsyncStorage.setItem('onboarding_task_difficulty', selectedAnswer);
+        // Přejít na další otázku
+        router.push('/(onboarding)/question6');
+      } catch (error) {
+        console.log('Error saving task difficulty answer:', error);
+        router.push('/(onboarding)/question6');
+      }
+    });
   };
 
   return (
     <View style={styles.container}>
+      {/* Header s progress barem - static, no animation */}
       <OnboardingHeader 
         step={5} 
         total={10} 
         questionLabel="Question 5"
       />
       
-      <View style={styles.content}>
-        <View style={styles.questionSection}>
-          <Text style={styles.questionText}>Do you find it harder now to finish simple tasks that used to feel easy?</Text>
+      {/* Animated page wrapper for smooth transitions */}
+      <AnimatedQuestionPage ref={animationRef}>
+        {/* Střední obsah - otázka a odpovědi s animací */}
+        <View style={styles.content}>
+          <AnimatedContent delay={100}>
+            <View style={styles.questionSection}>
+              <Text style={styles.questionText}>Do you find it harder now to finish simple tasks that used to feel easy?</Text>
+            </View>
+          </AnimatedContent>
+          
+          <AnimatedContent delay={300}>
+            <View style={styles.answersSection}>
+              <TouchableOpacity
+                style={[
+                  styles.answerButton,
+                  selectedAnswer === 'Yes' && styles.answerButtonSelected
+                ]}
+                onPress={() => handleAnswerSelect('Yes')}
+                activeOpacity={0.8}
+              >
+                <Text style={styles.answerText}>Yes</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={[
+                  styles.answerButton,
+                  selectedAnswer === 'No' && styles.answerButtonSelected
+                ]}
+                onPress={() => handleAnswerSelect('No')}
+                activeOpacity={0.8}
+              >
+                <Text style={styles.answerText}>No</Text>
+              </TouchableOpacity>
+            </View>
+          </AnimatedContent>
         </View>
         
-        <View style={styles.answersSection}>
-          <TouchableOpacity
-            style={[
-              styles.answerButton,
-              selectedAnswer === 'Yes' && styles.answerButtonSelected
-            ]}
-            onPress={() => handleAnswerSelect('Yes')}
-            activeOpacity={0.8}
-          >
-            <Text style={styles.answerText}>Yes</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[
-              styles.answerButton,
-              selectedAnswer === 'No' && styles.answerButtonSelected
-            ]}
-            onPress={() => handleAnswerSelect('No')}
-            activeOpacity={0.8}
-          >
-            <Text style={styles.answerText}>No</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-      
-      <View style={[styles.nextContainer, { paddingBottom: insets.bottom + SPACING.page }]}>
-        <TouchableOpacity 
-          style={[
-            styles.nextButton,
-            !selectedAnswer && styles.nextButtonDisabled
-          ]}
-          onPress={handleNext}
-          disabled={!selectedAnswer}
-        >
-          <Text style={styles.nextButtonText}>Next</Text>
-        </TouchableOpacity>
-      </View>
+        {/* Next tlačítko dole s animací */}
+        <AnimatedContent delay={500}>
+          <View style={[styles.nextContainer, { paddingBottom: insets.bottom + SPACING.page }]}>
+            <TouchableOpacity 
+              style={[
+                styles.nextButton,
+                !selectedAnswer && styles.nextButtonDisabled
+              ]}
+              onPress={handleNext}
+              disabled={!selectedAnswer}
+            >
+              <Text style={styles.nextButtonText}>Next</Text>
+            </TouchableOpacity>
+          </View>
+        </AnimatedContent>
+      </AnimatedQuestionPage>
     </View>
   );
 }

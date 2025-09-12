@@ -1,9 +1,16 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, TouchableOpacity, StyleSheet, Text } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
+import Animated, { 
+  useSharedValue, 
+  useAnimatedStyle, 
+  withSpring,
+  withTiming,
+  interpolate
+} from 'react-native-reanimated';
 import { COLORS, GRADIENTS, SPACING } from '../constants/theme';
 
 interface OnboardingHeaderProps {
@@ -16,7 +23,43 @@ export function OnboardingHeader({ step, total, questionLabel }: OnboardingHeade
   const insets = useSafeAreaInsets();
   const router = useRouter();
   
+  // Animated progress value
+  const progressValue = useSharedValue(0);
+  const questionOpacity = useSharedValue(0);
+  
+  // Calculate target progress percentage
   const progressPercentage = (step / total) * 100;
+
+  // Animate progress when step changes
+  useEffect(() => {
+    progressValue.value = withSpring(progressPercentage, {
+      damping: 15,
+      stiffness: 150,
+      mass: 1,
+    });
+    
+    // Animate question label appearance
+    questionOpacity.value = withTiming(1, {
+      duration: 300,
+    });
+  }, [step, progressPercentage]);
+
+  // Animated styles for progress bar
+  const progressAnimatedStyle = useAnimatedStyle(() => {
+    return {
+      width: `${progressValue.value}%`,
+    };
+  });
+
+  // Animated styles for question label
+  const questionAnimatedStyle = useAnimatedStyle(() => {
+    return {
+      opacity: questionOpacity.value,
+      transform: [{
+        translateY: interpolate(questionOpacity.value, [0, 1], [10, 0])
+      }]
+    };
+  });
 
   const handleBackPress = () => {
     router.back();
@@ -32,8 +75,8 @@ export function OnboardingHeader({ step, total, questionLabel }: OnboardingHeade
         
         <View style={styles.progressContainer}>
           <View style={styles.progressTrack}>
-            <View
-              style={[styles.progressFill, { width: `${progressPercentage}%` }]}
+            <Animated.View
+              style={[styles.progressFill, progressAnimatedStyle]}
             />
           </View>
         </View>
@@ -41,7 +84,9 @@ export function OnboardingHeader({ step, total, questionLabel }: OnboardingHeade
       
       {/* Question label */}
       {questionLabel && (
-        <Text style={styles.questionLabel}>{questionLabel}</Text>
+        <Animated.Text style={[styles.questionLabel, questionAnimatedStyle]}>
+          {questionLabel}
+        </Animated.Text>
       )}
     </View>
   );

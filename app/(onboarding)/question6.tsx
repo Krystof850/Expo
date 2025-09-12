@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import {
   View,
   Text,
@@ -11,11 +11,13 @@ import { router, useFocusEffect } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { OnboardingHeader } from '../../components/OnboardingHeader';
+import { AnimatedQuestionPage, AnimatedContent, AnimatedQuestionPageRef } from '../../components/AnimatedQuestionPage';
 import { COLORS, TYPOGRAPHY, SPACING } from '../../constants/theme';
 
 export default function OnboardingQuestion6() {
   const insets = useSafeAreaInsets();
   const [selectedFrequency, setSelectedFrequency] = useState<string>('');
+  const animationRef = useRef<AnimatedQuestionPageRef>(null);
 
   const frequencyOptions = [
     { label: '1-2 times', value: '1-2' },
@@ -48,59 +50,74 @@ export default function OnboardingQuestion6() {
   const handleNext = async () => {
     if (!selectedFrequency) return;
     
-    try {
-      // Uložit odpověď
-      await AsyncStorage.setItem('onboarding_delay_frequency', selectedFrequency);
-      // Přejít na další otázku
-      router.push('/(onboarding)/question7');
-    } catch (error) {
-      console.log('Error saving delay frequency answer:', error);
-      router.push('/(onboarding)/question7');
-    }
+    // Run exit animation before navigation
+    animationRef.current?.runExitAnimation(async () => {
+      try {
+        // Uložit odpověď
+        await AsyncStorage.setItem('onboarding_delay_frequency', selectedFrequency);
+        // Přejít na další otázku
+        router.push('/(onboarding)/question7');
+      } catch (error) {
+        console.log('Error saving delay frequency answer:', error);
+        router.push('/(onboarding)/question7');
+      }
+    });
   };
 
   return (
     <View style={styles.container}>
+      {/* Header s progress barem - static, no animation */}
       <OnboardingHeader 
         step={6} 
         total={10} 
         questionLabel="Question 6"
       />
       
-      <View style={styles.content}>
-        <View style={styles.questionSection}>
-          <Text style={styles.questionText}>On average, how many times do you delay a task before finally starting it?</Text>
+      {/* Animated page wrapper for smooth transitions */}
+      <AnimatedQuestionPage ref={animationRef}>
+        {/* Střední obsah - otázka a odpovědi s animací */}
+        <View style={styles.content}>
+          <AnimatedContent delay={100}>
+            <View style={styles.questionSection}>
+              <Text style={styles.questionText}>On average, how many times do you delay a task before finally starting it?</Text>
+            </View>
+          </AnimatedContent>
+          
+          <AnimatedContent delay={300}>
+            <View style={styles.answersSection}>
+              {frequencyOptions.map((option) => (
+                <TouchableOpacity
+                  key={option.value}
+                  style={[
+                    styles.answerButton,
+                    selectedFrequency === option.value && styles.answerButtonSelected
+                  ]}
+                  onPress={() => handleFrequencySelect(option.value)}
+                  activeOpacity={0.8}
+                >
+                  <Text style={styles.answerText}>{option.label}</Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </AnimatedContent>
         </View>
         
-        <View style={styles.answersSection}>
-          {frequencyOptions.map((option) => (
-            <TouchableOpacity
-              key={option.value}
+        {/* Next tlačítko dole s animací */}
+        <AnimatedContent delay={500}>
+          <View style={[styles.nextContainer, { paddingBottom: insets.bottom + SPACING.page }]}>
+            <TouchableOpacity 
               style={[
-                styles.answerButton,
-                selectedFrequency === option.value && styles.answerButtonSelected
+                styles.nextButton,
+                !selectedFrequency && styles.nextButtonDisabled
               ]}
-              onPress={() => handleFrequencySelect(option.value)}
-              activeOpacity={0.8}
+              onPress={handleNext}
+              disabled={!selectedFrequency}
             >
-              <Text style={styles.answerText}>{option.label}</Text>
+              <Text style={styles.nextButtonText}>Next</Text>
             </TouchableOpacity>
-          ))}
-        </View>
-      </View>
-      
-      <View style={[styles.nextContainer, { paddingBottom: insets.bottom + SPACING.page }]}>
-        <TouchableOpacity 
-          style={[
-            styles.nextButton,
-            !selectedFrequency && styles.nextButtonDisabled
-          ]}
-          onPress={handleNext}
-          disabled={!selectedFrequency}
-        >
-          <Text style={styles.nextButtonText}>Next</Text>
-        </TouchableOpacity>
-      </View>
+          </View>
+        </AnimatedContent>
+      </AnimatedQuestionPage>
     </View>
   );
 }
