@@ -79,9 +79,6 @@ export default function OnboardingQuestion5() {
           <AnimatedContent delay={100}>
             <View style={styles.questionSection}>
               <TitleText animated={false}>Do you find it harder now to finish simple tasks that used to feel easy?</TitleText>
-              <DescriptionText animated={false} style={styles.subtextStyle}>
-                This helps us to understand your situation
-              </DescriptionText>
             </View>
           </AnimatedContent>
           
@@ -135,16 +132,6 @@ const styles = StyleSheet.create({
     maxWidth: 384,
     alignItems: 'flex-start',
     marginBottom: 4, // Minimal space between question and answers
-  },
-  subtextStyle: {
-    marginTop: 8, // Professional spacing below main question
-    textAlign: 'left' as const,
-    // Override description text styling to be basic
-    textShadowColor: 'transparent',
-    textShadowOffset: { width: 0, height: 0 },
-    textShadowRadius: 0,
-    shadowOpacity: 0,
-    elevation: 0,
   },
   fullBleed: {
     marginHorizontal: -SPACING.page, // Cancel parent padding to achieve full screen width
