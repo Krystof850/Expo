@@ -150,12 +150,14 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-start', // Changed from center to start
     alignItems: 'center',
     paddingHorizontal: SPACING.page,
+    paddingTop: 80, // Much more top padding
+    paddingBottom: 80, // More bottom padding for spacing
   },
   progressContainer: {
-    marginBottom: 64, // Increased spacing to prevent text overlap
+    marginBottom: 100, // Maximum spacing to completely prevent text overlap
   },
   circleContainer: {
     width: SVG_SIZE,
@@ -180,22 +182,24 @@ const styles = StyleSheet.create({
   },
   textSection: {
     alignItems: 'center',
-    maxWidth: 320,
-    paddingHorizontal: 16, // Add padding to prevent edge overlap
+    maxWidth: 280, // Smaller max width to prevent edge issues
+    paddingHorizontal: 24, // More padding to prevent edge overlap
+    marginTop: 40, // Much larger top margin for complete separation
   },
   titleText: {
-    fontSize: 28, // Slightly smaller to prevent overlap
+    fontSize: 24, // Even smaller font to prevent overlap
     fontWeight: '700',
     color: COLORS.mainText,
     textAlign: 'center',
-    marginBottom: 16, // Increased margin to prevent overlap
+    marginBottom: 20, // Much larger margin to prevent overlap
     letterSpacing: -0.5,
+    lineHeight: 28, // Added line height for better spacing
   },
   subtitleText: {
-    fontSize: 18,
+    fontSize: 16, // Smaller font to prevent overlap
     fontWeight: '500',
     color: COLORS.questionLabel,
     textAlign: 'center',
-    lineHeight: 22,
+    lineHeight: 20, // Tighter line height
   },
 });
