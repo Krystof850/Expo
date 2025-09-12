@@ -152,7 +152,7 @@ const styles = StyleSheet.create({
     width: '80%',
     alignSelf: 'center',
     gap: 16, // space-y-4
-    paddingTop: 16, // pt-4
+    paddingTop: 8, // Reduced from 16 - less space between subtext and first answer card
   },
   nextContainer: {
     paddingHorizontal: SPACING.page,
