@@ -77,6 +77,7 @@ export const Button: React.FC<ButtonProps> = ({
           : COLORS.selectButton.background,
         borderWidth: 2,
         borderColor: COLORS.selectButton.border,
+        width: '100%', // Make select buttons full width
       };
     }
 
