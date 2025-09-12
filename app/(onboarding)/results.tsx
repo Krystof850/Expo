@@ -182,14 +182,16 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 40,
     paddingBottom: 24,
-    paddingHorizontal: 32,
+    paddingHorizontal: 0, // Remove container padding since titleContainer handles it
   },
   titleContainer: {
     alignItems: 'center',
-    marginBottom: 20,
+    marginBottom: 28, // Same spacing as other question pages
+    paddingHorizontal: 32, // Same as other pages
+    paddingTop: 8, // Same as other pages
   },
   titleText: {
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: '700',
     color: COLORS.mainText,
     textAlign: 'center',
@@ -197,7 +199,7 @@ const styles = StyleSheet.create({
     textShadowColor: 'rgba(0, 0, 0, 0.4)',
     textShadowOffset: { width: 0, height: 3 },
     textShadowRadius: 6,
-    lineHeight: 30,
+    lineHeight: 26, // Proportional to fontSize like other titles
   },
   contentContainer: {
     flex: 1,
