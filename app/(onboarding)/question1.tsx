@@ -130,7 +130,8 @@ const styles = StyleSheet.create({
     marginBottom: 32, // space-y-8 = 32px
   },
   answersSection: {
-    width: '100%',
+    width: '80%',
+    alignSelf: 'center',
     gap: 16, // space-y-4
     paddingTop: 16, // pt-4
   },
