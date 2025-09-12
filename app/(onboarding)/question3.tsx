@@ -136,6 +136,12 @@ const styles = StyleSheet.create({
   subtextStyle: {
     marginTop: 8, // Professional spacing below main question
     textAlign: 'left' as const,
+    // Override description text styling to be basic
+    textShadowColor: 'transparent',
+    textShadowOffset: { width: 0, height: 0 },
+    textShadowRadius: 0,
+    shadowOpacity: 0,
+    elevation: 0,
   },
   fullBleed: {
     marginHorizontal: -SPACING.page, // Cancel parent padding to achieve full screen width
