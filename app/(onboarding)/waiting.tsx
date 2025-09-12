@@ -1,12 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react';
 import {
   View,
+  Text,
   StyleSheet,
   BackHandler,
   Platform,
   Animated,
   Dimensions,
 } from 'react-native';
+import Svg, { Circle } from 'react-native-svg';
+const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 import { router, useFocusEffect } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { TitleText, DescriptionText } from '../../components/Text';
@@ -14,9 +17,10 @@ import AppBackground from '../../components/AppBackground';
 import { COLORS, SPACING } from '../../constants/theme';
 
 const { width } = Dimensions.get('window');
-const CIRCLE_SIZE = 120;
-const CIRCLE_RADIUS = CIRCLE_SIZE / 2 - 10;
+const CIRCLE_SIZE = 200; // Larger size for better visibility
+const CIRCLE_RADIUS = 80;
 const CIRCUMFERENCE = 2 * Math.PI * CIRCLE_RADIUS;
+const SVG_SIZE = CIRCLE_SIZE;
 
 export default function OnboardingWaiting() {
   const [progress, setProgress] = useState<number>(0);
@@ -93,26 +97,32 @@ export default function OnboardingWaiting() {
         {/* Circular Progress Bar */}
         <View style={styles.progressContainer}>
           <View style={styles.circleContainer}>
-            {/* Background circle */}
-            <View style={styles.backgroundCircle} />
-            
-            {/* Progress circle using border animation */}
-            <Animated.View 
-              style={[
-                styles.progressCircle,
-                {
-                  borderColor: COLORS.progressFill,
-                  transform: [
-                    {
-                      rotate: progressAnimation.interpolate({
-                        inputRange: [0, 100],
-                        outputRange: ['0deg', '360deg'],
-                      }),
-                    },
-                  ],
-                },
-              ]} 
-            />
+            {/* SVG Circle with animated stroke-dashoffset */}
+            <Svg width={SVG_SIZE} height={SVG_SIZE} style={styles.svgContainer}>
+              {/* Background circle */}
+              <Circle
+                cx={SVG_SIZE / 2}
+                cy={SVG_SIZE / 2}
+                r={CIRCLE_RADIUS}
+                stroke={COLORS.progressTrack}
+                strokeWidth={12}
+                fill="none"
+              />
+              
+              {/* Progress circle with smooth 360° animation */}
+              <AnimatedCircle
+                cx={SVG_SIZE / 2}
+                cy={SVG_SIZE / 2}
+                r={CIRCLE_RADIUS}
+                stroke={COLORS.progressFill}
+                strokeWidth={12}
+                fill="none"
+                strokeDasharray={CIRCUMFERENCE}
+                strokeDashoffset={strokeDashoffset}
+                strokeLinecap="round"
+                transform={`rotate(-90 ${SVG_SIZE / 2} ${SVG_SIZE / 2})`}
+              />
+            </Svg>
             
             {/* Center content */}
             <View style={styles.centerContent}>
@@ -148,30 +158,14 @@ const styles = StyleSheet.create({
     marginBottom: 48,
   },
   circleContainer: {
-    width: CIRCLE_SIZE,
-    height: CIRCLE_SIZE,
+    width: SVG_SIZE,
+    height: SVG_SIZE,
     justifyContent: 'center',
     alignItems: 'center',
     position: 'relative',
   },
-  backgroundCircle: {
+  svgContainer: {
     position: 'absolute',
-    width: CIRCLE_SIZE,
-    height: CIRCLE_SIZE,
-    borderRadius: CIRCLE_SIZE / 2,
-    borderWidth: 8,
-    borderColor: COLORS.progressTrack,
-  },
-  progressCircle: {
-    position: 'absolute',
-    width: CIRCLE_SIZE,
-    height: CIRCLE_SIZE,
-    borderRadius: CIRCLE_SIZE / 2,
-    borderWidth: 8,
-    borderColor: COLORS.progressFill,
-    borderTopColor: 'transparent',
-    borderRightColor: 'transparent',
-    borderBottomColor: 'transparent',
   },
   centerContent: {
     position: 'absolute',
@@ -179,7 +173,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   percentageText: {
-    fontSize: 24,
+    fontSize: 28, // Larger text for bigger circle
     fontWeight: '700',
     color: COLORS.mainText,
     textAlign: 'center',
