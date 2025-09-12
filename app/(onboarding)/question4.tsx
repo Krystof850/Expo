@@ -10,7 +10,7 @@ import {
 import { router, useFocusEffect } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { OnboardingHeader } from '../../components/OnboardingHeader';
+import { OnboardingHeader, OnboardingHeaderRef } from '../../components/OnboardingHeader';
 import { AnimatedQuestionPage, AnimatedContent, AnimatedQuestionPageRef } from '../../components/AnimatedQuestionPage';
 import { COLORS, TYPOGRAPHY, SPACING } from '../../constants/theme';
 
@@ -18,6 +18,7 @@ export default function OnboardingQuestion4() {
   const insets = useSafeAreaInsets();
   const [selectedFrequency, setSelectedFrequency] = useState<string>('');
   const animationRef = useRef<AnimatedQuestionPageRef>(null);
+  const headerRef = useRef<OnboardingHeaderRef>(null);
 
   const frequencyOptions = [
     { label: 'Never', value: 'never' },
@@ -50,24 +51,27 @@ export default function OnboardingQuestion4() {
   const handleNext = async () => {
     if (!selectedFrequency) return;
     
-    // Run exit animation before navigation
-    animationRef.current?.runExitAnimation(async () => {
-      try {
-        // Uložit odpověď
-        await AsyncStorage.setItem('onboarding_daily_procrastination', selectedFrequency);
-        // Přejít na další otázku
-        router.push('/(onboarding)/question5');
-      } catch (error) {
-        console.log('Error saving daily procrastination frequency:', error);
-        router.push('/(onboarding)/question5');
-      }
+    // Run header exit animation first, then content exit animation
+    headerRef.current?.runExitAnimation(() => {
+      animationRef.current?.runExitAnimation(async () => {
+        try {
+          // Uložit odpověď
+          await AsyncStorage.setItem('onboarding_daily_procrastination', selectedFrequency);
+          // Přejít na další otázku
+          router.push('/(onboarding)/question5');
+        } catch (error) {
+          console.log('Error saving daily procrastination frequency:', error);
+          router.push('/(onboarding)/question5');
+        }
+      });
     });
   };
 
   return (
     <View style={styles.container}>
-      {/* Header s progress barem - static, no animation */}
+      {/* Header s progress barem - with exit animation */}
       <OnboardingHeader 
+        ref={headerRef}
         step={4} 
         total={10} 
         questionLabel="Question 4"

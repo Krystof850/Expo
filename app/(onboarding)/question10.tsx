@@ -13,7 +13,7 @@ import {
 import { router, useFocusEffect } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { OnboardingHeader } from '../../components/OnboardingHeader';
+import { OnboardingHeader, OnboardingHeaderRef } from '../../components/OnboardingHeader';
 import { AnimatedQuestionPage, AnimatedContent, AnimatedQuestionPageRef } from '../../components/AnimatedQuestionPage';
 import { COLORS, TYPOGRAPHY, SPACING } from '../../constants/theme';
 
@@ -22,6 +22,7 @@ export default function OnboardingQuestion10() {
   const [name, setName] = useState<string>('');
   const [age, setAge] = useState<string>('');
   const animationRef = useRef<AnimatedQuestionPageRef>(null);
+  const headerRef = useRef<OnboardingHeaderRef>(null);
 
   // Blokování hardware back button pouze na Androidu
   useFocusEffect(
@@ -43,18 +44,20 @@ export default function OnboardingQuestion10() {
   const handleComplete = async () => {
     if (!name.trim() || !age.trim()) return;
     
-    // Run exit animation before navigation
-    animationRef.current?.runExitAnimation(async () => {
-      try {
-        // Uložit odpovědi
-        await AsyncStorage.setItem('onboarding_name', name.trim());
-        await AsyncStorage.setItem('onboarding_age', age.trim());
-        // Přejít na waiting screen
-        router.push('/(onboarding)/waiting');
-      } catch (error) {
-        console.log('Error saving name and age:', error);
-        router.push('/(onboarding)/waiting');
-      }
+    // Run header exit animation first, then content exit animation
+    headerRef.current?.runExitAnimation(() => {
+      animationRef.current?.runExitAnimation(async () => {
+        try {
+          // Uložit odpovědi
+          await AsyncStorage.setItem('onboarding_name', name.trim());
+          await AsyncStorage.setItem('onboarding_age', age.trim());
+          // Přejít na waiting screen
+          router.push('/(onboarding)/waiting');
+        } catch (error) {
+          console.log('Error saving name and age:', error);
+          router.push('/(onboarding)/waiting');
+        }
+      });
     });
   };
 
@@ -66,8 +69,9 @@ export default function OnboardingQuestion10() {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       keyboardVerticalOffset={0}
     >
-      {/* Header s progress barem - static, no animation */}
+      {/* Header s progress barem - with exit animation */}
       <OnboardingHeader 
+        ref={headerRef}
         step={10} 
         total={10} 
         questionLabel="Question 10"

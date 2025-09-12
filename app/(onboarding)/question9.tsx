@@ -10,7 +10,7 @@ import {
 import { router, useFocusEffect } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { OnboardingHeader } from '../../components/OnboardingHeader';
+import { OnboardingHeader, OnboardingHeaderRef } from '../../components/OnboardingHeader';
 import { AnimatedQuestionPage, AnimatedContent, AnimatedQuestionPageRef } from '../../components/AnimatedQuestionPage';
 import { COLORS, TYPOGRAPHY, SPACING } from '../../constants/theme';
 
@@ -18,6 +18,7 @@ export default function OnboardingQuestion9() {
   const insets = useSafeAreaInsets();
   const [selectedAnswer, setSelectedAnswer] = useState<string>('');
   const animationRef = useRef<AnimatedQuestionPageRef>(null);
+  const headerRef = useRef<OnboardingHeaderRef>(null);
 
   // Blokování hardware back button pouze na Androidu
   useFocusEffect(
@@ -43,24 +44,27 @@ export default function OnboardingQuestion9() {
   const handleNext = async () => {
     if (!selectedAnswer) return;
     
-    // Run exit animation before navigation
-    animationRef.current?.runExitAnimation(async () => {
-      try {
-        // Uložit odpověď
-        await AsyncStorage.setItem('onboarding_life_improvement', selectedAnswer);
-        // Přejít na další otázku
-        router.push('/(onboarding)/question10');
-      } catch (error) {
-        console.log('Error saving life improvement answer:', error);
-        router.push('/(onboarding)/question10');
-      }
+    // Run header exit animation first, then content exit animation
+    headerRef.current?.runExitAnimation(() => {
+      animationRef.current?.runExitAnimation(async () => {
+        try {
+          // Uložit odpověď
+          await AsyncStorage.setItem('onboarding_life_improvement', selectedAnswer);
+          // Přejít na další otázku
+          router.push('/(onboarding)/question10');
+        } catch (error) {
+          console.log('Error saving life improvement answer:', error);
+          router.push('/(onboarding)/question10');
+        }
+      });
     });
   };
 
   return (
     <View style={styles.container}>
-      {/* Header s progress barem - static, no animation */}
+      {/* Header s progress barem - with exit animation */}
       <OnboardingHeader 
+        ref={headerRef}
         step={9} 
         total={10} 
         questionLabel="Question 9"
