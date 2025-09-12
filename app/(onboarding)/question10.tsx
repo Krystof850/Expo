@@ -90,32 +90,33 @@ export default function OnboardingQuestion10() {
           <View style={styles.content}>
             <AnimatedContent delay={100}>
               <View style={styles.questionSection}>
-                <TitleText animated={false}>Finally</TitleText>
-                <DescriptionText animated={false}>A little more about you</DescriptionText>
+                <TitleText animated={false}>Finally, a little more about you</TitleText>
               </View>
             </AnimatedContent>
             
             <AnimatedContent delay={300}>
-              <View style={styles.inputsSection}>
-                <TextInput
-                  style={styles.input}
-                  placeholder="Name"
-                  placeholderTextColor={COLORS.questionLabel}
-                  value={name}
-                  onChangeText={setName}
-                  autoCapitalize="words"
-                  maxLength={50}
-                />
-                
-                <TextInput
-                  style={styles.input}
-                  placeholder="Age"
-                  placeholderTextColor={COLORS.questionLabel}
-                  value={age}
-                  onChangeText={setAge}
-                  keyboardType="numeric"
-                  maxLength={3}
-                />
+              <View style={styles.fullBleed}>
+                <View style={styles.inputsSection}>
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Name"
+                    placeholderTextColor={COLORS.descriptionText}
+                    value={name}
+                    onChangeText={setName}
+                    autoCapitalize="words"
+                    maxLength={50}
+                  />
+                  
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Age"
+                    placeholderTextColor={COLORS.descriptionText}
+                    value={age}
+                    onChangeText={setAge}
+                    keyboardType="numeric"
+                    maxLength={3}
+                  />
+                </View>
               </View>
             </AnimatedContent>
           </View>
@@ -149,34 +150,39 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   content: {
+    flex: 1,
     justifyContent: 'flex-start',
-    alignItems: 'center',
     paddingHorizontal: SPACING.page,
-    paddingTop: 40,
-    paddingBottom: 20,
+    paddingTop: 8, // Consistent with other questions
+    paddingBottom: 120, // Space for Next button to prevent overlap
   },
   questionSection: {
     width: '100%',
-    maxWidth: 384,
-    alignItems: 'center',
-    marginBottom: 32,
+    maxWidth: 384, // max-w-sm (384px)
+    alignItems: 'flex-start',
+    marginBottom: 28, // Consistent spacing with other questions
+  },
+  fullBleed: {
+    marginHorizontal: -SPACING.page, // Cancel parent padding to achieve full screen width
+    alignSelf: 'stretch',
   },
   inputsSection: {
-    width: '100%',
-    maxWidth: 384,
-    gap: 16,
+    width: '80%',
+    alignSelf: 'center',
+    gap: 12, // Same gap as answer cards
   },
   input: {
-    backgroundColor: 'rgba(255, 255, 255, 0.15)',
+    backgroundColor: COLORS.selectButton.background, // Same as SelectButton
     borderWidth: 2,
-    borderColor: 'rgba(255, 255, 255, 0.3)',
-    borderRadius: 25,
-    paddingVertical: 14,
-    paddingHorizontal: 24,
+    borderColor: COLORS.selectButton.border, // Same as SelectButton
+    borderRadius: 50, // Same rounded style as SelectButton
+    paddingVertical: 16, // Same as SPACING.button
+    paddingHorizontal: 32, // Same as SelectButton padding
     fontSize: 18,
     fontWeight: '600',
     color: COLORS.mainText,
-    textAlign: 'left',
+    textAlign: 'center', // Center text like SelectButton
+    width: '100%', // Full width like SelectButton
   },
   nextContainer: {
     paddingHorizontal: SPACING.page,
