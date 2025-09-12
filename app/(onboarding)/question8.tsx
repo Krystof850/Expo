@@ -128,13 +128,13 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-start',
     paddingHorizontal: SPACING.page,
-    paddingTop: 80, // Fixed positioning from top for consistent layout
+    paddingTop: 60, // Fixed positioning from top for consistent layout
   },
   questionSection: {
     width: '100%',
     maxWidth: 384,
     alignItems: 'flex-start',
-    marginBottom: 32,
+    marginBottom: 20,
   },
   subtextStyle: {
     marginTop: 8, // Professional spacing below main question
