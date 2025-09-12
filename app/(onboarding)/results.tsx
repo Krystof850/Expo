@@ -12,6 +12,8 @@ import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import Svg, { Circle, Defs, LinearGradient as SvgLinearGradient, Stop } from 'react-native-svg';
+
+const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 import AppBackground from '../../components/AppBackground';
 import { COLORS, SPACING } from '@/constants/theme';
 
@@ -82,12 +84,12 @@ export default function ResultsScreen() {
 
   const yourBarAnimatedHeight = yourBarHeight.interpolate({
     inputRange: [0, 1],
-    outputRange: [0, 200], // 78% height representation
+    outputRange: [0, 156], // 78% of 200px = 156px
   });
 
   const averageBarAnimatedHeight = averageBarHeight.interpolate({
     inputRange: [0, 1],
-    outputRange: [0, 56], // 22% height representation
+    outputRange: [0, 44], // 22% of 200px = 44px
   });
 
   const emojiTransform = [{
@@ -137,22 +139,18 @@ export default function ResultsScreen() {
                 fill="none"
               />
               {/* Progress circle */}
-              <Animated.View>
-                <Svg width={GAUGE_SIZE} height={GAUGE_SIZE} style={{ position: 'absolute' }}>
-                  <Circle
-                    cx={GAUGE_SIZE / 2}
-                    cy={GAUGE_SIZE / 2}
-                    r={GAUGE_RADIUS}
-                    stroke="url(#gaugeGradient)"
-                    strokeWidth={GAUGE_STROKE_WIDTH}
-                    fill="none"
-                    strokeDasharray={CIRCUMFERENCE}
-                    strokeDashoffset={strokeDashoffset}
-                    strokeLinecap="round"
-                    transform={`rotate(-90 ${GAUGE_SIZE / 2} ${GAUGE_SIZE / 2})`}
-                  />
-                </Svg>
-              </Animated.View>
+              <AnimatedCircle
+                cx={GAUGE_SIZE / 2}
+                cy={GAUGE_SIZE / 2}
+                r={GAUGE_RADIUS}
+                stroke="url(#gaugeGradient)"
+                strokeWidth={GAUGE_STROKE_WIDTH}
+                fill="none"
+                strokeDasharray={CIRCUMFERENCE}
+                strokeDashoffset={strokeDashoffset}
+                strokeLinecap="round"
+                transform={`rotate(-90 ${GAUGE_SIZE / 2} ${GAUGE_SIZE / 2})`}
+              />
             </Svg>
             
             {/* Center content */}
