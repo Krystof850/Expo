@@ -120,35 +120,15 @@ export default function ResultsScreen() {
         <View style={styles.contentContainer}>
           {/* Circular Gauge */}
           <View style={styles.gaugeContainer}>
-            <Svg width={GAUGE_SIZE} height={GAUGE_SIZE} style={styles.gauge}>
-              <Defs>
-                <SvgLinearGradient id="gaugeGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <Stop offset="0%" stopColor="#34D399" />
-                  <Stop offset="50%" stopColor="#FBBF24" />
-                  <Stop offset="100%" stopColor="#EF4444" />
-                </SvgLinearGradient>
-              </Defs>
-              {/* Background circle */}
+            <Svg width={GAUGE_SIZE} height={GAUGE_SIZE}>
+              {/* Basic gray circle - no animation, no colors */}
               <Circle
                 cx={GAUGE_SIZE / 2}
                 cy={GAUGE_SIZE / 2}
                 r={GAUGE_RADIUS}
-                stroke="rgba(255, 255, 255, 0.1)"
+                stroke="rgba(255, 255, 255, 0.3)"
                 strokeWidth={GAUGE_STROKE_WIDTH}
                 fill="none"
-              />
-              {/* Progress circle */}
-              <AnimatedCircle
-                cx={GAUGE_SIZE / 2}
-                cy={GAUGE_SIZE / 2}
-                r={GAUGE_RADIUS}
-                stroke="url(#gaugeGradient)"
-                strokeWidth={GAUGE_STROKE_WIDTH}
-                fill="none"
-                strokeDasharray={CIRCUMFERENCE}
-                strokeDashoffset={strokeDashoffset}
-                strokeLinecap="round"
-                transform={`rotate(-90 ${GAUGE_SIZE / 2} ${GAUGE_SIZE / 2})`}
               />
             </Svg>
             
@@ -203,11 +183,11 @@ export default function ResultsScreen() {
               </View>
             </View>
             
-            {/* Percentages below bars */}
-            <View style={styles.percentagesContainer}>
-              <Text style={styles.barPercentageBelow}>78%</Text>
-              <Text style={styles.barPercentageBelow}>22%</Text>
-            </View>
+          
+          {/* Percentages below bars */}
+          <View style={styles.percentagesContainer}>
+            <Text style={styles.barPercentageBelow}>78%</Text>
+            <Text style={styles.barPercentageBelow}>22%</Text>
           </View>
         </View>
 
@@ -231,7 +211,7 @@ const styles = StyleSheet.create({
   },
   titleContainer: {
     alignItems: 'center',
-    marginBottom: 60, // More spacing to prevent overlap with gauge
+    marginBottom: 80, // Much more spacing to prevent overlap with gauge
   },
   titleText: {
     fontSize: 28,
@@ -246,7 +226,8 @@ const styles = StyleSheet.create({
   contentContainer: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start', // Changed to flex-start for better spacing control
+    paddingTop: 20, // Add top padding
   },
   gaugeContainer: {
     alignItems: 'center',
