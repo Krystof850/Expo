@@ -8,11 +8,13 @@ import {
   SafeAreaView,
   StatusBar,
 } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { TitleText, DescriptionText } from '../../components/Text';
+import { SelectButton, NextButton } from '../../components/Button';
+import AppBackground from '../../components/AppBackground';
 import { COLORS, SPACING } from '@/constants/theme';
 
 interface Symptom {
@@ -61,13 +63,9 @@ export default function SymptomsScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor={COLORS.gradientStart} />
-      
-      <LinearGradient
-        colors={[COLORS.gradientStart, COLORS.gradientMiddle, COLORS.gradientEnd]}
-        style={styles.gradient}
-      >
+    <AppBackground>
+      <SafeAreaView style={styles.container}>
+        <StatusBar barStyle="light-content" backgroundColor={COLORS.gradientStart} />
         {/* Header */}
         <View style={[styles.header, { paddingTop: insets.top }]}>
           <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
@@ -132,18 +130,14 @@ export default function SymptomsScreen() {
 
         {/* Continue Button */}
         <View style={styles.buttonContainer}>
-          <TouchableOpacity 
-            style={styles.continueButton}
+          <NextButton
+            title="Restart My Brain"
             onPress={handleContinue}
-            activeOpacity={0.8}
-          >
-            <Text style={styles.continueButtonText}>
-              Restart My Brain
-            </Text>
-          </TouchableOpacity>
+            style={styles.continueButton}
+          />
         </View>
-      </LinearGradient>
-    </SafeAreaView>
+      </SafeAreaView>
+    </AppBackground>
   );
 }
 

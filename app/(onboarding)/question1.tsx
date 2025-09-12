@@ -12,6 +12,7 @@ import { OnboardingHeader, OnboardingHeaderRef } from '../../components/Onboardi
 import { AnimatedQuestionPage, AnimatedContent, AnimatedQuestionPageRef } from '../../components/AnimatedQuestionPage';
 import { SelectButton, NextButton } from '../../components/Button';
 import { TitleText } from '../../components/Text';
+import AppBackground from '../../components/AppBackground';
 import { SPACING } from '../../constants/theme';
 
 export default function OnboardingQuestion1() {
@@ -61,7 +62,8 @@ export default function OnboardingQuestion1() {
   };
 
   return (
-    <View style={styles.container}>
+    <AppBackground>
+      <View style={styles.container}>
       {/* Header s progress barem - with exit animation */}
       <OnboardingHeader 
         ref={headerRef}
@@ -106,6 +108,7 @@ export default function OnboardingQuestion1() {
         />
       </View>
     </View>
+    </AppBackground>
   );
 }
 

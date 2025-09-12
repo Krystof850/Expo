@@ -8,11 +8,13 @@ import {
   SafeAreaView,
   StatusBar,
 } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { TitleText, DescriptionText } from '../../components/Text';
+import { NextButton } from '../../components/Button';
+import AppBackground from '../../components/AppBackground';
 import { COLORS, SPACING } from '@/constants/theme';
 
 interface Goal {
@@ -62,19 +64,15 @@ export default function GoalsScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor={COLORS.gradientStart} />
-      
-      <LinearGradient
-        colors={[COLORS.gradientStart, COLORS.gradientMiddle, COLORS.gradientEnd]}
-        style={styles.gradient}
-      >
+    <AppBackground>
+      <SafeAreaView style={styles.container}>
+        <StatusBar barStyle="light-content" backgroundColor={COLORS.gradientStart} />
         {/* Header */}
         <View style={[styles.header, { paddingTop: insets.top }]}>
           <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
             <Ionicons name="arrow-back" size={24} color={COLORS.mainText} />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>Select Your Goals</Text>
+          <TitleText animated={false} style={styles.headerTitle}>Select Your Goals</TitleText>
         </View>
 
         <ScrollView 
@@ -84,9 +82,9 @@ export default function GoalsScreen() {
         >
           <View style={styles.content}>
             {/* Instructions */}
-            <Text style={styles.instructionText}>
+            <DescriptionText animated={false} style={styles.instructionText}>
               Select the goals you want to track during{'\n'}your journey to change.
-            </Text>
+            </DescriptionText>
 
             {/* Goals */}
             <View style={styles.goalsContainer}>
@@ -126,34 +124,20 @@ export default function GoalsScreen() {
 
         {/* Continue Button */}
         <View style={styles.buttonContainer}>
-          <TouchableOpacity 
-            style={[
-              styles.continueButton,
-              selectedGoals.length === 0 && styles.disabledButton
-            ]}
+          <NextButton
+            title="Track These Goals"
             onPress={handleContinue}
-            activeOpacity={0.8}
             disabled={selectedGoals.length === 0}
-          >
-            <Text style={[
-              styles.continueButtonText,
-              selectedGoals.length === 0 && styles.disabledButtonText
-            ]}>
-              Track These Goals
-            </Text>
-          </TouchableOpacity>
+            style={styles.continueButton}
+          />
         </View>
-      </LinearGradient>
-    </SafeAreaView>
+      </SafeAreaView>
+    </AppBackground>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: COLORS.gradientStart,
-  },
-  gradient: {
     flex: 1,
   },
   header: {
@@ -168,9 +152,6 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     flex: 1,
-    fontSize: 24,
-    fontWeight: '700',
-    color: COLORS.mainText,
     textAlign: 'center',
     marginRight: 40, // Compensation for back button
   },
@@ -186,11 +167,7 @@ const styles = StyleSheet.create({
     paddingTop: 20,
   },
   instructionText: {
-    fontSize: 18,
-    fontWeight: '500',
-    color: COLORS.questionLabel,
     textAlign: 'center',
-    lineHeight: 24,
     marginBottom: 32,
   },
   goalsContainer: {
@@ -253,28 +230,6 @@ const styles = StyleSheet.create({
     paddingTop: 20,
   },
   continueButton: {
-    backgroundColor: 'white',
-    borderRadius: 25,
-    paddingVertical: 18,
-    paddingHorizontal: 32,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 8,
-    elevation: 8,
-  },
-  disabledButton: {
-    backgroundColor: 'rgba(255, 255, 255, 0.5)',
-    shadowOpacity: 0.1,
-  },
-  continueButtonText: {
-    fontSize: 18,
-    fontWeight: '700',
-    color: COLORS.gradientEnd,
-    textAlign: 'center',
-  },
-  disabledButtonText: {
-    color: 'rgba(70, 130, 180, 0.5)',
+    // NextButton will handle its own styling
   },
 });

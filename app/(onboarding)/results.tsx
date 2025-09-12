@@ -8,10 +8,12 @@ import {
   ScrollView,
   SafeAreaView,
 } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { TitleText, DescriptionText } from '../../components/Text';
+import { NextButton } from '../../components/Button';
+import AppBackground from '../../components/AppBackground';
 import { COLORS, SPACING } from '@/constants/theme';
 
 export default function ResultsScreen() {
@@ -23,13 +25,9 @@ export default function ResultsScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor={COLORS.gradientStart} />
-      
-      <LinearGradient
-        colors={[COLORS.gradientStart, COLORS.gradientMiddle, COLORS.gradientEnd]}
-        style={styles.gradient}
-      >
+    <AppBackground>
+      <SafeAreaView style={styles.container}>
+        <StatusBar barStyle="light-content" backgroundColor={COLORS.gradientStart} />
         {/* Simple Header with Back Button */}
         <View style={[styles.header, { paddingTop: insets.top }]}>
           <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
@@ -45,12 +43,12 @@ export default function ResultsScreen() {
           <View style={styles.content}>
             {/* Header Section */}
             <View style={styles.headerSection}>
-              <Text style={styles.titleText}>
+              <TitleText animated={false} style={styles.titleText}>
                 Analysis Complete ✓
-              </Text>
-              <Text style={styles.subtitleText}>
+              </TitleText>
+              <DescriptionText animated={false} style={styles.subtitleText}>
                 We have some insights for you...
-              </Text>
+              </DescriptionText>
             </View>
 
             {/* Result Statement */}
@@ -93,18 +91,14 @@ export default function ResultsScreen() {
 
         {/* Continue Button */}
         <View style={styles.buttonContainer}>
-          <TouchableOpacity 
-            style={styles.continueButton}
+          <NextButton
+            title="Learn More About Your Habits"
             onPress={handleContinue}
-            activeOpacity={0.8}
-          >
-            <Text style={styles.continueButtonText}>
-              Learn More About Your Habits
-            </Text>
-          </TouchableOpacity>
+            style={styles.continueButton}
+          />
         </View>
-      </LinearGradient>
-    </SafeAreaView>
+      </SafeAreaView>
+    </AppBackground>
   );
 }
 

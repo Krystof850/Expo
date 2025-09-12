@@ -8,12 +8,14 @@ import {
   StatusBar,
   Alert,
 } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import SignatureScreen from 'react-native-signature-canvas';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { TitleText, DescriptionText } from '../../components/Text';
+import { NextButton } from '../../components/Button';
+import AppBackground from '../../components/AppBackground';
 import { COLORS, SPACING } from '@/constants/theme';
 
 export default function CommitmentSignatureScreen() {
@@ -81,13 +83,9 @@ export default function CommitmentSignatureScreen() {
   `;
 
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor={COLORS.gradientStart} />
-      
-      <LinearGradient
-        colors={[COLORS.gradientStart, COLORS.gradientMiddle, COLORS.gradientEnd]}
-        style={styles.gradient}
-      >
+    <AppBackground>
+      <SafeAreaView style={styles.container}>
+        <StatusBar barStyle="light-content" backgroundColor={COLORS.gradientStart} />
         {/* Header */}
         <View style={[styles.header, { paddingTop: insets.top }]}>
           <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
@@ -99,13 +97,13 @@ export default function CommitmentSignatureScreen() {
         <View style={styles.content}>
           {/* Title Section */}
           <View style={styles.titleSection}>
-            <Text style={styles.titleText}>
+            <TitleText animated={false} style={styles.titleText}>
               Sign your commitment
-            </Text>
-            <Text style={styles.commitmentText}>
+            </TitleText>
+            <DescriptionText animated={false} style={styles.commitmentText}>
               Finally, promise yourself that you will{'\n'}
               work to overcome your procrastination.
-            </Text>
+            </DescriptionText>
           </View>
 
           {/* Signature Canvas */}
@@ -136,26 +134,22 @@ export default function CommitmentSignatureScreen() {
 
           {/* Instructions */}
           <View style={styles.instructionsSection}>
-            <Text style={styles.instructionsText}>
+            <DescriptionText animated={false} style={styles.instructionsText}>
               Draw on the open space above
-            </Text>
+            </DescriptionText>
           </View>
         </View>
 
         {/* Finish Button */}
         <View style={styles.buttonContainer}>
-          <TouchableOpacity 
-            style={styles.finishButton}
+          <NextButton
+            title="Finish"
             onPress={handleFinish}
-            activeOpacity={0.8}
-          >
-            <Text style={styles.finishButtonText}>
-              Finish
-            </Text>
-          </TouchableOpacity>
+            style={styles.finishButton}
+          />
         </View>
-      </LinearGradient>
-    </SafeAreaView>
+      </SafeAreaView>
+    </AppBackground>
   );
 }
 

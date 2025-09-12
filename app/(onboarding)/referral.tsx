@@ -1,20 +1,21 @@
 import React, { useState } from 'react';
 import {
   View,
-  Text,
-  TouchableOpacity,
   StyleSheet,
   SafeAreaView,
   StatusBar,
   TextInput,
   KeyboardAvoidingView,
   Platform,
+  TouchableOpacity,
 } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { TitleText, DescriptionText } from '../../components/Text';
+import { NextButton } from '../../components/Button';
+import AppBackground from '../../components/AppBackground';
 import { COLORS, SPACING } from '@/constants/theme';
 
 export default function ReferralScreen() {
@@ -41,13 +42,9 @@ export default function ReferralScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor={COLORS.gradientStart} />
-      
-      <LinearGradient
-        colors={[COLORS.gradientStart, COLORS.gradientMiddle, COLORS.gradientEnd]}
-        style={styles.gradient}
-      >
+    <AppBackground>
+      <SafeAreaView style={styles.container}>
+        <StatusBar barStyle="light-content" backgroundColor={COLORS.gradientStart} />
         <KeyboardAvoidingView 
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
           style={styles.keyboardAvoidingView}
@@ -62,12 +59,12 @@ export default function ReferralScreen() {
           {/* Content */}
           <View style={styles.content}>
             <View style={styles.textSection}>
-              <Text style={styles.titleText}>
+              <TitleText animated={false} style={styles.titleText}>
                 Do you have a referral code?
-              </Text>
-              <Text style={styles.subtitleText}>
+              </TitleText>
+              <DescriptionText animated={false} style={styles.subtitleText}>
                 You can skip this step.
-              </Text>
+              </DescriptionText>
             </View>
 
             <View style={styles.inputSection}>
@@ -86,28 +83,20 @@ export default function ReferralScreen() {
 
           {/* Continue Button */}
           <View style={styles.buttonContainer}>
-            <TouchableOpacity 
-              style={styles.continueButton}
+            <NextButton
+              title="Next"
               onPress={handleContinue}
-              activeOpacity={0.8}
-            >
-              <Text style={styles.continueButtonText}>
-                Next
-              </Text>
-            </TouchableOpacity>
+              style={styles.continueButton}
+            />
           </View>
         </KeyboardAvoidingView>
-      </LinearGradient>
-    </SafeAreaView>
+      </SafeAreaView>
+    </AppBackground>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: COLORS.gradientStart,
-  },
-  gradient: {
     flex: 1,
   },
   keyboardAvoidingView: {
@@ -134,20 +123,11 @@ const styles = StyleSheet.create({
     marginBottom: 80,
   },
   titleText: {
-    fontSize: 36,
-    fontWeight: '700',
-    color: COLORS.mainText,
     textAlign: 'center',
     marginBottom: 16,
-    letterSpacing: -0.5,
-    lineHeight: 42,
   },
   subtitleText: {
-    fontSize: 18,
-    fontWeight: '500',
-    color: COLORS.questionLabel,
     textAlign: 'center',
-    lineHeight: 24,
   },
   inputSection: {
     width: '100%',
@@ -173,21 +153,6 @@ const styles = StyleSheet.create({
     paddingTop: 20,
   },
   continueButton: {
-    backgroundColor: 'white',
-    borderRadius: 25,
-    paddingVertical: 18,
-    paddingHorizontal: 32,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 8,
-    elevation: 8,
-  },
-  continueButtonText: {
-    fontSize: 18,
-    fontWeight: '700',
-    color: COLORS.gradientEnd,
-    textAlign: 'center',
+    // NextButton will handle its own styling
   },
 });

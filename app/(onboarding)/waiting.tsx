@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import {
   View,
-  Text,
   StyleSheet,
   BackHandler,
   Platform,
@@ -10,7 +9,9 @@ import {
 } from 'react-native';
 import { router, useFocusEffect } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { COLORS, TYPOGRAPHY, SPACING } from '../../constants/theme';
+import { TitleText, DescriptionText } from '../../components/Text';
+import AppBackground from '../../components/AppBackground';
+import { COLORS, SPACING } from '../../constants/theme';
 
 const { width } = Dimensions.get('window');
 const CIRCLE_SIZE = 120;
@@ -86,7 +87,8 @@ export default function OnboardingWaiting() {
   }, []);
 
   return (
-    <View style={styles.container}>
+    <AppBackground>
+      <View style={styles.container}>
       <View style={styles.content}>
         {/* Circular Progress Bar */}
         <View style={styles.progressContainer}>
@@ -121,11 +123,12 @@ export default function OnboardingWaiting() {
 
         {/* Text content */}
         <View style={styles.textSection}>
-          <Text style={styles.titleText}>Processing</Text>
-          <Text style={styles.subtitleText}>Analyzing your procrastination patterns</Text>
+          <TitleText animated={false} style={styles.titleText}>Processing</TitleText>
+          <DescriptionText animated={false} style={styles.subtitleText}>Analyzing your procrastination patterns</DescriptionText>
         </View>
       </View>
     </View>
+    </AppBackground>
   );
 }
 

@@ -1,8 +1,6 @@
 import React, { useState, useRef } from 'react';
 import {
   View,
-  Text,
-  TouchableOpacity,
   StyleSheet,
   BackHandler,
   Platform,
@@ -12,7 +10,10 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { OnboardingHeader, OnboardingHeaderRef } from '../../components/OnboardingHeader';
 import { AnimatedQuestionPage, AnimatedContent, AnimatedQuestionPageRef } from '../../components/AnimatedQuestionPage';
-import { COLORS, TYPOGRAPHY, SPACING } from '../../constants/theme';
+import { SelectButton, NextButton } from '../../components/Button';
+import { TitleText } from '../../components/Text';
+import AppBackground from '../../components/AppBackground';
+import { SPACING } from '../../constants/theme';
 
 export default function OnboardingQuestion4() {
   const insets = useSafeAreaInsets();
@@ -68,7 +69,8 @@ export default function OnboardingQuestion4() {
   };
 
   return (
-    <View style={styles.container}>
+    <AppBackground>
+      <View style={styles.container}>
       {/* Header s progress barem - with exit animation */}
       <OnboardingHeader 
         ref={headerRef}
@@ -83,24 +85,19 @@ export default function OnboardingQuestion4() {
         <View style={styles.content}>
           <AnimatedContent delay={100}>
             <View style={styles.questionSection}>
-              <Text style={styles.questionText}>How many times a day do you catch yourself procrastinating on tasks that matter?</Text>
+              <TitleText animated={false}>How many times a day do you catch yourself procrastinating on tasks that matter?</TitleText>
             </View>
           </AnimatedContent>
           
           <AnimatedContent delay={300}>
             <View style={styles.answersSection}>
               {frequencyOptions.map((option) => (
-                <TouchableOpacity
+                <SelectButton
                   key={option.value}
-                  style={[
-                    styles.answerButton,
-                    selectedFrequency === option.value && styles.answerButtonSelected
-                  ]}
+                  title={option.label}
+                  selected={selectedFrequency === option.value}
                   onPress={() => handleFrequencySelect(option.value)}
-                  activeOpacity={0.8}
-                >
-                  <Text style={styles.answerText}>{option.label}</Text>
-                </TouchableOpacity>
+                />
               ))}
             </View>
           </AnimatedContent>
@@ -110,18 +107,14 @@ export default function OnboardingQuestion4() {
       
       {/* Next button - OUTSIDE of animation wrapper */}
       <View style={[styles.nextContainer, { paddingBottom: insets.bottom + SPACING.page }]}>
-        <TouchableOpacity 
-          style={[
-            styles.nextButton,
-            !selectedFrequency && styles.nextButtonDisabled
-          ]}
+        <NextButton
+          title="Next"
           onPress={handleNext}
           disabled={!selectedFrequency}
-        >
-          <Text style={styles.nextButtonText}>Next</Text>
-        </TouchableOpacity>
+        />
       </View>
     </View>
+    </AppBackground>
   );
 }
 
@@ -142,57 +135,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 32,
   },
-  questionText: {
-    fontSize: 28,
-    fontWeight: '700',
-    color: COLORS.mainText,
-    textAlign: 'center',
-    lineHeight: 32,
-    letterSpacing: -0.5,
-  },
   answersSection: {
     width: '100%',
     maxWidth: 384,
     gap: 16,
     paddingTop: 16,
   },
-  answerButton: {
-    backgroundColor: COLORS.answerButton,
-    borderWidth: 2,
-    borderColor: COLORS.answerButtonBorder,
-    paddingVertical: 16,
-    paddingHorizontal: 32,
-    borderRadius: 50,
-    alignItems: 'center',
-  },
-  answerButtonSelected: {
-    backgroundColor: COLORS.answerButtonSelected,
-    borderColor: COLORS.answerButtonBorder,
-  },
-  answerText: {
-    ...TYPOGRAPHY.answerText,
-  },
   nextContainer: {
     paddingHorizontal: SPACING.page,
     zIndex: 10,
-  },
-  nextButton: {
-    backgroundColor: COLORS.nextButton,
-    paddingVertical: 16,
-    paddingHorizontal: 32,
-    borderRadius: 50,
-    alignItems: 'center',
-    justifyContent: 'center',
-    shadowColor: 'rgba(0, 0, 0, 0.1)',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 1,
-    shadowRadius: 8,
-    elevation: 4,
-  },
-  nextButtonDisabled: {
-    opacity: 0.5,
-  },
-  nextButtonText: {
-    ...TYPOGRAPHY.nextButton,
   },
 });

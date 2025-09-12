@@ -8,10 +8,12 @@ import {
   SafeAreaView,
   StatusBar,
 } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { TitleText, DescriptionText } from '../../components/Text';
+import { NextButton } from '../../components/Button';
+import AppBackground from '../../components/AppBackground';
 import { COLORS, SPACING } from '@/constants/theme';
 
 interface Review {
@@ -71,13 +73,9 @@ export default function RatingScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor={COLORS.gradientStart} />
-      
-      <LinearGradient
-        colors={[COLORS.gradientStart, COLORS.gradientMiddle, COLORS.gradientEnd]}
-        style={styles.gradient}
-      >
+    <AppBackground>
+      <SafeAreaView style={styles.container}>
+        <StatusBar barStyle="light-content" backgroundColor={COLORS.gradientStart} />
         {/* Header */}
         <View style={[styles.header, { paddingTop: insets.top }]}>
           <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
@@ -93,9 +91,9 @@ export default function RatingScreen() {
           <View style={styles.content}>
             {/* Title Section */}
             <View style={styles.titleSection}>
-              <Text style={styles.titleText}>
+              <TitleText animated={false} style={styles.titleText}>
                 Rate Us
-              </Text>
+              </TitleText>
               
               {/* Stars with elegant decoration */}
               <View style={styles.starsContainer}>
@@ -117,9 +115,9 @@ export default function RatingScreen() {
 
             {/* Description */}
             <View style={styles.descriptionSection}>
-              <Text style={styles.descriptionText}>
+              <DescriptionText animated={false} style={styles.descriptionText}>
                 This app was designed for people{'\n'}like you.
-              </Text>
+              </DescriptionText>
               
               {/* User avatars and count */}
               <View style={styles.usersContainer}>
@@ -168,27 +166,19 @@ export default function RatingScreen() {
 
         {/* Continue Button */}
         <View style={styles.buttonContainer}>
-          <TouchableOpacity 
-            style={styles.continueButton}
+          <NextButton
+            title="Next"
             onPress={handleContinue}
-            activeOpacity={0.8}
-          >
-            <Text style={styles.continueButtonText}>
-              Next
-            </Text>
-          </TouchableOpacity>
+            style={styles.continueButton}
+          />
         </View>
-      </LinearGradient>
-    </SafeAreaView>
+      </SafeAreaView>
+    </AppBackground>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: COLORS.gradientStart,
-  },
-  gradient: {
     flex: 1,
   },
   header: {
@@ -217,12 +207,8 @@ const styles = StyleSheet.create({
     paddingTop: 20,
   },
   titleText: {
-    fontSize: 36,
-    fontWeight: '700',
-    color: COLORS.mainText,
     textAlign: 'center',
     marginBottom: 32,
-    letterSpacing: -0.8,
   },
   starsContainer: {
     flexDirection: 'row',
@@ -254,11 +240,7 @@ const styles = StyleSheet.create({
     marginBottom: 40,
   },
   descriptionText: {
-    fontSize: 20,
-    fontWeight: '500',
-    color: COLORS.questionLabel,
     textAlign: 'center',
-    lineHeight: 26,
     marginBottom: 24,
   },
   usersContainer: {
@@ -374,21 +356,6 @@ const styles = StyleSheet.create({
     paddingTop: 20,
   },
   continueButton: {
-    backgroundColor: 'white',
-    borderRadius: 25,
-    paddingVertical: 18,
-    paddingHorizontal: 32,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 8,
-    elevation: 8,
-  },
-  continueButtonText: {
-    fontSize: 18,
-    fontWeight: '700',
-    color: COLORS.gradientEnd,
-    textAlign: 'center',
+    // NextButton will handle its own styling
   },
 });

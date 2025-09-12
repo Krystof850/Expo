@@ -1,9 +1,7 @@
 import React, { useState, useRef } from 'react';
 import {
   View,
-  Text,
   TextInput,
-  TouchableOpacity,
   StyleSheet,
   BackHandler,
   Platform,
@@ -15,7 +13,10 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { OnboardingHeader, OnboardingHeaderRef } from '../../components/OnboardingHeader';
 import { AnimatedQuestionPage, AnimatedContent, AnimatedQuestionPageRef } from '../../components/AnimatedQuestionPage';
-import { COLORS, TYPOGRAPHY, SPACING } from '../../constants/theme';
+import { NextButton } from '../../components/Button';
+import { TitleText, DescriptionText } from '../../components/Text';
+import AppBackground from '../../components/AppBackground';
+import { COLORS, SPACING } from '../../constants/theme';
 
 export default function OnboardingQuestion10() {
   const insets = useSafeAreaInsets();
@@ -64,11 +65,12 @@ export default function OnboardingQuestion10() {
   const isFormValid = name.trim().length > 0 && age.trim().length > 0;
 
   return (
-    <KeyboardAvoidingView 
-      style={styles.container}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      keyboardVerticalOffset={0}
-    >
+    <AppBackground>
+      <KeyboardAvoidingView 
+        style={styles.container}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={0}
+      >
       {/* Header s progress barem - with exit animation */}
       <OnboardingHeader 
         ref={headerRef}
@@ -88,8 +90,8 @@ export default function OnboardingQuestion10() {
           <View style={styles.content}>
             <AnimatedContent delay={100}>
               <View style={styles.questionSection}>
-                <Text style={styles.titleText}>Finally</Text>
-                <Text style={styles.subtitleText}>A little more about you</Text>
+                <TitleText animated={false}>Finally</TitleText>
+                <DescriptionText animated={false}>A little more about you</DescriptionText>
               </View>
             </AnimatedContent>
             
@@ -123,18 +125,14 @@ export default function OnboardingQuestion10() {
       
       {/* Next button - OUTSIDE of animation wrapper */}
       <View style={[styles.nextContainer, { paddingBottom: insets.bottom + SPACING.page }]}>
-        <TouchableOpacity 
-          style={[
-            styles.nextButton,
-            !isFormValid && styles.nextButtonDisabled
-          ]}
+        <NextButton
+          title="Complete Quiz"
           onPress={handleComplete}
           disabled={!isFormValid}
-        >
-          <Text style={styles.nextButtonText}>Complete Quiz</Text>
-        </TouchableOpacity>
+        />
       </View>
     </KeyboardAvoidingView>
+    </AppBackground>
   );
 }
 
@@ -163,21 +161,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 32,
   },
-  titleText: {
-    fontSize: 28,
-    fontWeight: '700',
-    color: COLORS.mainText,
-    textAlign: 'center',
-    marginBottom: 6,
-    letterSpacing: -0.5,
-  },
-  subtitleText: {
-    fontSize: 18,
-    fontWeight: '500',
-    color: COLORS.questionLabel,
-    textAlign: 'center',
-    lineHeight: 22,
-  },
   inputsSection: {
     width: '100%',
     maxWidth: 384,
@@ -198,24 +181,5 @@ const styles = StyleSheet.create({
   nextContainer: {
     paddingHorizontal: SPACING.page,
     zIndex: 10,
-  },
-  nextButton: {
-    backgroundColor: COLORS.nextButton,
-    paddingVertical: 16,
-    paddingHorizontal: 32,
-    borderRadius: 50,
-    alignItems: 'center',
-    justifyContent: 'center',
-    shadowColor: 'rgba(0, 0, 0, 0.1)',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 1,
-    shadowRadius: 8,
-    elevation: 4,
-  },
-  nextButtonDisabled: {
-    opacity: 0.5,
-  },
-  nextButtonText: {
-    ...TYPOGRAPHY.nextButton,
   },
 });
