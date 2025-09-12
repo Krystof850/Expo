@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
     width: '100%',
     maxWidth: 384,
     alignItems: 'flex-start',
-    marginBottom: 20,
+    marginBottom: 8,
   },
   subtextStyle: {
     marginTop: 8, // Professional spacing below main question

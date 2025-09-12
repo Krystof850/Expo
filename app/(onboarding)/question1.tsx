@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
     width: '100%',
     maxWidth: 384, // max-w-sm (384px)
     alignItems: 'flex-start',
-    marginBottom: 20, // space-y-8 = 32px
+    marginBottom: 8, // space-y-8 = 32px
   },
   subtextStyle: {
     marginTop: 8, // Professional spacing below main question
