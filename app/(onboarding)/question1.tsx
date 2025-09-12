@@ -11,7 +11,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { OnboardingHeader, OnboardingHeaderRef } from '../../components/OnboardingHeader';
 import { AnimatedQuestionPage, AnimatedContent, AnimatedQuestionPageRef } from '../../components/AnimatedQuestionPage';
 import { SelectButton, NextButton } from '../../components/Button';
-import { TitleText } from '../../components/Text';
+import { TitleText, DescriptionText } from '../../components/Text';
 import AppBackground from '../../components/AppBackground';
 import { SPACING } from '../../constants/theme';
 
@@ -78,6 +78,9 @@ export default function OnboardingQuestion1() {
           <AnimatedContent delay={100}>
             <View style={styles.questionSection}>
               <TitleText animated={false}>What is your gender?</TitleText>
+              <DescriptionText animated={false} style={styles.subtextStyle}>
+                This helps us to understand your situation
+              </DescriptionText>
             </View>
           </AnimatedContent>
           
@@ -127,8 +130,12 @@ const styles = StyleSheet.create({
   questionSection: {
     width: '100%',
     maxWidth: 384, // max-w-sm (384px)
-    alignItems: 'center',
+    alignItems: 'flex-start',
     marginBottom: 32, // space-y-8 = 32px
+  },
+  subtextStyle: {
+    marginTop: 8, // Professional spacing below main question
+    textAlign: 'left' as const,
   },
   fullBleed: {
     marginHorizontal: -SPACING.page, // Cancel parent padding to achieve full screen width
