@@ -108,12 +108,7 @@ export default function ResultsScreen() {
       <View style={styles.container}>
         <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
         
-        {/* Header */}
-        <View style={styles.header}>
-          <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-            <Ionicons name="arrow-back" size={24} color={COLORS.mainText} />
-          </TouchableOpacity>
-        </View>
+        {/* No header - removed back arrow */}
 
         {/* Title */}
         <View style={styles.titleContainer}>
@@ -193,7 +188,6 @@ export default function ResultsScreen() {
                     />
                   </Animated.View>
                 </View>
-                <Text style={styles.barPercentage}>78%</Text>
               </View>
 
               {/* Average Bar */}
@@ -209,7 +203,13 @@ export default function ResultsScreen() {
                     />
                   </Animated.View>
                 </View>
-                <Text style={styles.barPercentage}>22%</Text>
+              </View>
+            </View>
+            
+            {/* Percentages below bars */}
+            <View style={styles.percentagesContainer}>
+              <Text style={styles.barPercentageBelow}>78%</Text>
+              <Text style={styles.barPercentageBelow}>22%</Text>
               </View>
             </View>
           </View>
@@ -229,20 +229,13 @@ export default function ResultsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 60,
+    paddingTop: 80, // More top padding since no header
     paddingBottom: 32,
     paddingHorizontal: 32,
   },
-  header: {
-    marginBottom: 20,
-  },
-  backButton: {
-    padding: 8,
-    alignSelf: 'flex-start',
-  },
   titleContainer: {
     alignItems: 'center',
-    marginBottom: 40,
+    marginBottom: 60, // More spacing to prevent overlap with gauge
   },
   titleText: {
     fontSize: 28,
@@ -262,7 +255,7 @@ const styles = StyleSheet.create({
   gaugeContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 40,
+    marginBottom: 48, // More spacing after gauge
     position: 'relative',
   },
   gauge: {
@@ -288,7 +281,7 @@ const styles = StyleSheet.create({
   },
   headlineContainer: {
     alignItems: 'center',
-    marginBottom: 40,
+    marginBottom: 48, // More spacing after headline
     maxWidth: width - 64,
   },
   headlineText: {
@@ -317,7 +310,7 @@ const styles = StyleSheet.create({
     color: COLORS.mainText,
   },
   chartContainer: {
-    marginBottom: 40,
+    marginBottom: 48, // More spacing after chart
   },
   barsContainer: {
     flexDirection: 'row',
@@ -356,11 +349,18 @@ const styles = StyleSheet.create({
     flex: 1,
     borderRadius: 8,
   },
-  barPercentage: {
+  percentagesContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    gap: 48, // Match the gap between bars
+    marginTop: 12, // Space between bars and percentages
+  },
+  barPercentageBelow: {
     fontSize: 16,
     fontWeight: '700',
     color: COLORS.mainText,
     textAlign: 'center',
+    width: 48, // Match bar width to center align
   },
   buttonContainer: {
     width: '100%',
