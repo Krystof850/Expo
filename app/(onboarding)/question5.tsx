@@ -83,9 +83,10 @@ export default function OnboardingQuestion5() {
           </AnimatedContent>
           
           <AnimatedContent delay={300}>
-            <View style={styles.answersSection}>
-              <SelectButton
-                title="Yes"
+            <View style={styles.fullBleed}>
+              <View style={styles.answersSection}>
+                <SelectButton
+                  title="Yes"
                 selected={selectedAnswer === 'Yes'}
                 onPress={() => handleAnswerSelect('Yes')}
               />
@@ -94,7 +95,8 @@ export default function OnboardingQuestion5() {
                 title="No"
                 selected={selectedAnswer === 'No'}
                 onPress={() => handleAnswerSelect('No')}
-              />
+                />
+              </View>
             </View>
           </AnimatedContent>
         </View>
@@ -130,6 +132,9 @@ const styles = StyleSheet.create({
     maxWidth: 384,
     alignItems: 'center',
     marginBottom: 32,
+  },
+  fullBleed: {
+    marginHorizontal: -SPACING.page, // Cancel parent padding to achieve full screen width
   },
   answersSection: {
     width: '80%',

@@ -82,18 +82,20 @@ export default function OnboardingQuestion1() {
           </AnimatedContent>
           
           <AnimatedContent delay={300}>
-            <View style={styles.answersSection}>
-              <SelectButton
-                title="Male"
-                selected={selectedGender === 'Male'}
-                onPress={() => handleGenderSelect('Male')}
-              />
+            <View style={styles.fullBleed}>
+              <View style={styles.answersSection}>
+                <SelectButton
+                  title="Male"
+                  selected={selectedGender === 'Male'}
+                  onPress={() => handleGenderSelect('Male')}
+                />
 
-              <SelectButton
-                title="Female"
-                selected={selectedGender === 'Female'}
-                onPress={() => handleGenderSelect('Female')}
-              />
+                <SelectButton
+                  title="Female"
+                  selected={selectedGender === 'Female'}
+                  onPress={() => handleGenderSelect('Female')}
+                />
+              </View>
             </View>
           </AnimatedContent>
         </View>
@@ -128,6 +130,9 @@ const styles = StyleSheet.create({
     maxWidth: 384, // max-w-sm (384px)
     alignItems: 'center',
     marginBottom: 32, // space-y-8 = 32px
+  },
+  fullBleed: {
+    marginHorizontal: -SPACING.page, // Cancel parent padding to achieve full screen width
   },
   answersSection: {
     width: '80%',
