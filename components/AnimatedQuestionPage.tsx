@@ -29,24 +29,14 @@ export const AnimatedQuestionPage = forwardRef<AnimatedQuestionPageRef, Animated
     const translateY = useSharedValue(20);
 
     useEffect(() => {
-      // Start entrance animations
-      opacity.value = withTiming(1, {
-        duration: 400,
-      });
+      // Simple instant appearance - no complex animations
+      opacity.value = 1;
+      scale.value = 1;
+      translateY.value = 0;
       
-      scale.value = withSpring(1, {
-        damping: 15,
-        stiffness: 150,
-        mass: 1,
-      });
-      
-      translateY.value = withTiming(0, {
-        duration: 350,
-      }, (finished) => {
-        if (finished && onAnimationComplete) {
-          runOnJS(onAnimationComplete)();
-        }
-      });
+      if (onAnimationComplete) {
+        onAnimationComplete();
+      }
     }, []);
 
     // Reset animation values when screen comes back into focus
@@ -59,18 +49,16 @@ export const AnimatedQuestionPage = forwardRef<AnimatedQuestionPageRef, Animated
       }, [opacity, scale, translateY])
     );
 
-    // Expose exit animation method
+    // Expose exit animation method - instant disappear
     useImperativeHandle(ref, () => ({
       runExitAnimation: (callback: () => void) => {
-        opacity.value = withTiming(0, { duration: 300 });
-        scale.value = withTiming(0.9, { duration: 300 });
-        translateY.value = withTiming(-10, { 
-          duration: 300 
-        }, (finished) => {
-          if (finished) {
-            runOnJS(callback)();
-          }
-        });
+        // Instant disappear instead of gradual animation
+        opacity.value = 0;
+        scale.value = 1;
+        translateY.value = 0;
+        
+        // Call callback immediately 
+        callback();
       },
     }));
 

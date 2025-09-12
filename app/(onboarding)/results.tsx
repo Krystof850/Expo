@@ -57,21 +57,23 @@ export default function ResultsScreen() {
       ])
     ]).start();
 
-    // Animate bars after a delay
+    // Animate bars after a delay - smoother animation
     setTimeout(() => {
-      Animated.parallel([
-        Animated.timing(yourBarHeight, {
+      Animated.stagger(200, [
+        Animated.spring(yourBarHeight, {
           toValue: 1,
-          duration: 1500,
+          tension: 80,
+          friction: 8,
           useNativeDriver: false,
         }),
-        Animated.timing(averageBarHeight, {
+        Animated.spring(averageBarHeight, {
           toValue: 1,
-          duration: 1500,
+          tension: 80,
+          friction: 8,
           useNativeDriver: false,
         }),
       ]).start();
-    }, 1200);
+    }, 1000);
   }, []);
 
   const emojiTransform = [
@@ -88,12 +90,12 @@ export default function ResultsScreen() {
 
   const yourBarAnimatedHeight = yourBarHeight.interpolate({
     inputRange: [0, 1],
-    outputRange: [0, 160], // 78% representation - smaller tall bar
+    outputRange: [0, 220], // 78% representation - bigger tall bar
   });
 
   const averageBarAnimatedHeight = averageBarHeight.interpolate({
     inputRange: [0, 1],
-    outputRange: [0, 60], // 22% representation - smaller shorter bar
+    outputRange: [0, 80], // 22% representation - bigger shorter bar
   });
 
   const handleContinue = () => {
@@ -263,8 +265,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-end',
     justifyContent: 'center',
-    gap: 48, // Reduced spacing between bars
-    height: 200, // Smaller container
+    gap: 60, // More spacing between bars for bigger bars
+    height: 280, // Bigger container for larger bars
   },
   barColumn: {
     alignItems: 'center',
@@ -278,8 +280,8 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
   },
   barWrapper: {
-    width: 48, // Smaller bars
-    height: 160,
+    width: 60, // Bigger bars to fill more space
+    height: 220,
     justifyContent: 'flex-end',
     marginBottom: 12,
   },
@@ -309,18 +311,19 @@ const styles = StyleSheet.create({
   },
   ctaButton: {
     backgroundColor: '#FFFFFF', // var(--vibrant-cta)
-    borderRadius: 30,
-    paddingVertical: 16,
-    paddingHorizontal: 32,
+    borderRadius: 50, // Same as other NextButtons
+    paddingVertical: 16, // Same as SPACING.button
+    paddingHorizontal: 32, // Same as other NextButtons (SPACING.button * 2)
     alignItems: 'center',
     shadowColor: 'rgba(255, 255, 255, 0.2)',
     shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 1,
-    shadowRadius: 16,
+    shadowRadius: 24, // Same shadow as other NextButtons
     elevation: 8,
+    width: '100%', // Make it full width like other NextButtons
   },
   ctaButtonText: {
-    fontSize: 18,
+    fontSize: 18, // Same as TYPOGRAPHY.buttonNext
     fontWeight: '700',
     color: '#0B1120', // var(--vibrant-cta-text)
     textAlign: 'center',
