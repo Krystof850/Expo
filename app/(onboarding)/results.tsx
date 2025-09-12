@@ -10,39 +10,54 @@ import {
 } from 'react-native';
 import { router } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
-import Svg, { Circle, Defs, LinearGradient as SvgLinearGradient, Stop } from 'react-native-svg';
 
-const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 import AppBackground from '../../components/AppBackground';
 import { COLORS, SPACING } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
-const GAUGE_SIZE = 200;
-const GAUGE_STROKE_WIDTH = 12;
-const GAUGE_RADIUS = (GAUGE_SIZE - GAUGE_STROKE_WIDTH) / 2;
-const CIRCUMFERENCE = 2 * Math.PI * GAUGE_RADIUS;
 
 export default function ResultsScreen() {
-  const gaugeProgress = useRef(new Animated.Value(0)).current;
+  const emojiScale = useRef(new Animated.Value(0.8)).current;
+  const emojiRotation = useRef(new Animated.Value(0)).current;
   const yourBarHeight = useRef(new Animated.Value(0)).current;
   const averageBarHeight = useRef(new Animated.Value(0)).current;
-  const emojiScale = useRef(new Animated.Value(0)).current;
-  const emojiRotation = useRef(new Animated.Value(0)).current;
+  const contentOpacity = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
-    // Start animations after component mounts
-    const animationDelay = 500;
+    // Emoji animation matching HTML keyframes (sad-face-anim)
+    Animated.sequence([
+      Animated.parallel([
+        Animated.timing(emojiScale, {
+          toValue: 1.05,
+          duration: 1000,
+          useNativeDriver: true,
+        }),
+        Animated.timing(emojiRotation, {
+          toValue: -5,
+          duration: 1000,
+          useNativeDriver: true,
+        }),
+        Animated.timing(contentOpacity, {
+          toValue: 1,
+          duration: 800,
+          useNativeDriver: true,
+        }),
+      ]),
+      Animated.parallel([
+        Animated.timing(emojiScale, {
+          toValue: 1,
+          duration: 1000,
+          useNativeDriver: true,
+        }),
+        Animated.timing(emojiRotation, {
+          toValue: 0,
+          duration: 1000,
+          useNativeDriver: true,
+        }),
+      ])
+    ]).start();
 
-    // Animate gauge progress to 73%
-    setTimeout(() => {
-      Animated.timing(gaugeProgress, {
-        toValue: 0.73,
-        duration: 2000,
-        useNativeDriver: false,
-      }).start();
-    }, animationDelay);
-
-    // Animate bars
+    // Animate bars after a delay
     setTimeout(() => {
       Animated.parallel([
         Animated.timing(yourBarHeight, {
@@ -56,49 +71,30 @@ export default function ResultsScreen() {
           useNativeDriver: false,
         }),
       ]).start();
-    }, animationDelay + 1000);
-
-    // Animate emoji with scale and rotation
-    setTimeout(() => {
-      Animated.parallel([
-        Animated.spring(emojiScale, {
-          toValue: 1,
-          tension: 100,
-          friction: 8,
-          useNativeDriver: true,
-        }),
-        Animated.timing(emojiRotation, {
-          toValue: 1,
-          duration: 2000,
-          useNativeDriver: true,
-        }),
-      ]).start();
-    }, animationDelay + 200);
+    }, 1200);
   }, []);
 
-  const strokeDashoffset = gaugeProgress.interpolate({
-    inputRange: [0, 1],
-    outputRange: [CIRCUMFERENCE, 0],
-  });
+  const emojiTransform = [
+    {
+      scale: emojiScale
+    },
+    {
+      rotate: emojiRotation.interpolate({
+        inputRange: [-5, 0],
+        outputRange: ['-5deg', '0deg']
+      })
+    }
+  ];
 
   const yourBarAnimatedHeight = yourBarHeight.interpolate({
     inputRange: [0, 1],
-    outputRange: [0, 156], // 78% of 200px = 156px
+    outputRange: [0, 256], // 78% representation - tall bar
   });
 
   const averageBarAnimatedHeight = averageBarHeight.interpolate({
     inputRange: [0, 1],
-    outputRange: [0, 44], // 22% of 200px = 44px
+    outputRange: [0, 96], // 22% representation - shorter bar
   });
-
-  const emojiTransform = [{
-    scale: emojiScale
-  }, {
-    rotate: emojiRotation.interpolate({
-      inputRange: [0, 0.5, 1],
-      outputRange: ['15deg', '-5deg', '0deg']
-    })
-  }];
 
   const handleContinue = () => {
     router.push('/(onboarding)/symptoms');
@@ -109,48 +105,31 @@ export default function ResultsScreen() {
       <View style={styles.container}>
         <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
         
-        {/* No header - removed back arrow */}
-
         {/* Title */}
         <View style={styles.titleContainer}>
           <Text style={styles.titleText}>Your Analysis is Complete</Text>
         </View>
 
         {/* Main Content */}
-        <View style={styles.contentContainer}>
-          {/* Circular Gauge */}
-          <View style={styles.gaugeContainer}>
-            <Svg width={GAUGE_SIZE} height={GAUGE_SIZE}>
-              {/* Basic gray circle - no animation, no colors */}
-              <Circle
-                cx={GAUGE_SIZE / 2}
-                cy={GAUGE_SIZE / 2}
-                r={GAUGE_RADIUS}
-                stroke="rgba(255, 255, 255, 0.3)"
-                strokeWidth={GAUGE_STROKE_WIDTH}
-                fill="none"
-              />
-            </Svg>
-            
-            {/* Center content */}
-            <View style={styles.gaugeCenter}>
-              <Animated.Text style={[styles.emoji, { transform: emojiTransform }]}>
-                😕
-              </Animated.Text>
-              <Text style={styles.gaugeCenterText}>Your productivity is low</Text>
-            </View>
+        <Animated.View style={[styles.contentContainer, { opacity: contentOpacity }]}>
+          {/* Large Emoji Section */}
+          <View style={styles.emojiSection}>
+            <Animated.Text style={[styles.largeEmoji, { transform: emojiTransform }]}>
+              😕
+            </Animated.Text>
+            <Text style={styles.productivityText}>Your productivity is low</Text>
           </View>
 
-          {/* Headline */}
-          <View style={styles.headlineContainer}>
+          {/* Headline Section */}
+          <View style={styles.headlineSection}>
             <Text style={styles.headlineText}>Oof. That's rough.</Text>
             <Text style={styles.descriptionText}>
               You're procrastinating more than <Text style={styles.percentageHighlight}>78%</Text> of people your age. But hey, that's why you're here, right?
             </Text>
           </View>
 
-          {/* Bar Comparison Chart */}
-          <View style={styles.chartContainer}>
+          {/* Vertical Bar Chart */}
+          <View style={styles.chartSection}>
             <View style={styles.barsContainer}>
               {/* Your Bar */}
               <View style={styles.barColumn}>
@@ -158,13 +137,14 @@ export default function ResultsScreen() {
                 <View style={styles.barWrapper}>
                   <Animated.View style={[styles.barBackground, { height: yourBarAnimatedHeight }]}>
                     <LinearGradient
-                      colors={['#EF4444', '#F97316', '#EAB308']}
+                      colors={['#EF4444', '#F97316', '#EAB308']} // red-500, orange-500, yellow-500
                       style={styles.barGradient}
                       start={{ x: 0, y: 1 }}
                       end={{ x: 0, y: 0 }}
                     />
                   </Animated.View>
                 </View>
+                <Text style={styles.barPercentage}>78%</Text>
               </View>
 
               {/* Average Bar */}
@@ -173,23 +153,18 @@ export default function ResultsScreen() {
                 <View style={styles.barWrapper}>
                   <Animated.View style={[styles.barBackground, { height: averageBarAnimatedHeight }]}>
                     <LinearGradient
-                      colors={['#22D3EE', '#06B6D4']}
+                      colors={['#06B6D4', '#22D3EE']} // cyan-500, sky-400
                       style={styles.barGradient}
                       start={{ x: 0, y: 1 }}
                       end={{ x: 0, y: 0 }}
                     />
                   </Animated.View>
                 </View>
+                <Text style={styles.barPercentage}>22%</Text>
               </View>
             </View>
-            
-            {/* Percentages below bars */}
-            <View style={styles.percentagesContainer}>
-              <Text style={styles.barPercentageBelow}>78%</Text>
-              <Text style={styles.barPercentageBelow}>22%</Text>
-            </View>
           </View>
-        </View>
+        </Animated.View>
 
         {/* CTA Button */}
         <View style={styles.buttonContainer}>
@@ -205,17 +180,16 @@ export default function ResultsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 60, // Reduced top padding
+    paddingTop: 60,
     paddingBottom: 32,
     paddingHorizontal: 32,
   },
   titleContainer: {
     alignItems: 'center',
-    marginBottom: 120, // Extra large spacing to completely prevent overlap with gauge
-    paddingTop: 20, // Add top padding for better spacing
+    marginBottom: 40,
   },
   titleText: {
-    fontSize: 28,
+    fontSize: 30,
     fontWeight: '700',
     color: COLORS.mainText,
     textAlign: 'center',
@@ -223,52 +197,42 @@ const styles = StyleSheet.create({
     textShadowColor: 'rgba(0, 0, 0, 0.4)',
     textShadowOffset: { width: 0, height: 3 },
     textShadowRadius: 6,
+    lineHeight: 38,
   },
   contentContainer: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'flex-start', // Changed to flex-start for better spacing control
-    paddingTop: 0, // No top padding to give more space for title
+    justifyContent: 'space-around',
   },
-  gaugeContainer: {
+  emojiSection: {
     alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 60, // Much more spacing after gauge
-    position: 'relative',
+    marginBottom: 20,
   },
-  gauge: {
-    transform: [{ scaleY: -1 }],
-  },
-  gaugeCenter: {
-    position: 'absolute',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  emoji: {
-    fontSize: 48,
+  largeEmoji: {
+    fontSize: 128, // text-8xl equivalent
     textShadowColor: 'rgba(0, 0, 0, 0.4)',
     textShadowOffset: { width: 0, height: 3 },
     textShadowRadius: 6,
+    marginBottom: 16,
   },
-  gaugeCenterText: {
-    fontSize: 14,
+  productivityText: {
+    fontSize: 18,
     fontWeight: '500',
     color: 'rgba(186, 230, 253, 0.8)', // sky-200/80
-    marginTop: 8,
     textAlign: 'center',
   },
-  headlineContainer: {
+  headlineSection: {
     alignItems: 'center',
-    marginBottom: 48, // More spacing after headline
     maxWidth: width - 64,
+    marginBottom: 20,
   },
   headlineText: {
-    fontSize: 28,
+    fontSize: 30,
     fontWeight: '700',
     color: COLORS.mainText,
     textAlign: 'center',
     marginBottom: 12,
-    letterSpacing: -0.5,
+    letterSpacing: -0.8,
     textShadowColor: 'rgba(0, 0, 0, 0.4)',
     textShadowOffset: { width: 0, height: 3 },
     textShadowRadius: 6,
@@ -287,15 +251,16 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: COLORS.mainText,
   },
-  chartContainer: {
-    marginBottom: 20, // Less spacing to make room for percentages
+  chartSection: {
+    alignItems: 'center',
+    marginBottom: 20,
   },
   barsContainer: {
     flexDirection: 'row',
     alignItems: 'flex-end',
     justifyContent: 'center',
-    gap: 48,
-    height: 240,
+    gap: 64, // More spacing between bars
+    height: 320, // Taller container for bigger bars
   },
   barColumn: {
     alignItems: 'center',
@@ -304,49 +269,43 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '600',
     color: 'rgba(103, 232, 249, 0.8)', // sky-300/80
-    letterSpacing: 1,
-    marginBottom: 12,
+    letterSpacing: 1.2,
+    marginBottom: 16,
+    textTransform: 'uppercase',
   },
   barWrapper: {
-    width: 48,
-    height: 200,
+    width: 64, // Wider bars
+    height: 256,
     justifyContent: 'flex-end',
-    marginBottom: 12,
+    marginBottom: 16,
   },
   barBackground: {
     width: '100%',
-    borderRadius: 8,
+    borderRadius: 12,
     overflow: 'hidden',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 8,
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.25,
+    shadowRadius: 12,
+    elevation: 12,
   },
   barGradient: {
     flex: 1,
-    borderRadius: 8,
+    borderRadius: 12,
   },
-  percentagesContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    gap: 48, // Match the exact gap between bars
-    marginTop: 16, // Space between bars and percentages
-    marginBottom: 32, // Add bottom margin for better spacing
-  },
-  barPercentageBelow: {
+  barPercentage: {
     fontSize: 16,
     fontWeight: '700',
     color: COLORS.mainText,
     textAlign: 'center',
-    minWidth: 48, // Minimum width to ensure proper alignment
+    marginTop: 8,
   },
   buttonContainer: {
     width: '100%',
   },
   ctaButton: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 25,
+    backgroundColor: '#FFFFFF', // var(--vibrant-cta)
+    borderRadius: 30,
     paddingVertical: 16,
     paddingHorizontal: 32,
     alignItems: 'center',
@@ -359,7 +318,7 @@ const styles = StyleSheet.create({
   ctaButtonText: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#0B1120',
+    color: '#0B1120', // var(--vibrant-cta-text)
     textAlign: 'center',
   },
 });
