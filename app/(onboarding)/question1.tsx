@@ -157,27 +157,27 @@ const styles = StyleSheet.create({
     paddingTop: 16, // pt-4
   },
   answerButton: {
-    backgroundColor: COLORS.answerButton, // bg-sky-400/20
+    backgroundColor: COLORS.selectButton.background, // bg-sky-400/20
     borderWidth: 2,
-    borderColor: COLORS.answerButtonBorder, // border-sky-400/50
+    borderColor: COLORS.selectButton.border, // border-sky-400/50
     paddingVertical: 16, // py-4
     paddingHorizontal: 32, // px-8
     borderRadius: 50, // rounded-full
     alignItems: 'center',
   },
   answerButtonSelected: {
-    backgroundColor: COLORS.answerButtonSelected,
-    borderColor: COLORS.answerButtonBorder,
+    backgroundColor: COLORS.selectButton.hover,
+    borderColor: COLORS.selectButton.border,
   },
   answerText: {
-    ...TYPOGRAPHY.answerText,
+    ...TYPOGRAPHY.buttonSelect,
   },
   nextContainer: {
     paddingHorizontal: SPACING.page,
     zIndex: 10,
   },
   nextButton: {
-    backgroundColor: COLORS.nextButton,
+    backgroundColor: COLORS.nextButton.background,
     paddingVertical: 16,
     paddingHorizontal: 32,
     borderRadius: 50,
@@ -193,6 +193,6 @@ const styles = StyleSheet.create({
     opacity: 0.5,
   },
   nextButtonText: {
-    ...TYPOGRAPHY.nextButton,
+    ...TYPOGRAPHY.buttonNext,
   },
 });
