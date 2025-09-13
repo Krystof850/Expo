@@ -17,6 +17,7 @@ import { AnimatedQuestionPage, AnimatedContent, AnimatedQuestionPageRef } from '
 import { NextButton } from '../../components/Button';
 import { SPACING } from '@/constants/theme';
 import { Asset } from 'expo-asset';
+import * as Haptics from 'expo-haptics';
 
 // Life Transformation Illustration Component
 const LifeTransformationIllustration = () => (
@@ -174,6 +175,7 @@ export default function LevelScreen() {
   );
 
   const handleBack = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     // Run content exit animation
     animationRef.current?.runExitAnimation(() => {
       router.back();

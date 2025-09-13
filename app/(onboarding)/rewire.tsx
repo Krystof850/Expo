@@ -16,6 +16,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { AnimatedQuestionPage, AnimatedContent, AnimatedQuestionPageRef } from '../../components/AnimatedQuestionPage';
 import { NextButton } from '../../components/Button';
 import { SPACING } from '@/constants/theme';
+import * as Haptics from 'expo-haptics';
 
 // Brain Rewiring Circuit Illustration Component
 const BrainRewireIllustration = () => (
@@ -177,6 +178,7 @@ export default function RewireScreen() {
   );
 
   const handleBack = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     // Run content exit animation
     animationRef.current?.runExitAnimation(() => {
       router.back();

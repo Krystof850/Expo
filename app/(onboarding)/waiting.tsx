@@ -12,6 +12,7 @@ import Svg, { Circle } from 'react-native-svg';
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 import { router, useFocusEffect } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Haptics from 'expo-haptics';
 import { TitleText, DescriptionText } from '../../components/Text';
 import AppBackground from '../../components/AppBackground';
 import { COLORS, SPACING } from '../../constants/theme';
@@ -63,9 +64,16 @@ export default function OnboardingWaiting() {
       useNativeDriver: false,
     }).start();
 
-    // Listener for progress text updates
+    // Listener for progress text updates with haptic feedback
     const progressListener = progressAnimation.addListener(({ value }) => {
-      setProgress(Math.round(value));
+      const newProgress = Math.round(value);
+      
+      // Trigger quick light haptic feedback every 5% progress
+      if (newProgress > progress && newProgress % 5 === 0) {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+      }
+      
+      setProgress(newProgress);
     });
 
     // Timeout for completion

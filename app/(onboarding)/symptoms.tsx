@@ -19,6 +19,7 @@ import { TitleText, DescriptionText } from '../../components/Text';
 import { NextButton } from '../../components/Button';
 import AppBackground from '../../components/AppBackground';
 import { COLORS, SPACING, TYPOGRAPHY, SHADOWS } from '@/constants/theme';
+import * as Haptics from 'expo-haptics';
 
 interface Symptom {
   id: string;
@@ -60,6 +61,7 @@ export default function SymptomsScreen() {
   );
 
   const toggleSymptom = (symptomId: string) => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     setSelectedSymptoms(prev => {
       if (prev.includes(symptomId)) {
         return prev.filter(id => id !== symptomId);
@@ -70,6 +72,7 @@ export default function SymptomsScreen() {
   };
 
   const handleBack = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     // Run header exit animation first, then content exit animation
     headerRef.current?.runExitAnimation(() => {
       animationRef.current?.runExitAnimation(() => {
@@ -79,6 +82,7 @@ export default function SymptomsScreen() {
   };
 
   const handleContinue = async () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     // Run header exit animation first, then content exit animation
     headerRef.current?.runExitAnimation(() => {
       animationRef.current?.runExitAnimation(async () => {

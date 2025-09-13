@@ -16,6 +16,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { AnimatedQuestionPage, AnimatedContent, AnimatedQuestionPageRef } from '../../components/AnimatedQuestionPage';
 import { NextButton } from '../../components/Button';
 import { SPACING } from '@/constants/theme';
+import * as Haptics from 'expo-haptics';
 
 // Science-backed System Illustration Component
 const ScienceSystemIllustration = () => (
@@ -156,6 +157,7 @@ export default function WelcomeScreen() {
   );
 
   const handleBack = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     // Run content exit animation
     animationRef.current?.runExitAnimation(() => {
       router.back();

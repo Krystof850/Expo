@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { Image } from 'expo-image';
 import { router } from 'expo-router';
+import * as Haptics from 'expo-haptics';
 
 import AppBackground from '../../components/AppBackground';
 import { COLORS, SPACING } from '@/constants/theme';
@@ -22,6 +23,7 @@ export default function BenefitsScreen() {
   // No preloading needed for local assets - they load instantly
 
   const handleContinue = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     router.push('/(onboarding)/goals');
   };
 

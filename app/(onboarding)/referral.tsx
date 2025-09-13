@@ -18,12 +18,14 @@ import { NextButton } from '../../components/Button';
 import AppBackground from '../../components/AppBackground';
 import { COLORS, SPACING } from '@/constants/theme';
 import { Asset } from 'expo-asset';
+import * as Haptics from 'expo-haptics';
 
 export default function ReferralScreen() {
   const insets = useSafeAreaInsets();
   const [referralCode, setReferralCode] = useState<string>('');
 
   const handleContinue = async () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     try {
       // Save referral code (even if empty)
       if (referralCode.trim()) {
@@ -65,7 +67,7 @@ export default function ReferralScreen() {
         >
           {/* Header */}
           <View style={[styles.header, { paddingTop: insets.top }]}>
-            <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
+            <TouchableOpacity onPress={() => { Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light); router.back(); }} style={styles.backButton};
               <Ionicons name="arrow-back" size={24} color={COLORS.mainText} />
             </TouchableOpacity>
           </View>

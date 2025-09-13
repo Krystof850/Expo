@@ -16,6 +16,7 @@ import { NextButton } from '../../components/Button';
 import AppBackground from '../../components/AppBackground';
 import { COLORS, SPACING } from '@/constants/theme';
 import { Image } from 'expo-image';
+import * as Haptics from 'expo-haptics';
 
 // Profile images - declared first to avoid TDZ errors
 const profileImages = [
@@ -75,6 +76,7 @@ export default function RatingScreen() {
   // Note: require() assets in React Native load instantly, no preloading needed
 
   const handleContinue = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     // Continue to signature
     router.push('/(onboarding)/signature');
   };
@@ -97,7 +99,7 @@ export default function RatingScreen() {
         <StatusBar barStyle="light-content" backgroundColor={COLORS.gradientStart} />
         {/* Header */}
         <View style={[styles.header, { paddingTop: insets.top }]}>
-          <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
+          <TouchableOpacity onPress={() => { Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light); router.back(); }} style={styles.backButton}>
             <Ionicons name="arrow-back" size={24} color={COLORS.mainText} />
           </TouchableOpacity>
         </View>

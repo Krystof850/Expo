@@ -16,6 +16,7 @@ import { TitleText, DescriptionText } from '../../components/Text';
 import { NextButton } from '../../components/Button';
 import AppBackground from '../../components/AppBackground';
 import { COLORS, SPACING } from '@/constants/theme';
+import * as Haptics from 'expo-haptics';
 
 interface Goal {
   id: string;
@@ -39,6 +40,7 @@ export default function GoalsScreen() {
   const [selectedGoals, setSelectedGoals] = useState<string[]>([]);
 
   const toggleGoal = (goalId: string) => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     setSelectedGoals(prev => {
       if (prev.includes(goalId)) {
         return prev.filter(id => id !== goalId);
@@ -49,6 +51,7 @@ export default function GoalsScreen() {
   };
 
   const handleContinue = async () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     try {
       // Save selected goals
       await AsyncStorage.setItem('selected_goals', JSON.stringify(selectedGoals));
@@ -69,7 +72,7 @@ export default function GoalsScreen() {
         <StatusBar barStyle="light-content" backgroundColor={COLORS.gradientStart} />
         {/* Header */}
         <View style={[styles.header, { paddingTop: insets.top }]}>
-          <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
+          <TouchableOpacity onPress={() => { Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light); router.back(); }} style={styles.backButton}>
             <Ionicons name="arrow-back" size={24} color={COLORS.mainText} />
           </TouchableOpacity>
           <TitleText animated={false} style={styles.headerTitle}>Select Your Goals</TitleText>

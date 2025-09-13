@@ -16,6 +16,7 @@ import { TouchableOpacity } from 'react-native';
 import { AnimatedQuestionPage, AnimatedContent, AnimatedQuestionPageRef } from '../../components/AnimatedQuestionPage';
 import { NextButton } from '../../components/Button';
 import { SPACING } from '@/constants/theme';
+import * * Haptics from 'expo-haptics';
 
 // Simple Brain with Chain Illustration Component
 const BrainChainIllustration = () => (
@@ -141,6 +142,7 @@ export default function TrapScreen() {
   );
 
   const handleBack = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     // Run content exit animation
     animationRef.current?.runExitAnimation(() => {
       router.back();

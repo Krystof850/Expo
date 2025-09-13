@@ -17,6 +17,7 @@ import { TitleText, DescriptionText } from '../../components/Text';
 import { NextButton } from '../../components/Button';
 import AppBackground from '../../components/AppBackground';
 import { COLORS, SPACING } from '@/constants/theme';
+import * as Haptics from 'expo-haptics';
 
 export default function CommitmentSignatureScreen() {
   const insets = useSafeAreaInsets();
@@ -40,11 +41,13 @@ export default function CommitmentSignatureScreen() {
   };
 
   const handleClear = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     signatureRef.current?.clearSignature();
     setHasSignature(false);
   };
 
   const handleFinish = async () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     // Try to read signature directly from canvas
     signatureRef.current?.readSignature();
   };
@@ -88,7 +91,7 @@ export default function CommitmentSignatureScreen() {
         <StatusBar barStyle="light-content" backgroundColor={COLORS.gradientStart} />
         {/* Header */}
         <View style={[styles.header, { paddingTop: insets.top + 40 }]}>
-          <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
+          <TouchableOpacity onPress={() => { Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light); router.back(); }} style={styles.backButton}>
             <Ionicons name="arrow-back" size={24} color={COLORS.mainText} />
           </TouchableOpacity>
         </View>
