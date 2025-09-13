@@ -21,19 +21,9 @@ export default function BenefitsScreen() {
   const imageScale = useRef(new Animated.Value(0.9)).current;
 
   useEffect(() => {
-    // Fade in animation
-    Animated.parallel([
-      Animated.timing(contentOpacity, {
-        toValue: 1,
-        duration: 800,
-        useNativeDriver: true,
-      }),
-      Animated.timing(imageScale, {
-        toValue: 1,
-        duration: 1000,
-        useNativeDriver: true,
-      }),
-    ]).start();
+    // Instant loading - no animation delay
+    contentOpacity.setValue(1);
+    imageScale.setValue(1);
   }, []);
 
   const handleContinue = () => {
@@ -133,10 +123,10 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(255, 255, 255, 0.1)',
   },
   chartImage: {
-    width: width - 96, // Account for padding and wrapper padding
-    height: (width - 96) * 0.75, // Maintain aspect ratio
-    maxWidth: 300,
-    maxHeight: 225,
+    width: width - 64, // Larger image - less padding
+    height: (width - 64) * 0.75, // Maintain aspect ratio
+    maxWidth: 350, // Increased max width
+    maxHeight: 262, // Increased max height proportionally
   },
   descriptionSection: {
     alignItems: 'center',

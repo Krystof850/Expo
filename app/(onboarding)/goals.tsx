@@ -83,7 +83,7 @@ export default function GoalsScreen() {
           <View style={styles.content}>
             {/* Instructions */}
             <DescriptionText animated={false} style={styles.instructionText}>
-              Select the goals you want to track during{'\n'}your journey to change.
+              Select the goals you want to track during your journey to change.
             </DescriptionText>
 
             {/* Goals */}
