@@ -11,7 +11,8 @@ import { router, useFocusEffect } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import Svg, { Path, Circle, G } from 'react-native-svg';
-import { OnboardingHeader, OnboardingHeaderRef } from '../../components/OnboardingHeader';
+import { Ionicons } from '@expo/vector-icons';
+import { TouchableOpacity } from 'react-native';
 import { AnimatedQuestionPage, AnimatedContent, AnimatedQuestionPageRef } from '../../components/AnimatedQuestionPage';
 import { NextButton } from '../../components/Button';
 import { SPACING } from '@/constants/theme';
@@ -121,7 +122,6 @@ const BrainChainIllustration = () => (
 export default function TrapScreen() {
   const insets = useSafeAreaInsets();
   const animationRef = useRef<AnimatedQuestionPageRef>(null);
-  const headerRef = useRef<OnboardingHeaderRef>(null);
 
   // Block hardware back button on Android only
   useFocusEffect(
@@ -141,21 +141,17 @@ export default function TrapScreen() {
   );
 
   const handleBack = () => {
-    // Run header exit animation first, then content exit animation
-    headerRef.current?.runExitAnimation(() => {
-      animationRef.current?.runExitAnimation(() => {
-        router.back();
-      });
+    // Run content exit animation
+    animationRef.current?.runExitAnimation(() => {
+      router.back();
     });
   };
 
   const handleContinue = () => {
-    // Run header exit animation first, then content exit animation
-    headerRef.current?.runExitAnimation(() => {
-      animationRef.current?.runExitAnimation(() => {
-        // Continue to goals page
-        router.push('/(onboarding)/goals');
-      });
+    // Run content exit animation
+    animationRef.current?.runExitAnimation(() => {
+      // Continue to goals page
+      router.push('/(onboarding)/goals');
     });
   };
 
@@ -184,14 +180,12 @@ export default function TrapScreen() {
         </View>
       </LinearGradient>
       
-      {/* Header with progress bar */}
-      <OnboardingHeader 
-        ref={headerRef}
-        step={12} 
-        total={15} 
-        questionLabel="Understanding"
-        onBackPress={handleBack}
-      />
+      {/* Simple header without progress bar */}
+      <View style={[styles.simpleHeader, { paddingTop: insets.top }]}>
+        <TouchableOpacity onPress={handleBack} style={styles.backButton}>
+          <Ionicons name="arrow-back" size={24} color="#FFFFFF" />
+        </TouchableOpacity>
+      </View>
       
       {/* Animated content wrapper */}
       <AnimatedQuestionPage ref={animationRef}>
@@ -285,7 +279,7 @@ const styles = StyleSheet.create({
   textContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: SPACING.page,
+    paddingHorizontal: SPACING.small,
     gap: 24,
   },
   title: {
@@ -294,7 +288,7 @@ const styles = StyleSheet.create({
     color: '#FFFFFF', // --main-text
     textAlign: 'center',
     lineHeight: 42,
-    // Use proper textShadow property instead of SHADOWS.text
+    maxWidth: 380, // Wider boundary to prevent word breaking
     textShadow: '0 4px 8px rgba(0, 0, 0, 0.5)',
   },
   description: {
@@ -303,7 +297,7 @@ const styles = StyleSheet.create({
     color: '#FECACA', // text-red-100 equivalent
     textAlign: 'center',
     lineHeight: 28,
-    maxWidth: 320, // max-w-md equivalent
+    maxWidth: 400, // Wider boundary to prevent word breaking
     textShadow: '0 2px 6px rgba(0, 0, 0, 0.4)',
   },
   nextContainer: {
@@ -320,5 +314,13 @@ const styles = StyleSheet.create({
     color: '#7F1D1D', // --vibrant-cta-text (dark red)
     fontSize: 20,
     fontWeight: '700',
+  },
+  simpleHeader: {
+    paddingHorizontal: SPACING.page,
+    paddingBottom: SPACING.small,
+    zIndex: 10,
+  },
+  backButton: {
+    padding: 8,
   },
 });
