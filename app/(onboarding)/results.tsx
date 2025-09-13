@@ -13,6 +13,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 import AppBackground from '../../components/AppBackground';
 import { COLORS, SPACING } from '@/constants/theme';
+import * as Haptics from 'expo-haptics';
 
 const { width } = Dimensions.get('window');
 
@@ -99,6 +100,7 @@ export default function ResultsScreen() {
   });
 
   const handleContinue = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     router.push('/(onboarding)/symptoms');
   };
 
