@@ -12,6 +12,7 @@ import { router } from 'expo-router';
 import * as Haptics from 'expo-haptics';
 
 import AppBackground from '../../components/AppBackground';
+import { NextButton } from '../../components/Button';
 import { COLORS, SPACING } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
@@ -61,9 +62,10 @@ export default function BenefitsScreen() {
 
         {/* CTA Button */}
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.ctaButton} onPress={handleContinue}>
-            <Text style={styles.ctaButtonText}>Continue</Text>
-          </TouchableOpacity>
+          <NextButton
+            title="Continue"
+            onPress={handleContinue}
+          />
         </View>
       </View>
     </AppBackground>
@@ -132,21 +134,5 @@ const styles = StyleSheet.create({
     width: '100%',
     paddingHorizontal: 32,
   },
-  ctaButton: {
-    backgroundColor: '#FFFFFF', // var(--vibrant-cta)
-    borderRadius: 50, // Same as other NextButtons
-    paddingVertical: 20, // Increased height to match other pages
-    paddingHorizontal: 32, // Same as other NextButtons (SPACING.button * 2)
-    alignItems: 'center',
-    boxShadow: '0 8px 24px rgba(255, 255, 255, 0.2)', // Same shadow as other NextButtons
-    elevation: 8,
-    width: '100%', // Make it full width like other NextButtons
-    minHeight: 56, // Add minimum height for consistency
-  },
-  ctaButtonText: {
-    fontSize: 18, // Same as TYPOGRAPHY.buttonNext
-    fontWeight: '700',
-    color: '#0B1120', // var(--vibrant-cta-text)
-    textAlign: 'center',
-  },
+  // NextButton handles all styling
 });

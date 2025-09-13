@@ -58,8 +58,8 @@ export default function CommitmentSignatureScreen() {
         await AsyncStorage.setItem('commitment_signature', signature);
         console.log('✍️ Signature captured and saved');
         setHasSignature(true);
-        // Navigate to auth after successful signature capture
-        router.push('/(auth)/sign-in');
+        // Navigate to typing page after successful signature capture
+        router.push('/(onboarding)/typing');
       } else {
         Alert.alert(
           'Signature Missing',
