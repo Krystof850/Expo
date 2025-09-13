@@ -56,7 +56,7 @@ export default function BenefitsScreen() {
           <View style={styles.imageSection}>
             <Animated.View style={[styles.imageWrapper, { transform: [{ scale: imageScale }] }]}>
               <Image
-                source={require('@/attached_assets/ChatGPT Image Sep 13, 2025, 02_31_47 PM_1757745241749.png')}
+                source={require('@/attached_assets/ChatGPT Image Sep 13, 2025, 03_26_59 PM_1757748428786.png')}
                 style={styles.chartImage}
                 resizeMode="contain"
               />
@@ -119,7 +119,6 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     overflow: 'hidden',
     backgroundColor: 'rgba(255, 255, 255, 0.05)',
-    padding: 16,
     // Shadow properties to match other elements
     shadowColor: '#000',
     shadowOffset: {
