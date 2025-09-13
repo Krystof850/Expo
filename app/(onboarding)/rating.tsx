@@ -7,6 +7,7 @@ import {
   ScrollView,
   SafeAreaView,
   StatusBar,
+  Image,
 } from 'react-native';
 import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -20,7 +21,7 @@ interface Review {
   id: string;
   name: string;
   username: string;
-  avatar: string;
+  avatar: any; // Changed to any to support require() imports
   rating: number;
   review: string;
 }
@@ -30,7 +31,7 @@ const CLIENT_REVIEWS: Review[] = [
     id: '1',
     name: 'Jake Newman',
     username: '@jake_newman',
-    avatar: '👨‍💻',
+    avatar: require('@/attached_assets/22_1757748931161.jpg'), // Male profile
     rating: 5,
     review: 'This app changed my life! I\'ve been able to complete projects on time for 2 months now. The procrastination tracking system helped me understand my habits.'
   },
@@ -38,7 +39,7 @@ const CLIENT_REVIEWS: Review[] = [
     id: '2', 
     name: 'Anna Stevens',
     username: '@anna_codes',
-    avatar: '👩‍🎓',
+    avatar: require('@/attached_assets/2_1757748931159.jpg'), // Female profile
     rating: 5,
     review: 'I was skeptical at first, but the anti-procrastination features really work. I can finally write my thesis without endless postponing!'
   },
@@ -46,9 +47,17 @@ const CLIENT_REVIEWS: Review[] = [
     id: '3',
     name: 'Tom Collins',
     username: '@tomas_productivity',
-    avatar: '👨‍💼',
+    avatar: require('@/attached_assets/42_1757748931161.jpg'), // Male profile
     rating: 5,
     review: 'Best investment in my productivity. The app helped me identify my procrastination patterns and build better work habits.'
+  },
+  {
+    id: '4',
+    name: 'Sarah Johnson',
+    username: '@sarah_focus',
+    avatar: require('@/attached_assets/79_1757748931161.jpg'), // Female profile
+    rating: 5,
+    review: 'PROCRAP completely transformed how I approach my daily tasks. The science-based approach really works - I feel so much more in control now!'
   }
 ];
 
@@ -92,7 +101,7 @@ export default function RatingScreen() {
             {/* Title Section */}
             <View style={styles.titleSection}>
               <TitleText animated={false} style={styles.titleText}>
-                Rate Us
+                Give us a rating
               </TitleText>
               
               {/* Stars with elegant decoration */}
@@ -123,13 +132,16 @@ export default function RatingScreen() {
               <View style={styles.usersContainer}>
                 <View style={styles.avatarsRow}>
                   <View style={styles.avatarCircle}>
-                    <Text style={styles.avatarEmoji}>👨‍💻</Text>
+                    <Image source={CLIENT_REVIEWS[0].avatar} style={styles.avatarImage} />
                   </View>
                   <View style={styles.avatarCircle}>
-                    <Text style={styles.avatarEmoji}>👩‍🎓</Text>
+                    <Image source={CLIENT_REVIEWS[1].avatar} style={styles.avatarImage} />
                   </View>
                   <View style={styles.avatarCircle}>
-                    <Text style={styles.avatarEmoji}>👨‍💼</Text>
+                    <Image source={CLIENT_REVIEWS[2].avatar} style={styles.avatarImage} />
+                  </View>
+                  <View style={styles.avatarCircle}>
+                    <Image source={CLIENT_REVIEWS[3].avatar} style={styles.avatarImage} />
                   </View>
                 </View>
                 <Text style={styles.usersCount}>+ 50,000 people</Text>
@@ -143,7 +155,7 @@ export default function RatingScreen() {
                   <View style={styles.reviewHeader}>
                     <View style={styles.reviewUserInfo}>
                       <View style={styles.avatarContainer}>
-                        <Text style={styles.reviewAvatar}>{review.avatar}</Text>
+                        <Image source={review.avatar} style={styles.reviewAvatarImage} />
                       </View>
                       <View style={styles.userDetails}>
                         <Text style={styles.userName}>{review.name}</Text>
@@ -199,12 +211,12 @@ const styles = StyleSheet.create({
   },
   content: {
     paddingHorizontal: SPACING.page,
-    paddingTop: 20,
+    paddingTop: 16, // Reduced top padding
   },
   titleSection: {
     alignItems: 'center',
-    marginBottom: 40,
-    paddingTop: 20,
+    marginBottom: 32, // Reduced margin for better fit
+    paddingTop: 16, // Reduced padding
   },
   titleText: {
     textAlign: 'center',
@@ -237,7 +249,7 @@ const styles = StyleSheet.create({
   },
   descriptionSection: {
     alignItems: 'center',
-    marginBottom: 40,
+    marginBottom: 24, // Reduced to fit more content
   },
   descriptionText: {
     textAlign: 'center',
@@ -268,8 +280,10 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 4,
   },
-  avatarEmoji: {
-    fontSize: 22,
+  avatarImage: {
+    width: 38,
+    height: 38,
+    borderRadius: 19,
   },
   usersCount: {
     fontSize: 17,
@@ -278,15 +292,15 @@ const styles = StyleSheet.create({
     opacity: 0.8,
   },
   reviewsSection: {
-    gap: 20,
+    gap: 16, // Reduced gap to fit more reviews
     marginBottom: 20,
   },
   reviewCard: {
     backgroundColor: 'rgba(255, 255, 255, 0.08)',
     borderWidth: 1,
     borderColor: 'rgba(255, 255, 255, 0.15)',
-    borderRadius: 24,
-    padding: 24,
+    borderRadius: 20, // Reduced for more compact look
+    padding: 20, // Reduced padding
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.1,
@@ -297,7 +311,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-    marginBottom: 18,
+    marginBottom: 14, // Reduced margin
   },
   reviewUserInfo: {
     flexDirection: 'row',
@@ -306,9 +320,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   avatarContainer: {
-    width: 52,
-    height: 52,
-    borderRadius: 26,
+    width: 48, // Reduced size
+    height: 48,
+    borderRadius: 24,
     backgroundColor: 'rgba(255, 255, 255, 0.12)',
     alignItems: 'center',
     justifyContent: 'center',
@@ -319,18 +333,21 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.15,
     shadowRadius: 4,
     elevation: 3,
+    overflow: 'hidden', // Ensure proper image clipping
   },
-  reviewAvatar: {
-    fontSize: 26,
+  reviewAvatarImage: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
   },
   userDetails: {
     flex: 1,
   },
   userName: {
-    fontSize: 18,
+    fontSize: 17, // Slightly smaller
     fontWeight: '700',
     color: COLORS.mainText,
-    marginBottom: 4,
+    marginBottom: 3, // Reduced margin
   },
   userHandle: {
     fontSize: 14,
@@ -343,10 +360,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   reviewText: {
-    fontSize: 16,
+    fontSize: 15, // Slightly smaller text
     fontWeight: '500',
     color: COLORS.mainText,
-    lineHeight: 24,
+    lineHeight: 22, // Reduced line height
     fontStyle: 'italic',
     opacity: 0.95,
   },
