@@ -6,8 +6,8 @@ import {
   StatusBar,
   StyleSheet,
   Dimensions,
-  Image,
 } from 'react-native';
+import { Image } from 'expo-image';
 import { router } from 'expo-router';
 
 import AppBackground from '../../components/AppBackground';
