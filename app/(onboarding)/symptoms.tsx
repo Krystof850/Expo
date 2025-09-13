@@ -87,12 +87,12 @@ export default function SymptomsScreen() {
           await AsyncStorage.setItem('selected_symptoms', JSON.stringify(selectedSymptoms));
           console.log('💾 Symptoms saved:', selectedSymptoms);
           
-          // Continue to goals
-          router.push('/(onboarding)/goals');
+          // Continue to trap page
+          router.push('/(onboarding)/trap');
         } catch (error) {
           console.log('Error saving symptoms:', error);
-          // Continue to goals even on error
-          router.push('/(onboarding)/goals');
+          // Continue to trap page even on error
+          router.push('/(onboarding)/trap');
         }
       });
     });
