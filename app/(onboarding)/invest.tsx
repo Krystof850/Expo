@@ -91,7 +91,7 @@ export default function InvestScreen() {
     // TODO: Integrate Superwall paywall presentation here
     // When paywall is properly integrated, this should trigger the paywall
     // and only navigate to auth after successful subscription or free trial
-    router.push('/(auth)/sign-in');
+    router.push('/(onboarding)/journey');
   };
 
   // Animated styles
