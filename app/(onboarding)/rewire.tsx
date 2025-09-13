@@ -186,6 +186,7 @@ export default function RewireScreen() {
   };
 
   const handleContinue = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     // Run content exit animation
     animationRef.current?.runExitAnimation(() => {
       // Continue to quit page

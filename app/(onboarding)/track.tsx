@@ -178,6 +178,7 @@ export default function TrackScreen() {
   };
 
   const handleContinue = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     // Run content exit animation
     animationRef.current?.runExitAnimation(() => {
       // Continue to level page

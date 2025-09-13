@@ -183,6 +183,7 @@ export default function LevelScreen() {
   };
 
   const handleContinue = async () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     // Preload benefits chart image for instant loading
     try {
       const benefitsChart = require('@/attached_assets/ChatGPT Image Sep 13, 2025, 03_26_59 PM_1757748428786.png');
