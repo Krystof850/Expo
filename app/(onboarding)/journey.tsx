@@ -9,9 +9,9 @@ import {
 import { router } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-import AppBackground from '@/components/AppBackground';
-import { TitleText, DescriptionText } from '@/components/ThemedText';
-import HapticButton from '@/components/HapticButton';
+import AppBackground from '../../components/AppBackground';
+import { TitleText, DescriptionText } from '../../components/Text';
+import HapticButton from '../../components/HapticButton';
 import { COLORS, SPACING } from '@/constants/theme';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Haptics from 'expo-haptics';
