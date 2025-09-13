@@ -9,6 +9,10 @@ localPort = 5000
 externalPort = 80
 
 [[ports]]
+localPort = 8081
+externalPort = 8081
+
+[[ports]]
 localPort = 8082
 externalPort = 3000
 
@@ -66,19 +70,18 @@ author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "workflow.run"
-args = "Expo Dev Server"
+args = "Expo Mobile Server"
 
 [[workflows.workflow]]
-name = "Expo Dev Server"
+name = "Expo Mobile Server"
 author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "npx expo start --lan --port 5000"
-waitForPort = 5000
+args = "npx expo start --tunnel"
 
 [workflows.workflow.metadata]
-outputType = "webview"
+outputType = "console"
 
 [agent]
 expertMode = true
