@@ -17,99 +17,223 @@ import { AnimatedQuestionPage, AnimatedContent, AnimatedQuestionPageRef } from '
 import { NextButton } from '../../components/Button';
 import { SPACING } from '@/constants/theme';
 
-// Broken Dreams and Lost Opportunities Illustration
-const BrokenDreamsIllustration = () => (
+// Success and Victory Illustration Component
+const SuccessVictoryIllustration = () => (
   <Svg width="200" height="200" viewBox="0 0 200 200">
-    {/* Dream cloud (fading away) */}
+    {/* Mountain peaks (representing achievement) */}
     <Path
-      d="M50 60C45 60 40 65 40 70C35 70 30 75 30 80C30 85 35 90 40 90L140 90C145 90 150 85 150 80C150 75 145 70 140 70C140 65 135 60 130 60C125 60 120 65 120 70C115 65 110 60 105 60C100 60 95 65 95 70C90 65 85 60 80 60C75 60 70 60 65 60C60 60 55 60 50 60Z"
-      fill="rgba(255, 255, 255, 0.4)"
-      stroke="rgba(255, 255, 255, 0.2)"
-      strokeWidth="1"
-      strokeDasharray="4,4"
+      d="M20 150 L60 80 L100 100 L140 60 L180 150 Z"
+      fill="rgba(255, 255, 255, 0.7)"
+      stroke="rgba(255, 255, 255, 0.9)"
+      strokeWidth="2"
     />
     
-    {/* Broken ladder to success */}
+    {/* Person at the top of mountain with arms raised */}
     <G>
-      {/* Left side of ladder */}
-      <Line x1="60" y1="160" x2="65" y2="100" stroke="rgba(255, 255, 255, 0.7)" strokeWidth="4" />
-      {/* Right side of ladder */}
-      <Line x1="80" y1="160" x2="85" y2="100" stroke="rgba(255, 255, 255, 0.7)" strokeWidth="4" />
+      {/* Head */}
+      <Circle
+        cx="140"
+        cy="65"
+        r="6"
+        fill="rgba(59, 130, 246, 1)"
+      />
       
-      {/* Broken rungs */}
-      <Line x1="62" y1="150" x2="75" y2="149" stroke="rgba(255, 255, 255, 0.7)" strokeWidth="3" />
-      <Line x1="63" y1="135" x2="72" y2="134" stroke="rgba(239, 68, 68, 0.8)" strokeWidth="3" strokeDasharray="2,2" />
-      <Line x1="64" y1="120" x2="70" y2="119" stroke="rgba(239, 68, 68, 0.8)" strokeWidth="3" strokeDasharray="2,2" />
-      <Line x1="65" y1="105" x2="83" y2="104" stroke="rgba(255, 255, 255, 0.7)" strokeWidth="3" />
+      {/* Body */}
+      <Path
+        d="M136 71 L144 71 L144 85 L136 85 Z"
+        fill="rgba(59, 130, 246, 1)"
+      />
+      
+      {/* Arms raised in victory */}
+      <Path
+        d="M136 75 L125 65"
+        stroke="rgba(59, 130, 246, 1)"
+        strokeWidth="3"
+        strokeLinecap="round"
+      />
+      <Path
+        d="M144 75 L155 65"
+        stroke="rgba(59, 130, 246, 1)"
+        strokeWidth="3"
+        strokeLinecap="round"
+      />
+      
+      {/* Legs */}
+      <Path
+        d="M138 85 L135 95"
+        stroke="rgba(59, 130, 246, 1)"
+        strokeWidth="3"
+        strokeLinecap="round"
+      />
+      <Path
+        d="M142 85 L145 95"
+        stroke="rgba(59, 130, 246, 1)"
+        strokeWidth="3"
+        strokeLinecap="round"
+      />
     </G>
     
-    {/* Falling broken pieces (lost opportunities) */}
-    <G opacity="0.6">
-      <Polygon
-        points="100,95 110,90 115,100 105,105"
-        fill="rgba(239, 68, 68, 0.7)"
-      />
-      <Polygon
-        points="125,110 135,105 140,115 130,120"
-        fill="rgba(239, 68, 68, 0.7)"
-      />
-      <Polygon
-        points="90,125 100,120 105,130 95,135"
-        fill="rgba(239, 68, 68, 0.7)"
-      />
-      <Polygon
-        points="140,140 150,135 155,145 145,150"
-        fill="rgba(239, 68, 68, 0.7)"
-      />
-    </G>
-    
-    {/* Door of opportunity (closing/closed) */}
-    <Path
-      d="M120 100 L160 100 L160 160 L120 160 Z"
-      fill="rgba(255, 255, 255, 0.3)"
-      stroke="rgba(255, 255, 255, 0.5)"
-      strokeWidth="2"
-    />
-    
-    {/* Door handle */}
-    <Circle cx="150" cy="130" r="3" fill="rgba(239, 68, 68, 0.8)" />
-    
-    {/* "CLOSED" sign on door */}
-    <Path
-      d="M125 115 L155 115 L155 125 L125 125 Z"
-      fill="rgba(220, 38, 38, 0.8)"
-    />
-    
-    {/* X mark on closed sign */}
+    {/* Trophy on peak */}
     <G>
-      <Line x1="130" y1="118" x2="150" y2="122" stroke="rgba(255, 255, 255, 0.9)" strokeWidth="2" />
-      <Line x1="150" y1="118" x2="130" y2="122" stroke="rgba(255, 255, 255, 0.9)" strokeWidth="2" />
+      {/* Trophy base */}
+      <Path
+        d="M130 95 L150 95 L148 105 L132 105 Z"
+        fill="rgba(251, 191, 36, 0.9)"
+        stroke="rgba(245, 158, 11, 1)"
+        strokeWidth="1"
+      />
+      
+      {/* Trophy cup */}
+      <Path
+        d="M132 85 L148 85 L148 95 L132 95 Z"
+        fill="rgba(251, 191, 36, 0.9)"
+        stroke="rgba(245, 158, 11, 1)"
+        strokeWidth="1"
+      />
+      
+      {/* Trophy handles */}
+      <Path
+        d="M148 87 C152 87 152 93 148 93"
+        stroke="rgba(245, 158, 11, 1)"
+        strokeWidth="2"
+        fill="none"
+      />
+      <Path
+        d="M132 87 C128 87 128 93 132 93"
+        stroke="rgba(245, 158, 11, 1)"
+        strokeWidth="2"
+        fill="none"
+      />
     </G>
     
-    {/* Time passing (clock showing late hour) */}
+    {/* Victory stars around the scene */}
+    <G opacity="0.8">
+      <VictoryStar
+        cx={100}
+        cy={30}
+        r1={4}
+        r2={8}
+        fill="rgba(34, 211, 238, 0.8)"
+      />
+      <VictoryStar
+        cx={160}
+        cy={40}
+        r1={3}
+        r2={6}
+        fill="rgba(34, 211, 238, 0.7)"
+      />
+      <VictoryStar
+        cx={50}
+        cy={50}
+        r1={3}
+        r2={6}
+        fill="rgba(34, 211, 238, 0.7)"
+      />
+      <VictoryStar
+        cx={170}
+        cy={80}
+        r1={2}
+        r2={4}
+        fill="rgba(34, 211, 238, 0.6)"
+      />
+      <VictoryStar
+        cx={30}
+        cy={90}
+        r1={2}
+        r2={4}
+        fill="rgba(34, 211, 238, 0.6)"
+      />
+    </G>
+    
+    {/* Broken chains at the bottom (freedom from procrastination) */}
+    <G opacity="0.6">
+      {/* Left broken chain */}
+      <Circle
+        cx="70"
+        cy="170"
+        r="6"
+        fill="none"
+        stroke="rgba(156, 163, 175, 0.8)"
+        strokeWidth="3"
+        strokeDasharray="6,6"
+      />
+      <Circle
+        cx="85"
+        cy="175"
+        r="6"
+        fill="none"
+        stroke="rgba(156, 163, 175, 0.8)"
+        strokeWidth="3"
+        strokeDasharray="6,6"
+      />
+      
+      {/* Right broken chain */}
+      <Circle
+        cx="115"
+        cy="175"
+        r="6"
+        fill="none"
+        stroke="rgba(156, 163, 175, 0.8)"
+        strokeWidth="3"
+        strokeDasharray="6,6"
+      />
+      <Circle
+        cx="130"
+        cy="170"
+        r="6"
+        fill="none"
+        stroke="rgba(156, 163, 175, 0.8)"
+        strokeWidth="3"
+        strokeDasharray="6,6"
+      />
+    </G>
+    
+    {/* Rising sun/light behind mountains */}
     <Circle
-      cx="170"
-      cy="50"
-      r="25"
-      fill="rgba(255, 255, 255, 0.2)"
-      stroke="rgba(239, 68, 68, 0.6)"
-      strokeWidth="2"
+      cx="100"
+      cy="120"
+      r="30"
+      fill="rgba(251, 191, 36, 0.3)"
+      opacity="0.7"
     />
     
-    {/* Clock hands pointing to "too late" */}
-    <Line x1="170" y1="50" x2="170" y2="30" stroke="rgba(239, 68, 68, 0.8)" strokeWidth="2" />
-    <Line x1="170" y1="50" x2="185" y2="50" stroke="rgba(239, 68, 68, 0.8)" strokeWidth="2" />
+    {/* Light rays */}
+    <G opacity="0.4">
+      <Line x1="100" y1="90" x2="100" y2="70" stroke="rgba(251, 191, 36, 0.8)" strokeWidth="2" />
+      <Line x1="120" y1="100" x2="135" y2="85" stroke="rgba(251, 191, 36, 0.8)" strokeWidth="2" />
+      <Line x1="130" y1="120" x2="150" y2="120" stroke="rgba(251, 191, 36, 0.8)" strokeWidth="2" />
+      <Line x1="80" y1="100" x2="65" y2="85" stroke="rgba(251, 191, 36, 0.8)" strokeWidth="2" />
+      <Line x1="70" y1="120" x2="50" y2="120" stroke="rgba(251, 191, 36, 0.8)" strokeWidth="2" />
+    </G>
     
-    {/* Scattered dreams (stars fading) */}
-    <G opacity="0.3">
-      <Path d="M30 30 L32 35 L37 35 L33 38 L35 43 L30 40 L25 43 L27 38 L23 35 L28 35 Z" fill="rgba(255, 255, 255, 0.4)" />
-      <Path d="M170 20 L172 25 L177 25 L173 28 L175 33 L170 30 L165 33 L167 28 L163 25 L168 25 Z" fill="rgba(255, 255, 255, 0.4)" />
-      <Path d="M20 100 L22 105 L27 105 L23 108 L25 113 L20 110 L15 113 L17 108 L13 105 L18 105 Z" fill="rgba(255, 255, 255, 0.4)" />
+    {/* Flag of victory */}
+    <G>
+      {/* Flag pole */}
+      <Line x1="165" y1="45" x2="165" y2="75" stroke="rgba(59, 130, 246, 1)" strokeWidth="2" />
+      {/* Flag */}
+      <Polygon
+        points="165,45 180,50 180,60 165,55"
+        fill="rgba(34, 211, 238, 0.8)"
+        stroke="rgba(6, 182, 212, 1)"
+        strokeWidth="1"
+      />
     </G>
   </Svg>
 );
 
-export default function FutureScreen() {
+const VictoryStar = ({ cx, cy, r1, r2, fill }: { cx: number; cy: number; r1: number; r2: number; fill: string }) => {
+  const points = [];
+  for (let i = 0; i < 10; i++) {
+    const angle = (i * Math.PI) / 5;
+    const radius = i % 2 === 0 ? r2 : r1;
+    const x = cx + radius * Math.cos(angle - Math.PI / 2);
+    const y = cy + radius * Math.sin(angle - Math.PI / 2);
+    points.push(`${x},${y}`);
+  }
+  return <Polygon points={points.join(' ')} fill={fill} />;
+};
+
+export default function HopeScreen() {
   const insets = useSafeAreaInsets();
   const animationRef = useRef<AnimatedQuestionPageRef>(null);
 
@@ -140,8 +264,8 @@ export default function FutureScreen() {
   const handleContinue = () => {
     // Run content exit animation
     animationRef.current?.runExitAnimation(() => {
-      // Continue to hope page
-      router.push('/(onboarding)/hope');
+      // Continue to goals page
+      router.push('/(onboarding)/goals');
     });
   };
 
@@ -149,9 +273,9 @@ export default function FutureScreen() {
     <View style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
       
-      {/* Red gradient background with blur effects */}
+      {/* Blue gradient background with blur effects */}
       <LinearGradient
-        colors={['#991B1B', '#7F1D1D', '#000000']} // red-800 → red-900 → black
+        colors={['#1D4ED8', '#1E40AF', '#000000']} // blue-700 → blue-800 → black
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }} // diagonal gradient from top-left to bottom-right
         style={styles.backgroundContainer}
@@ -159,12 +283,12 @@ export default function FutureScreen() {
         <View style={styles.blurOverlay}>
           {/* First blur orb with gradient */}
           <LinearGradient
-            colors={['rgba(239, 68, 68, 0.5)', 'transparent']}
+            colors={['rgba(59, 130, 246, 0.5)', 'transparent']}
             style={styles.blurCircle1}
           />
           {/* Second blur orb with gradient */}
           <LinearGradient
-            colors={['rgba(249, 115, 22, 0.4)', 'transparent']}
+            colors={['rgba(34, 211, 238, 0.4)', 'transparent']}
             style={styles.blurCircle2}
           />
         </View>
@@ -183,17 +307,17 @@ export default function FutureScreen() {
           {/* Illustration space */}
           <AnimatedContent delay={100}>
             <View style={styles.illustrationContainer}>
-              <BrokenDreamsIllustration />
+              <SuccessVictoryIllustration />
             </View>
           </AnimatedContent>
 
           {/* Text content */}
           <AnimatedContent delay={200}>
             <View style={styles.textContainer}>
-              <Text style={styles.title}>It steals your future</Text>
+              <Text style={styles.title}>But there's hope</Text>
               
               <Text style={styles.description}>
-                Dreams get postponed, opportunities lost. Procrastination silently kills the life you deserve.
+                With PROCRAP, you can reboot your brain, rebuild discipline, and take back control.
               </Text>
             </View>
           </AnimatedContent>
@@ -203,7 +327,7 @@ export default function FutureScreen() {
       {/* Next button - OUTSIDE of animation wrapper */}
       <View style={[styles.nextContainer, { paddingBottom: insets.bottom + SPACING.page }]}>
         <NextButton
-          title="I Understand"
+          title="Let's Do It"
           onPress={handleContinue}
           style={styles.continueButton}
           textStyle={styles.continueButtonText}
@@ -284,7 +408,7 @@ const styles = StyleSheet.create({
   description: {
     fontSize: 20, // text-xl
     fontWeight: '600', // font-semibold
-    color: '#FECACA', // text-red-100 equivalent
+    color: '#DBEAFE', // text-blue-100 equivalent
     textAlign: 'center',
     lineHeight: 28,
     maxWidth: 400, // Wider boundary to prevent word breaking
@@ -301,7 +425,7 @@ const styles = StyleSheet.create({
     elevation: 8,
   },
   continueButtonText: {
-    color: '#7F1D1D', // --vibrant-cta-text (dark red)
+    color: '#1E40AF', // --vibrant-cta-text (blue)
     fontSize: 20,
     fontWeight: '700',
   },
