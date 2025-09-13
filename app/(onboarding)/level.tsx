@@ -182,8 +182,8 @@ export default function LevelScreen() {
   const handleContinue = () => {
     // Run content exit animation
     animationRef.current?.runExitAnimation(() => {
-      // Continue to goals page
-      router.push('/(onboarding)/goals');
+      // Continue to benefits page
+      router.push('/(onboarding)/benefits');
     });
   };
 
