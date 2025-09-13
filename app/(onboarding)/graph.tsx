@@ -10,6 +10,9 @@ import {
 } from 'react-native';
 import { router } from 'expo-router';
 import Svg, { Path, Circle, Line, G, Text as SvgText } from 'react-native-svg';
+
+// Create animated components for SVG
+const AnimatedPath = Animated.createAnimatedComponent(Path);
 import AppBackground from '../../components/AppBackground';
 import { COLORS, SPACING } from '@/constants/theme';
 
@@ -23,7 +26,7 @@ const relapses = [
   { x: 0.4, y: 0.28 },
   { x: 1.3, y: 0.38 },
   { x: 1.8, y: 0.32 },
-  { x: 2.4, y: 0.22 }
+  { x: 1.9, y: 0.22 }
 ];
 
 export default function ProcrapGraphScreen() {
@@ -153,7 +156,7 @@ export default function ProcrapGraphScreen() {
                 </G>
 
                 {/* Willpower curve (red) */}
-                <Animated.Path
+                <AnimatedPath
                   d={willpowerPath}
                   stroke="#EF4444"
                   strokeWidth={3}
@@ -164,7 +167,7 @@ export default function ProcrapGraphScreen() {
                 />
 
                 {/* PROCRAP curve (green) */}
-                <Animated.Path
+                <AnimatedPath
                   d={procrapPath}
                   stroke={COLORS.accentGreen}
                   strokeWidth={3}
@@ -229,6 +232,26 @@ export default function ProcrapGraphScreen() {
                   })()}
                 </G>
 
+                {/* Y-axis labels */}
+                {['Low', 'Med', 'High'].map((label, index) => {
+                  const y = chartInnerPadding + (index * plotHeight / 2);
+                  const x = 12;
+                  return (
+                    <SvgText
+                      key={`y-${index}`}
+                      x={x}
+                      y={y + 4}
+                      fontSize="10"
+                      fill={COLORS.questionLabel}
+                      textAnchor="start"
+                      fontWeight="500"
+                      opacity={0.6}
+                    >
+                      {label}
+                    </SvgText>
+                  );
+                })}
+                
                 {/* X-axis labels */}
                 {weeks.map((week, index) => {
                   const x = chartInnerPadding + (index / 2) * plotWidth;
@@ -292,7 +315,9 @@ const styles = StyleSheet.create({
     color: COLORS.mainText,
     textAlign: 'center',
     letterSpacing: -0.5,
-    textShadow: '0 3px 6px rgba(0, 0, 0, 0.4)',
+    textShadowColor: 'rgba(0, 0, 0, 0.4)',
+    textShadowOffset: { width: 0, height: 3 },
+    textShadowRadius: 6,
     lineHeight: 26,
   },
   contentContainer: {
@@ -311,17 +336,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: '100%',
     marginBottom: 16,
-    gap: 16,
   },
   legendItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
+    marginLeft: 16,
   },
   legendDot: {
     width: 8,
     height: 8,
     borderRadius: 4,
+    marginRight: 6,
   },
   legendText: {
     fontSize: 12,
@@ -343,7 +368,9 @@ const styles = StyleSheet.create({
     color: COLORS.descriptionText,
     textAlign: 'center',
     lineHeight: 22,
-    textShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
+    textShadowColor: 'rgba(0, 0, 0, 0.2)',
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 4,
   },
   buttonContainer: {
     width: '100%',
@@ -355,7 +382,10 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     paddingHorizontal: 32,
     alignItems: 'center',
-    boxShadow: '0 8px 24px rgba(255, 255, 255, 0.2)',
+    shadowColor: 'rgba(255, 255, 255, 0.2)',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 1,
+    shadowRadius: 24,
     elevation: 8,
     width: '100%',
   },

@@ -99,7 +99,8 @@ export default function ResultsScreen() {
   });
 
   const handleContinue = () => {
-    router.push('/(onboarding)/symptoms');
+    // Navigate to graph screen for testing - user can change this
+    router.push('/(onboarding)/graph');
   };
 
   return (
