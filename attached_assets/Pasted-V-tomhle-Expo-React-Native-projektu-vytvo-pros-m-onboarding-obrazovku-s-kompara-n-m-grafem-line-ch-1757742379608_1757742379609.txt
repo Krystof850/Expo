@@ -1,0 +1,103 @@
+V tomhle Expo React Native projektu vytvoř prosím onboarding obrazovku s komparačním grafem (line chart) pro appku PROCRAP.
+Design drž konzistentní s obrazovkou „Your analysis is complete“ (stejná barevná paleta, fonty, spacing, CTA button komponenta). Níže definuji jen to, jak má vypadat samotný graf a texty.
+
+Cíle
+
+Nový soubor: screens/ProcrapGraphScreen.tsx
+
+Navigace: přidej route ProcrapGraph do stávajícího stacku/tabu.
+
+Knihovna pro grafiku: react-native-svg (použij čisté SVG – žádná těžká chart knihovna).
+
+Instalace: expo install react-native-svg
+
+Specifikace grafu (obsah a chování)
+
+Typ: 2× křivka (line chart) přes 3 týdny na ose X: Week 1, Week 2, Week 3.
+
+Zelená křivka (label: With PROCRAP): plynulý stoupající průběh (easing), končí nejvýš vpravo.
+
+Červená křivka (label: Willpower only): zvlněná s častými propady; u 3–4 bodů vykresli červené „X“ jako markery Relapse.
+
+Osy
+
+X-osa: tři popisky dole (Week 1/2/3).
+
+Y-osa: skrytá mřížka (tenké, nízký kontrast), bez čísel.
+
+Markery a popisky
+
+Na konci zelené křivky vykresli zelený bod + drobný label “Focus & Discipline”.
+
+U červených bodů vykresli malé červené X + přístupný accessibilityLabel="Relapse".
+
+Legenda: dvouřádková, kompaktní, vpravo nahoře nad grafem:
+
+● Green — With PROCRAP
+
+● Red — Willpower only
+
+Doplňkový text pod grafem (2 řádky, střed):
+
+PROCRAP helps you beat procrastination faster
+
+and stay consistent with daily action.
+
+CTA button dole: použij stejnou komponentu a styl jako na „Your analysis is complete“, text “Continue”, onPress → navigation.navigate('NextOnboardingScreen') (dummy route, nechám na projektu).
+
+Technické požadavky pro SVG
+
+Vytvoř kontejner s aspect-ratio ~ 16:9; responsivní škálování na šířku obrazovky, vnitřní padding 24.
+
+Vypočítej body v normalized space (0–1) a přemapuj je na pixelové souřadnice podle aktuální šířky/výšky.
+
+Vykresli křivky pomocí cubic Bezier path (funkce pro generování smooth path ze serie bodů – Catmull-Rom → Bezier, nebo vlastní jednoduché smoothing).
+
+Tloušťka linek: 3 px; zakončení round; mřížka opacity 0.15.
+
+Markery:
+
+Zelený koncový bod: kruh r=6.
+
+Relapse: červené X (dvě diagonální čáry, strokeWidth=2.5).
+
+Data (můžeš hardcodovat do komponenty)
+const weeks = ['Week 1', 'Week 2', 'Week 3'];
+// normalizované Y (0 = low, 1 = high)
+const procrap = [0.25, 0.6, 0.9];           // hladký růst
+const willpower = [0.3, 0.35, 0.2];         // stagnace/pokles
+// indexy, kde vykreslit červené X
+const relapses = [{x:0.4,y:0.28}, {x:1.3,y:0.38}, {x:1.8,y:0.32}, {x:2.4,y:0.22}];
+
+
+x u relapsů je v polo-indexech (např. 1.3 = mezi Week1 a Week2), přemapuj si to na šířku grafu.
+
+UX detaily
+
+Graf začni animovat strokeDashoffset (krátká 400–600 ms animace při mountu).
+
+Dbejte na contrast ratio; použij stejné barvy/opacity tokeny jako „Your analysis is complete“.
+
+Celý screen musí být scroll-safe area aware (iPhone notch), min. target 60 FPS.
+
+Součásti výstupu
+
+screens/ProcrapGraphScreen.tsx (komponenta + styly)
+
+Úprava navigace (registrace route)
+
+Krátký README snippet v PR/komentu, jak je řešené škálování a kde upravit data.
+
+Akceptační kritéria
+
+Dvě jasné křivky, správné popisky Week 1–3.
+
+Relapse markery (X) na červené trati, zelený finální bod s labelem „Focus & Discipline“.
+
+Legenda vpravo nahoře; text pod grafem na 2 řádky; CTA “Continue”.
+
+Vizuál konzistentní s „Your analysis is complete“ (typografie, barvy, spacing, CTA).
+
+Žádné další knihovny mimo react-native-svg a to, co už projekt používá.
+
+Dík!
