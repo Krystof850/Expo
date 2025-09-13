@@ -37,7 +37,7 @@ export default function BenefitsScreen() {
         
         {/* Title */}
         <View style={styles.titleContainer}>
-          <Text style={styles.titleText}>PROCRAP benefits</Text>
+          <Text style={styles.titleText}>PROCRAPP benefits</Text>
         </View>
 
         {/* Main Content */}
