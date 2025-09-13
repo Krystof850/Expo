@@ -11,7 +11,7 @@ import {
 import { router, useFocusEffect } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
-import Svg, { Path, Circle, G, Polygon, Line, Rect } from 'react-native-svg';
+import Svg, { Path, Circle, G, Polygon, Line, Rect, Text as SvgText } from 'react-native-svg';
 import { Ionicons } from '@expo/vector-icons';
 import { AnimatedQuestionPage, AnimatedContent, AnimatedQuestionPageRef } from '../../components/AnimatedQuestionPage';
 import { NextButton } from '../../components/Button';
@@ -39,25 +39,25 @@ const ProgressTrackingIllustration = () => (
     <G opacity="0.9">
       {/* Week 1 */}
       <Rect x="45" y="120" width="10" height="20" fill="rgba(34, 197, 94, 0.8)" />
-      <Text x="50" y="155" fontSize="8" fill="rgba(59, 130, 246, 0.8)" textAnchor="middle">W1</Text>
+      <SvgText x="50" y="155" fontSize="8" fill="rgba(59, 130, 246, 0.8)" textAnchor="middle">W1</SvgText>
       
       {/* Week 2 */}
       <Rect x="85" y="100" width="10" height="40" fill="rgba(34, 197, 94, 0.8)" />
-      <Text x="90" y="155" fontSize="8" fill="rgba(59, 130, 246, 0.8)" textAnchor="middle">W2</Text>
+      <SvgText x="90" y="155" fontSize="8" fill="rgba(59, 130, 246, 0.8)" textAnchor="middle">W2</SvgText>
       
       {/* Week 3 */}
       <Rect x="125" y="80" width="10" height="60" fill="rgba(34, 197, 94, 0.8)" />
-      <Text x="130" y="155" fontSize="8" fill="rgba(59, 130, 246, 0.8)" textAnchor="middle">W3</Text>
+      <SvgText x="130" y="155" fontSize="8" fill="rgba(59, 130, 246, 0.8)" textAnchor="middle">W3</SvgText>
       
       {/* Week 4 */}
       <Rect x="155" y="60" width="10" height="80" fill="rgba(34, 211, 238, 1)" />
-      <Text x="160" y="155" fontSize="8" fill="rgba(59, 130, 246, 0.8)" textAnchor="middle">W4</Text>
+      <SvgText x="160" y="155" fontSize="8" fill="rgba(59, 130, 246, 0.8)" textAnchor="middle">W4</SvgText>
     </G>
     
     {/* Streak counter */}
     <G opacity="0.9">
       <Rect x="20" y="20" width="60" height="15" rx="7" fill="rgba(251, 191, 36, 0.2)" stroke="rgba(251, 191, 36, 0.8)" strokeWidth="1" />
-      <Text x="50" y="30" fontSize="10" fill="rgba(251, 191, 36, 1)" textAnchor="middle" fontWeight="bold">🔥 28 Days</Text>
+      <SvgText x="50" y="30" fontSize="10" fill="rgba(251, 191, 36, 1)" textAnchor="middle" fontWeight="bold">🔥 28 Days</SvgText>
     </G>
     
     {/* Completed tasks visualization */}
@@ -86,7 +86,7 @@ const ProgressTrackingIllustration = () => (
       <Circle cx="75" cy="170" r="6" fill="none" stroke="rgba(34, 211, 238, 0.8)" strokeWidth="3" />
       <Circle cx="90" cy="170" r="6" fill="none" stroke="rgba(34, 211, 238, 0.8)" strokeWidth="3" />
       
-      <Text x="60" y="190" fontSize="8" fill="rgba(34, 211, 238, 1)" textAnchor="middle">Lifelong Habits</Text>
+      <SvgText x="60" y="190" fontSize="8" fill="rgba(34, 211, 238, 1)" textAnchor="middle">Lifelong Habits</SvgText>
     </G>
     
     {/* Achievement badges */}
@@ -98,7 +98,7 @@ const ProgressTrackingIllustration = () => (
         stroke="rgba(22, 163, 74, 1)"
         strokeWidth="1"
       />
-      <Text x="20" y="65" fontSize="6" fill="rgba(255, 255, 255, 1)" textAnchor="middle" fontWeight="bold">7</Text>
+      <SvgText x="20" y="65" fontSize="6" fill="rgba(255, 255, 255, 1)" textAnchor="middle" fontWeight="bold">7</SvgText>
       
       {/* Second badge - 14 days */}
       <Polygon
@@ -107,7 +107,7 @@ const ProgressTrackingIllustration = () => (
         stroke="rgba(245, 158, 11, 1)"
         strokeWidth="1"
       />
-      <Text x="20" y="90" fontSize="6" fill="rgba(255, 255, 255, 1)" textAnchor="middle" fontWeight="bold">14</Text>
+      <SvgText x="20" y="90" fontSize="6" fill="rgba(255, 255, 255, 1)" textAnchor="middle" fontWeight="bold">14</SvgText>
       
       {/* Third badge - 21 days */}
       <Polygon
@@ -116,7 +116,7 @@ const ProgressTrackingIllustration = () => (
         stroke="rgba(147, 51, 234, 1)"
         strokeWidth="1"
       />
-      <Text x="20" y="115" fontSize="6" fill="rgba(255, 255, 255, 1)" textAnchor="middle" fontWeight="bold">21</Text>
+      <SvgText x="20" y="115" fontSize="6" fill="rgba(255, 255, 255, 1)" textAnchor="middle" fontWeight="bold">21</SvgText>
     </G>
     
     {/* Progress trend line */}

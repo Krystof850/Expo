@@ -11,7 +11,7 @@ import {
 import { router, useFocusEffect } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
-import Svg, { Path, Circle, G, Polygon, Line, Rect } from 'react-native-svg';
+import Svg, { Path, Circle, G, Polygon, Line, Rect, Text as SvgText } from 'react-native-svg';
 import { Ionicons } from '@expo/vector-icons';
 import { AnimatedQuestionPage, AnimatedContent, AnimatedQuestionPageRef } from '../../components/AnimatedQuestionPage';
 import { NextButton } from '../../components/Button';
@@ -67,8 +67,8 @@ const ScienceSystemIllustration = () => (
       <Circle cx="150" cy="45" r="2" fill="rgba(34, 211, 238, 1)" />
       
       {/* Formula symbols */}
-      <Text x="30" y="160" fontSize="14" fill="rgba(251, 191, 36, 0.8)" fontFamily="monospace">E=mc²</Text>
-      <Text x="160" y="165" fontSize="12" fill="rgba(34, 211, 238, 0.8)" fontFamily="monospace">f(x)</Text>
+      <SvgText x="30" y="160" fontSize="14" fill="rgba(251, 191, 36, 0.8)" fontFamily="monospace">E=mc²</SvgText>
+      <SvgText x="160" y="165" fontSize="12" fill="rgba(34, 211, 238, 0.8)" fontFamily="monospace">f(x)</SvgText>
     </G>
     
     {/* Data flow connections */}
@@ -130,7 +130,7 @@ const ScienceSystemIllustration = () => (
     
     {/* "PROCRAP" text integrated into design */}
     <Rect x="90" y="150" width="50" height="15" rx="7" fill="rgba(59, 130, 246, 0.2)" stroke="rgba(59, 130, 246, 0.6)" strokeWidth="1" />
-    <Text x="100" y="161" fontSize="10" fill="rgba(59, 130, 246, 1)" fontFamily="sans-serif" fontWeight="bold">PROCRAP</Text>
+    <SvgText x="100" y="161" fontSize="10" fill="rgba(59, 130, 246, 1)" fontFamily="sans-serif" fontWeight="bold">PROCRAP</SvgText>
   </Svg>
 );
 
