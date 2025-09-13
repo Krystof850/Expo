@@ -6,120 +6,111 @@ import {
   StatusBar,
   BackHandler,
   Platform,
+  TouchableOpacity,
 } from 'react-native';
 import { router, useFocusEffect } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
-import Svg, { Path, Circle, G } from 'react-native-svg';
+import Svg, { Path, Circle, G, Polygon } from 'react-native-svg';
 import { Ionicons } from '@expo/vector-icons';
-import { TouchableOpacity } from 'react-native';
 import { AnimatedQuestionPage, AnimatedContent, AnimatedQuestionPageRef } from '../../components/AnimatedQuestionPage';
 import { NextButton } from '../../components/Button';
 import { SPACING } from '@/constants/theme';
 
-// Simple Brain with Chain Illustration Component
-const BrainChainIllustration = () => (
+// Broken Confidence Illustration Component
+const BrokenConfidenceIllustration = () => (
   <Svg width="200" height="200" viewBox="0 0 200 200">
-    {/* Brain outline */}
+    {/* Main person silhouette */}
     <Path
-      d="M100 40C85 40 70 45 60 55C55 50 45 48 40 52C35 40 25 35 20 45C15 40 5 45 8 55C5 65 10 75 15 80C10 90 15 100 25 105C30 115 40 120 50 115C60 125 75 130 90 125C105 130 120 125 130 115C140 120 150 115 155 105C165 100 170 90 165 80C170 75 175 65 172 55C175 45 165 40 160 45C155 35 145 40 140 52C135 48 125 50 120 55C110 45 105 40 100 40Z"
-      fill="rgba(255, 255, 255, 0.9)"
+      d="M100 40C110 40 120 50 120 60C120 70 110 80 100 80C90 80 80 70 80 60C80 50 90 40 100 40Z"
+      fill="rgba(255, 255, 255, 0.8)"
       stroke="rgba(255, 255, 255, 0.6)"
       strokeWidth="2"
     />
     
-    {/* Brain details */}
+    {/* Body */}
     <Path
-      d="M85 70C90 65 95 70 100 65C105 70 110 65 115 70"
-      stroke="rgba(220, 38, 38, 0.6)"
+      d="M85 80 L115 80 L115 140 L105 140 L105 160 L95 160 L95 140 L85 140 Z"
+      fill="rgba(255, 255, 255, 0.8)"
+      stroke="rgba(255, 255, 255, 0.6)"
       strokeWidth="2"
+    />
+    
+    {/* Arms (drooping down showing defeat) */}
+    <Path
+      d="M85 90 L70 110 L65 125"
+      stroke="rgba(255, 255, 255, 0.8)"
+      strokeWidth="6"
+      strokeLinecap="round"
       fill="none"
     />
     <Path
-      d="M75 85C85 80 95 85 105 80C115 85 125 80 135 85"
-      stroke="rgba(220, 38, 38, 0.6)"
-      strokeWidth="2"
+      d="M115 90 L130 110 L135 125"
+      stroke="rgba(255, 255, 255, 0.8)"
+      strokeWidth="6"
+      strokeLinecap="round"
       fill="none"
     />
     
-    {/* Chain links around brain */}
+    {/* Cracks in the person showing broken confidence */}
     <G>
-      {/* Chain link 1 */}
-      <Circle
-        cx="70"
-        cy="60"
-        r="8"
+      <Path
+        d="M95 65 L105 75 M90 85 L110 95 M88 110 L112 120"
+        stroke="rgba(220, 38, 38, 0.8)"
+        strokeWidth="2"
         fill="none"
-        stroke="rgba(239, 68, 68, 0.8)"
-        strokeWidth="4"
-      />
-      <Circle
-        cx="85"
-        cy="55"
-        r="8"
-        fill="none"
-        stroke="rgba(239, 68, 68, 0.8)"
-        strokeWidth="4"
-      />
-      
-      {/* Chain link 2 */}
-      <Circle
-        cx="130"
-        cy="60"
-        r="8"
-        fill="none"
-        stroke="rgba(239, 68, 68, 0.8)"
-        strokeWidth="4"
-      />
-      <Circle
-        cx="115"
-        cy="55"
-        r="8"
-        fill="none"
-        stroke="rgba(239, 68, 68, 0.8)"
-        strokeWidth="4"
-      />
-      
-      {/* Chain link 3 */}
-      <Circle
-        cx="60"
-        cy="100"
-        r="8"
-        fill="none"
-        stroke="rgba(239, 68, 68, 0.8)"
-        strokeWidth="4"
-      />
-      <Circle
-        cx="75"
-        cy="105"
-        r="8"
-        fill="none"
-        stroke="rgba(239, 68, 68, 0.8)"
-        strokeWidth="4"
-      />
-      
-      {/* Chain link 4 */}
-      <Circle
-        cx="125"
-        cy="105"
-        r="8"
-        fill="none"
-        stroke="rgba(239, 68, 68, 0.8)"
-        strokeWidth="4"
-      />
-      <Circle
-        cx="140"
-        cy="100"
-        r="8"
-        fill="none"
-        stroke="rgba(239, 68, 68, 0.8)"
-        strokeWidth="4"
       />
     </G>
+    
+    {/* Broken pieces falling away */}
+    <G opacity="0.7">
+      <Polygon
+        points="50,90 55,85 60,95 55,100"
+        fill="rgba(239, 68, 68, 0.6)"
+      />
+      <Polygon
+        points="140,105 145,100 150,110 145,115"
+        fill="rgba(239, 68, 68, 0.6)"
+      />
+      <Polygon
+        points="75,130 80,125 85,135 80,140"
+        fill="rgba(239, 68, 68, 0.6)"
+      />
+      <Polygon
+        points="120,135 125,130 130,140 125,145"
+        fill="rgba(239, 68, 68, 0.6)"
+      />
+    </G>
+    
+    {/* Dark cloud above representing negative thoughts */}
+    <Path
+      d="M70 20C65 20 60 25 60 30C55 30 50 35 50 40C50 45 55 50 60 50L120 50C125 50 130 45 130 40C130 35 125 30 120 30C120 25 115 20 110 20C105 20 100 25 100 30C95 25 90 20 85 20C80 20 75 20 70 20Z"
+      fill="rgba(220, 38, 38, 0.5)"
+      stroke="rgba(220, 38, 38, 0.3)"
+      strokeWidth="1"
+    />
+    
+    {/* Rain drops from the cloud (guilt and negative feelings) */}
+    <G opacity="0.6">
+      <Circle cx="75" cy="55" r="1.5" fill="rgba(239, 68, 68, 0.7)" />
+      <Circle cx="85" cy="62" r="1" fill="rgba(239, 68, 68, 0.7)" />
+      <Circle cx="95" cy="58" r="1.5" fill="rgba(239, 68, 68, 0.7)" />
+      <Circle cx="105" cy="65" r="1" fill="rgba(239, 68, 68, 0.7)" />
+      <Circle cx="115" cy="60" r="1.5" fill="rgba(239, 68, 68, 0.7)" />
+    </G>
+    
+    {/* Weak foundation showing instability */}
+    <Path
+      d="M70 160 L130 160 L128 170 L72 170 Z"
+      fill="rgba(255, 255, 255, 0.4)"
+      stroke="rgba(255, 255, 255, 0.3)"
+      strokeWidth="1"
+      strokeDasharray="3,3"
+    />
   </Svg>
 );
 
-export default function TrapScreen() {
+export default function ConfidenceScreen() {
   const insets = useSafeAreaInsets();
   const animationRef = useRef<AnimatedQuestionPageRef>(null);
 
@@ -150,8 +141,8 @@ export default function TrapScreen() {
   const handleContinue = () => {
     // Run content exit animation
     animationRef.current?.runExitAnimation(() => {
-      // Continue to time page
-      router.push('/(onboarding)/time');
+      // Continue to future page
+      router.push('/(onboarding)/future');
     });
   };
 
@@ -193,17 +184,17 @@ export default function TrapScreen() {
           {/* Illustration space */}
           <AnimatedContent delay={100}>
             <View style={styles.illustrationContainer}>
-              <BrainChainIllustration />
+              <BrokenConfidenceIllustration />
             </View>
           </AnimatedContent>
 
           {/* Text content */}
           <AnimatedContent delay={200}>
             <View style={styles.textContainer}>
-              <Text style={styles.title}>Procrastination is a trap</Text>
+              <Text style={styles.title}>It destroys your confidence</Text>
               
               <Text style={styles.description}>
-                Every delay gives your brain cheap dopamine. It trains you to run from hard work instead of facing it.
+                Procrastination cycles make you guilty and weak. Even small tasks feel impossible, and frustration grows.
               </Text>
             </View>
           </AnimatedContent>

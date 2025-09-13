@@ -6,120 +6,94 @@ import {
   StatusBar,
   BackHandler,
   Platform,
+  TouchableOpacity,
 } from 'react-native';
 import { router, useFocusEffect } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
-import Svg, { Path, Circle, G } from 'react-native-svg';
+import Svg, { Path, Circle, G, Rect, Line } from 'react-native-svg';
 import { Ionicons } from '@expo/vector-icons';
-import { TouchableOpacity } from 'react-native';
 import { AnimatedQuestionPage, AnimatedContent, AnimatedQuestionPageRef } from '../../components/AnimatedQuestionPage';
 import { NextButton } from '../../components/Button';
 import { SPACING } from '@/constants/theme';
 
-// Simple Brain with Chain Illustration Component
-const BrainChainIllustration = () => (
+// Hourglass with Clock Illustration Component
+const HourglassClockIllustration = () => (
   <Svg width="200" height="200" viewBox="0 0 200 200">
-    {/* Brain outline */}
+    {/* Hourglass outline */}
     <Path
-      d="M100 40C85 40 70 45 60 55C55 50 45 48 40 52C35 40 25 35 20 45C15 40 5 45 8 55C5 65 10 75 15 80C10 90 15 100 25 105C30 115 40 120 50 115C60 125 75 130 90 125C105 130 120 125 130 115C140 120 150 115 155 105C165 100 170 90 165 80C170 75 175 65 172 55C175 45 165 40 160 45C155 35 145 40 140 52C135 48 125 50 120 55C110 45 105 40 100 40Z"
+      d="M70 30 L130 30 L130 50 L110 70 L130 90 L130 170 L70 170 L70 90 L90 70 L70 50 Z"
       fill="rgba(255, 255, 255, 0.9)"
       stroke="rgba(255, 255, 255, 0.6)"
-      strokeWidth="2"
+      strokeWidth="3"
     />
     
-    {/* Brain details */}
+    {/* Sand in top chamber */}
     <Path
-      d="M85 70C90 65 95 70 100 65C105 70 110 65 115 70"
-      stroke="rgba(220, 38, 38, 0.6)"
-      strokeWidth="2"
-      fill="none"
-    />
-    <Path
-      d="M75 85C85 80 95 85 105 80C115 85 125 80 135 85"
-      stroke="rgba(220, 38, 38, 0.6)"
-      strokeWidth="2"
-      fill="none"
+      d="M75 35 L125 35 L125 45 L105 65 L95 65 L75 45 Z"
+      fill="rgba(220, 38, 38, 0.7)"
     />
     
-    {/* Chain links around brain */}
+    {/* Sand in bottom chamber */}
+    <Path
+      d="M75 165 L125 165 L125 155 L100 130 L75 155 Z"
+      fill="rgba(220, 38, 38, 0.6)"
+    />
+    
+    {/* Falling sand stream */}
+    <Rect
+      x="98"
+      y="70"
+      width="4"
+      height="60"
+      fill="rgba(220, 38, 38, 0.5)"
+    />
+    
+    {/* Clock face around hourglass */}
+    <Circle
+      cx="100"
+      cy="100"
+      r="90"
+      fill="none"
+      stroke="rgba(239, 68, 68, 0.4)"
+      strokeWidth="2"
+      strokeDasharray="5,5"
+    />
+    
+    {/* Clock hour markers */}
     <G>
-      {/* Chain link 1 */}
-      <Circle
-        cx="70"
-        cy="60"
-        r="8"
-        fill="none"
-        stroke="rgba(239, 68, 68, 0.8)"
-        strokeWidth="4"
-      />
-      <Circle
-        cx="85"
-        cy="55"
-        r="8"
-        fill="none"
-        stroke="rgba(239, 68, 68, 0.8)"
-        strokeWidth="4"
-      />
-      
-      {/* Chain link 2 */}
-      <Circle
-        cx="130"
-        cy="60"
-        r="8"
-        fill="none"
-        stroke="rgba(239, 68, 68, 0.8)"
-        strokeWidth="4"
-      />
-      <Circle
-        cx="115"
-        cy="55"
-        r="8"
-        fill="none"
-        stroke="rgba(239, 68, 68, 0.8)"
-        strokeWidth="4"
-      />
-      
-      {/* Chain link 3 */}
-      <Circle
-        cx="60"
-        cy="100"
-        r="8"
-        fill="none"
-        stroke="rgba(239, 68, 68, 0.8)"
-        strokeWidth="4"
-      />
-      <Circle
-        cx="75"
-        cy="105"
-        r="8"
-        fill="none"
-        stroke="rgba(239, 68, 68, 0.8)"
-        strokeWidth="4"
-      />
-      
-      {/* Chain link 4 */}
-      <Circle
-        cx="125"
-        cy="105"
-        r="8"
-        fill="none"
-        stroke="rgba(239, 68, 68, 0.8)"
-        strokeWidth="4"
-      />
-      <Circle
-        cx="140"
-        cy="100"
-        r="8"
-        fill="none"
-        stroke="rgba(239, 68, 68, 0.8)"
-        strokeWidth="4"
-      />
+      {/* 12 o'clock */}
+      <Line x1="100" y1="15" x2="100" y2="25" stroke="rgba(239, 68, 68, 0.8)" strokeWidth="3" />
+      {/* 3 o'clock */}
+      <Line x1="185" y1="100" x2="175" y2="100" stroke="rgba(239, 68, 68, 0.8)" strokeWidth="3" />
+      {/* 6 o'clock */}
+      <Line x1="100" y1="185" x2="100" y2="175" stroke="rgba(239, 68, 68, 0.8)" strokeWidth="3" />
+      {/* 9 o'clock */}
+      <Line x1="15" y1="100" x2="25" y2="100" stroke="rgba(239, 68, 68, 0.8)" strokeWidth="3" />
+    </G>
+    
+    {/* Clock hands pointing to different times (showing time passing) */}
+    <G opacity="0.6">
+      {/* Hour hand */}
+      <Line x1="100" y1="100" x2="100" y2="60" stroke="rgba(239, 68, 68, 1)" strokeWidth="4" strokeLinecap="round" />
+      {/* Minute hand */}
+      <Line x1="100" y1="100" x2="130" y2="70" stroke="rgba(239, 68, 68, 1)" strokeWidth="3" strokeLinecap="round" />
+    </G>
+    
+    {/* Center dot */}
+    <Circle cx="100" cy="100" r="4" fill="rgba(239, 68, 68, 1)" />
+    
+    {/* Scattered time particles */}
+    <G opacity="0.4">
+      <Circle cx="40" cy="60" r="2" fill="rgba(239, 68, 68, 0.6)" />
+      <Circle cx="160" cy="40" r="1.5" fill="rgba(239, 68, 68, 0.6)" />
+      <Circle cx="170" cy="160" r="2" fill="rgba(239, 68, 68, 0.6)" />
+      <Circle cx="30" cy="140" r="1.5" fill="rgba(239, 68, 68, 0.6)" />
     </G>
   </Svg>
 );
 
-export default function TrapScreen() {
+export default function TimeScreen() {
   const insets = useSafeAreaInsets();
   const animationRef = useRef<AnimatedQuestionPageRef>(null);
 
@@ -150,8 +124,8 @@ export default function TrapScreen() {
   const handleContinue = () => {
     // Run content exit animation
     animationRef.current?.runExitAnimation(() => {
-      // Continue to time page
-      router.push('/(onboarding)/time');
+      // Continue to confidence page
+      router.push('/(onboarding)/confidence');
     });
   };
 
@@ -193,17 +167,17 @@ export default function TrapScreen() {
           {/* Illustration space */}
           <AnimatedContent delay={100}>
             <View style={styles.illustrationContainer}>
-              <BrainChainIllustration />
+              <HourglassClockIllustration />
             </View>
           </AnimatedContent>
 
           {/* Text content */}
           <AnimatedContent delay={200}>
             <View style={styles.textContainer}>
-              <Text style={styles.title}>Procrastination is a trap</Text>
+              <Text style={styles.title}>It kills your time</Text>
               
               <Text style={styles.description}>
-                Every delay gives your brain cheap dopamine. It trains you to run from hard work instead of facing it.
+                Hours disappear through scrolling, playing games, or other task avoidance. At the end, you've done nothing meaningful.
               </Text>
             </View>
           </AnimatedContent>

@@ -6,120 +6,110 @@ import {
   StatusBar,
   BackHandler,
   Platform,
+  TouchableOpacity,
 } from 'react-native';
 import { router, useFocusEffect } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
-import Svg, { Path, Circle, G } from 'react-native-svg';
+import Svg, { Path, Circle, G, Polygon, Line } from 'react-native-svg';
 import { Ionicons } from '@expo/vector-icons';
-import { TouchableOpacity } from 'react-native';
 import { AnimatedQuestionPage, AnimatedContent, AnimatedQuestionPageRef } from '../../components/AnimatedQuestionPage';
 import { NextButton } from '../../components/Button';
 import { SPACING } from '@/constants/theme';
 
-// Simple Brain with Chain Illustration Component
-const BrainChainIllustration = () => (
+// Broken Dreams and Lost Opportunities Illustration
+const BrokenDreamsIllustration = () => (
   <Svg width="200" height="200" viewBox="0 0 200 200">
-    {/* Brain outline */}
+    {/* Dream cloud (fading away) */}
     <Path
-      d="M100 40C85 40 70 45 60 55C55 50 45 48 40 52C35 40 25 35 20 45C15 40 5 45 8 55C5 65 10 75 15 80C10 90 15 100 25 105C30 115 40 120 50 115C60 125 75 130 90 125C105 130 120 125 130 115C140 120 150 115 155 105C165 100 170 90 165 80C170 75 175 65 172 55C175 45 165 40 160 45C155 35 145 40 140 52C135 48 125 50 120 55C110 45 105 40 100 40Z"
-      fill="rgba(255, 255, 255, 0.9)"
-      stroke="rgba(255, 255, 255, 0.6)"
-      strokeWidth="2"
+      d="M50 60C45 60 40 65 40 70C35 70 30 75 30 80C30 85 35 90 40 90L140 90C145 90 150 85 150 80C150 75 145 70 140 70C140 65 135 60 130 60C125 60 120 65 120 70C115 65 110 60 105 60C100 60 95 65 95 70C90 65 85 60 80 60C75 60 70 60 65 60C60 60 55 60 50 60Z"
+      fill="rgba(255, 255, 255, 0.4)"
+      stroke="rgba(255, 255, 255, 0.2)"
+      strokeWidth="1"
+      strokeDasharray="4,4"
     />
     
-    {/* Brain details */}
-    <Path
-      d="M85 70C90 65 95 70 100 65C105 70 110 65 115 70"
-      stroke="rgba(220, 38, 38, 0.6)"
-      strokeWidth="2"
-      fill="none"
-    />
-    <Path
-      d="M75 85C85 80 95 85 105 80C115 85 125 80 135 85"
-      stroke="rgba(220, 38, 38, 0.6)"
-      strokeWidth="2"
-      fill="none"
-    />
-    
-    {/* Chain links around brain */}
+    {/* Broken ladder to success */}
     <G>
-      {/* Chain link 1 */}
-      <Circle
-        cx="70"
-        cy="60"
-        r="8"
-        fill="none"
-        stroke="rgba(239, 68, 68, 0.8)"
-        strokeWidth="4"
-      />
-      <Circle
-        cx="85"
-        cy="55"
-        r="8"
-        fill="none"
-        stroke="rgba(239, 68, 68, 0.8)"
-        strokeWidth="4"
-      />
+      {/* Left side of ladder */}
+      <Line x1="60" y1="160" x2="65" y2="100" stroke="rgba(255, 255, 255, 0.7)" strokeWidth="4" />
+      {/* Right side of ladder */}
+      <Line x1="80" y1="160" x2="85" y2="100" stroke="rgba(255, 255, 255, 0.7)" strokeWidth="4" />
       
-      {/* Chain link 2 */}
-      <Circle
-        cx="130"
-        cy="60"
-        r="8"
-        fill="none"
-        stroke="rgba(239, 68, 68, 0.8)"
-        strokeWidth="4"
+      {/* Broken rungs */}
+      <Line x1="62" y1="150" x2="75" y2="149" stroke="rgba(255, 255, 255, 0.7)" strokeWidth="3" />
+      <Line x1="63" y1="135" x2="72" y2="134" stroke="rgba(239, 68, 68, 0.8)" strokeWidth="3" strokeDasharray="2,2" />
+      <Line x1="64" y1="120" x2="70" y2="119" stroke="rgba(239, 68, 68, 0.8)" strokeWidth="3" strokeDasharray="2,2" />
+      <Line x1="65" y1="105" x2="83" y2="104" stroke="rgba(255, 255, 255, 0.7)" strokeWidth="3" />
+    </G>
+    
+    {/* Falling broken pieces (lost opportunities) */}
+    <G opacity="0.6">
+      <Polygon
+        points="100,95 110,90 115,100 105,105"
+        fill="rgba(239, 68, 68, 0.7)"
       />
-      <Circle
-        cx="115"
-        cy="55"
-        r="8"
-        fill="none"
-        stroke="rgba(239, 68, 68, 0.8)"
-        strokeWidth="4"
+      <Polygon
+        points="125,110 135,105 140,115 130,120"
+        fill="rgba(239, 68, 68, 0.7)"
       />
-      
-      {/* Chain link 3 */}
-      <Circle
-        cx="60"
-        cy="100"
-        r="8"
-        fill="none"
-        stroke="rgba(239, 68, 68, 0.8)"
-        strokeWidth="4"
+      <Polygon
+        points="90,125 100,120 105,130 95,135"
+        fill="rgba(239, 68, 68, 0.7)"
       />
-      <Circle
-        cx="75"
-        cy="105"
-        r="8"
-        fill="none"
-        stroke="rgba(239, 68, 68, 0.8)"
-        strokeWidth="4"
+      <Polygon
+        points="140,140 150,135 155,145 145,150"
+        fill="rgba(239, 68, 68, 0.7)"
       />
-      
-      {/* Chain link 4 */}
-      <Circle
-        cx="125"
-        cy="105"
-        r="8"
-        fill="none"
-        stroke="rgba(239, 68, 68, 0.8)"
-        strokeWidth="4"
-      />
-      <Circle
-        cx="140"
-        cy="100"
-        r="8"
-        fill="none"
-        stroke="rgba(239, 68, 68, 0.8)"
-        strokeWidth="4"
-      />
+    </G>
+    
+    {/* Door of opportunity (closing/closed) */}
+    <Path
+      d="M120 100 L160 100 L160 160 L120 160 Z"
+      fill="rgba(255, 255, 255, 0.3)"
+      stroke="rgba(255, 255, 255, 0.5)"
+      strokeWidth="2"
+    />
+    
+    {/* Door handle */}
+    <Circle cx="150" cy="130" r="3" fill="rgba(239, 68, 68, 0.8)" />
+    
+    {/* "CLOSED" sign on door */}
+    <Path
+      d="M125 115 L155 115 L155 125 L125 125 Z"
+      fill="rgba(220, 38, 38, 0.8)"
+    />
+    
+    {/* X mark on closed sign */}
+    <G>
+      <Line x1="130" y1="118" x2="150" y2="122" stroke="rgba(255, 255, 255, 0.9)" strokeWidth="2" />
+      <Line x1="150" y1="118" x2="130" y2="122" stroke="rgba(255, 255, 255, 0.9)" strokeWidth="2" />
+    </G>
+    
+    {/* Time passing (clock showing late hour) */}
+    <Circle
+      cx="170"
+      cy="50"
+      r="25"
+      fill="rgba(255, 255, 255, 0.2)"
+      stroke="rgba(239, 68, 68, 0.6)"
+      strokeWidth="2"
+    />
+    
+    {/* Clock hands pointing to "too late" */}
+    <Line x1="170" y1="50" x2="170" y2="30" stroke="rgba(239, 68, 68, 0.8)" strokeWidth="2" />
+    <Line x1="170" y1="50" x2="185" y2="50" stroke="rgba(239, 68, 68, 0.8)" strokeWidth="2" />
+    
+    {/* Scattered dreams (stars fading) */}
+    <G opacity="0.3">
+      <Path d="M30 30 L32 35 L37 35 L33 38 L35 43 L30 40 L25 43 L27 38 L23 35 L28 35 Z" fill="rgba(255, 255, 255, 0.4)" />
+      <Path d="M170 20 L172 25 L177 25 L173 28 L175 33 L170 30 L165 33 L167 28 L163 25 L168 25 Z" fill="rgba(255, 255, 255, 0.4)" />
+      <Path d="M20 100 L22 105 L27 105 L23 108 L25 113 L20 110 L15 113 L17 108 L13 105 L18 105 Z" fill="rgba(255, 255, 255, 0.4)" />
     </G>
   </Svg>
 );
 
-export default function TrapScreen() {
+export default function FutureScreen() {
   const insets = useSafeAreaInsets();
   const animationRef = useRef<AnimatedQuestionPageRef>(null);
 
@@ -150,8 +140,8 @@ export default function TrapScreen() {
   const handleContinue = () => {
     // Run content exit animation
     animationRef.current?.runExitAnimation(() => {
-      // Continue to time page
-      router.push('/(onboarding)/time');
+      // Continue to goals page
+      router.push('/(onboarding)/goals');
     });
   };
 
@@ -193,17 +183,17 @@ export default function TrapScreen() {
           {/* Illustration space */}
           <AnimatedContent delay={100}>
             <View style={styles.illustrationContainer}>
-              <BrainChainIllustration />
+              <BrokenDreamsIllustration />
             </View>
           </AnimatedContent>
 
           {/* Text content */}
           <AnimatedContent delay={200}>
             <View style={styles.textContainer}>
-              <Text style={styles.title}>Procrastination is a trap</Text>
+              <Text style={styles.title}>It steals your future</Text>
               
               <Text style={styles.description}>
-                Every delay gives your brain cheap dopamine. It trains you to run from hard work instead of facing it.
+                Dreams get postponed, opportunities lost. Procrastination silently kills the life you deserve.
               </Text>
             </View>
           </AnimatedContent>
