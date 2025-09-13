@@ -295,9 +295,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     lineHeight: 42,
     // Use proper textShadow property instead of SHADOWS.text
-    textShadowColor: 'rgba(0, 0, 0, 0.5)',
-    textShadowOffset: { width: 0, height: 4 },
-    textShadowRadius: 8,
+    textShadow: '0 4px 8px rgba(0, 0, 0, 0.5)',
   },
   description: {
     fontSize: 20, // text-xl
@@ -306,9 +304,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     lineHeight: 28,
     maxWidth: 320, // max-w-md equivalent
-    textShadowColor: 'rgba(0, 0, 0, 0.4)',
-    textShadowOffset: { width: 0, height: 2 },
-    textShadowRadius: 6,
+    textShadow: '0 2px 6px rgba(0, 0, 0, 0.4)',
   },
   nextContainer: {
     paddingHorizontal: SPACING.page,
@@ -317,10 +313,7 @@ const styles = StyleSheet.create({
   continueButton: {
     backgroundColor: '#FFFFFF', // --vibrant-cta
     // Use proper shadow properties for React Native
-    shadowColor: 'rgba(255, 255, 255, 0.3)',
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 1,
-    shadowRadius: 24,
+    boxShadow: '0 8px 24px rgba(255, 255, 255, 0.3)',
     elevation: 8,
   },
   continueButtonText: {

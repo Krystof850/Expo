@@ -198,9 +198,7 @@ const styles = StyleSheet.create({
     color: COLORS.mainText,
     textAlign: 'center',
     letterSpacing: -0.5,
-    textShadowColor: 'rgba(0, 0, 0, 0.4)',
-    textShadowOffset: { width: 0, height: 3 },
-    textShadowRadius: 6,
+    textShadow: '0 3px 6px rgba(0, 0, 0, 0.4)',
     lineHeight: 26, // Proportional to fontSize like other titles
   },
   contentContainer: {
@@ -214,9 +212,7 @@ const styles = StyleSheet.create({
   },
   largeEmoji: {
     fontSize: 80, // Smaller emoji to fit better
-    textShadowColor: 'rgba(0, 0, 0, 0.4)',
-    textShadowOffset: { width: 0, height: 3 },
-    textShadowRadius: 6,
+    textShadow: '0 3px 6px rgba(0, 0, 0, 0.4)',
     marginBottom: 8,
   },
   productivityText: {
@@ -238,9 +234,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 8,
     letterSpacing: -0.8,
-    textShadowColor: 'rgba(0, 0, 0, 0.4)',
-    textShadowOffset: { width: 0, height: 3 },
-    textShadowRadius: 6,
+    textShadow: '0 3px 6px rgba(0, 0, 0, 0.4)',
   },
   descriptionText: {
     fontSize: 14,
@@ -248,9 +242,7 @@ const styles = StyleSheet.create({
     color: 'rgba(186, 230, 253, 0.8)', // sky-200/80
     textAlign: 'center',
     lineHeight: 20,
-    textShadowColor: 'rgba(0, 0, 0, 0.2)',
-    textShadowOffset: { width: 0, height: 2 },
-    textShadowRadius: 4,
+    textShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
   },
   percentageHighlight: {
     fontWeight: '700',
@@ -289,10 +281,7 @@ const styles = StyleSheet.create({
     width: '100%',
     borderRadius: 8,
     overflow: 'hidden',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.25,
-    shadowRadius: 8,
+    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.25)',
     elevation: 8,
   },
   barGradient: {
@@ -315,10 +304,7 @@ const styles = StyleSheet.create({
     paddingVertical: 16, // Same as SPACING.button
     paddingHorizontal: 32, // Same as other NextButtons (SPACING.button * 2)
     alignItems: 'center',
-    shadowColor: 'rgba(255, 255, 255, 0.2)',
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 1,
-    shadowRadius: 24, // Same shadow as other NextButtons
+    boxShadow: '0 8px 24px rgba(255, 255, 255, 0.2)', // Same shadow as other NextButtons
     elevation: 8,
     width: '100%', // Make it full width like other NextButtons
   },
