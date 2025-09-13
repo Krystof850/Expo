@@ -264,6 +264,7 @@ export default function HopeScreen() {
   };
 
   const handleContinue = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     // Run content exit animation
     animationRef.current?.runExitAnimation(() => {
       // Continue to welcome page

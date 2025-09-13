@@ -32,6 +32,11 @@ export default function BenefitsScreen() {
       <View style={styles.container}>
         <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
         
+        {/* Title - moved to top */}
+        <View style={styles.titleContainer}>
+          <Text style={styles.titleText}>PROCRAPP benefits</Text>
+        </View>
+        
         {/* Main Content */}
         <View style={styles.contentContainer}>
           {/* Image Section */}
@@ -44,11 +49,6 @@ export default function BenefitsScreen() {
               cachePolicy="memory-disk"
               priority="high"
             />
-          </View>
-          
-          {/* Title - moved below image */}
-          <View style={styles.titleContainer}>
-            <Text style={styles.titleText}>PROCRAPP benefits</Text>
           </View>
 
           {/* Description Section */}
@@ -135,12 +135,13 @@ const styles = StyleSheet.create({
   ctaButton: {
     backgroundColor: '#FFFFFF', // var(--vibrant-cta)
     borderRadius: 50, // Same as other NextButtons
-    paddingVertical: 16, // Same as SPACING.button
+    paddingVertical: 20, // Increased height to match other pages
     paddingHorizontal: 32, // Same as other NextButtons (SPACING.button * 2)
     alignItems: 'center',
     boxShadow: '0 8px 24px rgba(255, 255, 255, 0.2)', // Same shadow as other NextButtons
     elevation: 8,
     width: '100%', // Make it full width like other NextButtons
+    minHeight: 56, // Add minimum height for consistency
   },
   ctaButtonText: {
     fontSize: 18, // Same as TYPOGRAPHY.buttonNext

@@ -47,7 +47,7 @@ const CLIENT_REVIEWS: Review[] = [
   {
     id: '2', 
     name: 'Anna Stevens',
-    username: '@anna_codes',
+    username: '@anna_stevens',
     avatar: profileImages[1], // Female profile
     rating: 5,
     review: 'I was skeptical at first, but the anti-procrastination features really work. I can finally write my thesis without endless postponing!'
@@ -55,7 +55,7 @@ const CLIENT_REVIEWS: Review[] = [
   {
     id: '3',
     name: 'Tom Collins',
-    username: '@tomas_productivity',
+    username: '@tom_collins',
     avatar: profileImages[2], // Male profile
     rating: 5,
     review: 'Best investment in my productivity. The app helped me identify my procrastination patterns and build better work habits.'
@@ -63,7 +63,7 @@ const CLIENT_REVIEWS: Review[] = [
   {
     id: '4',
     name: 'Sarah Johnson',
-    username: '@sarah_focus',
+    username: '@sarah_johnson',
     avatar: profileImages[3], // Female profile
     rating: 5,
     review: 'PROCRAP completely transformed how I approach my daily tasks. The science-based approach really works - I feel so much more in control now!'
