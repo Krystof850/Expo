@@ -87,7 +87,7 @@ export default function CommitmentSignatureScreen() {
       <SafeAreaView style={styles.container}>
         <StatusBar barStyle="light-content" backgroundColor={COLORS.gradientStart} />
         {/* Header */}
-        <View style={[styles.header, { paddingTop: insets.top }]}>
+        <View style={[styles.header, { paddingTop: insets.top + 40 }]}>
           <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
             <Ionicons name="arrow-back" size={24} color={COLORS.mainText} />
           </TouchableOpacity>
@@ -156,7 +156,6 @@ export default function CommitmentSignatureScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.gradientStart,
   },
   gradient: {
     flex: 1,
@@ -175,24 +174,25 @@ const styles = StyleSheet.create({
     paddingHorizontal: SPACING.page,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingTop: 20,
+    paddingTop: 0, // Remove extra padding to prevent overlap
   },
   titleSection: {
     alignItems: 'center',
     marginBottom: 40,
   },
   titleText: {
-    fontSize: 32,
+    fontSize: 20, // Match other pages
     fontWeight: '700',
     color: COLORS.mainText,
     textAlign: 'center',
-    marginBottom: 20,
+    marginBottom: 16,
     letterSpacing: -0.5,
+    lineHeight: 26, // Match other pages
   },
   commitmentText: {
-    fontSize: 18,
+    fontSize: 16, // Match other pages description text
     fontWeight: '500',
-    color: COLORS.questionLabel,
+    color: 'rgba(186, 230, 253, 0.9)', // Match other pages sky-200/90
     textAlign: 'center',
     lineHeight: 24,
   },
@@ -225,7 +225,7 @@ const styles = StyleSheet.create({
   clearButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: COLORS.questionLabel,
+    color: 'rgba(186, 230, 253, 0.9)', // Match other pages styling
     textAlign: 'center',
   },
   instructionsSection: {
@@ -235,7 +235,7 @@ const styles = StyleSheet.create({
   instructionsText: {
     fontSize: 16,
     fontWeight: '500',
-    color: COLORS.questionLabel,
+    color: 'rgba(186, 230, 253, 0.8)', // Match other pages styling
     textAlign: 'center',
     opacity: 0.8,
   },

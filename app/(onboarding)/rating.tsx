@@ -17,6 +17,14 @@ import { NextButton } from '../../components/Button';
 import AppBackground from '../../components/AppBackground';
 import { COLORS, SPACING } from '@/constants/theme';
 
+// Profile images - declared first to avoid TDZ errors
+const profileImages = [
+  require('@/attached_assets/22_1757748931161.jpg'),
+  require('@/attached_assets/2_1757748931159.jpg'),
+  require('@/attached_assets/42_1757748931161.jpg'),
+  require('@/attached_assets/79_1757748931161.jpg'),
+];
+
 interface Review {
   id: string;
   name: string;
@@ -31,7 +39,7 @@ const CLIENT_REVIEWS: Review[] = [
     id: '1',
     name: 'Jake Newman',
     username: '@jake_newman',
-    avatar: require('@/attached_assets/22_1757748931161.jpg'), // Male profile
+    avatar: profileImages[0], // Male profile
     rating: 5,
     review: 'This app changed my life! I\'ve been able to complete projects on time for 2 months now. The procrastination tracking system helped me understand my habits.'
   },
@@ -39,7 +47,7 @@ const CLIENT_REVIEWS: Review[] = [
     id: '2', 
     name: 'Anna Stevens',
     username: '@anna_codes',
-    avatar: require('@/attached_assets/2_1757748931159.jpg'), // Female profile
+    avatar: profileImages[1], // Female profile
     rating: 5,
     review: 'I was skeptical at first, but the anti-procrastination features really work. I can finally write my thesis without endless postponing!'
   },
@@ -47,7 +55,7 @@ const CLIENT_REVIEWS: Review[] = [
     id: '3',
     name: 'Tom Collins',
     username: '@tomas_productivity',
-    avatar: require('@/attached_assets/42_1757748931161.jpg'), // Male profile
+    avatar: profileImages[2], // Male profile
     rating: 5,
     review: 'Best investment in my productivity. The app helped me identify my procrastination patterns and build better work habits.'
   },
@@ -55,7 +63,7 @@ const CLIENT_REVIEWS: Review[] = [
     id: '4',
     name: 'Sarah Johnson',
     username: '@sarah_focus',
-    avatar: require('@/attached_assets/79_1757748931161.jpg'), // Female profile
+    avatar: profileImages[3], // Female profile
     rating: 5,
     review: 'PROCRAP completely transformed how I approach my daily tasks. The science-based approach really works - I feel so much more in control now!'
   }
@@ -63,6 +71,8 @@ const CLIENT_REVIEWS: Review[] = [
 
 export default function RatingScreen() {
   const insets = useSafeAreaInsets();
+  
+  // Note: require() assets in React Native load instantly, no preloading needed
 
   const handleContinue = () => {
     // Continue to signature

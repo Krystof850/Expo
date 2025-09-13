@@ -1,11 +1,10 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import {
   View,
   Text,
   TouchableOpacity,
   StatusBar,
   StyleSheet,
-  Animated,
   Dimensions,
   Image,
 } from 'react-native';
@@ -17,14 +16,8 @@ import { COLORS, SPACING } from '@/constants/theme';
 const { width } = Dimensions.get('window');
 
 export default function BenefitsScreen() {
-  const contentOpacity = useRef(new Animated.Value(0)).current;
-  const imageScale = useRef(new Animated.Value(0.9)).current;
-
-  useEffect(() => {
-    // Instant loading - no animation delay
-    contentOpacity.setValue(1);
-    imageScale.setValue(1);
-  }, []);
+  // Remove all animations for instant loading
+  // No useEffect needed for performance
 
   const handleContinue = () => {
     router.push('/(onboarding)/goals');
@@ -35,22 +28,20 @@ export default function BenefitsScreen() {
       <View style={styles.container}>
         <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
         
-        {/* Title */}
-        <View style={styles.titleContainer}>
-          <Text style={styles.titleText}>PROCRAPP benefits</Text>
-        </View>
-
         {/* Main Content */}
-        <Animated.View style={[styles.contentContainer, { opacity: contentOpacity }]}>
+        <View style={styles.contentContainer}>
           {/* Image Section */}
           <View style={styles.imageSection}>
-            <Animated.View style={[styles.imageWrapper, { transform: [{ scale: imageScale }] }]}>
-              <Image
-                source={require('@/attached_assets/ChatGPT Image Sep 13, 2025, 03_26_59 PM_1757748428786.png')}
-                style={styles.chartImage}
-                resizeMode="contain"
-              />
-            </Animated.View>
+            <Image
+              source={require('@/attached_assets/ChatGPT Image Sep 13, 2025, 03_26_59 PM_1757748428786.png')}
+              style={styles.chartImage}
+              resizeMode="contain"
+            />
+          </View>
+          
+          {/* Title - moved below image */}
+          <View style={styles.titleContainer}>
+            <Text style={styles.titleText}>PROCRAPP benefits</Text>
           </View>
 
           {/* Description Section */}
@@ -59,7 +50,7 @@ export default function BenefitsScreen() {
               PROCRAPP helps you overcome procrastination <Text style={styles.percentageHighlight}>76% faster</Text> than willpower alone.
             </Text>
           </View>
-        </Animated.View>
+        </View>
 
         {/* CTA Button */}
         <View style={styles.buttonContainer}>
@@ -81,9 +72,9 @@ const styles = StyleSheet.create({
   },
   titleContainer: {
     alignItems: 'center',
-    marginBottom: 28, // Same spacing as other question pages
-    paddingHorizontal: 32, // Same as other pages
-    paddingTop: 8, // Same as other pages
+    marginBottom: 24,
+    paddingHorizontal: 32,
+    marginTop: 20, // Space above title after image
   },
   titleText: {
     fontSize: 20,
@@ -99,34 +90,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 32,
+    paddingTop: 40, // Add top padding to center content better
   },
   imageSection: {
     alignItems: 'center',
-    marginBottom: 32,
+    marginBottom: 20, // Reduced since title moved below
     width: '100%',
-  },
-  imageWrapper: {
-    borderRadius: 12,
-    overflow: 'hidden',
-    backgroundColor: 'rgba(255, 255, 255, 0.05)',
-    // Shadow properties to match other elements
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 8,
-    elevation: 8,
-    // Border to add subtle definition
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.1)',
   },
   chartImage: {
     width: width - 64, // Larger image - less padding
     height: (width - 64) * 0.75, // Maintain aspect ratio
     maxWidth: 350, // Increased max width
     maxHeight: 262, // Increased max height proportionally
+    borderRadius: 12, // Rounded corners directly on image
   },
   descriptionSection: {
     alignItems: 'center',
