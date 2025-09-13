@@ -16,7 +16,7 @@ import { TouchableOpacity } from 'react-native';
 import { AnimatedQuestionPage, AnimatedContent, AnimatedQuestionPageRef } from '../../components/AnimatedQuestionPage';
 import { NextButton } from '../../components/Button';
 import { SPACING } from '@/constants/theme';
-import * * Haptics from 'expo-haptics';
+import * as Haptics from 'expo-haptics';
 
 // Simple Brain with Chain Illustration Component
 const BrainChainIllustration = () => (
