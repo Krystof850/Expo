@@ -7,7 +7,6 @@ import {
   ScrollView,
   SafeAreaView,
   StatusBar,
-  Image,
 } from 'react-native';
 import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -16,6 +15,7 @@ import { TitleText, DescriptionText } from '../../components/Text';
 import { NextButton } from '../../components/Button';
 import AppBackground from '../../components/AppBackground';
 import { COLORS, SPACING } from '@/constants/theme';
+import { Image } from 'expo-image';
 
 // Profile images - declared first to avoid TDZ errors
 const profileImages = [
@@ -142,16 +142,16 @@ export default function RatingScreen() {
               <View style={styles.usersContainer}>
                 <View style={styles.avatarsRow}>
                   <View style={styles.avatarCircle}>
-                    <Image source={CLIENT_REVIEWS[0].avatar} style={styles.avatarImage} />
+                    <Image source={CLIENT_REVIEWS[0].avatar} style={styles.avatarImage} contentFit="cover" transition={0} cachePolicy="memory-disk" />
                   </View>
                   <View style={styles.avatarCircle}>
-                    <Image source={CLIENT_REVIEWS[1].avatar} style={styles.avatarImage} />
+                    <Image source={CLIENT_REVIEWS[1].avatar} style={styles.avatarImage} contentFit="cover" transition={0} cachePolicy="memory-disk" />
                   </View>
                   <View style={styles.avatarCircle}>
-                    <Image source={CLIENT_REVIEWS[2].avatar} style={styles.avatarImage} />
+                    <Image source={CLIENT_REVIEWS[2].avatar} style={styles.avatarImage} contentFit="cover" transition={0} cachePolicy="memory-disk" />
                   </View>
                   <View style={styles.avatarCircle}>
-                    <Image source={CLIENT_REVIEWS[3].avatar} style={styles.avatarImage} />
+                    <Image source={CLIENT_REVIEWS[3].avatar} style={styles.avatarImage} contentFit="cover" transition={0} cachePolicy="memory-disk" />
                   </View>
                 </View>
                 <Text style={styles.usersCount}>+ 50,000 people</Text>
@@ -165,7 +165,7 @@ export default function RatingScreen() {
                   <View style={styles.reviewHeader}>
                     <View style={styles.reviewUserInfo}>
                       <View style={styles.avatarContainer}>
-                        <Image source={review.avatar} style={styles.reviewAvatarImage} />
+                        <Image source={review.avatar} style={styles.reviewAvatarImage} contentFit="cover" transition={0} cachePolicy="memory-disk" />
                       </View>
                       <View style={styles.userDetails}>
                         <Text style={styles.userName}>{review.name}</Text>

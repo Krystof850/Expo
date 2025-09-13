@@ -15,9 +15,11 @@ import { COLORS, SPACING } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 
+// Preload the optimized chart image for instant loading
+const chartImageSource = require('@/attached_assets/generated_images/Optimized_productivity_chart_2e4c9982.png');
+
 export default function BenefitsScreen() {
-  // Remove all animations for instant loading
-  // No useEffect needed for performance
+  // No preloading needed for local assets - they load instantly
 
   const handleContinue = () => {
     router.push('/(onboarding)/goals');
@@ -33,9 +35,12 @@ export default function BenefitsScreen() {
           {/* Image Section */}
           <View style={styles.imageSection}>
             <Image
-              source={require('@/attached_assets/ChatGPT Image Sep 13, 2025, 03_26_59 PM_1757748428786.png')}
+              source={chartImageSource}
               style={styles.chartImage}
-              resizeMode="contain"
+              contentFit="contain"
+              transition={0}
+              cachePolicy="memory-disk"
+              priority="high"
             />
           </View>
           
