@@ -14,6 +14,7 @@ import { SelectButton, NextButton } from '../../components/Button';
 import { TitleText, DescriptionText } from '../../components/Text';
 import AppBackground from '../../components/AppBackground';
 import { SPACING } from '../../constants/theme';
+import * as Haptics from 'expo-haptics';
 
 export default function OnboardingQuestion1() {
   const insets = useSafeAreaInsets();
@@ -39,12 +40,14 @@ export default function OnboardingQuestion1() {
   );
 
   const handleGenderSelect = (gender: string) => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     setSelectedGender(gender);
   };
 
   const handleNext = async () => {
     if (!selectedGender) return;
     
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     // Run header exit animation first, then content exit animation
     headerRef.current?.runExitAnimation(() => {
       animationRef.current?.runExitAnimation(async () => {

@@ -14,6 +14,7 @@ import { SelectButton, NextButton } from '../../components/Button';
 import { TitleText, DescriptionText } from '../../components/Text';
 import AppBackground from '../../components/AppBackground';
 import { SPACING } from '../../constants/theme';
+import * as Haptics from 'expo-haptics';
 
 export default function OnboardingQuestion4() {
   const insets = useSafeAreaInsets();
@@ -46,12 +47,14 @@ export default function OnboardingQuestion4() {
   );
 
   const handleFrequencySelect = (frequency: string) => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     setSelectedFrequency(frequency);
   };
 
   const handleNext = async () => {
     if (!selectedFrequency) return;
     
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     // Run header exit animation first, then content exit animation
     headerRef.current?.runExitAnimation(() => {
       animationRef.current?.runExitAnimation(async () => {

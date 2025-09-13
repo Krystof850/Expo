@@ -68,8 +68,8 @@ export default function OnboardingWaiting() {
     const progressListener = progressAnimation.addListener(({ value }) => {
       const newProgress = Math.round(value);
       
-      // Trigger quick light haptic feedback every 5% progress
-      if (newProgress > progress && newProgress % 5 === 0) {
+      // Trigger quick light haptic feedback every 2% progress
+      if (newProgress > progress && newProgress % 2 === 0) {
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
       }
       

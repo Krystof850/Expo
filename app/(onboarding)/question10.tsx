@@ -17,6 +17,7 @@ import { NextButton } from '../../components/Button';
 import { TitleText, DescriptionText } from '../../components/Text';
 import AppBackground from '../../components/AppBackground';
 import { COLORS, SPACING } from '../../constants/theme';
+import * as Haptics from 'expo-haptics';
 
 export default function OnboardingQuestion10() {
   const insets = useSafeAreaInsets();
@@ -45,6 +46,7 @@ export default function OnboardingQuestion10() {
   const handleComplete = async () => {
     if (!name.trim() || !age.trim()) return;
     
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     // Run header exit animation first, then content exit animation
     headerRef.current?.runExitAnimation(() => {
       animationRef.current?.runExitAnimation(async () => {

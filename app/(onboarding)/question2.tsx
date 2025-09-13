@@ -14,6 +14,7 @@ import { SelectButton, NextButton } from '../../components/Button';
 import { TitleText, DescriptionText } from '../../components/Text';
 import AppBackground from '../../components/AppBackground';
 import { SPACING } from '../../constants/theme';
+import * as Haptics from 'expo-haptics';
 
 export default function OnboardingQuestion2() {
   const insets = useSafeAreaInsets();
@@ -39,12 +40,14 @@ export default function OnboardingQuestion2() {
   );
 
   const handleAnswerSelect = (answer: string) => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     setSelectedAnswer(answer);
   };
 
   const handleNext = async () => {
     if (!selectedAnswer) return;
     
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     // Run header exit animation first, then content exit animation
     headerRef.current?.runExitAnimation(() => {
       animationRef.current?.runExitAnimation(async () => {
