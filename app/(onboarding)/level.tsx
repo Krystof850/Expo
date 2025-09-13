@@ -16,6 +16,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { AnimatedQuestionPage, AnimatedContent, AnimatedQuestionPageRef } from '../../components/AnimatedQuestionPage';
 import { NextButton } from '../../components/Button';
 import { SPACING } from '@/constants/theme';
+import { Asset } from 'expo-asset';
 
 // Life Transformation Illustration Component
 const LifeTransformationIllustration = () => (
@@ -179,7 +180,16 @@ export default function LevelScreen() {
     });
   };
 
-  const handleContinue = () => {
+  const handleContinue = async () => {
+    // Preload benefits chart image for instant loading
+    try {
+      const benefitsChart = require('@/attached_assets/ChatGPT Image Sep 13, 2025, 03_26_59 PM_1757748428786.png');
+      await Asset.fromModule(benefitsChart).downloadAsync();
+      console.log('✅ Benefits chart preloaded');
+    } catch (error) {
+      console.log('⚠️ Benefits chart preload failed:', error);
+    }
+    
     // Run content exit animation
     animationRef.current?.runExitAnimation(() => {
       // Continue to benefits page

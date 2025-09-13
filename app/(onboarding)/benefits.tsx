@@ -16,7 +16,7 @@ import { COLORS, SPACING } from '@/constants/theme';
 const { width } = Dimensions.get('window');
 
 // Preload the optimized chart image for instant loading
-const chartImageSource = require('@/attached_assets/generated_images/Optimized_productivity_chart_2e4c9982.png');
+const chartImageSource = require('@/attached_assets/ChatGPT Image Sep 13, 2025, 03_26_59 PM_1757748428786.png');
 
 export default function BenefitsScreen() {
   // No preloading needed for local assets - they load instantly

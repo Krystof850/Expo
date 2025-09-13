@@ -17,6 +17,7 @@ import { TitleText, DescriptionText } from '../../components/Text';
 import { NextButton } from '../../components/Button';
 import AppBackground from '../../components/AppBackground';
 import { COLORS, SPACING } from '@/constants/theme';
+import { Asset } from 'expo-asset';
 
 export default function ReferralScreen() {
   const insets = useSafeAreaInsets();
@@ -31,6 +32,19 @@ export default function ReferralScreen() {
       } else {
         console.log('🔗 No referral code provided');
       }
+      
+      // Preload all rating profile images for instant loading
+      const profileImages = [
+        require('@/attached_assets/22_1757748931161.jpg'),
+        require('@/attached_assets/2_1757748931159.jpg'), 
+        require('@/attached_assets/42_1757748931161.jpg'),
+        require('@/attached_assets/79_1757748931161.jpg'),
+      ];
+      
+      await Promise.all(profileImages.map(img => 
+        Asset.fromModule(img).downloadAsync().catch(e => console.log('Profile preload failed:', e))
+      ));
+      console.log('✅ All profile images preloaded');
       
       // Pokračovat na rating
       router.push('/(onboarding)/rating');
