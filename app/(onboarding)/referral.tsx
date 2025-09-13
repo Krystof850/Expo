@@ -67,7 +67,7 @@ export default function ReferralScreen() {
         >
           {/* Header */}
           <View style={[styles.header, { paddingTop: insets.top }]}>
-            <TouchableOpacity onPress={() => { Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light); router.back(); }} style={styles.backButton};
+            <TouchableOpacity onPress={() => { Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light); router.back(); }} style={styles.backButton}>
               <Ionicons name="arrow-back" size={24} color={COLORS.mainText} />
             </TouchableOpacity>
           </View>
