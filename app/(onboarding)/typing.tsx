@@ -24,7 +24,7 @@ export default function TypingScreen() {
     'Hey, [NAME].',
     'Welcome to PROCRAPP, your path to freedom.',
     'Based on your answers, we\'ve built a custom plan just for you.',
-    'It is designed to help you overcome procrastination for ever.',
+    'It is designed to help you overcome procrastination forever.',
     'Now, it\'s time to invest in yourself.'
   ];
 
