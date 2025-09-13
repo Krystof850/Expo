@@ -48,6 +48,11 @@ export const SPACING = {
   large: 40,     // larger spacing for sections
   button: 16,    // py-4 equivalent - button padding
   content: 32,   // space-y-8 equivalent - content spacing
+  // Additional spacing for journey page
+  sm: 8,         // small spacing
+  md: 16,        // medium spacing  
+  lg: 24,        // large spacing
+  xl: 32,        // extra large spacing
 } as const;
 
 export const RADIUS = {
