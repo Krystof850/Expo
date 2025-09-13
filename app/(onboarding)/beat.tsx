@@ -11,229 +11,101 @@ import {
 import { router, useFocusEffect } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
-import Svg, { Path, Circle, G, Polygon, Line } from 'react-native-svg';
+import Svg, { Path, Circle, G, Polygon, Line, Rect } from 'react-native-svg';
 import { Ionicons } from '@expo/vector-icons';
 import { AnimatedQuestionPage, AnimatedContent, AnimatedQuestionPageRef } from '../../components/AnimatedQuestionPage';
 import { NextButton } from '../../components/Button';
 import { SPACING } from '@/constants/theme';
 
-// Success and Victory Illustration Component
-const SuccessVictoryIllustration = () => (
+// Task Breakdown Illustration Component
+const TaskBreakdownIllustration = () => (
   <Svg width="200" height="200" viewBox="0 0 200 200">
-    {/* Mountain peaks (representing achievement) */}
-    <Path
-      d="M20 150 L60 80 L100 100 L140 60 L180 150 Z"
-      fill="rgba(255, 255, 255, 0.7)"
-      stroke="rgba(255, 255, 255, 0.9)"
-      strokeWidth="2"
-    />
-    
-    {/* Person at the top of mountain with arms raised */}
-    <G>
-      {/* Head */}
-      <Circle
-        cx="140"
-        cy="65"
-        r="6"
-        fill="rgba(59, 130, 246, 1)"
-      />
-      
-      {/* Body */}
-      <Path
-        d="M136 71 L144 71 L144 85 L136 85 Z"
-        fill="rgba(59, 130, 246, 1)"
-      />
-      
-      {/* Arms raised in victory */}
-      <Path
-        d="M136 75 L125 65"
-        stroke="rgba(59, 130, 246, 1)"
-        strokeWidth="3"
-        strokeLinecap="round"
-      />
-      <Path
-        d="M144 75 L155 65"
-        stroke="rgba(59, 130, 246, 1)"
-        strokeWidth="3"
-        strokeLinecap="round"
-      />
-      
-      {/* Legs */}
-      <Path
-        d="M138 85 L135 95"
-        stroke="rgba(59, 130, 246, 1)"
-        strokeWidth="3"
-        strokeLinecap="round"
-      />
-      <Path
-        d="M142 85 L145 95"
-        stroke="rgba(59, 130, 246, 1)"
-        strokeWidth="3"
-        strokeLinecap="round"
-      />
+    {/* Large overwhelming task (breaking apart) */}
+    <G opacity="0.5">
+      <Rect x="60" y="30" width="80" height="50" rx="5" fill="rgba(239, 68, 68, 0.4)" stroke="rgba(220, 38, 38, 0.6)" strokeWidth="2" strokeDasharray="4,4" />
     </G>
     
-    {/* Trophy on peak */}
-    <G>
-      {/* Trophy base */}
-      <Path
-        d="M130 95 L150 95 L148 105 L132 105 Z"
-        fill="rgba(251, 191, 36, 0.9)"
-        stroke="rgba(245, 158, 11, 1)"
-        strokeWidth="1"
-      />
-      
-      {/* Trophy cup */}
-      <Path
-        d="M132 85 L148 85 L148 95 L132 95 Z"
-        fill="rgba(251, 191, 36, 0.9)"
-        stroke="rgba(245, 158, 11, 1)"
-        strokeWidth="1"
-      />
-      
-      {/* Trophy handles */}
-      <Path
-        d="M148 87 C152 87 152 93 148 93"
-        stroke="rgba(245, 158, 11, 1)"
-        strokeWidth="2"
-        fill="none"
-      />
-      <Path
-        d="M132 87 C128 87 128 93 132 93"
-        stroke="rgba(245, 158, 11, 1)"
-        strokeWidth="2"
-        fill="none"
-      />
-    </G>
-    
-    {/* Victory stars around the scene */}
+    {/* Breakdown arrow */}
     <G opacity="0.8">
-      <VictoryStar
-        cx={100}
-        cy={30}
-        r1={4}
-        r2={8}
-        fill="rgba(34, 211, 238, 0.8)"
-      />
-      <VictoryStar
-        cx={160}
-        cy={40}
-        r1={3}
-        r2={6}
-        fill="rgba(34, 211, 238, 0.7)"
-      />
-      <VictoryStar
-        cx={50}
-        cy={50}
-        r1={3}
-        r2={6}
-        fill="rgba(34, 211, 238, 0.7)"
-      />
-      <VictoryStar
-        cx={170}
-        cy={80}
-        r1={2}
-        r2={4}
-        fill="rgba(34, 211, 238, 0.6)"
-      />
-      <VictoryStar
-        cx={30}
-        cy={90}
-        r1={2}
-        r2={4}
-        fill="rgba(34, 211, 238, 0.6)"
-      />
+      <Line x1="100" y1="85" x2="100" y2="110" stroke="rgba(34, 211, 238, 1)" strokeWidth="3" />
+      <Path d="M95 105 L100 110 L105 105" stroke="rgba(34, 211, 238, 1)" strokeWidth="3" fill="none" strokeLinecap="round" />
     </G>
     
-    {/* Broken chains at the bottom (freedom from procrastination) */}
-    <G opacity="0.6">
-      {/* Left broken chain */}
-      <Circle
-        cx="70"
-        cy="170"
-        r="6"
-        fill="none"
-        stroke="rgba(156, 163, 175, 0.8)"
-        strokeWidth="3"
-        strokeDasharray="6,6"
-      />
-      <Circle
-        cx="85"
-        cy="175"
-        r="6"
-        fill="none"
-        stroke="rgba(156, 163, 175, 0.8)"
-        strokeWidth="3"
-        strokeDasharray="6,6"
-      />
+    {/* Small manageable steps */}
+    <G opacity="0.9">
+      {/* Step 1 */}
+      <Rect x="30" y="120" width="35" height="20" rx="3" fill="rgba(34, 197, 94, 0.8)" stroke="rgba(22, 163, 74, 1)" strokeWidth="1" />
       
-      {/* Right broken chain */}
-      <Circle
-        cx="115"
-        cy="175"
-        r="6"
-        fill="none"
-        stroke="rgba(156, 163, 175, 0.8)"
-        strokeWidth="3"
-        strokeDasharray="6,6"
+      {/* Step 2 */}
+      <Rect x="82" y="120" width="35" height="20" rx="3" fill="rgba(34, 197, 94, 0.8)" stroke="rgba(22, 163, 74, 1)" strokeWidth="1" />
+      
+      {/* Step 3 */}
+      <Rect x="135" y="120" width="35" height="20" rx="3" fill="rgba(34, 197, 94, 0.8)" stroke="rgba(22, 163, 74, 1)" strokeWidth="1" />
+    </G>
+    
+    {/* Progress indicators */}
+    <G opacity="0.8">
+      {/* Checkmarks for completed steps */}
+      <Path d="M35 155 L40 160 L50 150" stroke="rgba(34, 197, 94, 1)" strokeWidth="2" fill="none" strokeLinecap="round" />
+      <Path d="M87 155 L92 160 L102 150" stroke="rgba(34, 197, 94, 1)" strokeWidth="2" fill="none" strokeLinecap="round" />
+      
+      {/* Current step indicator */}
+      <Circle cx="152" cy="155" r="4" fill="rgba(251, 191, 36, 1)" />
+      <Circle cx="152" cy="155" r="6" fill="none" stroke="rgba(251, 191, 36, 0.6)" strokeWidth="2" />
+    </G>
+    
+    {/* Time saved visualization */}
+    <G opacity="0.7">
+      {/* Clock showing less time */}
+      <Circle cx="50" cy="180" r="12" fill="none" stroke="rgba(34, 211, 238, 0.8)" strokeWidth="2" />
+      <Line x1="50" y1="180" x2="50" y2="172" stroke="rgba(34, 211, 238, 1)" strokeWidth="2" />
+      <Line x1="50" y1="180" x2="56" y2="180" stroke="rgba(34, 211, 238, 1)" strokeWidth="1" />
+      
+      {/* Progress meter */}
+      <Rect x="120" y="170" width="60" height="8" rx="4" fill="rgba(59, 130, 246, 0.3)" stroke="rgba(59, 130, 246, 0.6)" strokeWidth="1" />
+      <Rect x="120" y="170" width="40" height="8" rx="4" fill="rgba(34, 197, 94, 0.8)" />
+    </G>
+    
+    {/* Distraction barriers */}
+    <G opacity="0.6">
+      {/* Shield protecting the process */}
+      <Path
+        d="M20 100 Q20 90 30 90 L40 90 Q50 90 50 100 L50 115 Q50 125 40 125 L30 125 Q20 125 20 115 Z"
+        fill="rgba(59, 130, 246, 0.2)"
+        stroke="rgba(59, 130, 246, 0.6)"
+        strokeWidth="2"
       />
-      <Circle
-        cx="130"
-        cy="170"
-        r="6"
-        fill="none"
-        stroke="rgba(156, 163, 175, 0.8)"
-        strokeWidth="3"
-        strokeDasharray="6,6"
+      <Path
+        d="M170 100 Q170 90 180 90 L190 90 Q200 90 200 100 L200 115 Q200 125 190 125 L180 125 Q170 125 170 115 Z"
+        fill="rgba(59, 130, 246, 0.2)"
+        stroke="rgba(59, 130, 246, 0.6)"
+        strokeWidth="2"
       />
     </G>
     
-    {/* Rising sun/light behind mountains */}
-    <Circle
-      cx="100"
-      cy="120"
-      r="30"
-      fill="rgba(251, 191, 36, 0.3)"
-      opacity="0.7"
-    />
+    {/* Connection lines between steps */}
+    <G opacity="0.5">
+      <Line x1="65" y1="130" x2="82" y2="130" stroke="rgba(34, 211, 238, 0.6)" strokeWidth="1" strokeDasharray="2,2" />
+      <Line x1="117" y1="130" x2="135" y2="130" stroke="rgba(34, 211, 238, 0.6)" strokeWidth="1" strokeDasharray="2,2" />
+    </G>
     
-    {/* Light rays */}
+    {/* Focus beam */}
     <G opacity="0.4">
-      <Line x1="100" y1="90" x2="100" y2="70" stroke="rgba(251, 191, 36, 0.8)" strokeWidth="2" />
-      <Line x1="120" y1="100" x2="135" y2="85" stroke="rgba(251, 191, 36, 0.8)" strokeWidth="2" />
-      <Line x1="130" y1="120" x2="150" y2="120" stroke="rgba(251, 191, 36, 0.8)" strokeWidth="2" />
-      <Line x1="80" y1="100" x2="65" y2="85" stroke="rgba(251, 191, 36, 0.8)" strokeWidth="2" />
-      <Line x1="70" y1="120" x2="50" y2="120" stroke="rgba(251, 191, 36, 0.8)" strokeWidth="2" />
+      <Path
+        d="M100 85 L95 120 L105 120 Z"
+        fill="rgba(251, 191, 36, 0.3)"
+      />
     </G>
     
-    {/* Flag of victory */}
-    <G>
-      {/* Flag pole */}
-      <Line x1="165" y1="45" x2="165" y2="75" stroke="rgba(59, 130, 246, 1)" strokeWidth="2" />
-      {/* Flag */}
-      <Polygon
-        points="165,45 180,50 180,60 165,55"
-        fill="rgba(34, 211, 238, 0.8)"
-        stroke="rgba(6, 182, 212, 1)"
-        strokeWidth="1"
-      />
+    {/* Productivity arrows */}
+    <G opacity="0.6">
+      <Path d="M25 110 L15 105 L25 100" stroke="rgba(34, 197, 94, 0.8)" strokeWidth="2" fill="none" />
+      <Path d="M175 110 L185 105 L175 100" stroke="rgba(34, 197, 94, 0.8)" strokeWidth="2" fill="none" />
     </G>
   </Svg>
 );
 
-const VictoryStar = ({ cx, cy, r1, r2, fill }: { cx: number; cy: number; r1: number; r2: number; fill: string }) => {
-  const points = [];
-  for (let i = 0; i < 10; i++) {
-    const angle = (i * Math.PI) / 5;
-    const radius = i % 2 === 0 ? r2 : r1;
-    const x = cx + radius * Math.cos(angle - Math.PI / 2);
-    const y = cy + radius * Math.sin(angle - Math.PI / 2);
-    points.push(`${x},${y}`);
-  }
-  return <Polygon points={points.join(' ')} fill={fill} />;
-};
-
-export default function HopeScreen() {
+export default function BeatScreen() {
   const insets = useSafeAreaInsets();
   const animationRef = useRef<AnimatedQuestionPageRef>(null);
 
@@ -264,8 +136,8 @@ export default function HopeScreen() {
   const handleContinue = () => {
     // Run content exit animation
     animationRef.current?.runExitAnimation(() => {
-      // Continue to welcome page
-      router.push('/(onboarding)/welcome');
+      // Continue to track page
+      router.push('/(onboarding)/track');
     });
   };
 
@@ -307,17 +179,17 @@ export default function HopeScreen() {
           {/* Illustration space */}
           <AnimatedContent delay={100}>
             <View style={styles.illustrationContainer}>
-              <SuccessVictoryIllustration />
+              <TaskBreakdownIllustration />
             </View>
           </AnimatedContent>
 
           {/* Text content */}
           <AnimatedContent delay={200}>
             <View style={styles.textContainer}>
-              <Text style={styles.title}>But there's hope</Text>
+              <Text style={styles.title}>Beat distractions</Text>
               
               <Text style={styles.description}>
-                With PROCRAP, you can reboot your brain, rebuild discipline, and take back control.
+                PROCRAP breaks big tasks into small steps. Less wasted time, more progress every day.
               </Text>
             </View>
           </AnimatedContent>
@@ -327,7 +199,7 @@ export default function HopeScreen() {
       {/* Next button - OUTSIDE of animation wrapper */}
       <View style={[styles.nextContainer, { paddingBottom: insets.bottom + SPACING.page }]}>
         <NextButton
-          title="Let's Do It"
+          title="Continue"
           onPress={handleContinue}
           style={styles.continueButton}
           textStyle={styles.continueButtonText}

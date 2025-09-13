@@ -11,229 +11,151 @@ import {
 import { router, useFocusEffect } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
-import Svg, { Path, Circle, G, Polygon, Line } from 'react-native-svg';
+import Svg, { Path, Circle, G, Line } from 'react-native-svg';
 import { Ionicons } from '@expo/vector-icons';
 import { AnimatedQuestionPage, AnimatedContent, AnimatedQuestionPageRef } from '../../components/AnimatedQuestionPage';
 import { NextButton } from '../../components/Button';
 import { SPACING } from '@/constants/theme';
 
-// Success and Victory Illustration Component
-const SuccessVictoryIllustration = () => (
+// Brain Rewiring Circuit Illustration Component
+const BrainRewireIllustration = () => (
   <Svg width="200" height="200" viewBox="0 0 200 200">
-    {/* Mountain peaks (representing achievement) */}
+    {/* Brain outline */}
     <Path
-      d="M20 150 L60 80 L100 100 L140 60 L180 150 Z"
-      fill="rgba(255, 255, 255, 0.7)"
-      stroke="rgba(255, 255, 255, 0.9)"
+      d="M100 40C115 40 130 45 140 55C145 50 155 48 160 52C165 40 175 35 180 45C185 40 195 45 192 55C195 65 190 75 185 80C190 90 185 100 175 105C170 115 160 120 150 115C140 125 125 130 110 125C95 130 80 125 70 115C60 120 50 115 45 105C35 100 30 90 35 80C30 75 25 65 28 55C25 45 35 40 40 45C45 35 55 40 60 52C65 48 75 50 80 55C90 45 95 40 100 40Z"
+      fill="rgba(59, 130, 246, 0.3)"
+      stroke="rgba(59, 130, 246, 0.8)"
       strokeWidth="2"
     />
     
-    {/* Person at the top of mountain with arms raised */}
-    <G>
-      {/* Head */}
-      <Circle
-        cx="140"
-        cy="65"
-        r="6"
-        fill="rgba(59, 130, 246, 1)"
-      />
-      
-      {/* Body */}
-      <Path
-        d="M136 71 L144 71 L144 85 L136 85 Z"
-        fill="rgba(59, 130, 246, 1)"
-      />
-      
-      {/* Arms raised in victory */}
-      <Path
-        d="M136 75 L125 65"
-        stroke="rgba(59, 130, 246, 1)"
-        strokeWidth="3"
-        strokeLinecap="round"
-      />
-      <Path
-        d="M144 75 L155 65"
-        stroke="rgba(59, 130, 246, 1)"
-        strokeWidth="3"
-        strokeLinecap="round"
-      />
-      
-      {/* Legs */}
-      <Path
-        d="M138 85 L135 95"
-        stroke="rgba(59, 130, 246, 1)"
-        strokeWidth="3"
-        strokeLinecap="round"
-      />
-      <Path
-        d="M142 85 L145 95"
-        stroke="rgba(59, 130, 246, 1)"
-        strokeWidth="3"
-        strokeLinecap="round"
-      />
-    </G>
-    
-    {/* Trophy on peak */}
-    <G>
-      {/* Trophy base */}
-      <Path
-        d="M130 95 L150 95 L148 105 L132 105 Z"
-        fill="rgba(251, 191, 36, 0.9)"
-        stroke="rgba(245, 158, 11, 1)"
-        strokeWidth="1"
-      />
-      
-      {/* Trophy cup */}
-      <Path
-        d="M132 85 L148 85 L148 95 L132 95 Z"
-        fill="rgba(251, 191, 36, 0.9)"
-        stroke="rgba(245, 158, 11, 1)"
-        strokeWidth="1"
-      />
-      
-      {/* Trophy handles */}
-      <Path
-        d="M148 87 C152 87 152 93 148 93"
-        stroke="rgba(245, 158, 11, 1)"
-        strokeWidth="2"
-        fill="none"
-      />
-      <Path
-        d="M132 87 C128 87 128 93 132 93"
-        stroke="rgba(245, 158, 11, 1)"
-        strokeWidth="2"
-        fill="none"
-      />
-    </G>
-    
-    {/* Victory stars around the scene */}
-    <G opacity="0.8">
-      <VictoryStar
-        cx={100}
-        cy={30}
-        r1={4}
-        r2={8}
-        fill="rgba(34, 211, 238, 0.8)"
-      />
-      <VictoryStar
-        cx={160}
-        cy={40}
-        r1={3}
-        r2={6}
-        fill="rgba(34, 211, 238, 0.7)"
-      />
-      <VictoryStar
-        cx={50}
-        cy={50}
-        r1={3}
-        r2={6}
-        fill="rgba(34, 211, 238, 0.7)"
-      />
-      <VictoryStar
-        cx={170}
-        cy={80}
-        r1={2}
-        r2={4}
-        fill="rgba(34, 211, 238, 0.6)"
-      />
-      <VictoryStar
-        cx={30}
-        cy={90}
-        r1={2}
-        r2={4}
-        fill="rgba(34, 211, 238, 0.6)"
-      />
-    </G>
-    
-    {/* Broken chains at the bottom (freedom from procrastination) */}
-    <G opacity="0.6">
-      {/* Left broken chain */}
-      <Circle
-        cx="70"
-        cy="170"
-        r="6"
-        fill="none"
-        stroke="rgba(156, 163, 175, 0.8)"
-        strokeWidth="3"
-        strokeDasharray="6,6"
-      />
-      <Circle
-        cx="85"
-        cy="175"
-        r="6"
-        fill="none"
-        stroke="rgba(156, 163, 175, 0.8)"
-        strokeWidth="3"
-        strokeDasharray="6,6"
-      />
-      
-      {/* Right broken chain */}
-      <Circle
-        cx="115"
-        cy="175"
-        r="6"
-        fill="none"
-        stroke="rgba(156, 163, 175, 0.8)"
-        strokeWidth="3"
-        strokeDasharray="6,6"
-      />
-      <Circle
-        cx="130"
-        cy="170"
-        r="6"
-        fill="none"
-        stroke="rgba(156, 163, 175, 0.8)"
-        strokeWidth="3"
-        strokeDasharray="6,6"
-      />
-    </G>
-    
-    {/* Rising sun/light behind mountains */}
-    <Circle
-      cx="100"
-      cy="120"
-      r="30"
-      fill="rgba(251, 191, 36, 0.3)"
-      opacity="0.7"
-    />
-    
-    {/* Light rays */}
+    {/* Neural pathways - old (red/fading) */}
     <G opacity="0.4">
-      <Line x1="100" y1="90" x2="100" y2="70" stroke="rgba(251, 191, 36, 0.8)" strokeWidth="2" />
-      <Line x1="120" y1="100" x2="135" y2="85" stroke="rgba(251, 191, 36, 0.8)" strokeWidth="2" />
-      <Line x1="130" y1="120" x2="150" y2="120" stroke="rgba(251, 191, 36, 0.8)" strokeWidth="2" />
-      <Line x1="80" y1="100" x2="65" y2="85" stroke="rgba(251, 191, 36, 0.8)" strokeWidth="2" />
-      <Line x1="70" y1="120" x2="50" y2="120" stroke="rgba(251, 191, 36, 0.8)" strokeWidth="2" />
+      <Path
+        d="M70 70 Q85 65 90 75 Q95 85 110 80"
+        stroke="rgba(239, 68, 68, 0.6)"
+        strokeWidth="3"
+        fill="none"
+        strokeDasharray="5,5"
+      />
+      <Path
+        d="M80 90 Q95 85 100 95 Q105 105 120 100"
+        stroke="rgba(239, 68, 68, 0.6)"
+        strokeWidth="3"
+        fill="none"
+        strokeDasharray="5,5"
+      />
     </G>
     
-    {/* Flag of victory */}
+    {/* Neural pathways - new (bright blue/cyan) */}
+    <G opacity="0.9">
+      <Path
+        d="M75 75 Q90 70 95 80 Q100 90 115 85"
+        stroke="rgba(34, 211, 238, 1)"
+        strokeWidth="4"
+        fill="none"
+      />
+      <Path
+        d="M85 95 Q100 90 105 100 Q110 110 125 105"
+        stroke="rgba(34, 211, 238, 1)"
+        strokeWidth="4"
+        fill="none"
+      />
+      <Path
+        d="M90 65 Q105 60 110 70 Q115 80 130 75"
+        stroke="rgba(34, 211, 238, 1)"
+        strokeWidth="3"
+        fill="none"
+      />
+    </G>
+    
+    {/* Electrical nodes/synapses */}
     <G>
-      {/* Flag pole */}
-      <Line x1="165" y1="45" x2="165" y2="75" stroke="rgba(59, 130, 246, 1)" strokeWidth="2" />
-      {/* Flag */}
-      <Polygon
-        points="165,45 180,50 180,60 165,55"
-        fill="rgba(34, 211, 238, 0.8)"
-        stroke="rgba(6, 182, 212, 1)"
+      <Circle cx="90" cy="75" r="3" fill="rgba(251, 191, 36, 1)" />
+      <Circle cx="110" cy="85" r="3" fill="rgba(251, 191, 36, 1)" />
+      <Circle cx="100" cy="95" r="3" fill="rgba(251, 191, 36, 1)" />
+      <Circle cx="120" cy="105" r="3" fill="rgba(251, 191, 36, 1)" />
+      <Circle cx="105" cy="65" r="3" fill="rgba(251, 191, 36, 1)" />
+      <Circle cx="125" cy="75" r="3" fill="rgba(251, 191, 36, 1)" />
+    </G>
+    
+    {/* Electrical sparks around nodes */}
+    <G opacity="0.8">
+      <Line x1="87" y1="72" x2="93" y2="78" stroke="rgba(251, 191, 36, 0.8)" strokeWidth="1" />
+      <Line x1="93" y1="72" x2="87" y2="78" stroke="rgba(251, 191, 36, 0.8)" strokeWidth="1" />
+      <Line x1="107" y1="82" x2="113" y2="88" stroke="rgba(251, 191, 36, 0.8)" strokeWidth="1" />
+      <Line x1="113" y1="82" x2="107" y2="88" stroke="rgba(251, 191, 36, 0.8)" strokeWidth="1" />
+      <Line x1="97" y1="92" x2="103" y2="98" stroke="rgba(251, 191, 36, 0.8)" strokeWidth="1" />
+      <Line x1="103" y1="92" x2="97" y2="98" stroke="rgba(251, 191, 36, 0.8)" strokeWidth="1" />
+    </G>
+    
+    {/* Circuit board patterns */}
+    <G opacity="0.6">
+      {/* Horizontal circuit lines */}
+      <Line x1="50" y1="130" x2="80" y2="130" stroke="rgba(34, 211, 238, 0.7)" strokeWidth="2" />
+      <Line x1="120" y1="140" x2="150" y2="140" stroke="rgba(34, 211, 238, 0.7)" strokeWidth="2" />
+      {/* Vertical circuit lines */}
+      <Line x1="60" y1="125" x2="60" y2="145" stroke="rgba(34, 211, 238, 0.7)" strokeWidth="2" />
+      <Line x1="140" y1="135" x2="140" y2="155" stroke="rgba(34, 211, 238, 0.7)" strokeWidth="2" />
+      {/* Circuit junction points */}
+      <Circle cx="60" cy="130" r="2" fill="rgba(34, 211, 238, 1)" />
+      <Circle cx="140" cy="140" r="2" fill="rgba(34, 211, 238, 1)" />
+    </G>
+    
+    {/* Energy waves emanating from brain */}
+    <G opacity="0.5">
+      <Circle cx="100" cy="90" r="60" fill="none" stroke="rgba(34, 211, 238, 0.3)" strokeWidth="1" strokeDasharray="3,6" />
+      <Circle cx="100" cy="90" r="80" fill="none" stroke="rgba(34, 211, 238, 0.2)" strokeWidth="1" strokeDasharray="3,6" />
+      <Circle cx="100" cy="90" r="100" fill="none" stroke="rgba(34, 211, 238, 0.1)" strokeWidth="1" strokeDasharray="3,6" />
+    </G>
+    
+    {/* Focus and discipline indicators */}
+    <G opacity="0.7">
+      {/* Focus symbol (eye) */}
+      <Circle cx="50" cy="60" r="12" fill="none" stroke="rgba(251, 191, 36, 0.8)" strokeWidth="2" />
+      <Circle cx="50" cy="60" r="6" fill="rgba(251, 191, 36, 0.8)" />
+      <Circle cx="50" cy="60" r="3" fill="rgba(59, 130, 246, 1)" />
+      
+      {/* Discipline symbol (strong pillar) */}
+      <Path
+        d="M145 50 L155 50 L155 80 L145 80 Z"
+        fill="rgba(251, 191, 36, 0.8)"
+        stroke="rgba(251, 191, 36, 1)"
         strokeWidth="1"
       />
+      <Path
+        d="M143 50 L157 50"
+        stroke="rgba(251, 191, 36, 1)"
+        strokeWidth="2"
+      />
+      <Path
+        d="M143 80 L157 80"
+        stroke="rgba(251, 191, 36, 1)"
+        strokeWidth="2"
+      />
+    </G>
+    
+    {/* Transformation arrows */}
+    <G opacity="0.6">
+      <Path
+        d="M40 100 L30 95 L40 90"
+        stroke="rgba(34, 211, 238, 0.8)"
+        strokeWidth="2"
+        fill="none"
+      />
+      <Line x1="30" y1="95" x2="15" y2="95" stroke="rgba(34, 211, 238, 0.8)" strokeWidth="2" />
+      
+      <Path
+        d="M160 110 L170 105 L160 100"
+        stroke="rgba(34, 211, 238, 0.8)"
+        strokeWidth="2"
+        fill="none"
+      />
+      <Line x1="170" y1="105" x2="185" y2="105" stroke="rgba(34, 211, 238, 0.8)" strokeWidth="2" />
     </G>
   </Svg>
 );
 
-const VictoryStar = ({ cx, cy, r1, r2, fill }: { cx: number; cy: number; r1: number; r2: number; fill: string }) => {
-  const points = [];
-  for (let i = 0; i < 10; i++) {
-    const angle = (i * Math.PI) / 5;
-    const radius = i % 2 === 0 ? r2 : r1;
-    const x = cx + radius * Math.cos(angle - Math.PI / 2);
-    const y = cy + radius * Math.sin(angle - Math.PI / 2);
-    points.push(`${x},${y}`);
-  }
-  return <Polygon points={points.join(' ')} fill={fill} />;
-};
-
-export default function HopeScreen() {
+export default function RewireScreen() {
   const insets = useSafeAreaInsets();
   const animationRef = useRef<AnimatedQuestionPageRef>(null);
 
@@ -264,8 +186,8 @@ export default function HopeScreen() {
   const handleContinue = () => {
     // Run content exit animation
     animationRef.current?.runExitAnimation(() => {
-      // Continue to welcome page
-      router.push('/(onboarding)/welcome');
+      // Continue to quit page
+      router.push('/(onboarding)/quit');
     });
   };
 
@@ -307,17 +229,17 @@ export default function HopeScreen() {
           {/* Illustration space */}
           <AnimatedContent delay={100}>
             <View style={styles.illustrationContainer}>
-              <SuccessVictoryIllustration />
+              <BrainRewireIllustration />
             </View>
           </AnimatedContent>
 
           {/* Text content */}
           <AnimatedContent delay={200}>
             <View style={styles.textContainer}>
-              <Text style={styles.title}>But there's hope</Text>
+              <Text style={styles.title}>Rewire your brain</Text>
               
               <Text style={styles.description}>
-                With PROCRAP, you can reboot your brain, rebuild discipline, and take back control.
+                You will reprogram your brain. Focus and discipline will become your default mode.
               </Text>
             </View>
           </AnimatedContent>
@@ -327,7 +249,7 @@ export default function HopeScreen() {
       {/* Next button - OUTSIDE of animation wrapper */}
       <View style={[styles.nextContainer, { paddingBottom: insets.bottom + SPACING.page }]}>
         <NextButton
-          title="Let's Do It"
+          title="Continue"
           onPress={handleContinue}
           style={styles.continueButton}
           textStyle={styles.continueButtonText}
