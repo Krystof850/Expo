@@ -33,6 +33,8 @@ export default function EmailSignIn() {
     <AuthErrorBoundary>
       <AppBackground>
         <FirebaseConfigBanner />
+        {/* Absolute Title at Top */}
+        <TitleText style={[styles.absoluteTitle, { top: insets.top + 10 }]}>Continue with Email</TitleText>
         <View style={styles.container}>
           <View style={styles.content}>
             <View style={styles.header}>
@@ -42,7 +44,7 @@ export default function EmailSignIn() {
               >
                 <Ionicons name="arrow-back" size={24} color={COLORS.mainText} />
               </HapticButton>
-              <TitleText style={styles.title}>Continue with Email</TitleText>
+              <View style={styles.titleSpacer} />
               <DescriptionText style={styles.subtitle}>We'll sign you in or create your account</DescriptionText>
             </View>
 
@@ -163,11 +165,17 @@ const styles = StyleSheet.create({
     top: 0,
     padding: SPACING.sm,
   },
-  title: {
+  absoluteTitle: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
     fontSize: 28,
     fontWeight: '700',
     textAlign: 'center',
-    marginBottom: SPACING.sm,
+    zIndex: 10,
+  },
+  titleSpacer: {
+    height: 60,
   },
   subtitle: {
     fontSize: 16,

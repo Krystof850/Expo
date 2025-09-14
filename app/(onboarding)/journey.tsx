@@ -87,15 +87,15 @@ export default function JourneyScreen() {
   return (
     <AppBackground>
       <StatusBar barStyle="light-content" />
+      {/* Absolute Title at Top */}
+      <TitleText style={[styles.absoluteTitle, { top: insets.top + 10 }]}>Almost There!</TitleText>
       <ScrollView 
         style={styles.container}
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        {/* Header */}
-        <Animated.View entering={FadeInDown.delay(100)} style={styles.header}>
-          <TitleText style={styles.headerTitle}>Almost There!</TitleText>
-        </Animated.View>
+        {/* Spacer for absolute title */}
+        <View style={styles.titleSpacer} />
 
         {/* Main Content */}
         <View style={styles.mainContent}>
@@ -217,13 +217,20 @@ const styles = StyleSheet.create({
     paddingVertical: SPACING.xl,
     marginTop: SPACING.xl * 3,
   },
-  headerTitle: {
+  absoluteTitle: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
     fontSize: 32,
     fontWeight: '700',
     textAlign: 'center',
+    zIndex: 10,
     textShadowColor: 'rgba(0, 0, 0, 0.4)',
     textShadowOffset: { width: 0, height: 3 },
     textShadowRadius: 6,
+  },
+  titleSpacer: {
+    height: 80,
   },
   mainContent: {
     flex: 1,
