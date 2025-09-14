@@ -53,12 +53,10 @@ export default function SignIn() {
     <AuthErrorBoundary>
       <AppBackground>
         <FirebaseConfigBanner />
-        {/* Absolute Title at Top */}
-        <TitleText style={[styles.absoluteTitle, { top: insets.top + 10 }]}>Sign In</TitleText>
         <View style={styles.container}>
           <View style={styles.content}>
             <View style={styles.header}>
-              <View style={styles.titleSpacer} />
+              <TitleText style={styles.title}>Sign In</TitleText>
               <DescriptionText style={styles.subtitle}>Choose your preferred sign-in method</DescriptionText>
             </View>
 
@@ -104,6 +102,7 @@ export default function SignIn() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    zIndex: 1,
   },
   content: {
     flex: 1,
@@ -115,20 +114,14 @@ const styles = StyleSheet.create({
     marginBottom: SPACING.xl,
     marginTop: SPACING.xl * 4,
   },
-  absoluteTitle: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
+  title: {
     fontSize: 32,
     fontWeight: '700',
     textAlign: 'center',
-    zIndex: 10,
+    marginBottom: SPACING.sm,
     textShadowColor: 'rgba(0, 0, 0, 0.4)',
     textShadowOffset: { width: 0, height: 3 },
     textShadowRadius: 6,
-  },
-  titleSpacer: {
-    height: 60,
   },
   subtitle: {
     fontSize: 16,

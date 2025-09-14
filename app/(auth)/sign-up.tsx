@@ -44,8 +44,6 @@ export default function SignUp() {
     <AuthErrorBoundary>
       <AppBackground>
         <StatusBar barStyle="light-content" />
-        {/* Absolute Title at Top */}
-        <TitleText style={[styles.absoluteTitle, { top: insets.top + 10 }]}>Create Account</TitleText>
         <ScrollView 
           style={styles.container}
           contentContainerStyle={styles.scrollContent}
@@ -53,7 +51,7 @@ export default function SignUp() {
         >
           <FirebaseConfigBanner />
           <View style={styles.formContainer}>
-            <View style={styles.titleSpacer} />
+            <TitleText style={styles.title}>Create Account</TitleText>
       <Formik
         initialValues={{ email: "", password: "" }}
         validationSchema={schema}
@@ -144,6 +142,7 @@ export default function SignUp() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    zIndex: 1,
   },
   scrollContent: {
     flexGrow: 1,
@@ -157,21 +156,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingVertical: SPACING.xl,
   },
-  absoluteTitle: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
+  title: {
     fontSize: 32,
     fontWeight: '700',
     textAlign: 'center',
-    zIndex: 10,
+    marginBottom: SPACING.xl,
     textShadowColor: 'rgba(0, 0, 0, 0.4)',
     textShadowOffset: { width: 0, height: 3 },
     textShadowRadius: 6,
-  },
-  titleSpacer: {
-    height: 100,
-    marginBottom: SPACING.xl,
   },
   input: {
     backgroundColor: 'rgba(255, 255, 255, 0.1)',
