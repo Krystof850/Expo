@@ -12,10 +12,10 @@ import { useAuth } from "../../src/context/AuthContext";
 import { FirebaseConfigBanner } from "../../src/components/FirebaseConfigBanner";
 import { AuthErrorBoundary } from "../../src/components/AuthErrorBoundary";
 import AppBackground from '../../components/AppBackground';
-import ScreenContainer from '../../components/ScreenContainer';
 import { TitleText, DescriptionText } from '../../components/Text';
 import HapticButton from '../../components/HapticButton';
 import { COLORS, SPACING } from '../../constants/theme';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const schema = Yup.object({
   email: Yup.string().email("Invalid email").required("Required"),
@@ -25,6 +25,7 @@ const schema = Yup.object({
 export default function EmailSignIn() {
   const { user } = useAuth();
   const [submitting, setSubmitting] = useState(false);
+  const insets = useSafeAreaInsets();
 
   if (user) return <Redirect href="/(protected)/" />;
 
@@ -32,17 +33,18 @@ export default function EmailSignIn() {
     <AuthErrorBoundary>
       <AppBackground>
         <FirebaseConfigBanner />
-        <ScreenContainer>
-          <View style={styles.header}>
-            <HapticButton 
-              style={styles.backButton}
-              onPress={() => router.back()}
-            >
-              <Ionicons name="arrow-back" size={24} color={COLORS.mainText} />
-            </HapticButton>
-            <TitleText style={styles.title}>Continue with Email</TitleText>
-            <DescriptionText style={styles.subtitle}>We'll sign you in or create your account</DescriptionText>
-          </View>
+        <View style={[styles.container, { paddingTop: insets.top + SPACING.xl }]}>
+          <View style={styles.content}>
+            <View style={styles.header}>
+              <HapticButton 
+                style={styles.backButton}
+                onPress={() => router.back()}
+              >
+                <Ionicons name="arrow-back" size={24} color={COLORS.mainText} />
+              </HapticButton>
+              <TitleText style={styles.title}>Continue with Email</TitleText>
+              <DescriptionText style={styles.subtitle}>We'll sign you in or create your account</DescriptionText>
+            </View>
 
             <Formik
               initialValues={{ email: "", password: "" }}
@@ -133,13 +135,22 @@ export default function EmailSignIn() {
                 </View>
               )}
             </Formik>
-        </ScreenContainer>
+          </View>
+        </View>
       </AppBackground>
     </AuthErrorBoundary>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  content: {
+    flex: 1,
+    paddingHorizontal: SPACING.lg,
+    justifyContent: 'center',
+  },
   header: {
     alignItems: 'center',
     marginBottom: SPACING.xl,

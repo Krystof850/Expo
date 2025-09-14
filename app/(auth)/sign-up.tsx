@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, Redirect } from "expo-router";
-import { View, Text, TextInput, Alert, TouchableOpacity, StyleSheet, StatusBar } from "react-native";
+import { View, Text, TextInput, Alert, TouchableOpacity, StyleSheet, StatusBar, ScrollView } from "react-native";
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as Haptics from 'expo-haptics';
 import { Formik } from "formik";
 import * as Yup from "yup";
@@ -9,7 +10,6 @@ import { useAuth } from "../../src/context/AuthContext";
 import { FirebaseConfigBanner } from "../../src/components/FirebaseConfigBanner";
 import { AuthErrorBoundary } from "../../src/components/AuthErrorBoundary";
 import AppBackground from '../../components/AppBackground';
-import ScreenContainer from '../../components/ScreenContainer';
 import { TitleText, DescriptionText } from '../../components/Text';
 import HapticButton from '../../components/HapticButton';
 import { COLORS, SPACING } from '../../constants/theme';
@@ -38,11 +38,17 @@ export default function SignUp() {
 
   if (user) return <Redirect href="/(protected)/" />;
 
+  const insets = useSafeAreaInsets();
+
   return (
     <AuthErrorBoundary>
       <AppBackground>
         <StatusBar barStyle="light-content" />
-        <ScreenContainer scroll>
+        <ScrollView 
+          style={styles.container}
+          contentContainerStyle={[styles.scrollContent, { paddingTop: insets.top + SPACING.xl * 2 }]}
+          showsVerticalScrollIndicator={false}
+        >
           <FirebaseConfigBanner />
           <View style={styles.formContainer}>
             <TitleText style={styles.title}>Create Account</TitleText>
@@ -127,13 +133,23 @@ export default function SignUp() {
         )}
       </Formik>
           </View>
-        </ScreenContainer>
+        </ScrollView>
       </AppBackground>
     </AuthErrorBoundary>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  scrollContent: {
+    flexGrow: 1,
+    paddingHorizontal: SPACING.lg,
+    paddingBottom: SPACING.xl,
+    justifyContent: 'center',
+    minHeight: '100%',
+  },
   formContainer: {
     flex: 1,
     justifyContent: 'center',

@@ -8,11 +8,10 @@ import {
   Poppins_800ExtraBold,
 } from '@expo-google-fonts/poppins';
 import { Stack, Redirect, router, usePathname } from 'expo-router';
-import { StatusBar } from 'react-native';
+import { StatusBar } from 'expo-status-bar';
 import Constants from 'expo-constants';
 import { ActivityIndicator, View } from 'react-native';
 import 'react-native-reanimated';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { AuthProvider } from '../src/context/AuthContext';
@@ -73,28 +72,26 @@ export default function RootLayout() {
 
   // Základní app wrapper bez Superwall (pro Expo Go kompatibilitu)
   const AppContent = () => (
-    <SafeAreaProvider>
-      <StatusBar translucent={false} backgroundColor="transparent" barStyle="light-content" />
-      <AuthProvider>
-        <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-          <Stack
-            screenOptions={{
-              headerShown: false,
-              animation: 'slide_from_right',
-              animationDuration: 300,
-              fullScreenGestureEnabled: true,
-              gestureDirection: 'horizontal',
-            }}
-          >
-            <Stack.Screen name="(onboarding)" options={{ headerShown: false }} />
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-            <Stack.Screen name="(protected)" options={{ headerShown: false }} />
-            <Stack.Screen name="+not-found" />
-          </Stack>
-        </ThemeProvider>
-      </AuthProvider>
-    </SafeAreaProvider>
+    <AuthProvider>
+      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+        <Stack
+          screenOptions={{
+            headerShown: false,
+            animation: 'slide_from_right',
+            animationDuration: 300,
+            fullScreenGestureEnabled: true,
+            gestureDirection: 'horizontal',
+          }}
+        >
+          <Stack.Screen name="(onboarding)" options={{ headerShown: false }} />
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+          <Stack.Screen name="(protected)" options={{ headerShown: false }} />
+          <Stack.Screen name="+not-found" />
+        </Stack>
+        <StatusBar style="auto" />
+      </ThemeProvider>
+    </AuthProvider>
   );
 
   return <AppContent />;

@@ -8,15 +8,16 @@ import { useAuth } from "../../src/context/AuthContext";
 import { FirebaseConfigBanner } from "../../src/components/FirebaseConfigBanner";
 import { AuthErrorBoundary } from "../../src/components/AuthErrorBoundary";
 import AppBackground from '../../components/AppBackground';
-import ScreenContainer from '../../components/ScreenContainer';
 import { TitleText, DescriptionText } from '../../components/Text';
 import HapticButton from '../../components/HapticButton';
 import { COLORS, SPACING } from '../../constants/theme';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 
 export default function SignIn() {
   const { user } = useAuth();
   const [googleLoading, setGoogleLoading] = useState(false);
+  const insets = useSafeAreaInsets();
 
 
   const handleGoogleSignIn = async () => {
@@ -52,11 +53,12 @@ export default function SignIn() {
     <AuthErrorBoundary>
       <AppBackground>
         <FirebaseConfigBanner />
-        <ScreenContainer>
-          <View style={styles.header}>
-            <TitleText style={styles.title}>Sign In</TitleText>
-            <DescriptionText style={styles.subtitle}>Choose your preferred sign-in method</DescriptionText>
-          </View>
+        <View style={styles.container}>
+          <View style={[styles.content, { paddingTop: insets.top + SPACING.xl * 2 }]}>
+            <View style={styles.header}>
+              <TitleText style={styles.title}>Sign In</TitleText>
+              <DescriptionText style={styles.subtitle}>Choose your preferred sign-in method</DescriptionText>
+            </View>
 
             <View style={styles.buttonContainer}>
               {/* Apple Sign In Button */}
@@ -88,14 +90,24 @@ export default function SignIn() {
                 <Ionicons name="mail" size={20} color="#000000" style={styles.buttonIcon} />
                 <TitleText style={styles.buttonText}>Continue with Email</TitleText>
               </HapticButton>
+            </View>
+
           </View>
-        </ScreenContainer>
+        </View>
       </AppBackground>
     </AuthErrorBoundary>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  content: {
+    flex: 1,
+    paddingHorizontal: SPACING.lg,
+    justifyContent: 'center',
+  },
   header: {
     alignItems: 'center',
     marginBottom: SPACING.xl,
