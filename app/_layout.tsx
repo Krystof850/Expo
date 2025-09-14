@@ -10,14 +10,15 @@ import {
 import { Stack, Redirect, router, usePathname } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import Constants from 'expo-constants';
-import { ActivityIndicator, View } from 'react-native';
+import { ActivityIndicator, View, Platform } from 'react-native';
 import 'react-native-reanimated';
 
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { AuthProvider } from '../src/context/AuthContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect } from 'react';
-import { SuperwallProvider } from 'expo-superwall';
+
+// SuperwallProvider temporarily disabled for setup
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
@@ -40,30 +41,12 @@ export default function RootLayout() {
 
   const enforceRootNavigation = async () => {
     try {
-      const pathname = window?.location?.pathname || '/';
       const onboardingCompleted = await AsyncStorage.getItem('onboarding_complete');
-      
-      console.log('🔧 Layout: Checking flow...', { pathname, onboardingCompleted });
-      
-      // Povolené routes pro nekompletní flow
-      const allowedRoutes = [
-        '/'
-      ];
-      const isOnboardingRoute = pathname.startsWith('/(onboarding)') || pathname.includes('/question');
-      const isAllowedRoute = allowedRoutes.includes(pathname) || isOnboardingRoute;
-      
-      // Pokud flow není dokončený a user není na povolené route
-      const flowIncomplete = !onboardingCompleted || onboardingCompleted !== 'true';
-      
-      if (flowIncomplete && !isAllowedRoute) {
-        console.log('🚫 Layout: Flow incomplete, user on forbidden route, redirecting to /');
-        setTimeout(() => router.replace('/'), 100);
-      } else {
-        console.log('✅ Layout: Route allowed or flow complete');
-      }
+      console.log('🔧 Layout: Checking onboarding flow...', { onboardingCompleted });
+      // Note: Route checking will be handled by the AuthProvider and individual screens
+      // This prevents render-time side effects causing React errors
     } catch (error) {
-      console.log('⚠️ Layout: Error, redirecting to root:', error);
-      setTimeout(() => router.replace('/'), 100);
+      console.log('⚠️ Layout: Error checking onboarding:', error);
     }
   };
 
@@ -71,22 +54,8 @@ export default function RootLayout() {
     return null;
   }
 
-  // App wrapper s Superwall integací
-  const AppContent = () => {
-    const apiKey = Constants.expoConfig?.extra?.SUPERWALL_API_KEY;
-    
-    if (!apiKey) {
-      console.warn('⚠️ SUPERWALL_API_KEY not configured');
-    }
-    
-    return (
-      <SuperwallProvider 
-        apiKeys={{ 
-          ios: apiKey || '',
-          android: apiKey || ''
-        }}
-      >
-        <AuthProvider>
+  return (
+    <AuthProvider>
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
         <Stack
           screenOptions={{
@@ -105,10 +74,7 @@ export default function RootLayout() {
         </Stack>
         <StatusBar style="auto" />
       </ThemeProvider>
-        </AuthProvider>
-      </SuperwallProvider>
-    );
-  };
+    </AuthProvider>
+  );
 
-  return <AppContent />;
 }

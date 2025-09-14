@@ -13,14 +13,14 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const extra = (Constants.expoConfig?.extra || {}) as Record<string, string>;
 
-// Pro web build použij přímo process.env, pro native použij expo config
+// Use Expo Constants for all platforms with fallback to EXPO_PUBLIC_ env vars
 const firebaseConfig = {
-  apiKey: Platform.OS === 'web' ? process.env.FIREBASE_API_KEY : extra.FIREBASE_API_KEY,
-  authDomain: Platform.OS === 'web' ? process.env.FIREBASE_AUTH_DOMAIN : extra.FIREBASE_AUTH_DOMAIN,
-  projectId: Platform.OS === 'web' ? process.env.FIREBASE_PROJECT_ID : extra.FIREBASE_PROJECT_ID,
-  storageBucket: Platform.OS === 'web' ? process.env.FIREBASE_STORAGE_BUCKET : extra.FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: Platform.OS === 'web' ? process.env.FIREBASE_MESSAGING_SENDER_ID : extra.FIREBASE_MESSAGING_SENDER_ID,
-  appId: Platform.OS === 'web' ? process.env.FIREBASE_APP_ID : extra.FIREBASE_APP_ID,
+  apiKey: extra.FIREBASE_API_KEY || process.env.EXPO_PUBLIC_FIREBASE_API_KEY,
+  authDomain: extra.FIREBASE_AUTH_DOMAIN || process.env.EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  projectId: extra.FIREBASE_PROJECT_ID || process.env.EXPO_PUBLIC_FIREBASE_PROJECT_ID,
+  storageBucket: extra.FIREBASE_STORAGE_BUCKET || process.env.EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: extra.FIREBASE_MESSAGING_SENDER_ID || process.env.EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+  appId: extra.FIREBASE_APP_ID || process.env.EXPO_PUBLIC_FIREBASE_APP_ID,
 };
 
 // Debug log pro kontrolu configu
