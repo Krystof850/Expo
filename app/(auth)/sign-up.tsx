@@ -46,7 +46,7 @@ export default function SignUp() {
         <StatusBar barStyle="light-content" />
         <ScrollView 
           style={styles.container}
-          contentContainerStyle={[styles.scrollContent, { paddingTop: insets.top + SPACING.xl * 2 }]}
+          contentContainerStyle={[styles.scrollContent, { paddingTop: insets.top + 80 }]}
           showsVerticalScrollIndicator={false}
         >
           <FirebaseConfigBanner />
