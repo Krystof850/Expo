@@ -4,7 +4,6 @@ import {
   StyleSheet,
   StatusBar,
   Dimensions,
-  ScrollView,
 } from 'react-native';
 import Animated, {
   useSharedValue,
@@ -21,9 +20,9 @@ import Animated, {
   BounceIn
 } from 'react-native-reanimated';
 import { router } from 'expo-router';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import AppBackground from '../../components/AppBackground';
+import ScreenContainer from '../../components/ScreenContainer';
 import { TitleText, DescriptionText } from '../../components/Text';
 import HapticButton from '../../components/HapticButton';
 import { COLORS, SPACING } from '@/constants/theme';
@@ -33,7 +32,6 @@ import * as Haptics from 'expo-haptics';
 const { width, height } = Dimensions.get('window');
 
 export default function JourneyScreen() {
-  const insets = useSafeAreaInsets();
   const [userName, setUserName] = useState('');
   const [targetDate, setTargetDate] = useState('');
   const [isLoaded, setIsLoaded] = useState(false);
@@ -79,7 +77,9 @@ export default function JourneyScreen() {
   if (!isLoaded) {
     return (
       <AppBackground>
-        <View style={styles.loadingContainer} />
+        <ScreenContainer>
+          <View style={styles.loadingContainer} />
+        </ScreenContainer>
       </AppBackground>
     );
   }
@@ -87,11 +87,7 @@ export default function JourneyScreen() {
   return (
     <AppBackground>
       <StatusBar barStyle="light-content" />
-      <ScrollView 
-        style={styles.container}
-        contentContainerStyle={[styles.scrollContent, { paddingTop: insets.top + 60 }]}
-        showsVerticalScrollIndicator={false}
-      >
+      <ScreenContainer scroll>
         {/* Header */}
         <Animated.View entering={FadeInDown.delay(100)} style={styles.header}>
           <TitleText style={styles.headerTitle}>Almost There!</TitleText>
@@ -195,20 +191,12 @@ export default function JourneyScreen() {
             </View>
           </View>
         </Animated.View>
-      </ScrollView>
+      </ScreenContainer>
     </AppBackground>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  scrollContent: {
-    flexGrow: 1,
-    paddingHorizontal: SPACING.lg,
-    paddingBottom: SPACING.xl,
-  },
   loadingContainer: {
     flex: 1,
   },
