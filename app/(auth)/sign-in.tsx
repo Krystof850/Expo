@@ -54,7 +54,7 @@ export default function SignIn() {
       <AppBackground>
         <FirebaseConfigBanner />
         <View style={styles.container}>
-          <View style={styles.content}>
+          <View style={[styles.content, { paddingTop: insets.top + SPACING.xl * 2 }]}>
             <View style={styles.header}>
               <TitleText style={styles.title}>Sign In</TitleText>
               <DescriptionText style={styles.subtitle}>Choose your preferred sign-in method</DescriptionText>
@@ -102,7 +102,6 @@ export default function SignIn() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    zIndex: 1,
   },
   content: {
     flex: 1,
@@ -112,7 +111,6 @@ const styles = StyleSheet.create({
   header: {
     alignItems: 'center',
     marginBottom: SPACING.xl,
-    marginTop: SPACING.xl * 4,
   },
   title: {
     fontSize: 32,

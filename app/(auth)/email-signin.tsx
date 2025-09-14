@@ -33,7 +33,7 @@ export default function EmailSignIn() {
     <AuthErrorBoundary>
       <AppBackground>
         <FirebaseConfigBanner />
-        <View style={styles.container}>
+        <View style={[styles.container, { paddingTop: insets.top + SPACING.xl }]}>
           <View style={styles.content}>
             <View style={styles.header}>
               <HapticButton 
@@ -145,7 +145,6 @@ export default function EmailSignIn() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    zIndex: 1,
   },
   content: {
     flex: 1,
@@ -156,7 +155,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: SPACING.xl,
     position: 'relative',
-    marginTop: SPACING.xl * 4,
   },
   backButton: {
     position: 'absolute',

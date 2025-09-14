@@ -87,12 +87,11 @@ export default function JourneyScreen() {
   return (
     <AppBackground>
       <StatusBar barStyle="light-content" />
-      <View style={styles.contentWrapper}>
-        <ScrollView 
-          style={styles.container}
-          contentContainerStyle={styles.scrollContent}
-          showsVerticalScrollIndicator={false}
-        >
+      <ScrollView 
+        style={styles.container}
+        contentContainerStyle={[styles.scrollContent, { paddingTop: insets.top + SPACING.xl * 2 }]}
+        showsVerticalScrollIndicator={false}
+      >
         {/* Header */}
         <Animated.View entering={FadeInDown.delay(100)} style={styles.header}>
           <TitleText style={styles.headerTitle}>Almost There!</TitleText>
@@ -196,8 +195,7 @@ export default function JourneyScreen() {
             </View>
           </View>
         </Animated.View>
-        </ScrollView>
-      </View>
+      </ScrollView>
     </AppBackground>
   );
 }
@@ -217,7 +215,6 @@ const styles = StyleSheet.create({
   header: {
     alignItems: 'center',
     paddingVertical: SPACING.xl,
-    marginTop: SPACING.xl * 3,
   },
   headerTitle: {
     fontSize: 32,
@@ -330,9 +327,5 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '500',
     color: 'rgba(255, 255, 255, 0.7)',
-  },
-  contentWrapper: {
-    flex: 1,
-    zIndex: 1,
   },
 });

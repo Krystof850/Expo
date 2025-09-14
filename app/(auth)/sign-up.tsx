@@ -46,7 +46,7 @@ export default function SignUp() {
         <StatusBar barStyle="light-content" />
         <ScrollView 
           style={styles.container}
-          contentContainerStyle={styles.scrollContent}
+          contentContainerStyle={[styles.scrollContent, { paddingTop: insets.top + SPACING.xl * 2 }]}
           showsVerticalScrollIndicator={false}
         >
           <FirebaseConfigBanner />
@@ -142,7 +142,6 @@ export default function SignUp() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    zIndex: 1,
   },
   scrollContent: {
     flexGrow: 1,
