@@ -1,131 +1,91 @@
 import React, { useState } from "react";
-import { Link, Redirect } from "expo-router";
-import { View, Text, TextInput, Button, Alert, TouchableOpacity, StyleSheet } from "react-native";
-import { Formik } from "formik";
-import * as Yup from "yup";
-import { signInWithEmail, signInWithGoogle } from "../../src/services/auth";
+import { router, Redirect } from "expo-router";
+import { View, Text, Alert, StyleSheet } from "react-native";
+import * as Haptics from 'expo-haptics';
+import { Ionicons } from '@expo/vector-icons';
+import { signInWithGoogle } from "../../src/services/auth";
 import { useAuth } from "../../src/context/AuthContext";
 import { FirebaseConfigBanner } from "../../src/components/FirebaseConfigBanner";
 import { AuthErrorBoundary } from "../../src/components/AuthErrorBoundary";
+import AppBackground from '../../components/AppBackground';
+import { TitleText, DescriptionText } from '../../components/Text';
+import HapticButton from '../../components/HapticButton';
+import { COLORS, SPACING } from '../../constants/theme';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-const schema = Yup.object({
-  email: Yup.string().email("Neplatný email").required("Povinné"),
-  password: Yup.string().min(6, "Min. 6 znaků").required("Povinné"),
-});
 
 export default function SignIn() {
   const { user } = useAuth();
-  const [submitting, setSubmitting] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
+  const insets = useSafeAreaInsets();
+
 
   const handleGoogleSignIn = async () => {
+    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     try {
       setGoogleLoading(true);
       await signInWithGoogle();
     } catch (e: any) {
-      Alert.alert("Chyba", e.message || "Nepodařilo se přihlásit přes Google.");
+      Alert.alert("Error", e.message || "Google Sign In failed.");
     } finally {
       setGoogleLoading(false);
     }
+  };
+
+  const handleEmailSignIn = async () => {
+    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    router.push('/(auth)/email-signin');
   };
 
   if (user) return <Redirect href="/(protected)/" />;
 
   return (
     <AuthErrorBoundary>
-      <View style={{ flex: 1 }}>
+      <AppBackground>
         <FirebaseConfigBanner />
-        <View style={styles.container}>
-        <Text style={styles.title}>Přihlášení</Text>
-      <Formik
-        initialValues={{ email: "", password: "" }}
-        validationSchema={schema}
-        onSubmit={async ({ email, password }) => {
-          try {
-            setSubmitting(true);
-            await signInWithEmail(email.trim(), password);
-          } catch (e: any) {
-            Alert.alert("Chyba", e.message || "Nepodařilo se přihlásit.");
-          } finally {
-            setSubmitting(false);
-          }
-        }}
-      >
-        {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
-          <>
-            <TextInput
-              placeholder="Email"
-              autoCapitalize="none"
-              keyboardType="email-address"
-              onChangeText={handleChange("email")}
-              onBlur={handleBlur("email")}
-              value={values.email}
-              style={styles.input}
-            />
-            {touched.email && errors.email ? <Text style={styles.errorText}>{errors.email}</Text> : null}
-
-            <TextInput
-              placeholder="Heslo"
-              secureTextEntry
-              onChangeText={handleChange("password")}
-              onBlur={handleBlur("password")}
-              value={values.password}
-              style={styles.input}
-            />
-            {touched.password && errors.password ? <Text style={styles.errorText}>{errors.password}</Text> : null}
-
-            <TouchableOpacity 
-              style={[styles.primaryButton, submitting && styles.disabledButton]}
-              onPress={() => handleSubmit()}
-              disabled={submitting}
-            >
-              <Text style={styles.primaryButtonText}>
-                {submitting ? "Přihlašuji..." : "Přihlásit se"}
-              </Text>
-            </TouchableOpacity>
-
-            {/* Oddělovač */}
-            <View style={styles.divider}>
-              <View style={styles.dividerLine} />
-              <Text style={styles.dividerText}>nebo</Text>
-              <View style={styles.dividerLine} />
+        <View style={[styles.container, { paddingTop: insets.top + SPACING.xl }]}>
+          <View style={styles.content}>
+            <View style={styles.header}>
+              <TitleText style={styles.title}>Sign In</TitleText>
+              <DescriptionText style={styles.subtitle}>Choose your preferred sign-in method</DescriptionText>
             </View>
 
-            {/* Google Sign In tlačítko */}
-            <TouchableOpacity 
-              style={[styles.googleButton, googleLoading && styles.disabledButton]}
-              onPress={handleGoogleSignIn}
-              disabled={googleLoading || submitting}
-            >
-              <Text style={styles.googleIcon}>G</Text>
-              <Text style={styles.googleButtonText}>
-                {googleLoading ? "Přihlašuji přes Google..." : "Přihlásit se přes Google"}
-              </Text>
-            </TouchableOpacity>
+            <View style={styles.buttonContainer}>
 
-            {/* Sekce pro registraci - velmi výrazná */}
-            <View style={styles.authAlternatives}>
-              <Text style={styles.alternativeText}>Nemáte ještě účet?</Text>
-              <Link href="/(auth)/sign-up" asChild>
-                <TouchableOpacity style={styles.secondaryButton}>
-                  <Text style={styles.secondaryButtonText}>Vytvořit nový účet</Text>
-                </TouchableOpacity>
-              </Link>
+              {/* Google Sign In Button */}
+              <HapticButton 
+                style={[styles.signInButton, styles.googleButton, googleLoading && styles.disabledButton]}
+                onPress={handleGoogleSignIn}
+                disabled={googleLoading}
+              >
+                <Text style={styles.googleIcon}>G</Text>
+                <TitleText style={styles.googleButtonText}>
+                  {googleLoading ? "Signing in..." : "Continue with Google"}
+                </TitleText>
+              </HapticButton>
+
+              {/* Email Sign In Button */}
+              <HapticButton 
+                style={[styles.signInButton, styles.emailButton]}
+                onPress={handleEmailSignIn}
+              >
+                <Ionicons name="mail" size={20} color={COLORS.mainText} style={styles.buttonIcon} />
+                <TitleText style={styles.emailButtonText}>Continue with Email</TitleText>
+              </HapticButton>
             </View>
 
-            {/* Odkaz na zapomenuté heslo */}
-            <View style={styles.forgotSection}>
-              <Link href="/(auth)/forgot" asChild>
-                <TouchableOpacity style={styles.linkButton}>
-                  <Text style={styles.linkText}>Zapomněli jste heslo?</Text>
-                </TouchableOpacity>
-              </Link>
+            <View style={styles.footer}>
+              <DescriptionText style={styles.footerText}>Don't have an account?</DescriptionText>
+              <HapticButton 
+                style={styles.linkButton}
+                onPress={() => router.push('/(auth)/sign-up')}
+              >
+                <DescriptionText style={styles.linkText}>Sign up here</DescriptionText>
+              </HapticButton>
             </View>
-          </>
-        )}
-      </Formik>
+          </View>
         </View>
-      </View>
+      </AppBackground>
     </AuthErrorBoundary>
   );
 }
@@ -133,131 +93,92 @@ export default function SignIn() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+  },
+  content: {
+    flex: 1,
+    paddingHorizontal: SPACING.lg,
     justifyContent: 'center',
-    backgroundColor: '#f9f9f9',
+  },
+  header: {
+    alignItems: 'center',
+    marginBottom: SPACING.xl,
   },
   title: {
-    fontSize: 28,
-    fontWeight: 'bold',
+    fontSize: 32,
+    fontWeight: '700',
     textAlign: 'center',
-    marginBottom: 30,
-    color: '#333',
+    marginBottom: SPACING.sm,
+    textShadowColor: 'rgba(0, 0, 0, 0.4)',
+    textShadowOffset: { width: 0, height: 3 },
+    textShadowRadius: 6,
   },
-  input: {
-    borderWidth: 1,
-    borderColor: '#ddd',
-    padding: 15,
-    borderRadius: 12,
-    backgroundColor: 'white',
+  subtitle: {
     fontSize: 16,
-    marginBottom: 10,
-  },
-  errorText: {
-    color: '#e74c3c',
-    fontSize: 14,
-    marginBottom: 10,
-  },
-  primaryButton: {
-    backgroundColor: '#3498db',
-    padding: 15,
-    borderRadius: 12,
-    alignItems: 'center',
-    marginTop: 10,
-    marginBottom: 20,
-  },
-  disabledButton: {
-    backgroundColor: '#bdc3c7',
-  },
-  primaryButtonText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  authAlternatives: {
-    backgroundColor: '#e8f5e8',
-    padding: 20,
-    borderRadius: 12,
-    alignItems: 'center',
-    marginBottom: 15,
-    borderWidth: 1,
-    borderColor: '#2ecc71',
-  },
-  alternativeText: {
-    fontSize: 16,
-    color: '#333',
-    marginBottom: 10,
     textAlign: 'center',
+    color: 'rgba(255, 255, 255, 0.8)',
   },
-  secondaryButton: {
-    backgroundColor: '#2ecc71',
-    padding: 12,
-    borderRadius: 8,
-    minWidth: 200,
-    alignItems: 'center',
+  buttonContainer: {
+    gap: SPACING.md,
+    marginBottom: SPACING.xl,
   },
-  secondaryButtonText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  forgotSection: {
-    alignItems: 'center',
-    marginTop: 10,
-  },
-  linkButton: {
-    padding: 10,
-  },
-  linkText: {
-    color: '#3498db',
-    fontSize: 16,
-    textDecorationLine: 'underline',
-  },
-  divider: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginVertical: 20,
-  },
-  dividerLine: {
-    flex: 1,
-    height: 1,
-    backgroundColor: '#ddd',
-  },
-  dividerText: {
-    marginHorizontal: 15,
-    color: '#666',
-    fontSize: 14,
-  },
-  googleButton: {
-    backgroundColor: 'white',
-    padding: 15,
-    borderRadius: 12,
+  signInButton: {
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    borderWidth: 2,
+    borderColor: 'rgba(255, 255, 255, 0.2)',
+    borderRadius: 16,
+    paddingVertical: SPACING.md + 2,
+    paddingHorizontal: SPACING.lg,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 20,
-    borderWidth: 1,
-    borderColor: '#ddd',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 3.84,
-    elevation: 5,
+    minHeight: 56,
+  },
+  disabledButton: {
+    opacity: 0.5,
+  },
+  buttonIcon: {
+    marginRight: SPACING.sm,
+  },
+  footer: {
+    alignItems: 'center',
+  },
+  footerText: {
+    fontSize: 14,
+    color: 'rgba(255, 255, 255, 0.6)',
+    marginBottom: SPACING.sm,
+  },
+  linkButton: {
+    padding: SPACING.sm,
+  },
+  linkText: {
+    color: COLORS.primaryAction,
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  googleButton: {
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    borderColor: 'rgba(66, 133, 244, 0.3)',
   },
   googleIcon: {
     fontSize: 18,
     fontWeight: 'bold',
     color: '#4285f4',
-    marginRight: 10,
+    marginRight: SPACING.sm,
     width: 20,
     textAlign: 'center',
   },
   googleButtonText: {
-    color: '#333',
+    color: '#333333',
     fontSize: 16,
-    fontWeight: '500',
+    fontWeight: '600',
+  },
+  emailButton: {
+    backgroundColor: 'rgba(56, 189, 248, 0.2)',
+    borderColor: COLORS.primaryAction,
+  },
+  emailButtonText: {
+    color: COLORS.primaryAction,
+    fontSize: 16,
+    fontWeight: '600',
   },
 });

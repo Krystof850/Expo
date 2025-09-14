@@ -88,8 +88,8 @@ export default function JourneyScreen() {
     <AppBackground>
       <StatusBar barStyle="light-content" />
       <ScrollView 
-        style={[styles.container, { paddingTop: insets.top }]}
-        contentContainerStyle={styles.scrollContent}
+        style={styles.container}
+        contentContainerStyle={[styles.scrollContent, { paddingTop: insets.top + SPACING.xl }]}
         showsVerticalScrollIndicator={false}
       >
         {/* Header */}
