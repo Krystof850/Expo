@@ -193,7 +193,7 @@ export default function JourneyScreen() {
               <Ionicons name="rocket" size={14} color="rgba(255, 255, 255, 0.7)" />
               <DescriptionText style={styles.guaranteeText}>Finally quit procrastination</DescriptionText>
             </View>
-          </Animated.View>
+          </View>
         </Animated.View>
       </ScrollView>
     </AppBackground>
