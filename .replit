@@ -89,3 +89,8 @@ outputType = "console"
 
 [agent]
 expertMode = true
+
+[deployment]
+deploymentTarget = "autoscale"
+run = ["npx", "expo", "export", "-p", "web"]
+build = ["npm", "install"]
