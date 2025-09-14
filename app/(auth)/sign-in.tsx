@@ -54,7 +54,7 @@ export default function SignIn() {
       <AppBackground>
         <FirebaseConfigBanner />
         <View style={styles.container}>
-          <View style={[styles.content, { paddingTop: insets.top + SPACING.xl * 2 }]}>
+          <View style={[styles.content, { paddingTop: insets.top + 60 }]}>
             <View style={styles.header}>
               <TitleText style={styles.title}>Sign In</TitleText>
               <DescriptionText style={styles.subtitle}>Choose your preferred sign-in method</DescriptionText>
