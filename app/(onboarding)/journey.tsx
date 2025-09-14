@@ -6,6 +6,20 @@ import {
   Dimensions,
   ScrollView,
 } from 'react-native';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withSpring,
+  withDelay,
+  withSequence,
+  withRepeat,
+  withTiming,
+  FadeInDown,
+  FadeInUp,
+  SlideInLeft,
+  SlideInRight,
+  BounceIn
+} from 'react-native-reanimated';
 import { router } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -79,13 +93,13 @@ export default function JourneyScreen() {
         showsVerticalScrollIndicator={false}
       >
         {/* Header */}
-        <View style={styles.header}>
+        <Animated.View entering={FadeInDown.delay(100)} style={styles.header}>
           <TitleText style={styles.headerTitle}>Almost There!</TitleText>
-        </View>
+        </Animated.View>
 
         {/* Main Content */}
         <View style={styles.mainContent}>
-          <View style={styles.messageSection}>
+          <Animated.View entering={FadeInUp.delay(200)} style={styles.messageSection}>
             <TitleText style={styles.personalizedTitle}>
               {userName}, we've made a custom plan for you.
             </TitleText>
@@ -95,66 +109,74 @@ export default function JourneyScreen() {
                 {targetDate}
               </DescriptionText>
             </DescriptionText>
-          </View>
+          </Animated.View>
 
           {/* Features Grid */}
-          <View style={styles.featuresSection}>
+          <Animated.View entering={FadeInUp.delay(300)} style={styles.featuresSection}>
             <TitleText style={styles.featuresTitle}>Here's what you'll get:</TitleText>
             
             <View style={styles.featuresGrid}>
-              <View style={styles.featureCard}>
-                <Ionicons 
-                  name="checkmark-circle" 
-                  size={32} 
-                  color={COLORS.accentGreen} 
-                  style={styles.featureIcon}
-                />
+              <Animated.View entering={SlideInLeft.delay(400)} style={styles.featureCard}>
+                <Animated.View entering={BounceIn.delay(600).springify()}>
+                  <Ionicons 
+                    name="checkmark-circle" 
+                    size={32} 
+                    color={COLORS.primaryAction} 
+                    style={styles.featureIcon}
+                  />
+                </Animated.View>
                 <DescriptionText style={styles.featureText}>
                   Personalized daily tasks
                 </DescriptionText>
-              </View>
+              </Animated.View>
 
-              <View style={styles.featureCard}>
-                <Ionicons 
-                  name="bulb" 
-                  size={32} 
-                  color={COLORS.accentGreen} 
-                  style={styles.featureIcon}
-                />
+              <Animated.View entering={SlideInRight.delay(500)} style={styles.featureCard}>
+                <Animated.View entering={BounceIn.delay(700).springify()}>
+                  <Ionicons 
+                    name="bulb" 
+                    size={32} 
+                    color="#FFD700" 
+                    style={styles.featureIcon}
+                  />
+                </Animated.View>
                 <DescriptionText style={styles.featureText}>
                   AI-powered motivation coach
                 </DescriptionText>
-              </View>
+              </Animated.View>
 
-              <View style={styles.featureCard}>
-                <Ionicons 
-                  name="trending-up" 
-                  size={32} 
-                  color={COLORS.accentGreen} 
-                  style={styles.featureIcon}
-                />
+              <Animated.View entering={SlideInLeft.delay(600)} style={styles.featureCard}>
+                <Animated.View entering={BounceIn.delay(800).springify()}>
+                  <Ionicons 
+                    name="trending-up" 
+                    size={32} 
+                    color="#00D2FF" 
+                    style={styles.featureIcon}
+                  />
+                </Animated.View>
                 <DescriptionText style={styles.featureText}>
                   Advanced progress tracking
                 </DescriptionText>
-              </View>
+              </Animated.View>
 
-              <View style={styles.featureCard}>
-                <Ionicons 
-                  name="people" 
-                  size={32} 
-                  color={COLORS.accentGreen} 
-                  style={styles.featureIcon}
-                />
+              <Animated.View entering={SlideInRight.delay(700)} style={styles.featureCard}>
+                <Animated.View entering={BounceIn.delay(900).springify()}>
+                  <Ionicons 
+                    name="people" 
+                    size={32} 
+                    color="#FF6B6B" 
+                    style={styles.featureIcon}
+                  />
+                </Animated.View>
                 <DescriptionText style={styles.featureText}>
                   Exclusive community access
                 </DescriptionText>
-              </View>
+              </Animated.View>
             </View>
-          </View>
+          </Animated.View>
         </View>
 
         {/* Bottom Section */}
-        <View style={styles.bottomSection}>
+        <Animated.View entering={FadeInUp.delay(800)} style={styles.bottomSection}>
           <HapticButton
             style={styles.startButton}
             onPress={handleStartJourney}
@@ -171,8 +193,8 @@ export default function JourneyScreen() {
               <Ionicons name="rocket" size={14} color="rgba(255, 255, 255, 0.7)" />
               <DescriptionText style={styles.guaranteeText}>Finally quit procrastination</DescriptionText>
             </View>
-          </View>
-        </View>
+          </Animated.View>
+        </Animated.View>
       </ScrollView>
     </AppBackground>
   );
@@ -185,6 +207,7 @@ const styles = StyleSheet.create({
   scrollContent: {
     flexGrow: 1,
     paddingHorizontal: SPACING.lg,
+    paddingBottom: SPACING.xl,
   },
   loadingContainer: {
     flex: 1,
@@ -286,6 +309,9 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '700',
     color: COLORS.defaultBg,
+    textShadowColor: 'rgba(0, 0, 0, 0.1)',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 2,
   },
   guaranteesSection: {
     flexDirection: 'row',

@@ -1,44 +1,57 @@
 import React from "react";
 import { View, Text, Button, StyleSheet, Alert } from "react-native";
+import * as Haptics from 'expo-haptics';
 import { useAuth } from "../../src/context/AuthContext";
 import { Protected } from "../../src/components/Protected";
+import HapticButton from '../../components/HapticButton';
+import { TitleText, DescriptionText } from '../../components/Text';
+import { COLORS, SPACING } from '@/constants/theme';
 
 export default function Home() {
   const { user, logout } = useAuth();
 
-  const handleShowPaywall = () => {
+  const handleShowPaywall = async () => {
+    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     Alert.alert(
       "Paywall", 
-      "Pro Expo Go verzi je paywall zakázán. Používejte development build pro plnou funkcionalitat.",
+      "For Expo Go version, paywall is disabled. Use development build for full functionality.",
       [
         { text: "OK", style: "default" }
       ]
     );
   };
 
+  const handleLogout = async () => {
+    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    logout();
+  };
+
   return (
     <Protected>
       <View style={styles.container}>
-        <Text style={styles.title}>Vítejte v chráněné oblasti!</Text>
-        <Text style={styles.email}>Přihlášen jako: {user?.email}</Text>
+        <TitleText style={styles.title}>Welcome to the protected area!</TitleText>
+        <DescriptionText style={styles.email}>Signed in as: {user?.email}</DescriptionText>
         
         <View style={styles.paywallSection}>
-          <Text style={styles.subtitle}>Prémiové funkce</Text>
-          <Text style={styles.description}>
-            Získejte přístup k pokročilým funkcím pro zvýšení produktivity.
-          </Text>
-          <Button 
-            title="Zobrazit Paywall (Demo)" 
+          <TitleText style={styles.subtitle}>Premium Features</TitleText>
+          <DescriptionText style={styles.description}>
+            Get access to advanced features to increase productivity.
+          </DescriptionText>
+          <HapticButton 
+            style={styles.paywallButton}
             onPress={handleShowPaywall}
-            color="#007AFF"
-          />
-          <Text style={styles.templateInfo}>
-            Pozn.: Paywall je zakázán v Expo Go
-          </Text>
+          >
+            <TitleText style={styles.paywallButtonText}>Show Paywall (Demo)</TitleText>
+          </HapticButton>
+          <DescriptionText style={styles.templateInfo}>
+            Note: Paywall is disabled in Expo Go
+          </DescriptionText>
         </View>
         
         <View style={styles.logoutSection}>
-          <Button title="Odhlásit se" onPress={logout} color="#FF3B30" />
+          <HapticButton style={styles.logoutButton} onPress={handleLogout}>
+            <TitleText style={styles.logoutButtonText}>Sign Out</TitleText>
+          </HapticButton>
         </View>
       </View>
     </Protected>
@@ -48,46 +61,89 @@ export default function Home() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    padding: SPACING.lg,
     alignItems: "center",
     justifyContent: "center",
-    gap: 20,
+    gap: SPACING.lg,
   },
   title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 8,
+    fontSize: 28,
+    fontWeight: "700",
+    marginBottom: SPACING.sm,
+    textShadowColor: 'rgba(0, 0, 0, 0.4)',
+    textShadowOffset: { width: 0, height: 3 },
+    textShadowRadius: 6,
   },
   email: {
     fontSize: 16,
-    color: "#666",
+    color: 'rgba(255, 255, 255, 0.8)',
   },
   paywallSection: {
-    backgroundColor: "#f5f5f5",
-    padding: 20,
-    borderRadius: 12,
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    padding: SPACING.lg,
+    borderRadius: 16,
     alignItems: "center",
     width: "100%",
-    maxWidth: 300,
+    maxWidth: 320,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.2)',
   },
   subtitle: {
-    fontSize: 18,
-    fontWeight: "600",
-    marginBottom: 8,
+    fontSize: 20,
+    fontWeight: "700",
+    marginBottom: SPACING.sm,
+    textShadowColor: 'rgba(0, 0, 0, 0.3)',
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 4,
   },
   description: {
     textAlign: "center",
-    marginBottom: 16,
-    color: "#666",
+    marginBottom: SPACING.md,
+    color: 'rgba(255, 255, 255, 0.8)',
+    lineHeight: 22,
+  },
+  paywallButton: {
+    backgroundColor: COLORS.primaryAction,
+    paddingVertical: SPACING.sm,
+    paddingHorizontal: SPACING.lg,
+    borderRadius: 25,
+    alignItems: 'center',
+    shadowColor: COLORS.primaryAction,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  paywallButtonText: {
+    color: COLORS.mainText,
+    fontSize: 16,
+    fontWeight: '600',
   },
   templateInfo: {
     fontSize: 12,
-    color: "#999",
-    marginTop: 8,
+    color: 'rgba(255, 255, 255, 0.5)',
+    marginTop: SPACING.sm,
     textAlign: "center",
     fontStyle: "italic",
   },
   logoutSection: {
-    marginTop: 20,
+    marginTop: SPACING.lg,
+  },
+  logoutButton: {
+    backgroundColor: '#FF6B6B',
+    paddingVertical: SPACING.sm,
+    paddingHorizontal: SPACING.lg,
+    borderRadius: 25,
+    alignItems: 'center',
+    shadowColor: '#FF6B6B',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  logoutButtonText: {
+    color: COLORS.mainText,
+    fontSize: 16,
+    fontWeight: '600',
   },
 });

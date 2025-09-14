@@ -49,9 +49,9 @@ export default function TypingScreen() {
     if (!isNameLoaded) return; // Wait for name to load
     
     if (currentSentenceIndex >= sentences.length) {
-      // All sentences complete, navigate to invest page
+      // All sentences complete, navigate to journey page
       setTimeout(() => {
-        router.push('/(onboarding)/invest');
+        router.push('/(onboarding)/journey');
       }, 2000);
       return;
     }
