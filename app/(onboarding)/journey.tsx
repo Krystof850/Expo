@@ -93,8 +93,8 @@ export default function JourneyScreen() {
         showsVerticalScrollIndicator={false}
       >
         {/* Header */}
-        <Animated.View entering={FadeInDown.delay(100)} style={styles.header}>
-          <TitleText style={styles.headerTitle}>Almost There!</TitleText>
+        <Animated.View entering={FadeInDown.delay(100)} style={[styles.header, { overflow: 'visible' }]}>
+          <TitleText style={[styles.headerTitle, { fontSize: 32, lineHeight: Math.round(32 * 1.25) }]}>Almost There!</TitleText>
         </Animated.View>
 
         {/* Main Content */}

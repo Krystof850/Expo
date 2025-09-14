@@ -55,8 +55,8 @@ export default function SignIn() {
         <FirebaseConfigBanner />
         <View style={styles.container}>
           <View style={[styles.content, { paddingTop: insets.top + SPACING.xl * 2 }]}>
-            <View style={styles.header}>
-              <TitleText style={styles.title}>Sign In</TitleText>
+            <View style={[styles.header, { overflow: 'visible' }]}>
+              <TitleText style={[styles.title, { fontSize: 32, lineHeight: Math.round(32 * 1.25) }]}>Sign In</TitleText>
               <DescriptionText style={styles.subtitle}>Choose your preferred sign-in method</DescriptionText>
             </View>
 

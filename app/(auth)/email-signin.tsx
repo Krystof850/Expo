@@ -35,14 +35,14 @@ export default function EmailSignIn() {
         <FirebaseConfigBanner />
         <View style={[styles.container, { paddingTop: insets.top + SPACING.xl }]}>
           <View style={styles.content}>
-            <View style={styles.header}>
+            <View style={[styles.header, { overflow: 'visible' }]}>
               <HapticButton 
                 style={styles.backButton}
                 onPress={() => router.back()}
               >
                 <Ionicons name="arrow-back" size={24} color={COLORS.mainText} />
               </HapticButton>
-              <TitleText style={styles.title}>Continue with Email</TitleText>
+              <TitleText style={[styles.title, { fontSize: 28, lineHeight: Math.round(28 * 1.25) }]}>Continue with Email</TitleText>
               <DescriptionText style={styles.subtitle}>We'll sign you in or create your account</DescriptionText>
             </View>
 

@@ -1,0 +1,63 @@
+Prompt pro Replit Agenta (jen 3 screeeny)
+
+Proveď prosím lokální opravu ořezu nadpisů pouze na těchto stránkách:
+
+screens/JourneyScreen.tsx (headline: “Almost there!”)
+
+screens/SignInScreen.tsx (headline: “Sign in”)
+
+screens/EmailContinueScreen.tsx (headline: “Continue with Email”)
+
+⚠️ Neprováděj globální změny typografie. Nezasahuj do jiných screenů.
+
+Co přesně upravit na KAŽDÉM z těchto tří screenů:
+
+lineHeight u hlavního <Text> nadpisu nastav lokálně na bezpečnou hodnotu:
+
+pokud fontSize = 44 → lineHeight: 56
+
+pokud jiný fontSize → použij lineHeight: Math.round(fontSize * 1.25)
+
+změnu aplikuj přímo na instanci nadpisu (přes style nebo style prop u Title/H1), ne do globálního stylu komponenty typografie.
+
+Wrapper bez ořezu:
+
+bezprostřední parent kontejner nadpisu musí mít overflow: 'visible'.
+
+pokud je nadpis uvnitř karty s borderRadius a ta karta používá overflow: 'hidden', vlož mezi kartu a nadpis vnitřní <View style={{overflow:'visible'}}>:
+
+<Card style={cardStyle /* může mít overflow:'hidden' */}>
+  <View style={{ overflow: 'visible' }}>
+    <TitleLarge style={{ lineHeight: 56 }}>Almost there!</TitleLarge>
+  </View>
+</Card>
+
+
+Marginy:
+
+odstraň případné negativní marginTop na nadpisu; použij normální marginTop ≥ 0.
+
+Absolutní vrstvy nad textem (jen pokud existují):
+
+pokud nad nadpisem leží nějaký LinearGradient/dekor s position:'absolute', nastav mu zIndex: 0 a nadpisu zIndex: 1, případně gradient renderuj dřív. Gradientu dej pointerEvents="none".
+
+SafeArea nemaž ani neupravuj; ten ponech tak, jak je. Tenhle task řeší výhradně lineHeight/overflow na těchto 3 screenech.
+
+Příklad úpravy (vzorec pro každý z těchto screenů)
+// uvnitř renderu příslušného screenu
+const TITLE_FONT_SIZE = 44; // ponech skutečnou hodnotu, jaká se tam používá
+const TITLE_STYLE = { fontSize: TITLE_FONT_SIZE, lineHeight: Math.round(TITLE_FONT_SIZE * 1.25) };
+
+<View style={{ overflow: 'visible' }}>
+  <TitleLarge style={TITLE_STYLE}>Almost there!</TitleLarge>
+</View>
+
+Akceptační kritéria
+
+Na těchto třech screenech nejsou horní části písmen u nadpisu oříznuté, žádný překryv.
+
+lineHeight je aspoň fontSize * 1.2 (ověř skutečnou hodnotu).
+
+Bez změn mimo tyto 3 soubory; vizuální styl (barvy, font, stíny) zůstal stejný.
+
+Po dokončení pošli diff změn a vypiš pro každý ze 3 screenů výsledný fontSize a lineHeight nadpisu.
