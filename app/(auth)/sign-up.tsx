@@ -46,7 +46,7 @@ export default function SignUp() {
         <StatusBar barStyle="light-content" />
         <ScrollView 
           style={styles.container}
-          contentContainerStyle={[styles.scrollContent, { paddingTop: insets.top + 80 }]}
+          contentContainerStyle={styles.scrollContent}
           showsVerticalScrollIndicator={false}
         >
           <FirebaseConfigBanner />
@@ -160,6 +160,7 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     textAlign: 'center',
     marginBottom: SPACING.xl,
+    marginTop: SPACING.xl * 4,
     textShadowColor: 'rgba(0, 0, 0, 0.4)',
     textShadowOffset: { width: 0, height: 3 },
     textShadowRadius: 6,

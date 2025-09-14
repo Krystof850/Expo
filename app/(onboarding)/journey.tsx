@@ -89,7 +89,7 @@ export default function JourneyScreen() {
       <StatusBar barStyle="light-content" />
       <ScrollView 
         style={styles.container}
-        contentContainerStyle={[styles.scrollContent, { paddingTop: insets.top + 80 }]}
+        contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
         {/* Header */}
@@ -215,6 +215,7 @@ const styles = StyleSheet.create({
   header: {
     alignItems: 'center',
     paddingVertical: SPACING.xl,
+    marginTop: SPACING.xl * 3,
   },
   headerTitle: {
     fontSize: 32,
