@@ -12,7 +12,7 @@ import { AuthErrorBoundary } from "../../src/components/AuthErrorBoundary";
 import AppBackground from '../../components/AppBackground';
 import { TitleText, DescriptionText } from '../../components/Text';
 import HapticButton from '../../components/HapticButton';
-import { COLORS, SPACING } from '@/constants/theme';
+import { COLORS, SPACING } from '../../constants/theme';
 
 const schema = Yup.object({
   email: Yup.string().email("Invalid email").required("Required"),
@@ -45,8 +45,8 @@ export default function SignUp() {
       <AppBackground>
         <StatusBar barStyle="light-content" />
         <ScrollView 
-          style={[styles.container, { paddingTop: insets.top }]}
-          contentContainerStyle={styles.scrollContent}
+          style={styles.container}
+          contentContainerStyle={[styles.scrollContent, { paddingTop: insets.top + SPACING.xl * 2 }]}
           showsVerticalScrollIndicator={false}
         >
           <FirebaseConfigBanner />

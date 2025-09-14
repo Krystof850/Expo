@@ -32,6 +32,16 @@ export default function SignIn() {
     }
   };
 
+  const handleAppleSignIn = async () => {
+    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    try {
+      // TODO: Implement Apple Sign In with Firebase
+      Alert.alert("Apple Sign In", "Apple Sign In coming soon!");
+    } catch (e: any) {
+      Alert.alert("Error", e.message || "Apple Sign In failed.");
+    }
+  };
+
   const handleEmailSignIn = async () => {
     await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     router.push('/(auth)/email-signin');
@@ -43,46 +53,45 @@ export default function SignIn() {
     <AuthErrorBoundary>
       <AppBackground>
         <FirebaseConfigBanner />
-        <View style={[styles.container, { paddingTop: insets.top + SPACING.xl }]}>
-          <View style={styles.content}>
+        <View style={styles.container}>
+          <View style={[styles.content, { paddingTop: insets.top + SPACING.xl * 2 }]}>
             <View style={styles.header}>
               <TitleText style={styles.title}>Sign In</TitleText>
               <DescriptionText style={styles.subtitle}>Choose your preferred sign-in method</DescriptionText>
             </View>
 
             <View style={styles.buttonContainer}>
+              {/* Apple Sign In Button */}
+              <HapticButton 
+                style={styles.signInButton}
+                onPress={handleAppleSignIn}
+              >
+                <Ionicons name="logo-apple" size={24} color="#000000" style={styles.buttonIcon} />
+                <TitleText style={styles.buttonText}>Continue with Apple</TitleText>
+              </HapticButton>
 
               {/* Google Sign In Button */}
               <HapticButton 
-                style={[styles.signInButton, styles.googleButton, googleLoading && styles.disabledButton]}
+                style={[styles.signInButton, googleLoading && styles.disabledButton]}
                 onPress={handleGoogleSignIn}
                 disabled={googleLoading}
               >
                 <Text style={styles.googleIcon}>G</Text>
-                <TitleText style={styles.googleButtonText}>
+                <TitleText style={styles.buttonText}>
                   {googleLoading ? "Signing in..." : "Continue with Google"}
                 </TitleText>
               </HapticButton>
 
               {/* Email Sign In Button */}
               <HapticButton 
-                style={[styles.signInButton, styles.emailButton]}
+                style={styles.signInButton}
                 onPress={handleEmailSignIn}
               >
-                <Ionicons name="mail" size={20} color={COLORS.mainText} style={styles.buttonIcon} />
-                <TitleText style={styles.emailButtonText}>Continue with Email</TitleText>
+                <Ionicons name="mail" size={20} color="#000000" style={styles.buttonIcon} />
+                <TitleText style={styles.buttonText}>Continue with Email</TitleText>
               </HapticButton>
             </View>
 
-            <View style={styles.footer}>
-              <DescriptionText style={styles.footerText}>Don't have an account?</DescriptionText>
-              <HapticButton 
-                style={styles.linkButton}
-                onPress={() => router.push('/(auth)/sign-up')}
-              >
-                <DescriptionText style={styles.linkText}>Sign up here</DescriptionText>
-              </HapticButton>
-            </View>
           </View>
         </View>
       </AppBackground>
@@ -122,9 +131,8 @@ const styles = StyleSheet.create({
     marginBottom: SPACING.xl,
   },
   signInButton: {
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-    borderWidth: 2,
-    borderColor: 'rgba(255, 255, 255, 0.2)',
+    backgroundColor: '#FFFFFF',
+    borderWidth: 0,
     borderRadius: 16,
     paddingVertical: SPACING.md + 2,
     paddingHorizontal: SPACING.lg,
@@ -139,25 +147,10 @@ const styles = StyleSheet.create({
   buttonIcon: {
     marginRight: SPACING.sm,
   },
-  footer: {
-    alignItems: 'center',
-  },
-  footerText: {
-    fontSize: 14,
-    color: 'rgba(255, 255, 255, 0.6)',
-    marginBottom: SPACING.sm,
-  },
-  linkButton: {
-    padding: SPACING.sm,
-  },
-  linkText: {
-    color: COLORS.primaryAction,
-    fontSize: 14,
+  buttonText: {
+    color: '#000000',
+    fontSize: 16,
     fontWeight: '600',
-  },
-  googleButton: {
-    backgroundColor: 'rgba(255, 255, 255, 0.9)',
-    borderColor: 'rgba(66, 133, 244, 0.3)',
   },
   googleIcon: {
     fontSize: 18,
@@ -166,19 +159,5 @@ const styles = StyleSheet.create({
     marginRight: SPACING.sm,
     width: 20,
     textAlign: 'center',
-  },
-  googleButtonText: {
-    color: '#333333',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  emailButton: {
-    backgroundColor: 'rgba(56, 189, 248, 0.2)',
-    borderColor: COLORS.primaryAction,
-  },
-  emailButtonText: {
-    color: COLORS.primaryAction,
-    fontSize: 16,
-    fontWeight: '600',
   },
 });

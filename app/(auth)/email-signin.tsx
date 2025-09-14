@@ -5,7 +5,9 @@ import { Formik } from "formik";
 import * as Yup from "yup";
 import * as Haptics from 'expo-haptics';
 import { Ionicons } from '@expo/vector-icons';
-import { signInWithEmail } from "../../src/services/auth";
+import { signInWithEmail, signUpWithEmail } from "../../src/services/auth";
+import { fetchSignInMethodsForEmail } from 'firebase/auth';
+import { auth } from '../../src/lib/firebase';
 import { useAuth } from "../../src/context/AuthContext";
 import { FirebaseConfigBanner } from "../../src/components/FirebaseConfigBanner";
 import { AuthErrorBoundary } from "../../src/components/AuthErrorBoundary";
@@ -40,8 +42,8 @@ export default function EmailSignIn() {
               >
                 <Ionicons name="arrow-back" size={24} color={COLORS.mainText} />
               </HapticButton>
-              <TitleText style={styles.title}>Sign in with Email</TitleText>
-              <DescriptionText style={styles.subtitle}>Enter your email and password</DescriptionText>
+              <TitleText style={styles.title}>Continue with Email</TitleText>
+              <DescriptionText style={styles.subtitle}>We'll sign you in or create your account</DescriptionText>
             </View>
 
             <Formik
@@ -51,9 +53,29 @@ export default function EmailSignIn() {
                 try {
                   await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                   setSubmitting(true);
-                  await signInWithEmail(email.trim(), password);
+                  
+                  const trimmedEmail = email.trim();
+                  
+                  // Check if user already exists
+                  const signInMethods = await fetchSignInMethodsForEmail(auth, trimmedEmail);
+                  
+                  if (signInMethods.length > 0) {
+                    // User exists, try to sign in
+                    await signInWithEmail(trimmedEmail, password);
+                  } else {
+                    // New user, create account
+                    await signUpWithEmail(trimmedEmail, password);
+                  }
                 } catch (e: any) {
-                  Alert.alert("Error", e.message || "Failed to sign in.");
+                  let errorMessage = "Authentication failed.";
+                  if (e.code === 'auth/wrong-password' || e.code === 'auth/invalid-credential') {
+                    errorMessage = "Incorrect password. Please try again.";
+                  } else if (e.code === 'auth/email-already-in-use') {
+                    errorMessage = "This email is already registered. Please sign in.";
+                  } else if (e.code === 'auth/weak-password') {
+                    errorMessage = "Password is too weak. Please choose a stronger password.";
+                  }
+                  Alert.alert("Error", e.message || errorMessage);
                 } finally {
                   setSubmitting(false);
                 }
@@ -98,7 +120,7 @@ export default function EmailSignIn() {
                     disabled={submitting}
                   >
                     <TitleText style={styles.signInButtonText}>
-                      {submitting ? "Signing in..." : "Sign In"}
+                      {submitting ? "Please wait..." : "Continue"}
                     </TitleText>
                   </HapticButton>
 
