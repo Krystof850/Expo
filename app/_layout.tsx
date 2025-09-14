@@ -17,6 +17,7 @@ import { useColorScheme } from '@/hooks/useColorScheme';
 import { AuthProvider } from '../src/context/AuthContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect } from 'react';
+import { SuperwallProvider } from 'expo-superwall';
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
@@ -70,9 +71,22 @@ export default function RootLayout() {
     return null;
   }
 
-  // Základní app wrapper bez Superwall (pro Expo Go kompatibilitu)
-  const AppContent = () => (
-    <AuthProvider>
+  // App wrapper s Superwall integací
+  const AppContent = () => {
+    const apiKey = Constants.expoConfig?.extra?.SUPERWALL_API_KEY;
+    
+    if (!apiKey) {
+      console.warn('⚠️ SUPERWALL_API_KEY not configured');
+    }
+    
+    return (
+      <SuperwallProvider 
+        apiKeys={{ 
+          ios: apiKey || '',
+          android: apiKey || ''
+        }}
+      >
+        <AuthProvider>
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
         <Stack
           screenOptions={{
@@ -91,8 +105,10 @@ export default function RootLayout() {
         </Stack>
         <StatusBar style="auto" />
       </ThemeProvider>
-    </AuthProvider>
-  );
+        </AuthProvider>
+      </SuperwallProvider>
+    );
+  };
 
   return <AppContent />;
 }
