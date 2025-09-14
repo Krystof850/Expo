@@ -29,7 +29,7 @@ import HapticButton from '../../components/HapticButton';
 import { COLORS, SPACING } from '@/constants/theme';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Haptics from 'expo-haptics';
-import { usePlacement } from 'expo-superwall';
+// Superwall temporarily disabled
 
 const { width, height } = Dimensions.get('window');
 
@@ -39,24 +39,7 @@ export default function JourneyScreen() {
   const [targetDate, setTargetDate] = useState('');
   const [isLoaded, setIsLoaded] = useState(false);
   
-  // Superwall paywall integration
-  const { registerPlacement } = usePlacement({
-    onPresent: (info) => {
-      console.log('💳 Paywall presented:', info);
-    },
-    onDismiss: (info, result) => {
-      console.log('💳 Paywall dismissed:', info, result);
-      // Navigate to sign-in after paywall dismissal
-      if (result !== 'purchased') {
-        router.push('/(auth)/sign-in');
-      }
-    },
-    onError: (err) => {
-      console.error('💳 Paywall error:', err);
-      // Fallback to sign-in if paywall fails
-      router.push('/(auth)/sign-in');
-    }
-  });
+  // Superwall temporarily disabled
 
   // Load user name and calculate target date
   useEffect(() => {
@@ -91,14 +74,8 @@ export default function JourneyScreen() {
   const handleStartJourney = async () => {
     await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     
-    // Trigger Superwall paywall
-    try {
-      await registerPlacement({ placement: 'onboarding_complete' });
-    } catch (error) {
-      console.error('Failed to show paywall:', error);
-      // Fallback to sign-in if paywall fails
-      router.push('/(auth)/sign-in');
-    }
+    // Direct navigation to sign-in (Superwall temporarily disabled)
+    router.push('/(auth)/sign-in');
   };
 
   if (!isLoaded) {
