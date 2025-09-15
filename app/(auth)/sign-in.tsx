@@ -47,7 +47,7 @@ export default function SignIn() {
     router.push('/(auth)/email-signin');
   };
 
-  if (user) return <Redirect href="/(protected)/" />;
+  if (user) return <Redirect href="/(tabs)/" />;
 
   return (
     <AuthErrorBoundary>

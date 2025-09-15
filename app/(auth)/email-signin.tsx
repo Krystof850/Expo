@@ -27,7 +27,7 @@ export default function EmailSignIn() {
   const [submitting, setSubmitting] = useState(false);
   const insets = useSafeAreaInsets();
 
-  if (user) return <Redirect href="/(protected)/" />;
+  if (user) return <Redirect href="/(tabs)/" />;
 
   return (
     <AuthErrorBoundary>
