@@ -7,6 +7,7 @@ import {
   Text,
   Dimensions,
   TouchableOpacity,
+  Image,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -40,28 +41,13 @@ export default function Homepage() {
   const [startTime, setStartTime] = useState<number | null>(null);
   const [streak, setStreak] = useState(0);
 
-  // Animation values
+  // Animation values (only for aura)
   const auraPulse = useSharedValue(0);
-  const floatAnimation1 = useSharedValue(0);
-  const floatAnimation2 = useSharedValue(0);
 
   useEffect(() => {
     // Aura pulsing animation
     auraPulse.value = withRepeat(
       withTiming(1, { duration: 2000 }),
-      -1,
-      true
-    );
-
-    // Floating orbs animations
-    floatAnimation1.value = withRepeat(
-      withTiming(1, { duration: 9000 }),
-      -1,
-      true
-    );
-
-    floatAnimation2.value = withRepeat(
-      withTiming(1, { duration: 11000 }),
       -1,
       true
     );
@@ -177,37 +163,11 @@ export default function Homepage() {
     return num.toString().padStart(2, '0');
   };
 
-  // Animated styles
+  // Animated styles (only aura)
   const auraAnimatedStyle = useAnimatedStyle(() => {
     const scale = interpolate(auraPulse.value, [0, 1], [1, 1.05]);
     return {
       transform: [{ scale }],
-    };
-  });
-
-  const floatingOrb1Style = useAnimatedStyle(() => {
-    const translateY = interpolate(floatAnimation1.value, [0, 1], [0, -50]);
-    const translateX = interpolate(floatAnimation1.value, [0, 1], [0, 30]);
-    const rotate = interpolate(floatAnimation1.value, [0, 1], [0, 35]);
-    return {
-      transform: [
-        { translateY },
-        { translateX },
-        { rotate: `${rotate}deg` },
-      ],
-    };
-  });
-
-  const floatingOrb2Style = useAnimatedStyle(() => {
-    const translateY = interpolate(floatAnimation2.value, [0, 1], [0, -70]);
-    const translateX = interpolate(floatAnimation2.value, [0, 1], [0, -40]);
-    const rotate = interpolate(floatAnimation2.value, [0, 1], [0, -40]);
-    return {
-      transform: [
-        { translateY },
-        { translateX },
-        { rotate: `${rotate}deg` },
-      ],
     };
   });
 
@@ -216,26 +176,22 @@ export default function Homepage() {
       <View style={styles.container}>
         <StatusBar barStyle="dark-content" backgroundColor="transparent" translucent />
         
-        {/* Animated Background */}
+        {/* Static Background */}
         <LinearGradient
-          colors={['#E0F2FE', '#BFDBFE', '#93C5FD', '#BFDBFE', '#E0F2FE']}
+          colors={['#DBEAFE', '#BFDBFE']}
           style={styles.backgroundGradient}
           start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
+          end={{ x: 0, y: 1 }}
         />
-        
-        {/* Floating Orbs */}
-        <Animated.View style={[styles.floatingOrb1, floatingOrb1Style]} />
-        <Animated.View style={[styles.floatingOrb2, floatingOrb2Style]} />
-        <View style={styles.floatingOrb3} />
-        <View style={styles.floatingOrb4} />
-        <View style={styles.floatingOrb5} />
-        <View style={styles.floatingOrb6} />
 
         <View style={[styles.content, { paddingTop: insets.top + 24 }]}>
           {/* Header */}
           <View style={styles.header}>
-            <Text style={styles.logoText}>Unloop AI</Text>
+            <Image 
+              source={require('../../assets/images/unloop-logo.png')} 
+              style={styles.logoImage}
+              resizeMode="contain"
+            />
             
             <View style={styles.headerRight}>
               <View style={styles.streakContainer}>
@@ -341,64 +297,6 @@ const styles = StyleSheet.create({
   backgroundGradient: {
     ...StyleSheet.absoluteFillObject,
   },
-  floatingOrb1: {
-    position: 'absolute',
-    width: 650,
-    height: 650,
-    borderRadius: 325,
-    backgroundColor: 'rgba(2, 132, 199, 0.12)',
-    left: -width * 0.33,
-    top: -100,
-    opacity: 0.4,
-  },
-  floatingOrb2: {
-    position: 'absolute',
-    width: 750,
-    height: 750,
-    borderRadius: 375,
-    backgroundColor: 'rgba(12, 74, 110, 0.06)',
-    right: -width * 0.25,
-    bottom: -300,
-    opacity: 0.3,
-  },
-  floatingOrb3: {
-    position: 'absolute',
-    width: 288,
-    height: 288,
-    borderRadius: 144,
-    backgroundColor: 'rgba(2, 132, 199, 0.2)',
-    right: width * 0.25,
-    bottom: '33%',
-  },
-  floatingOrb4: {
-    position: 'absolute',
-    width: 256,
-    height: 256,
-    borderRadius: 128,
-    backgroundColor: 'rgba(16, 185, 129, 0.2)',
-    left: width * 0.25,
-    top: '33%',
-  },
-  floatingOrb5: {
-    position: 'absolute',
-    width: 550,
-    height: 550,
-    borderRadius: 275,
-    backgroundColor: 'rgba(14, 165, 233, 0.06)',
-    left: -width * 0.25,
-    top: '10%',
-    opacity: 0.3,
-  },
-  floatingOrb6: {
-    position: 'absolute',
-    width: 450,
-    height: 450,
-    borderRadius: 225,
-    backgroundColor: 'rgba(30, 41, 59, 0.06)',
-    right: -width * 0.25,
-    bottom: '5%',
-    opacity: 0.3,
-  },
   content: {
     flex: 1,
     paddingHorizontal: 24,
@@ -410,10 +308,9 @@ const styles = StyleSheet.create({
     marginBottom: 32,
     zIndex: 10,
   },
-  logoText: {
-    fontSize: 24,
-    fontWeight: '700',
-    color: '#082F49',
+  logoImage: {
+    width: 120,
+    height: 32,
   },
   headerRight: {
     flexDirection: 'row',
@@ -493,11 +390,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   timeNumber: {
-    fontSize: 80,
+    fontSize: 48,
     fontWeight: '700',
     color: '#082F49',
-    lineHeight: 88,
-    letterSpacing: -2,
+    lineHeight: 52,
+    letterSpacing: -1,
     textShadowColor: 'rgba(0, 0, 0, 0.1)',
     textShadowOffset: { width: 0, height: 2 },
     textShadowRadius: 4,
@@ -509,10 +406,10 @@ const styles = StyleSheet.create({
     marginTop: -8,
   },
   timeSeparator: {
-    fontSize: 64,
+    fontSize: 40,
     fontWeight: '700',
     color: '#082F49',
-    marginBottom: 20,
+    marginBottom: 12,
   },
   buttonSection: {
     width: '100%',
