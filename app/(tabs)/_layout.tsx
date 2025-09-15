@@ -1,50 +1,93 @@
 import { Tabs } from 'expo-router';
 import React from 'react';
 import { Platform } from 'react-native';
-
-import { HapticTab } from '@/components/HapticTab';
-import { IconSymbol } from '@/components/ui/IconSymbol';
-import TabBarBackground from '@/components/ui/TabBarBackground';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
+import { Ionicons } from '@expo/vector-icons';
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
         headerShown: false,
-        tabBarButton: HapticTab,
-        tabBarBackground: TabBarBackground,
-        tabBarStyle: Platform.select({
-          ios: {
-            // Use a transparent background on iOS to show the blur effect
-            position: 'absolute',
-          },
-          default: {},
-        }),
+        tabBarStyle: {
+          position: 'absolute',
+          bottom: 24,
+          left: 8,
+          right: 8,
+          backgroundColor: 'rgba(255, 255, 255, 0.5)',
+          borderRadius: 50,
+          height: 70,
+          paddingBottom: 0,
+          paddingTop: 0,
+          paddingHorizontal: 4,
+          borderTopWidth: 0,
+          ...Platform.select({
+            ios: {
+              shadowColor: 'rgba(0, 0, 0, 0.1)',
+              shadowOffset: { width: 0, height: 4 },
+              shadowOpacity: 1,
+              shadowRadius: 12,
+            },
+            android: {
+              elevation: 8,
+            },
+          }),
+        },
+        tabBarItemStyle: {
+          flex: 1,
+          alignItems: 'center',
+          justifyContent: 'center',
+          paddingVertical: 12,
+          marginHorizontal: 4,
+          borderRadius: 40,
+        },
+        tabBarActiveTintColor: '#0284C7',
+        tabBarInactiveTintColor: '#64748B',
+        tabBarLabelStyle: {
+          fontSize: 10,
+          fontWeight: '700',
+          marginTop: 2,
+        },
+        tabBarIconStyle: {
+          marginBottom: 2,
+        },
       }}>
       <Tabs.Screen
         name="index"
         options={{
           title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+          tabBarIcon: ({ color, focused }) => (
+            <Ionicons 
+              name={focused ? "home" : "home-outline"} 
+              size={28} 
+              color={color} 
+            />
+          ),
         }}
       />
       <Tabs.Screen
         name="statistics"
         options={{
           title: 'Statistics',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="chart.bar.fill" color={color} />,
+          tabBarIcon: ({ color, focused }) => (
+            <Ionicons 
+              name={focused ? "bar-chart" : "bar-chart-outline"} 
+              size={28} 
+              color={color} 
+            />
+          ),
         }}
       />
       <Tabs.Screen
         name="profile"
         options={{
           title: 'Profile',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="person.fill" color={color} />,
+          tabBarIcon: ({ color, focused }) => (
+            <Ionicons 
+              name={focused ? "person" : "person-outline"} 
+              size={28} 
+              color={color} 
+            />
+          ),
         }}
       />
     </Tabs>

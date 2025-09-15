@@ -13,6 +13,13 @@ import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { LinearGradient } from 'expo-linear-gradient';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withRepeat,
+  withTiming,
+  interpolate,
+} from 'react-native-reanimated';
 
 import { useAuth } from '../../src/context/AuthContext';
 import { Protected } from '../../src/components/Protected';
@@ -32,6 +39,33 @@ export default function Homepage() {
   const [time, setTime] = useState<TimeState>({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   const [startTime, setStartTime] = useState<number | null>(null);
   const [streak, setStreak] = useState(0);
+
+  // Animation values
+  const auraPulse = useSharedValue(0);
+  const floatAnimation1 = useSharedValue(0);
+  const floatAnimation2 = useSharedValue(0);
+
+  useEffect(() => {
+    // Aura pulsing animation
+    auraPulse.value = withRepeat(
+      withTiming(1, { duration: 2000 }),
+      -1,
+      true
+    );
+
+    // Floating orbs animations
+    floatAnimation1.value = withRepeat(
+      withTiming(1, { duration: 9000 }),
+      -1,
+      true
+    );
+
+    floatAnimation2.value = withRepeat(
+      withTiming(1, { duration: 11000 }),
+      -1,
+      true
+    );
+  }, []);
 
 
   // Load saved timer data
@@ -143,88 +177,158 @@ export default function Homepage() {
     return num.toString().padStart(2, '0');
   };
 
+  // Animated styles
+  const auraAnimatedStyle = useAnimatedStyle(() => {
+    const scale = interpolate(auraPulse.value, [0, 1], [1, 1.05]);
+    return {
+      transform: [{ scale }],
+    };
+  });
+
+  const floatingOrb1Style = useAnimatedStyle(() => {
+    const translateY = interpolate(floatAnimation1.value, [0, 1], [0, -50]);
+    const translateX = interpolate(floatAnimation1.value, [0, 1], [0, 30]);
+    const rotate = interpolate(floatAnimation1.value, [0, 1], [0, 35]);
+    return {
+      transform: [
+        { translateY },
+        { translateX },
+        { rotate: `${rotate}deg` },
+      ],
+    };
+  });
+
+  const floatingOrb2Style = useAnimatedStyle(() => {
+    const translateY = interpolate(floatAnimation2.value, [0, 1], [0, -70]);
+    const translateX = interpolate(floatAnimation2.value, [0, 1], [0, -40]);
+    const rotate = interpolate(floatAnimation2.value, [0, 1], [0, -40]);
+    return {
+      transform: [
+        { translateY },
+        { translateX },
+        { rotate: `${rotate}deg` },
+      ],
+    };
+  });
+
   return (
     <Protected>
-      <LinearGradient
-        colors={['#87CEEB', '#5DADE2', '#3498DB']}
-        style={styles.container}
-      >
+      <View style={styles.container}>
         <StatusBar barStyle="dark-content" backgroundColor="transparent" translucent />
         
-        {/* Header */}
-        <View style={[styles.header, { paddingTop: insets.top + 20 }]}>
-          <Text style={styles.logoText}>Unloop AI</Text>
-          
-          <View style={styles.headerRight}>
-            <View style={styles.streakContainer}>
-              <Ionicons name="flame" size={24} color="#FF6B35" />
-              <Text style={styles.streakNumber}>{streak}</Text>
+        {/* Animated Background */}
+        <LinearGradient
+          colors={['#E0F2FE', '#BFDBFE', '#93C5FD', '#BFDBFE', '#E0F2FE']}
+          style={styles.backgroundGradient}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+        />
+        
+        {/* Floating Orbs */}
+        <Animated.View style={[styles.floatingOrb1, floatingOrb1Style]} />
+        <Animated.View style={[styles.floatingOrb2, floatingOrb2Style]} />
+        <View style={styles.floatingOrb3} />
+        <View style={styles.floatingOrb4} />
+        <View style={styles.floatingOrb5} />
+        <View style={styles.floatingOrb6} />
+
+        <View style={[styles.content, { paddingTop: insets.top + 24 }]}>
+          {/* Header */}
+          <View style={styles.header}>
+            <Text style={styles.logoText}>Unloop AI</Text>
+            
+            <View style={styles.headerRight}>
+              <View style={styles.streakContainer}>
+                <Ionicons name="flame" size={28} color="#F97316" />
+                <Text style={styles.streakNumber}>{streak}</Text>
+              </View>
+              <TouchableOpacity style={styles.settingsButton}>
+                <Ionicons name="settings-outline" size={28} color="#64748B" />
+              </TouchableOpacity>
             </View>
-            <TouchableOpacity style={styles.settingsButton}>
-              <Ionicons name="settings-outline" size={24} color="#2C3E50" />
-            </TouchableOpacity>
+          </View>
+
+          {/* Main Content */}
+          <View style={styles.mainContent}>
+            {/* Aura Element */}
+            <Animated.View style={[styles.auraContainer, auraAnimatedStyle]}>
+              <LinearGradient
+                colors={['#87CEEB', '#67D7E8', '#87CEEB']}
+                style={styles.auraOuter}
+              />
+              <LinearGradient
+                colors={['rgba(135,206,235,0.8)', 'rgba(178,216,235,0.9)']}
+                style={styles.auraMiddle}
+              />
+              <LinearGradient
+                colors={['rgba(255,255,255,0.9)', 'rgba(255,255,255,0.7)']}
+                style={styles.auraInner}
+              />
+            </Animated.View>
+
+            {/* Timer */}
+            <View style={styles.timerSection}>
+              <Text style={styles.timerLabel}>Procrastination-free for</Text>
+              <View style={styles.timerDisplay}>
+                <View style={styles.timeUnit}>
+                  <Text style={styles.timeNumber}>{formatNumber(time.days)}</Text>
+                  <Text style={styles.timeLabel}>days</Text>
+                </View>
+                <Text style={styles.timeSeparator}>:</Text>
+                <View style={styles.timeUnit}>
+                  <Text style={styles.timeNumber}>{formatNumber(time.hours)}</Text>
+                  <Text style={styles.timeLabel}>hours</Text>
+                </View>
+                <Text style={styles.timeSeparator}>:</Text>
+                <View style={styles.timeUnit}>
+                  <Text style={styles.timeNumber}>{formatNumber(time.seconds)}</Text>
+                  <Text style={styles.timeLabel}>secs</Text>
+                </View>
+              </View>
+            </View>
+
+            {/* Main Button */}
+            <View style={styles.buttonSection}>
+              <LinearGradient
+                colors={['#0EA5E9', '#0284C7']}
+                style={styles.temptedButton}
+              >
+                <TouchableOpacity style={styles.temptedButtonInner} onPress={handleTempted}>
+                  <Text style={styles.temptedButtonText}>I Feel Tempted</Text>
+                </TouchableOpacity>
+              </LinearGradient>
+
+              {/* Action Buttons */}
+              <View style={styles.actionButtons}>
+                <TouchableOpacity style={styles.actionButton} onPress={handleResetTimer}>
+                  <Ionicons name="refresh" size={28} color="#0C4A6E" />
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.actionButton}>
+                  <Ionicons name="create-outline" size={28} color="#0C4A6E" />
+                </TouchableOpacity>
+              </View>
+            </View>
+
+            {/* Progress Card */}
+            <View style={styles.progressCard}>
+              <View style={styles.progressHeader}>
+                <Text style={styles.progressTitle}>Brain Rewiring</Text>
+                <Text style={styles.progressPercentage}>70%</Text>
+              </View>
+              <View style={styles.progressBarContainer}>
+                <View style={styles.progressBarBg}>
+                  <LinearGradient
+                    colors={['#10B981', '#14B8A6']}
+                    style={[styles.progressBarFill, { width: '70%' }]}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 1, y: 0 }}
+                  />
+                </View>
+              </View>
+            </View>
           </View>
         </View>
-
-        {/* Main Content */}
-        <View style={styles.mainContent}>
-          {/* Aura Element */}
-          <View style={styles.auraContainer}>
-            <View style={styles.auraOuter}>
-              <View style={styles.auraInner} />
-            </View>
-          </View>
-
-          {/* Timer */}
-          <View style={styles.timerSection}>
-            <Text style={styles.timerLabel}>Procrastination-free for</Text>
-            <View style={styles.timerDisplay}>
-              <View style={styles.timeUnit}>
-                <Text style={styles.timeNumber}>{formatNumber(time.days)}</Text>
-                <Text style={styles.timeLabel}>days</Text>
-              </View>
-              <Text style={styles.timeDot}>•</Text>
-              <View style={styles.timeUnit}>
-                <Text style={styles.timeNumber}>{formatNumber(time.hours)}</Text>
-                <Text style={styles.timeLabel}>hours</Text>
-              </View>
-              <Text style={styles.timeDot}>•</Text>
-              <View style={styles.timeUnit}>
-                <Text style={styles.timeNumber}>{formatNumber(time.seconds)}</Text>
-                <Text style={styles.timeLabel}>secs</Text>
-              </View>
-            </View>
-          </View>
-
-          {/* Main Button */}
-          <TouchableOpacity style={styles.temptedButton} onPress={handleTempted}>
-            <Text style={styles.temptedButtonText}>I Feel Tempted</Text>
-          </TouchableOpacity>
-
-          {/* Action Buttons */}
-          <View style={styles.actionButtons}>
-            <TouchableOpacity style={styles.actionButton} onPress={handleResetTimer}>
-              <Ionicons name="refresh" size={20} color="#2C3E50" />
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.actionButton}>
-              <Ionicons name="create-outline" size={20} color="#2C3E50" />
-            </TouchableOpacity>
-          </View>
-
-          {/* Progress Card */}
-          <View style={styles.progressCard}>
-            <View style={styles.progressHeader}>
-              <Text style={styles.progressTitle}>Brain Rewiring</Text>
-              <Text style={styles.progressPercentage}>70%</Text>
-            </View>
-            <View style={styles.progressBarContainer}>
-              <View style={styles.progressBarBg}>
-                <View style={[styles.progressBarFill, { width: '70%' }]} />
-              </View>
-            </View>
-          </View>
-        </View>
-      </LinearGradient>
+      </View>
     </Protected>
   );
 }
@@ -232,18 +336,84 @@ export default function Homepage() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#F0F9FF',
+  },
+  backgroundGradient: {
+    ...StyleSheet.absoluteFillObject,
+  },
+  floatingOrb1: {
+    position: 'absolute',
+    width: 650,
+    height: 650,
+    borderRadius: 325,
+    backgroundColor: 'rgba(2, 132, 199, 0.12)',
+    left: -width * 0.33,
+    top: -100,
+    opacity: 0.4,
+  },
+  floatingOrb2: {
+    position: 'absolute',
+    width: 750,
+    height: 750,
+    borderRadius: 375,
+    backgroundColor: 'rgba(12, 74, 110, 0.06)',
+    right: -width * 0.25,
+    bottom: -300,
+    opacity: 0.3,
+  },
+  floatingOrb3: {
+    position: 'absolute',
+    width: 288,
+    height: 288,
+    borderRadius: 144,
+    backgroundColor: 'rgba(2, 132, 199, 0.2)',
+    right: width * 0.25,
+    bottom: '33%',
+  },
+  floatingOrb4: {
+    position: 'absolute',
+    width: 256,
+    height: 256,
+    borderRadius: 128,
+    backgroundColor: 'rgba(16, 185, 129, 0.2)',
+    left: width * 0.25,
+    top: '33%',
+  },
+  floatingOrb5: {
+    position: 'absolute',
+    width: 550,
+    height: 550,
+    borderRadius: 275,
+    backgroundColor: 'rgba(14, 165, 233, 0.06)',
+    left: -width * 0.25,
+    top: '10%',
+    opacity: 0.3,
+  },
+  floatingOrb6: {
+    position: 'absolute',
+    width: 450,
+    height: 450,
+    borderRadius: 225,
+    backgroundColor: 'rgba(30, 41, 59, 0.06)',
+    right: -width * 0.25,
+    bottom: '5%',
+    opacity: 0.3,
+  },
+  content: {
+    flex: 1,
+    paddingHorizontal: 24,
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: 24,
-    paddingBottom: 20,
+    marginBottom: 32,
+    zIndex: 10,
   },
   logoText: {
     fontSize: 24,
     fontWeight: '700',
-    color: '#2C3E50',
+    color: '#082F49',
   },
   headerRight: {
     flexDirection: 'row',
@@ -253,12 +423,12 @@ const styles = StyleSheet.create({
   streakContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
+    gap: 8,
   },
   streakNumber: {
-    fontSize: 20,
+    fontSize: 24,
     fontWeight: '700',
-    color: '#2C3E50',
+    color: '#082F49',
   },
   settingsButton: {
     padding: 4,
@@ -266,144 +436,169 @@ const styles = StyleSheet.create({
   mainContent: {
     flex: 1,
     alignItems: 'center',
-    paddingHorizontal: 24,
-    paddingBottom: 120, // Account for tab bar
+    justifyContent: 'center',
+    paddingBottom: 140, // Account for tab bar
   },
   auraContainer: {
-    marginBottom: 40,
-    marginTop: 20,
-  },
-  auraOuter: {
-    width: 200,
-    height: 200,
-    borderRadius: 100,
-    backgroundColor: 'rgba(255, 255, 255, 0.3)',
+    position: 'relative',
+    width: 192,
+    height: 192,
+    marginBottom: 24,
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: 'rgba(0, 0, 0, 0.1)',
-    shadowOffset: { width: 0, height: 4 },
+  },
+  auraOuter: {
+    position: 'absolute',
+    width: 192,
+    height: 192,
+    borderRadius: 96,
+    shadowColor: 'rgba(56, 189, 248, 0.4)',
+    shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 1,
-    shadowRadius: 12,
-    elevation: 8,
+    shadowRadius: 40,
+    elevation: 10,
+  },
+  auraMiddle: {
+    position: 'absolute',
+    width: 182,
+    height: 182,
+    borderRadius: 91,
+    alignSelf: 'center',
+    top: 5,
   },
   auraInner: {
-    width: 160,
-    height: 160,
-    borderRadius: 80,
-    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+    position: 'absolute',
+    width: 154,
+    height: 154,
+    borderRadius: 77,
+    alignSelf: 'center',
+    top: 19,
   },
   timerSection: {
     alignItems: 'center',
-    marginBottom: 60,
+    marginBottom: 32,
   },
   timerLabel: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: '500',
-    color: '#2C3E50',
-    marginBottom: 12,
+    color: '#0C4A6E',
+    marginBottom: 8,
   },
   timerDisplay: {
     flexDirection: 'row',
-    alignItems: 'baseline',
+    alignItems: 'flex-end',
     gap: 8,
   },
   timeUnit: {
     alignItems: 'center',
   },
   timeNumber: {
-    fontSize: 52,
-    fontWeight: '800',
-    color: '#2C3E50',
-    lineHeight: 60,
+    fontSize: 80,
+    fontWeight: '700',
+    color: '#082F49',
+    lineHeight: 88,
+    letterSpacing: -2,
+    textShadowColor: 'rgba(0, 0, 0, 0.1)',
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 4,
   },
   timeLabel: {
-    fontSize: 14,
+    fontSize: 12,
     fontWeight: '500',
-    color: '#5A6C7D',
+    color: '#64748B',
     marginTop: -8,
   },
-  timeDot: {
-    fontSize: 36,
-    fontWeight: '800',
-    color: '#2C3E50',
-    marginBottom: 12,
+  timeSeparator: {
+    fontSize: 64,
+    fontWeight: '700',
+    color: '#082F49',
+    marginBottom: 20,
   },
-  temptedButton: {
-    width: width - 48,
-    backgroundColor: '#2980B9',
-    paddingVertical: 18,
-    borderRadius: 30,
+  buttonSection: {
+    width: '100%',
+    maxWidth: 320,
     alignItems: 'center',
     marginBottom: 24,
-    shadowColor: 'rgba(41, 128, 185, 0.4)',
-    shadowOffset: { width: 0, height: 8 },
+  },
+  temptedButton: {
+    width: '100%',
+    borderRadius: 50,
+    shadowColor: '#0284C7',
+    shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 1,
-    shadowRadius: 16,
-    elevation: 8,
+    shadowRadius: 80,
+    elevation: 15,
+    marginBottom: 16,
+  },
+  temptedButtonInner: {
+    width: '100%',
+    paddingVertical: 20,
+    alignItems: 'center',
+    borderRadius: 50,
   },
   temptedButtonText: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: '700',
     color: '#FFFFFF',
   },
   actionButtons: {
     flexDirection: 'row',
-    gap: 20,
-    marginBottom: 40,
+    gap: 16,
   },
   actionButton: {
     width: 56,
     height: 56,
     borderRadius: 28,
-    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+    backgroundColor: 'rgba(255, 255, 255, 0.6)',
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: 'rgba(0, 0, 0, 0.1)',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 1,
-    shadowRadius: 8,
-    elevation: 4,
-  },
-  progressCard: {
-    width: width - 48,
-    backgroundColor: 'rgba(255, 255, 255, 0.6)',
-    padding: 20,
-    borderRadius: 24,
     shadowColor: 'rgba(0, 0, 0, 0.1)',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 1,
     shadowRadius: 12,
     elevation: 6,
   },
+  progressCard: {
+    width: '100%',
+    maxWidth: 384,
+    backgroundColor: 'rgba(255, 255, 255, 0.4)',
+    padding: 16,
+    borderRadius: 32,
+    shadowColor: 'rgba(0, 0, 0, 0.1)',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 1,
+    shadowRadius: 12,
+    elevation: 6,
+    marginTop: 24,
+  },
   progressHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 12,
+    marginBottom: 8,
   },
   progressTitle: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: '600',
-    color: '#2C3E50',
+    color: '#0C4A6E',
   },
   progressPercentage: {
-    fontSize: 18,
+    fontSize: 14,
     fontWeight: '700',
-    color: '#2C3E50',
+    color: '#082F49',
   },
   progressBarContainer: {
     width: '100%',
   },
   progressBarBg: {
     width: '100%',
-    height: 12,
-    backgroundColor: '#E8F4FD',
-    borderRadius: 6,
+    height: 10,
+    backgroundColor: '#CBD5E1',
+    borderRadius: 5,
     overflow: 'hidden',
   },
   progressBarFill: {
     height: '100%',
-    backgroundColor: '#27AE60',
-    borderRadius: 6,
+    borderRadius: 5,
   },
 });
