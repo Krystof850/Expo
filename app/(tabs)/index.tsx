@@ -186,12 +186,17 @@ export default function Homepage() {
         />
 
         {/* HEADER - Proper Safe Area */}
-        <View style={styles.header}>
+        <View style={[styles.header, { paddingTop: insets.top + 4 }]}>
           {/* LEFT: LOGO */}
           <Image 
             source={require('../../assets/images/unloop-logo.png')} 
-            style={styles.logoImage}
-            resizeMode="contain"
+            style={{
+              width: 180,
+              height: 36,
+              resizeMode: 'contain',
+              marginLeft: 0,
+              flexShrink: 0,
+            }}
             accessibilityLabel="Unloop AI"
           />
           
@@ -318,11 +323,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingVertical: 12,
-  },
-  logoImage: {
-    width: 120,
-    height: 28,
   },
   headerRight: {
     flexDirection: 'row',
