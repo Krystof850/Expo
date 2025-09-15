@@ -1,0 +1,85 @@
+Cíl zarovnání (iOS/Android, RN):
+
+Logo Unloop AI: vlevo nahoře.
+
+„Streaks“: vpravo nahoře (ikona 🔥 + číslo).
+
+„Settings“ (⚙️): vpravo nahoře za streaks (s mezerou).
+
+Nic se nesmí krýt se statusem/notchem.
+
+Kroky:
+
+V souboru HomeScreen.tsx (případně screens/HomeScreen.tsx) vytvoř nad obsahem hlavičku:
+
+import { SafeAreaView, View, Image, Text, TouchableOpacity } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
+export function HomeScreen() {
+  const insets = useSafeAreaInsets();
+  return (
+    <SafeAreaView style={{ flex: 1 }}>
+      {/* HEADER */}
+      <View
+        style={{
+          paddingTop: insets.top,           // bezpečně pod notch
+          paddingHorizontal: 16,
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',  // logo vlevo, ikony vpravo
+        }}
+      >
+        {/* LEFT: LOGO */}
+        <Image
+          source={require('../assets/unloop-logo.png')} // použij správnou cestu
+          style={{ width: 120, height: 28, resizeMode: 'contain' }}
+          accessibilityLabel="Unloop AI"
+        />
+
+        {/* RIGHT: STREAKS + SETTINGS */}
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <Image
+              source={require('../assets/icons/streak.png')} // 🔥 ikona
+              style={{ width: 22, height: 22, resizeMode: 'contain', marginRight: 6 }}
+            />
+            <Text style={{ fontSize: 18, fontWeight: '600' }}>{streakCount}</Text>
+          </View>
+
+          <TouchableOpacity
+            onPress={onPressSettings}
+            hitSlop={{ top: 8, left: 8, right: 8, bottom: 8 }}
+            accessibilityLabel="Settings"
+          >
+            <Image
+              source={require('../assets/icons/settings.png')}
+              style={{ width: 22, height: 22, resizeMode: 'contain' }}
+            />
+          </TouchableOpacity>
+        </View>
+      </View>
+
+      {/* ...zbytek obsahu obrazovky níže... */}
+    </SafeAreaView>
+  );
+}
+
+
+Odstraň/nahraď jakékoli staré umístění loga/streaks/settings (žádné absolute u nich). Pokud jsou někde jinde v DOMu (např. součást hero sekce), přesuň je do výše uvedené hlavičky.
+
+Nikde v předcích hlavičky nepoužívej overflow: 'hidden', ať se nic neořezává.
+Pokud je kontejner backgroundu s borderRadius, hlavička musí být mimo něj.
+
+Zajisti, že na malých iPhonech (SE) i velkých (14 Pro Max) zůstane vše na jedné řádce. Pokud by se logo nevešlo, zmenši logo na šířku 100 px (min) – neikony.
+
+Akceptační kritéria:
+
+Logo je vlevo nahoře, zarovnáno na střed vertikálně s ikonami vpravo.
+
+Vpravo je v pořadí 🔥 číslo a ⚙️ s mezerou 12 px.
+
+Nic nezasahuje do status baru ani notche (ověř přes useSafeAreaInsets).
+
+Žádné překreslování/poskakování při scrollu.
+
+Pošli diff upravených souborů a screenshot z iPhone simulátoru (notch i bez notche), že je zarovnání správně.

@@ -8,6 +8,7 @@ import {
   Dimensions,
   TouchableOpacity,
   Image,
+  SafeAreaView,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -173,7 +174,7 @@ export default function Homepage() {
 
   return (
     <Protected>
-      <View style={styles.container}>
+      <SafeAreaView style={styles.container}>
         <StatusBar barStyle="dark-content" backgroundColor="transparent" translucent />
         
         {/* Static Background */}
@@ -184,26 +185,36 @@ export default function Homepage() {
           end={{ x: 0, y: 1 }}
         />
 
-        {/* Header - Fixed Position */}
-        <View style={[styles.header, { paddingTop: insets.top + 16 }]}>
+        {/* HEADER - Proper Safe Area */}
+        <View style={styles.header}>
+          {/* LEFT: LOGO */}
           <Image 
             source={require('../../assets/images/unloop-logo.png')} 
             style={styles.logoImage}
             resizeMode="contain"
+            accessibilityLabel="Unloop AI"
           />
           
+          {/* RIGHT: STREAKS + SETTINGS */}
           <View style={styles.headerRight}>
+            {/* Streaks with flame icon + number */}
             <View style={styles.streakContainer}>
-              <Ionicons name="flame" size={28} color="#F97316" />
+              <Ionicons name="flame" size={22} color="#F97316" style={{ marginRight: 6 }} />
               <Text style={styles.streakNumber}>{streak}</Text>
             </View>
-            <TouchableOpacity style={styles.settingsButton}>
-              <Ionicons name="settings-outline" size={28} color="#64748B" />
+            
+            {/* Settings button */}
+            <TouchableOpacity 
+              style={styles.settingsButton}
+              hitSlop={{ top: 8, left: 8, right: 8, bottom: 8 }}
+              accessibilityLabel="Settings"
+            >
+              <Ionicons name="settings-outline" size={22} color="#64748B" />
             </TouchableOpacity>
           </View>
         </View>
 
-        <View style={[styles.content, { paddingTop: insets.top + 120 }]}>
+        <View style={styles.content}>
 
           {/* Main Content */}
           <View style={styles.mainContent}>
@@ -285,7 +296,7 @@ export default function Homepage() {
             </View>
           </View>
         </View>
-      </View>
+      </SafeAreaView>
     </Protected>
   );
 }
@@ -303,40 +314,33 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
   },
   header: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
     paddingHorizontal: 16,
-    zIndex: 20,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 12,
   },
   logoImage: {
-    width: 300,
-    height: 80,
-    marginLeft: -16,
+    width: 120,
+    height: 28,
   },
   headerRight: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 20,
-    marginRight: -8,
-    marginTop: 8,
+    gap: 12,
   },
   streakContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
   },
   streakNumber: {
-    fontSize: 24,
-    fontWeight: '700',
+    fontSize: 18,
+    fontWeight: '600',
     color: '#082F49',
   },
   settingsButton: {
-    padding: 4,
+    width: 22,
+    height: 22,
   },
   mainContent: {
     flex: 1,
