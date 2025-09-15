@@ -304,18 +304,16 @@ const styles = StyleSheet.create({
   header: {
     position: 'relative',
     flexDirection: 'row',
-    justifyContent: 'flex-end',
+    justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 32,
     zIndex: 10,
     minHeight: 85,
   },
   logoImage: {
-    width: 320,
-    height: 85,
-    position: 'absolute',
-    top: 0,
-    left: 0,
+    width: 280,
+    height: 75,
+    alignSelf: 'flex-start',
   },
   headerRight: {
     flexDirection: 'row',
