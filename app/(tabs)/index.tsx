@@ -304,13 +304,14 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     marginBottom: 32,
     zIndex: 10,
   },
   logoImage: {
-    width: 120,
-    height: 32,
+    width: 240,
+    height: 64,
+    marginTop: -8,
   },
   headerRight: {
     flexDirection: 'row',
