@@ -3,29 +3,19 @@ import {
   View,
   StyleSheet,
   StatusBar,
-  Dimensions,
   Alert,
-  Image,
+  Text,
+  Dimensions,
+  TouchableOpacity,
 } from 'react-native';
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withRepeat,
-  withSequence,
-  withTiming,
-  interpolate,
-} from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { LinearGradient } from 'expo-linear-gradient';
 
 import { useAuth } from '../../src/context/AuthContext';
 import { Protected } from '../../src/components/Protected';
-import AppBackground from '../../components/AppBackground';
-import { TitleText, DescriptionText } from '../../components/Text';
-import HapticButton from '../../components/HapticButton';
-import { COLORS, SPACING } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 
@@ -171,117 +161,83 @@ export default function Homepage() {
     );
   };
 
-  // Animated styles
-  const auraAnimatedStyle = useAnimatedStyle(() => {
-    const scale = interpolate(pulseAnimation.value, [0, 1], [1, 1.05]);
-    const opacity = interpolate(pulseAnimation.value, [0, 1], [0.8, 1]);
-    
-    return {
-      transform: [{ scale }],
-      opacity,
-    };
-  });
-
-  const backgroundAnimatedStyle = useAnimatedStyle(() => {
-    return {
-      transform: [{ rotate: `${backgroundRotation.value}deg` }],
-    };
-  });
-
   const formatNumber = (num: number): string => {
     return num.toString().padStart(2, '0');
   };
 
   return (
     <Protected>
-      <View style={styles.container}>
-        <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
+      <LinearGradient
+        colors={['#87CEEB', '#5DADE2', '#3498DB']}
+        style={styles.container}
+      >
+        <StatusBar barStyle="dark-content" backgroundColor="transparent" translucent />
         
-        {/* Animated Background */}
-        <View style={styles.backgroundContainer}>
-          <AppBackground />
-          <Animated.View style={[styles.rotatingBackground, backgroundAnimatedStyle]}>
-            <View style={[styles.floatingOrb, styles.orb1]} />
-            <View style={[styles.floatingOrb, styles.orb2]} />
-            <View style={[styles.floatingOrb, styles.orb3]} />
-          </Animated.View>
-        </View>
-
         {/* Header */}
-        <View style={[styles.header, { paddingTop: insets.top + SPACING.md }]}>
-          <View style={styles.logo}>
-            <Image 
-              source={require('../../assets/unloop-logo.png')} 
-              style={styles.logoImage}
-              resizeMode="contain"
-            />
-          </View>
+        <View style={[styles.header, { paddingTop: insets.top + 20 }]}>
+          <Text style={styles.logoText}>Unloop AI</Text>
           
           <View style={styles.headerRight}>
             <View style={styles.streakContainer}>
-              <Ionicons name="flame" size={28} color="#FF6B35" style={styles.flameIcon} />
-              <TitleText style={styles.streakNumber}>{streak}</TitleText>
+              <Ionicons name="flame" size={24} color="#FF6B35" />
+              <Text style={styles.streakNumber}>{streak}</Text>
             </View>
-            <HapticButton style={styles.settingsButton}>
-              <Ionicons name="settings-outline" size={28} color={COLORS.mainText} />
-            </HapticButton>
+            <TouchableOpacity style={styles.settingsButton}>
+              <Ionicons name="settings-outline" size={24} color="#2C3E50" />
+            </TouchableOpacity>
           </View>
         </View>
 
         {/* Main Content */}
         <View style={styles.mainContent}>
           {/* Aura Element */}
-          <Animated.View style={[styles.auraContainer, auraAnimatedStyle]}>
+          <View style={styles.auraContainer}>
             <View style={styles.auraOuter}>
-              <View style={styles.auraMiddle}>
-                <View style={styles.auraInner} />
-              </View>
+              <View style={styles.auraInner} />
             </View>
-          </Animated.View>
+          </View>
 
           {/* Timer */}
           <View style={styles.timerSection}>
-            <DescriptionText style={styles.timerLabel}>Procrastination-free for</DescriptionText>
+            <Text style={styles.timerLabel}>Procrastination-free for</Text>
             <View style={styles.timerDisplay}>
               <View style={styles.timeUnit}>
-                <TitleText style={styles.timeNumber}>{formatNumber(time.days)}</TitleText>
-                <DescriptionText style={styles.timeLabel}>days</DescriptionText>
+                <Text style={styles.timeNumber}>{formatNumber(time.days)}</Text>
+                <Text style={styles.timeLabel}>days</Text>
               </View>
-              <TitleText style={styles.timeSeparator}>:</TitleText>
+              <Text style={styles.timeDot}>•</Text>
               <View style={styles.timeUnit}>
-                <TitleText style={styles.timeNumber}>{formatNumber(time.hours)}</TitleText>
-                <DescriptionText style={styles.timeLabel}>hours</DescriptionText>
+                <Text style={styles.timeNumber}>{formatNumber(time.hours)}</Text>
+                <Text style={styles.timeLabel}>hours</Text>
               </View>
-              <TitleText style={styles.timeSeparator}>:</TitleText>
+              <Text style={styles.timeDot}>•</Text>
               <View style={styles.timeUnit}>
-                <TitleText style={styles.timeNumber}>{formatNumber(time.seconds)}</TitleText>
-                <DescriptionText style={styles.timeLabel}>secs</DescriptionText>
+                <Text style={styles.timeNumber}>{formatNumber(time.seconds)}</Text>
+                <Text style={styles.timeLabel}>secs</Text>
               </View>
             </View>
           </View>
 
           {/* Main Button */}
-          <View style={styles.buttonSection}>
-            <HapticButton style={styles.temptedButton} onPress={handleTempted}>
-              <TitleText style={styles.temptedButtonText}>I Feel Tempted</TitleText>
-            </HapticButton>
+          <TouchableOpacity style={styles.temptedButton} onPress={handleTempted}>
+            <Text style={styles.temptedButtonText}>I Feel Tempted</Text>
+          </TouchableOpacity>
 
-            {/* Action Buttons */}
-            <View style={styles.actionButtons}>
-              <HapticButton style={styles.actionButton} onPress={handleResetTimer}>
-                <Ionicons name="refresh" size={24} color={COLORS.secondaryBackground} />
-              </HapticButton>
-              <HapticButton style={styles.actionButton}>
-                <Ionicons name="create-outline" size={24} color={COLORS.secondaryBackground} />
-              </HapticButton>
-            </View>
+          {/* Action Buttons */}
+          <View style={styles.actionButtons}>
+            <TouchableOpacity style={styles.actionButton} onPress={handleResetTimer}>
+              <Ionicons name="refresh" size={20} color="#2C3E50" />
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.actionButton}>
+              <Ionicons name="create-outline" size={20} color="#2C3E50" />
+            </TouchableOpacity>
           </View>
 
           {/* Progress Card */}
           <View style={styles.progressCard}>
             <View style={styles.progressHeader}>
-              <TitleText style={styles.progressTitle}>Brain Rewiring</TitleText>
-              <TitleText style={styles.progressPercentage}>70%</TitleText>
+              <Text style={styles.progressTitle}>Brain Rewiring</Text>
+              <Text style={styles.progressPercentage}>70%</Text>
             </View>
             <View style={styles.progressBarContainer}>
               <View style={styles.progressBarBg}>
@@ -290,7 +246,7 @@ export default function Homepage() {
             </View>
           </View>
         </View>
-      </View>
+      </LinearGradient>
     </Protected>
   );
 }
@@ -298,186 +254,130 @@ export default function Homepage() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.defaultBg,
-  },
-  backgroundContainer: {
-    ...StyleSheet.absoluteFillObject,
-  },
-  rotatingBackground: {
-    ...StyleSheet.absoluteFillObject,
-  },
-  floatingOrb: {
-    position: 'absolute',
-    borderRadius: 200,
-    opacity: 0.3,
-  },
-  orb1: {
-    width: 300,
-    height: 300,
-    backgroundColor: COLORS.primaryAction,
-    top: '10%',
-    left: '-20%',
-  },
-  orb2: {
-    width: 250,
-    height: 250,
-    backgroundColor: COLORS.secondaryBackground,
-    bottom: '20%',
-    right: '-15%',
-  },
-  orb3: {
-    width: 150,
-    height: 150,
-    backgroundColor: '#10B981',
-    top: '60%',
-    left: '70%',
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: SPACING.lg,
-    zIndex: 10,
+    paddingHorizontal: 24,
+    paddingBottom: 20,
   },
-  logo: {
-    flex: 1,
-  },
-  logoImage: {
-    width: 120,
-    height: 40,
+  logoText: {
+    fontSize: 24,
+    fontWeight: '700',
+    color: '#2C3E50',
   },
   headerRight: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: SPACING.md,
+    gap: 16,
   },
   streakContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
-  },
-  flameIcon: {
-    textShadowColor: 'rgba(255, 107, 53, 0.5)',
-    textShadowOffset: { width: 0, height: 0 },
-    textShadowRadius: 8,
+    gap: 6,
   },
   streakNumber: {
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: '700',
-    color: COLORS.mainText,
+    color: '#2C3E50',
   },
   settingsButton: {
-    padding: SPACING.sm,
+    padding: 4,
   },
   mainContent: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: SPACING.lg,
-    zIndex: 10,
-    paddingBottom: 100, // Account for tab bar
+    paddingHorizontal: 24,
+    paddingBottom: 120, // Account for tab bar
   },
   auraContainer: {
-    marginBottom: SPACING.xl * 2,
+    marginBottom: 40,
+    marginTop: 20,
   },
   auraOuter: {
-    width: 192,
-    height: 192,
-    borderRadius: 96,
-    backgroundColor: 'rgba(56, 189, 248, 0.4)',
+    width: 200,
+    height: 200,
+    borderRadius: 100,
+    backgroundColor: 'rgba(255, 255, 255, 0.3)',
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: '#38BDF8',
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.6,
-    shadowRadius: 20,
-    elevation: 10,
+    shadowColor: 'rgba(0, 0, 0, 0.1)',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 1,
+    shadowRadius: 12,
+    elevation: 8,
   },
-  auraMiddle: {
+  auraInner: {
     width: 160,
     height: 160,
     borderRadius: 80,
-    backgroundColor: 'rgba(186, 230, 253, 0.8)',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  auraInner: {
-    width: 128,
-    height: 128,
-    borderRadius: 64,
-    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    backgroundColor: 'rgba(255, 255, 255, 0.8)',
   },
   timerSection: {
     alignItems: 'center',
-    marginBottom: SPACING.xl * 2,
+    marginBottom: 60,
   },
   timerLabel: {
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: '500',
-    color: COLORS.secondaryBackground,
-    marginBottom: SPACING.sm,
+    color: '#2C3E50',
+    marginBottom: 12,
   },
   timerDisplay: {
     flexDirection: 'row',
-    alignItems: 'flex-end',
-    gap: SPACING.sm,
+    alignItems: 'baseline',
+    gap: 8,
   },
   timeUnit: {
     alignItems: 'center',
   },
   timeNumber: {
-    fontSize: 48,
-    fontWeight: '700',
-    color: COLORS.mainText,
-    lineHeight: 56,
-    textShadowColor: 'rgba(0, 0, 0, 0.1)',
-    textShadowOffset: { width: 0, height: 2 },
-    textShadowRadius: 4,
+    fontSize: 52,
+    fontWeight: '800',
+    color: '#2C3E50',
+    lineHeight: 60,
   },
   timeLabel: {
-    fontSize: 12,
+    fontSize: 14,
     fontWeight: '500',
-    color: '#64748B',
+    color: '#5A6C7D',
+    marginTop: -8,
   },
-  timeSeparator: {
+  timeDot: {
     fontSize: 36,
-    fontWeight: '700',
-    color: COLORS.mainText,
-    paddingBottom: 8,
-  },
-  buttonSection: {
-    width: '100%',
-    maxWidth: 300,
-    alignItems: 'center',
-    marginBottom: SPACING.xl,
+    fontWeight: '800',
+    color: '#2C3E50',
+    marginBottom: 12,
   },
   temptedButton: {
-    width: '100%',
-    backgroundColor: COLORS.primaryAction,
-    paddingVertical: SPACING.lg,
-    borderRadius: 50,
+    width: width - 48,
+    backgroundColor: '#2980B9',
+    paddingVertical: 18,
+    borderRadius: 30,
     alignItems: 'center',
-    marginBottom: SPACING.md,
-    shadowColor: COLORS.primaryAction,
+    marginBottom: 24,
+    shadowColor: 'rgba(41, 128, 185, 0.4)',
     shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.3,
+    shadowOpacity: 1,
     shadowRadius: 16,
     elevation: 8,
   },
   temptedButtonText: {
     fontSize: 18,
     fontWeight: '700',
-    color: COLORS.vibrantCta,
+    color: '#FFFFFF',
   },
   actionButtons: {
     flexDirection: 'row',
-    gap: SPACING.md,
+    gap: 20,
+    marginBottom: 40,
   },
   actionButton: {
     width: 56,
     height: 56,
     borderRadius: 28,
-    backgroundColor: 'rgba(255, 255, 255, 0.6)',
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
     alignItems: 'center',
     justifyContent: 'center',
     shadowColor: 'rgba(0, 0, 0, 0.1)',
@@ -487,46 +387,45 @@ const styles = StyleSheet.create({
     elevation: 4,
   },
   progressCard: {
-    width: '100%',
-    maxWidth: 350,
-    backgroundColor: 'rgba(255, 255, 255, 0.4)',
-    padding: SPACING.md,
-    borderRadius: 16,
+    width: width - 48,
+    backgroundColor: 'rgba(255, 255, 255, 0.6)',
+    padding: 20,
+    borderRadius: 24,
     shadowColor: 'rgba(0, 0, 0, 0.1)',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 1,
-    shadowRadius: 8,
-    elevation: 4,
+    shadowRadius: 12,
+    elevation: 6,
   },
   progressHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: SPACING.sm,
+    marginBottom: 12,
   },
   progressTitle: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: '600',
-    color: COLORS.secondaryBackground,
+    color: '#2C3E50',
   },
   progressPercentage: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: '700',
-    color: COLORS.mainText,
+    color: '#2C3E50',
   },
   progressBarContainer: {
     width: '100%',
   },
   progressBarBg: {
     width: '100%',
-    height: 10,
-    backgroundColor: '#E2E8F0',
-    borderRadius: 5,
+    height: 12,
+    backgroundColor: '#E8F4FD',
+    borderRadius: 6,
     overflow: 'hidden',
   },
   progressBarFill: {
     height: '100%',
-    backgroundColor: '#10B981',
-    borderRadius: 5,
+    backgroundColor: '#27AE60',
+    borderRadius: 6,
   },
 });
