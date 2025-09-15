@@ -321,8 +321,8 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
   },
   logoImage: {
-    width: 120,
-    height: 28,
+    width: 360,
+    height: 84,
   },
   headerRight: {
     flexDirection: 'row',
