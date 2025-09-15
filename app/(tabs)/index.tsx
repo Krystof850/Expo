@@ -189,7 +189,7 @@ export default function Homepage() {
         <View style={styles.header}>
           {/* LEFT: LOGO */}
           <Image 
-            source={require('../../assets/images/unloop-logo.png')} 
+            source={require('../../assets/images/unloop-logo-black.png')} 
             style={styles.logoImage}
             resizeMode="contain"
             accessibilityLabel="Unloop AI"
