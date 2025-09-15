@@ -4,7 +4,6 @@ import {
   getAuth,
   Auth,
 } from "firebase/auth";
-// Note: AsyncStorage persistence je dostupné v novějších verzích Firebase
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 import Constants from "expo-constants";
@@ -57,13 +56,12 @@ if (
 
 const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
 
-// Poznámka: Firebase persistence v Expo SDK 53 má problém s Hermes engine
-// Proto používáme základní getAuth() - auth bude fungovat ale nebude persistent mezi restarty
+// Firebase Auth - použijeme základní getAuth, AsyncStorage persistence přidáme později
 let auth: Auth;
 try {
   auth = getAuth(app);
 } catch (e) {
-  // Při HMR a opakovaném importu může být auth už hotové:
+  // Pri HMR a opakovaném importu může být auth již inicializovaný
   auth = getAuth();
 }
 

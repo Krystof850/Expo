@@ -56,26 +56,37 @@ export default function EmailSignIn() {
                   
                   const trimmedEmail = email.trim();
                   
-                  // Check if user already exists
-                  const signInMethods = await fetchSignInMethodsForEmail(auth, trimmedEmail);
-                  
-                  if (signInMethods.length > 0) {
-                    // User exists, try to sign in
+                  // Try to sign in first
+                  try {
+                    console.log('[EmailSignIn] Trying to sign in existing user');
                     await signInWithEmail(trimmedEmail, password);
-                  } else {
-                    // New user, create account
-                    await signUpWithEmail(trimmedEmail, password);
+                    console.log('[EmailSignIn] Sign in successful');
+                  } catch (signInError: any) {
+                    console.log('[EmailSignIn] Sign in failed:', signInError.code);
+                    
+                    if (signInError.code === 'auth/user-not-found' || signInError.code === 'auth/invalid-credential') {
+                      // User doesn't exist, try to create new account
+                      console.log('[EmailSignIn] User not found, trying to create new account');
+                      await signUpWithEmail(trimmedEmail, password);
+                      console.log('[EmailSignIn] Sign up successful');
+                    } else {
+                      // Other sign in errors (wrong password, etc.)
+                      throw signInError;
+                    }
                   }
                 } catch (e: any) {
+                  console.error('[EmailSignIn] Authentication failed:', e);
                   let errorMessage = "Authentication failed.";
                   if (e.code === 'auth/wrong-password' || e.code === 'auth/invalid-credential') {
-                    errorMessage = "Incorrect password. Please try again.";
+                    errorMessage = "Nesprávné heslo. Zkus to znovu.";
                   } else if (e.code === 'auth/email-already-in-use') {
-                    errorMessage = "This email is already registered. Please sign in.";
+                    errorMessage = "Tento email je již registrován. Zkus se přihlásit.";
                   } else if (e.code === 'auth/weak-password') {
-                    errorMessage = "Password is too weak. Please choose a stronger password.";
+                    errorMessage = "Heslo je příliš slabé. Zvolte silnější heslo (min. 6 znaků).";
+                  } else if (e.code === 'auth/invalid-email') {
+                    errorMessage = "Neplatný formát emailu.";
                   }
-                  Alert.alert("Error", e.message || errorMessage);
+                  Alert.alert("Chyba", e.message || errorMessage);
                 } finally {
                   setSubmitting(false);
                 }
