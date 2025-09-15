@@ -33,28 +33,6 @@ export default function Homepage() {
   const [startTime, setStartTime] = useState<number | null>(null);
   const [streak, setStreak] = useState(0);
 
-  // Animation values
-  const pulseAnimation = useSharedValue(0);
-  const backgroundRotation = useSharedValue(0);
-
-  useEffect(() => {
-    // Start pulsing animation for aura
-    pulseAnimation.value = withRepeat(
-      withSequence(
-        withTiming(1, { duration: 2000 }),
-        withTiming(0, { duration: 2000 })
-      ),
-      -1,
-      false
-    );
-
-    // Start background rotation
-    backgroundRotation.value = withRepeat(
-      withTiming(360, { duration: 60000 }),
-      -1,
-      false
-    );
-  }, []);
 
   // Load saved timer data
   useEffect(() => {

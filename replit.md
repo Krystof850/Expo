@@ -1,6 +1,6 @@
 # Overview
 
-This is an Expo React Native application with Firebase Authentication integration. The app implements email/password authentication with persistent user sessions using AsyncStorage. It features a clean TypeScript architecture with protected routes, form validation, and Czech language error mapping. The application uses expo-router for navigation and includes both public authentication screens and protected user areas.
+This is an Expo React Native application with Firebase Authentication integration. The app implements email/password authentication with persistent user sessions using AsyncStorage. It features a clean TypeScript architecture with protected routes, form validation, and automatic sign-in/registration flow. The application uses expo-router for navigation, includes an optional onboarding assessment, and has a welcome screen with choice between starting the quiz or skipping directly to login.
 
 **Recent Updates (Sep 14, 2025):**
 - ✅ **REMOVED: "Ready to Transform?" Page** - Streamlined navigation flow from typing directly to journey page
