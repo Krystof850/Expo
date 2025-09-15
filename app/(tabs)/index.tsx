@@ -184,25 +184,26 @@ export default function Homepage() {
           end={{ x: 0, y: 1 }}
         />
 
-        <View style={[styles.content, { paddingTop: insets.top + 24 }]}>
-          {/* Header */}
-          <View style={styles.header}>
-            <Image 
-              source={require('../../assets/images/unloop-logo.png')} 
-              style={styles.logoImage}
-              resizeMode="contain"
-            />
-            
-            <View style={styles.headerRight}>
-              <View style={styles.streakContainer}>
-                <Ionicons name="flame" size={28} color="#F97316" />
-                <Text style={styles.streakNumber}>{streak}</Text>
-              </View>
-              <TouchableOpacity style={styles.settingsButton}>
-                <Ionicons name="settings-outline" size={28} color="#64748B" />
-              </TouchableOpacity>
+        {/* Header - Fixed Position */}
+        <View style={[styles.header, { paddingTop: insets.top + 16 }]}>
+          <Image 
+            source={require('../../assets/images/unloop-logo.png')} 
+            style={styles.logoImage}
+            resizeMode="contain"
+          />
+          
+          <View style={styles.headerRight}>
+            <View style={styles.streakContainer}>
+              <Ionicons name="flame" size={28} color="#F97316" />
+              <Text style={styles.streakNumber}>{streak}</Text>
             </View>
+            <TouchableOpacity style={styles.settingsButton}>
+              <Ionicons name="settings-outline" size={28} color="#64748B" />
+            </TouchableOpacity>
           </View>
+        </View>
+
+        <View style={[styles.content, { paddingTop: insets.top + 120 }]}>
 
           {/* Main Content */}
           <View style={styles.mainContent}>
@@ -302,23 +303,27 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
   },
   header: {
-    position: 'relative',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 32,
-    zIndex: 10,
-    minHeight: 85,
+    alignItems: 'flex-start',
+    paddingHorizontal: 16,
+    zIndex: 20,
   },
   logoImage: {
-    width: 280,
-    height: 75,
-    alignSelf: 'flex-start',
+    width: 300,
+    height: 80,
+    marginLeft: -16,
   },
   headerRight: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 16,
+    gap: 20,
+    marginRight: -8,
+    marginTop: 8,
   },
   streakContainer: {
     flexDirection: 'row',
