@@ -51,7 +51,7 @@ export default function SignUp() {
         >
           <FirebaseConfigBanner />
           <View style={styles.formContainer}>
-            <TitleText style={styles.title}>Create Account</TitleText>
+            <TitleText animated={false} style={styles.title}>Create Account</TitleText>
       <Formik
         initialValues={{ email: "", password: "" }}
         validationSchema={schema}
@@ -78,7 +78,7 @@ export default function SignUp() {
               style={styles.input}
               placeholderTextColor="rgba(255, 255, 255, 0.6)"
             />
-            {touched.email && errors.email ? <DescriptionText style={styles.errorText}>{errors.email}</DescriptionText> : null}
+            {touched.email && errors.email ? <DescriptionText animated={false} style={styles.errorText}>{errors.email}</DescriptionText> : null}
 
             <TextInput
               placeholder="Password (min. 6 characters)"
@@ -89,14 +89,14 @@ export default function SignUp() {
               style={styles.input}
               placeholderTextColor="rgba(255, 255, 255, 0.6)"
             />
-            {touched.password && errors.password ? <DescriptionText style={styles.errorText}>{errors.password}</DescriptionText> : null}
+            {touched.password && errors.password ? <DescriptionText animated={false} style={styles.errorText}>{errors.password}</DescriptionText> : null}
 
             <HapticButton 
               style={[styles.primaryButton, submitting && styles.disabledButton]}
               onPress={() => handleSubmit()}
               disabled={submitting}
             >
-              <TitleText style={styles.primaryButtonText}>
+              <TitleText animated={false} style={styles.primaryButtonText}>
                 {submitting ? "Creating account..." : "Create Account"}
               </TitleText>
             </HapticButton>
@@ -104,7 +104,7 @@ export default function SignUp() {
             {/* Divider */}
             <View style={styles.divider}>
               <View style={styles.dividerLine} />
-              <DescriptionText style={styles.dividerText}>or</DescriptionText>
+              <DescriptionText animated={false} style={styles.dividerText}>or</DescriptionText>
               <View style={styles.dividerLine} />
             </View>
 
@@ -114,18 +114,18 @@ export default function SignUp() {
               onPress={handleGoogleSignIn}
               disabled={googleLoading || submitting}
             >
-              <DescriptionText style={styles.googleIcon}>G</DescriptionText>
-              <DescriptionText style={styles.googleButtonText}>
+              <DescriptionText animated={false} style={styles.googleIcon}>G</DescriptionText>
+              <DescriptionText animated={false} style={styles.googleButtonText}>
                 {googleLoading ? "Signing up with Google..." : "Sign up with Google"}
               </DescriptionText>
             </HapticButton>
 
             {/* Sign In Section */}
             <View style={styles.authAlternatives}>
-              <DescriptionText style={styles.alternativeText}>Already have an account?</DescriptionText>
+              <DescriptionText animated={false} style={styles.alternativeText}>Already have an account?</DescriptionText>
               <Link href="/(auth)/sign-in" asChild>
                 <HapticButton style={styles.secondaryButton}>
-                  <TitleText style={styles.secondaryButtonText}>Sign In</TitleText>
+                  <TitleText animated={false} style={styles.secondaryButtonText}>Sign In</TitleText>
                 </HapticButton>
               </Link>
             </View>

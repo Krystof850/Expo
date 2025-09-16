@@ -42,8 +42,8 @@ export default function EmailSignIn() {
               >
                 <Ionicons name="arrow-back" size={24} color={COLORS.mainText} />
               </HapticButton>
-              <TitleText style={[styles.title, { fontSize: 28, lineHeight: Math.round(28 * 1.25) }]}>Continue with Email</TitleText>
-              <DescriptionText style={styles.subtitle}>We'll sign you in or create your account</DescriptionText>
+              <TitleText animated={false} style={[styles.title, { fontSize: 28, lineHeight: Math.round(28 * 1.25) }]}>Continue with Email</TitleText>
+              <DescriptionText animated={false} style={styles.subtitle}>We'll sign you in or create your account</DescriptionText>
             </View>
 
             <Formik
@@ -106,7 +106,7 @@ export default function EmailSignIn() {
                       style={styles.input}
                     />
                     {touched.email && errors.email && (
-                      <DescriptionText style={styles.errorText}>{errors.email}</DescriptionText>
+                      <DescriptionText animated={false} style={styles.errorText}>{errors.email}</DescriptionText>
                     )}
                   </View>
 
@@ -121,7 +121,7 @@ export default function EmailSignIn() {
                       style={styles.input}
                     />
                     {touched.password && errors.password && (
-                      <DescriptionText style={styles.errorText}>{errors.password}</DescriptionText>
+                      <DescriptionText animated={false} style={styles.errorText}>{errors.password}</DescriptionText>
                     )}
                   </View>
 
@@ -130,7 +130,7 @@ export default function EmailSignIn() {
                     onPress={() => handleSubmit()}
                     disabled={submitting}
                   >
-                    <TitleText style={styles.signInButtonText}>
+                    <TitleText animated={false} style={styles.signInButtonText}>
                       {submitting ? "Please wait..." : "Continue"}
                     </TitleText>
                   </HapticButton>
@@ -140,7 +140,7 @@ export default function EmailSignIn() {
                       style={styles.linkButton}
                       onPress={() => router.push('/(auth)/forgot')}
                     >
-                      <DescriptionText style={styles.linkText}>Forgot password?</DescriptionText>
+                      <DescriptionText animated={false} style={styles.linkText}>Forgot password?</DescriptionText>
                     </HapticButton>
                   </View>
                 </View>

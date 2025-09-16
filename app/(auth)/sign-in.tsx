@@ -56,8 +56,8 @@ export default function SignIn() {
         <View style={styles.container}>
           <View style={[styles.content, { paddingTop: insets.top + SPACING.xl * 2 }]}>
             <View style={[styles.header, { overflow: 'visible' }]}>
-              <TitleText style={[styles.title, { fontSize: 32, lineHeight: Math.round(32 * 1.25) }]}>Sign In</TitleText>
-              <DescriptionText style={styles.subtitle}>Choose your preferred sign-in method</DescriptionText>
+              <TitleText animated={false} style={[styles.title, { fontSize: 32, lineHeight: Math.round(32 * 1.25) }]}>Sign In</TitleText>
+              <DescriptionText animated={false} style={styles.subtitle}>Choose your preferred sign-in method</DescriptionText>
             </View>
 
             <View style={styles.buttonContainer}>
@@ -67,7 +67,7 @@ export default function SignIn() {
                 onPress={handleAppleSignIn}
               >
                 <Ionicons name="logo-apple" size={24} color="#000000" style={styles.buttonIcon} />
-                <TitleText style={styles.buttonText}>Continue with Apple</TitleText>
+                <TitleText animated={false} style={styles.buttonText}>Continue with Apple</TitleText>
               </HapticButton>
 
               {/* Google Sign In Button */}
@@ -77,7 +77,7 @@ export default function SignIn() {
                 disabled={googleLoading}
               >
                 <Text style={styles.googleIcon}>G</Text>
-                <TitleText style={styles.buttonText}>
+                <TitleText animated={false} style={styles.buttonText}>
                   {googleLoading ? "Signing in..." : "Continue with Google"}
                 </TitleText>
               </HapticButton>
@@ -88,7 +88,7 @@ export default function SignIn() {
                 onPress={handleEmailSignIn}
               >
                 <Ionicons name="mail" size={20} color="#000000" style={styles.buttonIcon} />
-                <TitleText style={styles.buttonText}>Continue with Email</TitleText>
+                <TitleText animated={false} style={styles.buttonText}>Continue with Email</TitleText>
               </HapticButton>
             </View>
 
