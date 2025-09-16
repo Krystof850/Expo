@@ -4,7 +4,6 @@ import {
   StyleSheet,
   StatusBar,
   Dimensions,
-  ScrollView,
 } from 'react-native';
 import Animated, {
   useSharedValue,
@@ -89,11 +88,11 @@ export default function JourneyScreen() {
   return (
     <AppBackground>
       <StatusBar barStyle="light-content" />
-      <ScrollView 
-        style={styles.container}
-        contentContainerStyle={[styles.scrollContent, { paddingTop: insets.top + SPACING.xl * 2 }]}
-        showsVerticalScrollIndicator={false}
-      >
+      <View style={[styles.container, { 
+        paddingTop: insets.top + SPACING.sm, 
+        paddingBottom: insets.bottom + SPACING.sm,
+        justifyContent: 'space-between' 
+      }]}>
         {/* Header */}
         <Animated.View entering={FadeInDown.delay(100)} style={[styles.header, { overflow: 'visible' }]}>
           <TitleText style={[styles.headerTitle, { fontSize: 32, lineHeight: Math.round(32 * 1.25) }]}>Almost There!</TitleText>
@@ -197,7 +196,7 @@ export default function JourneyScreen() {
             </View>
           </View>
         </Animated.View>
-      </ScrollView>
+      </View>
     </AppBackground>
   );
 }
@@ -205,18 +204,14 @@ export default function JourneyScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  scrollContent: {
-    flexGrow: 1,
     paddingHorizontal: SPACING.lg,
-    paddingBottom: SPACING.xl,
   },
   loadingContainer: {
     flex: 1,
   },
   header: {
     alignItems: 'center',
-    paddingVertical: SPACING.xl,
+    paddingVertical: SPACING.sm,
   },
   headerTitle: {
     fontSize: 32,
@@ -227,8 +222,7 @@ const styles = StyleSheet.create({
     textShadowRadius: 6,
   },
   mainContent: {
-    flex: 1,
-    paddingBottom: SPACING.xl,
+    paddingBottom: SPACING.md,
   },
   messageSection: {
     alignItems: 'center',
@@ -292,7 +286,7 @@ const styles = StyleSheet.create({
     lineHeight: 18,
   },
   bottomSection: {
-    paddingBottom: SPACING.xl,
+    paddingBottom: SPACING.sm,
   },
   startButton: {
     backgroundColor: COLORS.mainText,
