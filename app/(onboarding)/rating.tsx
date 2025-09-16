@@ -39,7 +39,7 @@ const CLIENT_REVIEWS: Review[] = [
   {
     id: '1',
     name: 'Jake Newman',
-    username: '@jake_newman',
+    username: '@productivelife22',
     avatar: profileImages[0], // Male profile
     rating: 5,
     review: 'This app changed my life! I\'ve been able to complete projects on time for 2 months now. The procrastination tracking system helped me understand my habits.'
@@ -47,7 +47,7 @@ const CLIENT_REVIEWS: Review[] = [
   {
     id: '2', 
     name: 'Anna Stevens',
-    username: '@anna_stevens',
+    username: '@mindful_anna',
     avatar: profileImages[1], // Female profile
     rating: 5,
     review: 'I was skeptical at first, but the anti-procrastination features really work. I can finally write my thesis without endless postponing!'
@@ -55,7 +55,7 @@ const CLIENT_REVIEWS: Review[] = [
   {
     id: '3',
     name: 'Tom Collins',
-    username: '@tom_collins',
+    username: '@focusedtom',
     avatar: profileImages[2], // Male profile
     rating: 5,
     review: 'Best investment in my productivity. The app helped me identify my procrastination patterns and build better work habits.'
@@ -63,7 +63,7 @@ const CLIENT_REVIEWS: Review[] = [
   {
     id: '4',
     name: 'Sarah Johnson',
-    username: '@sarah_johnson',
+    username: '@sarahgetsitdone',
     avatar: profileImages[3], // Female profile
     rating: 5,
     review: 'Unloop completely transformed how I approach my daily tasks. The science-based approach really works - I feel so much more in control now!'
