@@ -33,6 +33,7 @@ const PROCRASTINATION_GOALS: Goal[] = [
   { id: 'goal_achievement', text: 'Achieving personal goals', icon: 'trophy-outline', color: '#9F7AEA' },
   { id: 'self_discipline', text: 'Strengthening self-discipline', icon: 'shield-checkmark-outline', color: '#38B2AC' },
   { id: 'work_life_balance', text: 'Better work-life balance', icon: 'library-outline', color: '#68D391' },
+  { id: 'improve_confidence', text: 'Improve my confidence', icon: 'star-outline', color: '#FF6B6B' },
 ];
 
 export default function GoalsScreen() {
