@@ -11,7 +11,7 @@
     "test": "jest --watchAll",
     "lint": "expo lint",
     "dev:ios": "eas build -p ios --profile development",
-    "dev:start": "expo start --dev-client --port 5000",
+    "dev:start": "expo start --dev-client --port 5000 --tunnel",
     "clean:cache": "expo start -c"
   },
   "jest": {

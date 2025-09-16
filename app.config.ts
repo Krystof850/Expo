@@ -9,7 +9,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   version: '1.0.0',
   orientation: 'portrait',
   icon: './assets/images/icon.png',
-  scheme: 'expo-on-replit',
+  scheme: 'unloop',
   userInterfaceStyle: 'automatic',
   newArchEnabled: true,
 
