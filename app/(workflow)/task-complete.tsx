@@ -40,12 +40,12 @@ export default function TaskComplete() {
     // Start animations
     setTimeout(() => {
       iconScale.value = withSequence(
-        withSpring(1.2, { duration: 400 }),
-        withSpring(1, { duration: 200 })
+        withSpring(1.2),
+        withSpring(1)
       );
       
       if (isSuccess) {
-        iconRotation.value = withSpring(360, { duration: 600 });
+        iconRotation.value = withSpring(360);
       }
       
       contentOpacity.value = withDelay(200, withTiming(1, { duration: 600 }));
@@ -56,7 +56,7 @@ export default function TaskComplete() {
     await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     
     // Navigate back to the protected homepage (tabs)
-    router.push('/(tabs)');
+    router.replace('/(tabs)');
   };
 
   const formatTimeSpent = (seconds: string): string => {

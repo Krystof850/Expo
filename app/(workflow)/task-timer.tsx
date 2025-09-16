@@ -107,7 +107,7 @@ export default function TaskTimer() {
     await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
     setIsTimerRunning(false);
     
-    router.push({
+    router.replace({
       pathname: '/(workflow)/task-complete',
       params: { 
         success: 'true',
@@ -121,7 +121,7 @@ export default function TaskTimer() {
     await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
     setIsTimerRunning(false);
     
-    router.push({
+    router.replace({
       pathname: '/(workflow)/task-complete',
       params: { 
         success: 'false',
@@ -132,8 +132,17 @@ export default function TaskTimer() {
   };
 
   const handleTimeUp = () => {
-    // Automatically handle when time runs out
-    handleTaskFailed();
+    // Automatically handle when time runs out and add timeout haptic
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    
+    router.replace({
+      pathname: '/(workflow)/task-complete',
+      params: { 
+        success: 'false',
+        task: microTask,
+        timeSpent: (180 - timeLeft).toString()
+      }
+    });
   };
 
   const formatTime = (seconds: number): string => {
