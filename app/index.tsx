@@ -6,7 +6,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { useAuth } from '../src/context/AuthContext';
-import { usePlacement } from 'expo-superwall';
+import { isSuperwallSupported } from '../src/utils/environment';
 
 export default function Index() {
   const { user, loading } = useAuth();
@@ -31,14 +31,38 @@ export default function Index() {
     router.push('/(auth)/sign-in');
   };
 
-  const { registerPlacement } = usePlacement({
-    onError: (error) => console.log('Paywall error:', error),
-    onPresent: (info) => console.log('Paywall presented:', info),
-    onDismiss: (info, result) => console.log('Paywall dismissed:', info, result),
-  });
+  // Podmíněný Superwall hook
+  const superwallSupported = isSuperwallSupported();
+  let registerPlacement = null;
+  
+  if (superwallSupported) {
+    try {
+      const { usePlacement } = require('expo-superwall');
+      const placementHook = usePlacement({
+        onError: (error: any) => console.log('Paywall error:', error),
+        onPresent: (info: any) => console.log('Paywall presented:', info),
+        onDismiss: (info: any, result: any) => console.log('Paywall dismissed:', info, result),
+      });
+      registerPlacement = placementHook.registerPlacement;
+    } catch (error) {
+      console.warn('⚠️ Superwall hook not available:', error);
+    }
+  }
 
   const handleShowPaywall = async () => {
     await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    
+    if (!superwallSupported) {
+      console.log('📱 Superwall not supported in Expo Go');
+      // Můžete přidat alert nebo jiné UI feedback
+      return;
+    }
+    
+    if (!registerPlacement) {
+      console.log('⚠️ Superwall not available');
+      return;
+    }
+    
     try {
       await registerPlacement({
         placement: 'zario-template-3a85-2025-09-10',

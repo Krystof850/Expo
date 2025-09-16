@@ -17,7 +17,7 @@ import { useColorScheme } from '@/hooks/useColorScheme';
 import { AuthProvider } from '../src/context/AuthContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect } from 'react';
-import { SuperwallProvider } from 'expo-superwall';
+import ConditionalSuperwallProvider from '../src/components/ConditionalSuperwallProvider';
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
@@ -53,15 +53,8 @@ export default function RootLayout() {
     return null;
   }
 
-  const superwallApiKey = Constants.expoConfig?.extra?.SUPERWALL_API_KEY;
-
   return (
-    <SuperwallProvider
-      apiKeys={{
-        ios: superwallApiKey,
-        android: superwallApiKey,
-      }}
-    >
+    <ConditionalSuperwallProvider>
       <AuthProvider>
         <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
           <Stack
@@ -82,7 +75,7 @@ export default function RootLayout() {
           <StatusBar style="auto" />
         </ThemeProvider>
       </AuthProvider>
-    </SuperwallProvider>
+    </ConditionalSuperwallProvider>
   );
 
 }
