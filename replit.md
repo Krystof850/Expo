@@ -1,8 +1,16 @@
 # Overview
 
-This is an Expo React Native application with Firebase Authentication integration. The app implements email/password authentication with persistent user sessions using AsyncStorage. It features a clean TypeScript architecture with protected routes, form validation, and automatic sign-in/registration flow. The application uses expo-router for navigation, includes an optional onboarding assessment, and has a welcome screen with choice between starting the quiz or skipping directly to login.
+This is an Expo React Native application with Firebase Authentication integration and OpenAI-powered micro-task generation. The app implements email/password authentication with persistent user sessions using AsyncStorage. It features a clean TypeScript architecture with protected routes, form validation, and automatic sign-in/registration flow. The application uses expo-router for navigation, includes an optional onboarding assessment, and has a complete "I feel tempted" procrastination workflow with AI-generated micro-tasks.
 
-**Recent Updates (Sep 14, 2025):**
+**Recent Updates (Sep 16, 2025):**
+- ✅ **NEW: OpenAI Integration** - Server-side API endpoint for secure micro-task generation using GPT-5 model
+- ✅ **NEW: Enhanced Timer Design** - SVG-based circular progress bar with smooth 360° animation
+- ✅ **IMPROVED: Web Server Configuration** - app.json updated to support server-side API routes
+- ✅ **SECURITY: Protected API Keys** - OpenAI API key secured on server-side, not exposed to client
+- ✅ **NEW: Fallback System** - Robust error handling with fallback to rule-based task generation
+- ✅ **ENHANCED: Timer Animation** - Fixed useAnimatedProps for proper SVG animation with calculated circumference
+
+**Previous Updates (Sep 14, 2025):**
 - ✅ **REMOVED: "Ready to Transform?" Page** - Streamlined navigation flow from typing directly to journey page
 - ✅ **ENHANCED: Journey Page Animations** - Professional staggered animations with FadeIn, SlideIn, and BounceIn effects
 - ✅ **NEW: Varied Icon Colors** - Dynamic icon colors (blue, gold, aqua, red) for enhanced visual appeal

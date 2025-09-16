@@ -7,10 +7,14 @@ import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import Animated, {
   useSharedValue,
-  useAnimatedStyle,
+  useAnimatedProps,
   withTiming,
   interpolate,
 } from 'react-native-reanimated';
+import Svg, { Circle } from 'react-native-svg';
+import { generateMicroTask } from '../../src/utils/openai';
+
+const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
 export default function TaskTimer() {
   const { procrastinationText } = useLocalSearchParams<{ procrastinationText: string }>();
@@ -20,13 +24,14 @@ export default function TaskTimer() {
   const [timeLeft, setTimeLeft] = useState(180);
   const [isTimerRunning, setIsTimerRunning] = useState(true);
   const [microTask, setMicroTask] = useState('');
+  const [isGeneratingTask, setIsGeneratingTask] = useState(true);
 
   // Animation values
   const timerProgress = useSharedValue(1);
 
   useEffect(() => {
     if (procrastinationText) {
-      generateMicroTask(procrastinationText);
+      generateTask(procrastinationText);
     }
   }, [procrastinationText]);
 
@@ -52,35 +57,17 @@ export default function TaskTimer() {
     return () => clearInterval(interval);
   }, [isTimerRunning, timeLeft]);
 
-  const generateMicroTask = (procrastination: string) => {
-    // Simple AI-like logic to break down procrastination into micro-task
-    const lowerText = procrastination.toLowerCase();
-    
-    let task = '';
-    
-    // Common procrastination patterns and their micro-tasks
-    if (lowerText.includes('gym') || lowerText.includes('workout') || lowerText.includes('exercise')) {
-      task = 'Put away your phone and pack your gym bag';
-    } else if (lowerText.includes('study') || lowerText.includes('homework') || lowerText.includes('learn')) {
-      task = 'Clear your desk and open your study materials';
-    } else if (lowerText.includes('work') || lowerText.includes('project') || lowerText.includes('task')) {
-      task = 'Close all distracting tabs and write one sentence about your project';
-    } else if (lowerText.includes('clean') || lowerText.includes('tidy') || lowerText.includes('organize')) {
-      task = 'Pick up just 5 items and put them in their proper place';
-    } else if (lowerText.includes('read') || lowerText.includes('book')) {
-      task = 'Find your book and read just the first paragraph';
-    } else if (lowerText.includes('cook') || lowerText.includes('meal') || lowerText.includes('food')) {
-      task = 'Get out one cooking ingredient and place it on the counter';
-    } else if (lowerText.includes('phone') || lowerText.includes('social') || lowerText.includes('scroll')) {
-      task = 'Put your phone in another room and take 3 deep breaths';
-    } else if (lowerText.includes('call') || lowerText.includes('email') || lowerText.includes('message')) {
-      task = 'Open your contacts and find the person you need to reach';
-    } else {
-      // Default micro-task for any procrastination
-      task = 'Stand up, take 3 deep breaths, and prepare your workspace';
+  const generateTask = async (procrastination: string) => {
+    try {
+      setIsGeneratingTask(true);
+      const aiTask = await generateMicroTask(procrastination);
+      setMicroTask(aiTask);
+    } catch (error) {
+      console.error('Failed to generate AI task:', error);
+      // Fallback is handled in the generateMicroTask function
+    } finally {
+      setIsGeneratingTask(false);
     }
-    
-    setMicroTask(task);
   };
 
   const handleBack = async () => {
@@ -151,16 +138,20 @@ export default function TaskTimer() {
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
-  // Animated styles for timer circle
-  const timerAnimatedStyle = useAnimatedStyle(() => {
-    const scale = interpolate(
+  // Constants for circle progress
+  const radius = 100;
+  const circumference = 2 * Math.PI * radius;
+
+  // Animated props for SVG circle progress
+  const circleAnimatedProps = useAnimatedProps(() => {
+    const strokeDashoffset = interpolate(
       timerProgress.value,
-      [0, 1],
-      [0, 1]
+      [1, 0], // From full (1) to empty (0)
+      [0, circumference] // From 0 offset (full circle) to full circumference offset (empty circle)
     );
     
     return {
-      transform: [{ scale }],
+      strokeDashoffset,
     };
   });
 
@@ -183,12 +174,40 @@ export default function TaskTimer() {
 
         {/* Main Content */}
         <View style={styles.mainContent}>
-          <Text style={styles.taskTitle}>{microTask}</Text>
+          {isGeneratingTask ? (
+            <View style={styles.generatingContainer}>
+              <Text style={styles.generatingText}>Generating your micro-task...</Text>
+            </View>
+          ) : (
+            <Text style={styles.taskTitle}>{microTask}</Text>
+          )}
           
-          {/* Timer Circle - Simplified for React Native */}
+          {/* Timer Circle with SVG Progress */}
           <View style={styles.timerContainer}>
-            <View style={styles.timerCircleBg} />
-            <Animated.View style={[styles.timerProgress, timerAnimatedStyle]} />
+            <Svg width={220} height={220} style={styles.svgTimer}>
+              {/* Background circle */}
+              <Circle
+                cx={110}
+                cy={110}
+                r={100}
+                stroke="rgba(255, 255, 255, 0.3)"
+                strokeWidth={20}
+                fill="none"
+              />
+              {/* Animated progress circle */}
+              <AnimatedCircle
+                cx={110}
+                cy={110}
+                r={radius}
+                stroke="#0284C7"
+                strokeWidth={20}
+                fill="none"
+                strokeLinecap="round"
+                strokeDasharray={circumference}
+                animatedProps={circleAnimatedProps}
+                transform="rotate(-90 110 110)"
+              />
+            </Svg>
             
             <View style={styles.timerContent}>
               <Text style={styles.timerTime}>{formatTime(timeLeft)}</Text>
@@ -258,24 +277,18 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  timerCircleBg: {
+  svgTimer: {
     position: 'absolute',
-    width: 220,
-    height: 220,
-    borderRadius: 110,
-    borderWidth: 20,
-    borderColor: 'rgba(255, 255, 255, 0.3)',
   },
-  timerProgress: {
-    position: 'absolute',
-    width: 220,
-    height: 220,
-    borderRadius: 110,
-    borderWidth: 20,
-    borderColor: '#0284C7',
-    borderTopColor: 'transparent',
-    borderLeftColor: 'transparent',
-    borderRightColor: 'transparent',
+  generatingContainer: {
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  generatingText: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#0C4A6E',
+    textAlign: 'center',
   },
   timerContent: {
     alignItems: 'center',
