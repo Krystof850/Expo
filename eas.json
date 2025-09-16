@@ -4,13 +4,13 @@
     "development": {
       "developmentClient": true,
       "distribution": "internal",
-      "autoIncrement": "version"
+      "autoIncrement": true
     },
     "preview": {
       "distribution": "internal"
     },
     "production": {
-      "autoIncrement": "version"
+      "autoIncrement": true
     }
   },
   "submit": {
