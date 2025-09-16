@@ -9,7 +9,10 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "test": "jest --watchAll",
-    "lint": "expo lint"
+    "lint": "expo lint",
+    "dev:ios": "eas build -p ios --profile development",
+    "dev:start": "expo start --dev-client --port 5000",
+    "clean:cache": "expo start -c"
   },
   "jest": {
     "preset": "jest-expo"

@@ -1,18 +1,16 @@
 {
-  "cli": {
-    "version": ">= 10.0.0",
-    "appVersionSource": "remote"
-  },
+  "cli": { "version": ">= 3.0.0" },
   "build": {
     "development": {
       "developmentClient": true,
       "distribution": "internal",
-      "ios": { "resourceClass": "m-medium" },
-      "android": { "gradleCommand": ":app:assembleDebug" }
+      "autoIncrement": "version"
+    },
+    "preview": {
+      "distribution": "internal"
     },
     "production": {
-      "ios": { "autoIncrement": "buildNumber" },
-      "android": { "autoIncrement": "versionCode" }
+      "autoIncrement": "version"
     }
   },
   "submit": {
