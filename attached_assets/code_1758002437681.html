@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<title>Stitch Design</title>
+<link href="data:image/x-icon;base64," rel="icon" type="image/x-icon"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<style type="text/tailwindcss">
+    :root {
+      --primary-action: #0284C7;
+      --secondary-background: #0C4A6E;
+      --main-text: #082F49;
+      --cta-text: #FFFFFF;
+      --accent-green: #10B981;
+      --default-bg: #F0F9FF;
+      --vibrant-cta: #FFFFFF;
+      --vibrant-cta-text: #0B1120;
+      --task-failed-bg: #F87171;
+      --task-failed-text: #FFFFFF;
+      --task-completed-bg: #34D399;
+      --task-completed-text: #FFFFFF;
+    }
+    body {
+      font-family: 'Poppins', sans-serif;
+    }
+    @keyframes gradient-animation {
+      0% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+    .animate-gradient {
+      background: linear-gradient(-45deg, #E0F2FE, #BFDBFE, #93C5FD, #BFDBFE, #E0F2FE);
+      background-size: 400% 400%;
+      animation: gradient-animation 20s ease infinite;
+    }
+    .material-symbols-outlined {
+        font-variation-settings:
+        'FILL' 0,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 24
+    }
+    .button-shadow {
+        box-shadow: 0px 4px 20px 0px #0284C780;
+    }
+     .timer-circle {
+      stroke-dasharray: 628;
+      stroke-dashoffset: 157;transition: stroke-dashoffset 1s linear;
+    }
+    .btn-completed {
+        background: linear-gradient(145deg, #34D399, #10B981);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1), 0 2px 5px rgba(52, 211, 153, 0.4);
+    }
+    .btn-failed {
+        background: linear-gradient(145deg, #F87171, #EF4444);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1), 0 2px 5px rgba(248, 113, 113, 0.4);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-[var(--default-bg)] text-[var(--main-text)] antialiased">
+<div class="relative flex min-h-screen flex-col overflow-hidden p-6">
+<div class="absolute inset-0 z-0 animate-gradient"></div>
+<header class="z-10 flex w-full items-center">
+<button class="flex items-center gap-2 text-[var(--secondary-background)] transition-transform hover:scale-105">
+<span class="material-symbols-outlined text-3xl">arrow_back_ios_new</span>
+</button>
+</header>
+<main class="z-10 flex flex-grow flex-col items-center justify-between space-y-8 text-center pt-8 pb-8">
+<h1 class="text-3xl font-bold text-[var(--main-text)] [text-shadow:_0_2px_4px_rgb(0_0_0_/_10%)] max-w-sm">Put away your phone and pack your gym bag</h1>
+<div class="relative flex h-64 w-64 items-center justify-center">
+<svg class="absolute inset-0 h-full w-full" viewBox="0 0 220 220">
+<circle class="text-white/50" cx="110" cy="110" fill="none" r="100" stroke-width="20"></circle>
+<circle class="timer-circle text-[var(--primary-action)] -rotate-90 origin-center" cx="110" cy="110" fill="none" r="100" stroke="currentColor" stroke-linecap="round" stroke-width="20" style="stroke-dashoffset: 282.6;"></circle>
+</svg>
+<div class="z-10 flex flex-col items-center justify-center">
+<p class="text-5xl font-extrabold text-[var(--main-text)] tracking-tighter">10:34</p>
+<p class="text-lg text-[var(--secondary-background)]">remaining</p>
+</div>
+</div>
+<div class="w-full max-w-sm space-y-4">
+<button class="w-full rounded-full btn-completed py-4 text-xl font-bold text-[var(--task-completed-text)] transition-transform duration-300 ease-in-out hover:scale-105 active:scale-100">Task Completed</button>
+<button class="w-full rounded-full btn-failed py-4 text-xl font-bold text-[var(--task-failed-text)] transition-transform duration-300 ease-in-out hover:scale-105 active:scale-100">Task Failed</button>
+</div>
+</main>
+</div>
+
+</body></html>

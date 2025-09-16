@@ -31,6 +31,11 @@ export default function Index() {
     router.push('/(auth)/sign-in');
   };
 
+  const handleIFeelTempted = async () => {
+    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    router.push('/(workflow)/procrastination-input');
+  };
+
 
 
   return (
@@ -58,6 +63,11 @@ export default function Index() {
           <TouchableOpacity style={styles.primaryButton} onPress={handleStartQuiz}>
             <Ionicons name="play-circle-outline" size={24} color="#FFFFFF" style={styles.buttonIcon} />
             <Text style={styles.primaryButtonText}>Start Assessment Quiz</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.temptedButton} onPress={handleIFeelTempted}>
+            <Ionicons name="warning-outline" size={20} color="#E74C3C" style={styles.buttonIcon} />
+            <Text style={styles.temptedButtonText}>I feel tempted</Text>
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.secondaryButton} onPress={handleSkipToLogin}>
@@ -155,6 +165,26 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     color: '#2C3E50',
+  },
+  temptedButton: {
+    backgroundColor: 'rgba(231, 76, 60, 0.1)',
+    borderWidth: 2,
+    borderColor: '#E74C3C',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 16,
+    borderRadius: 28,
+    shadowColor: 'rgba(231, 76, 60, 0.2)',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 1,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  temptedButtonText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#E74C3C',
   },
   footer: {
     alignItems: 'center',
