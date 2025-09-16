@@ -1,0 +1,142 @@
+Cíl: Připrav projekt pro iOS development build v Expo/EAS. Oprav metro.config.js (žádné server.host), nastav eas.json, app.json/app.config.js, závislosti, skripty a Run button tak, aby Run spustil dev server s QR a build šel přes eas build -p ios --profile development.
+
+Kroky:
+
+Závislosti (nejnovější stabilní):
+
+Přidej/aktualizuj dev nástroje:
+
+expo, expo-dev-client, eas-cli, @expo/metro-config, react-native-svg-transformer (pokud jsou v projektu SVG).
+
+Nainstaluj:
+
+npm i -D eas-cli
+npm i expo expo-dev-client @expo/metro-config
+# pokud projekt používá SVG:
+npm i react-native-svg react-native-svg-transformer
+
+
+eas.json – profily buildů:
+Vytvoř/nahraď soubor eas.json tímto obsahem:
+
+{
+  "cli": { "version": ">= 3.0.0" },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "autoIncrement": "version"
+    },
+    "preview": {
+      "distribution": "internal"
+    },
+    "production": {
+      "autoIncrement": "version"
+    }
+  },
+  "submit": {
+    "production": {}
+  }
+}
+
+
+app.json / app.config.js:
+
+Zkontroluj, že máme iOS bundle id a název. Pokud používáme app.json, uprav:
+
+{
+  "expo": {
+    "name": "MyApp",
+    "slug": "myapp",
+    "ios": {
+      "bundleIdentifier": "com.mycompany.myapp"
+    },
+    "plugins": ["expo-dev-client"]
+  }
+}
+
+
+(Když už plugins existují, jen přidej "expo-dev-client".)
+
+metro.config.js – oprav a rozšiř default z @expo/metro-config:
+
+Pokud existuje, nahraď obsah tímto minimem bez jakýchkoli server.host a podobných voleb:
+
+// metro.config.js
+const { getDefaultConfig } = require('@expo/metro-config');
+
+const config = getDefaultConfig(__dirname);
+
+// Pokud používáme SVG (volitelné):
+// const { getDefaultConfig } = require('@expo/metro-config');
+// const config = getDefaultConfig(__dirname);
+// config.transformer.babelTransformerPath = require.resolve('react-native-svg-transformer');
+// config.resolver.assetExts = config.resolver.assetExts.filter((ext) => ext !== 'svg');
+// config.resolver.sourceExts = [...config.resolver.sourceExts, 'svg'];
+
+module.exports = config;
+
+
+package.json – skripty a verze:
+
+Přidej/aktualizuj skripty:
+
+{
+  "scripts": {
+    "start": "expo start",
+    "ios": "expo run:ios",
+    "android": "expo run:android",
+    "dev:ios": "eas build -p ios --profile development",
+    "dev:start": "expo start --dev-client",
+    "clean:cache": "expo start -c"
+  }
+}
+
+
+Pokud start už existuje, ponech, jen přidej dev:start a dev:ios.
+
+Run button v Replitu:
+
+Nastav, aby Run spouštěl dev server s dev clientem (QR v konzoli):
+
+V .replit (nebo Replit Nix run cmd) nastav příkaz:
+
+run = "npm run dev:start"
+
+
+Pokud je použit replit.nix, jen zajisti, že npm run dev:start je výchozí.
+
+Kontroly a čištění:
+
+Odstraň z projektu jakékoliv zbytky nastavení Metro serveru typu server.host, enhanced apod. – Metro to nepodporuje a EAS validátor na to padá.
+
+Pokud je v repu vlastní watchFolders či experimentální nastavení, dočasně je vypni (může lámat assets v prod bundlu).
+
+Zkontroluj, že není přítomno expo-updates s špatnou konfigurací; pokud ano, neměň teď, jen ověř, že build projde.
+
+Příkazové zkratky (pro uživatele):
+
+Po dokončení konfigurace v terminálu spusť:
+
+Dev server: npm run dev:start
+
+iOS dev build (EAS Dev Client): npm run dev:ios
+
+Výstupní kritéria:
+
+eas build -p ios --profile development už nevyhazuje varování o server.host ani o tom, že metro.config.js neexteduje @expo/metro-config.
+
+Klik na Run v Replitu zobrazí Expo dev server s QR kódem.
+
+plugins obsahují expo-dev-client.
+
+Žádné nenalezené assety v bundlu (žádné varování o missing assets).
+
+V případě SVG v projektu funguje import .svg bez chyb (pokud jsme aktivovali část se SVG).
+
+Volitelně – upgrade EAS CLI globálně (neblokující):
+
+npm i -g eas-cli
+
+
+Proveď všechny změny, commitni je a vrať diff upravených souborů (eas.json, app.json/app.config.js, metro.config.js, package.json, .replit) + krátké potvrzení, že validace EAS proběhla bez varování o server.host.
