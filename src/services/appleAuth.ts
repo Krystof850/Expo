@@ -43,26 +43,14 @@ export const signInWithApple = async (): Promise<AppleSignInResult> => {
       throw new Error('Apple Sign In is not available on this device');
     }
 
-    // Generate a cryptographically secure nonce using expo-crypto  
-    const randomBytes = await Crypto.getRandomBytesAsync(32);
-    const rawNonce = Array.from(randomBytes, byte => byte.toString(16).padStart(2, '0')).join('');
-    
-    // Hash the nonce using SHA256
-    const hashedNonce = await Crypto.digestStringAsync(
-      Crypto.CryptoDigestAlgorithm.SHA256,
-      rawNonce,
-      { encoding: Crypto.CryptoEncoding.HEX }
-    );
+    console.log('[AppleAuth] Requesting Apple credentials');
 
-    console.log('[AppleAuth] Generated nonce, requesting Apple credentials');
-
-    // Request Apple authentication with nonce
+    // Request Apple authentication without nonce (Firebase web SDK compatible)
     const appleCredential = await AppleAuthentication.signInAsync({
       requestedScopes: [
         AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
         AppleAuthentication.AppleAuthenticationScope.EMAIL,
       ],
-      nonce: hashedNonce, // Pass hashed nonce to Apple
     });
 
     console.log('[AppleAuth] Received Apple credential response');
@@ -72,11 +60,10 @@ export const signInWithApple = async (): Promise<AppleSignInResult> => {
       throw new Error('Apple Sign In failed - no identity token returned');
     }
 
-    // Create Firebase credential using the identity token and raw nonce
+    // Create Firebase credential using only identity token (Firebase web SDK compatible)
     const provider = new OAuthProvider('apple.com');
     const firebaseCredential = provider.credential({
       idToken: appleCredential.identityToken,
-      rawNonce: rawNonce, // Use raw nonce for Firebase, not hashed
     });
 
     console.log('[AppleAuth] Created Firebase credential, signing in');
