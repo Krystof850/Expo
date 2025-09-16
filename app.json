@@ -13,7 +13,8 @@
       "bundleIdentifier": "com.app.dev",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
-      }
+      },
+      "buildNumber": "2"
     },
     "android": {
       "adaptiveIcon": {
