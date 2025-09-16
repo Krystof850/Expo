@@ -320,7 +320,7 @@ export default function HopeScreen() {
               <Text style={styles.title}>But there's hope</Text>
               
               <Text style={styles.description}>
-                With PROCRAP, you can reboot your brain, rebuild discipline, and take back control.
+                With Unloop, you can reboot your brain, rebuild discipline, and take back control.
               </Text>
             </View>
           </AnimatedContent>

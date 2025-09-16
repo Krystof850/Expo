@@ -192,7 +192,7 @@ export default function BeatScreen() {
               <Text style={styles.title}>Beat distractions</Text>
               
               <Text style={styles.description}>
-                PROCRAP breaks big tasks into small steps. Less wasted time, more progress every day.
+                Unloop breaks big tasks into small steps. Less wasted time, more progress every day.
               </Text>
             </View>
           </AnimatedContent>

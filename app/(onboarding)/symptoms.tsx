@@ -27,14 +27,14 @@ interface Symptom {
 }
 
 const PROCRASTINATION_SYMPTOMS: Symptom[] = [
-  { id: 'overwhelmed', text: 'I feel overwhelmed by tasks' },
-  { id: 'lack_motivation', text: 'Lack of motivation to start projects' },
-  { id: 'difficulty_concentrating', text: 'Difficulty concentrating on important work' },
-  { id: 'easy_tasks_priority', text: 'I prioritize easy tasks over important ones' },
-  { id: 'guilt_feelings', text: 'Chronic feelings of guilt about postponed work' },
-  { id: 'perfectionism', text: 'Perfectionism leading to delays' },
-  { id: 'fear_of_failure', text: 'Fear of failure preventing action' },
-  { id: 'time_management', text: 'Difficulties with time management' },
+  { id: 'feeling_stuck', text: 'Feeling stuck or paralyzed when facing important tasks' },
+  { id: 'endless_scrolling', text: 'Endless scrolling instead of focusing on work' },
+  { id: 'difficulty_starting', text: 'Difficulty starting projects even though I know how to do them' },
+  { id: 'self_criticism', text: 'Self-criticism and negative self-talk after procrastinating' },
+  { id: 'losing_track_time', text: 'Losing track of time when avoiding responsibilities' },
+  { id: 'fear_of_failure', text: 'Fear of failure making me avoid starting tasks' },
+  { id: 'choosing_easier', text: 'Choosing easier tasks to avoid more challenging ones' },
+  { id: 'feeling_overwhelmed', text: 'Feeling overwhelmed by the size of projects or goals' },
 ];
 
 export default function SymptomsScreen() {
@@ -82,6 +82,12 @@ export default function SymptomsScreen() {
   };
 
   const handleContinue = async () => {
+    // Check if at least one symptom is selected
+    if (selectedSymptoms.length === 0) {
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
+      return; // Don't proceed if no symptoms selected
+    }
+
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     // Run header exit animation first, then content exit animation
     headerRef.current?.runExitAnimation(() => {
@@ -184,7 +190,10 @@ export default function SymptomsScreen() {
           <NextButton
             title="Restart My Brain"
             onPress={handleContinue}
-            style={styles.continueButton}
+            style={[
+              styles.continueButton,
+              selectedSymptoms.length === 0 && styles.disabledButton
+            ]}
           />
         </View>
       </View>
@@ -292,5 +301,8 @@ const styles = StyleSheet.create({
   },
   continueButton: {
     backgroundColor: '#E53E3E', // Keep red color as requested
+  },
+  disabledButton: {
+    backgroundColor: 'rgba(229, 62, 62, 0.5)', // Faded version when disabled
   },
 });

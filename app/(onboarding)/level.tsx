@@ -248,7 +248,7 @@ export default function LevelScreen() {
               <Text style={styles.title}>Level up your life</Text>
               
               <Text style={styles.description}>
-                Ending procrastination transforms your mind and life. With PROCRAP, you become unstoppable!
+                Ending procrastination transforms your mind and life. With Unloop, you become unstoppable!
               </Text>
             </View>
           </AnimatedContent>

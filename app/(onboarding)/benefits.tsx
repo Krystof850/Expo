@@ -35,7 +35,7 @@ export default function BenefitsScreen() {
         
         {/* Title - moved to top */}
         <View style={styles.titleContainer}>
-          <Text style={styles.titleText}>PROCRAPP benefits</Text>
+          <Text style={styles.titleText}>Unloop benefits</Text>
         </View>
         
         {/* Main Content */}
@@ -55,7 +55,7 @@ export default function BenefitsScreen() {
           {/* Description Section */}
           <View style={styles.descriptionSection}>
             <Text style={styles.descriptionText}>
-              PROCRAPP helps you overcome procrastination <Text style={styles.percentageHighlight}>76% faster</Text> than willpower alone.
+              Unloop helps you overcome procrastination <Text style={styles.percentageHighlight}>76% faster</Text> than willpower alone.
             </Text>
           </View>
         </View>

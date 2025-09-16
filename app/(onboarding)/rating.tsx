@@ -66,7 +66,7 @@ const CLIENT_REVIEWS: Review[] = [
     username: '@sarah_johnson',
     avatar: profileImages[3], // Female profile
     rating: 5,
-    review: 'PROCRAP completely transformed how I approach my daily tasks. The science-based approach really works - I feel so much more in control now!'
+    review: 'Unloop completely transformed how I approach my daily tasks. The science-based approach really works - I feel so much more in control now!'
   }
 ];
 

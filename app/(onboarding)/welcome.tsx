@@ -131,7 +131,7 @@ const ScienceSystemIllustration = () => (
     
     {/* "PROCRAP" text integrated into design */}
     <Rect x="90" y="150" width="50" height="15" rx="7" fill="rgba(59, 130, 246, 0.2)" stroke="rgba(59, 130, 246, 0.6)" strokeWidth="1" />
-    <SvgText x="100" y="161" fontSize="10" fill="rgba(59, 130, 246, 1)" fontFamily="sans-serif" fontWeight="bold">PROCRAP</SvgText>
+    <SvgText x="100" y="161" fontSize="10" fill="rgba(59, 130, 246, 1)" fontFamily="sans-serif" fontWeight="bold">Unloop</SvgText>
   </Svg>
 );
 
@@ -218,7 +218,7 @@ export default function WelcomeScreen() {
           {/* Text content */}
           <AnimatedContent delay={200}>
             <View style={styles.textContainer}>
-              <Text style={styles.title}>Welcome to PROCRAP</Text>
+              <Text style={styles.title}>Welcome to Unloop</Text>
               
               <Text style={styles.description}>
                 A science-backed system to crush procrastination. Fast, simple, and proven to work.

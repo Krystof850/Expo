@@ -8,7 +8,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   owner: 'krystofkapka1',
   version: '1.0.0',
   orientation: 'portrait',
-  icon: './assets/images/icon.png',
+  icon: './assets/images/icon.jpg',
   scheme: 'unloop',
   userInterfaceStyle: 'automatic',
   newArchEnabled: true,
