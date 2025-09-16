@@ -52,7 +52,7 @@ export default function TypingScreen() {
       // All sentences complete, navigate to journey page
       setTimeout(() => {
         router.push('/(onboarding)/journey');
-      }, 2000);
+      }, 1500);
       return;
     }
 
@@ -68,7 +68,7 @@ export default function TypingScreen() {
         if (currentLetterIndex % 3 === 0) {
           Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
         }
-      }, 100); // 100ms delay between letters
+      }, 75); // 75ms delay between letters (1.3x faster)
 
       return () => clearTimeout(timer);
     } else {
@@ -77,7 +77,7 @@ export default function TypingScreen() {
         setCurrentText('');
         setLetterIndex(0);
         setSentenceIndex(prev => prev + 1);
-      }, 1000);
+      }, 750);
 
       return () => clearTimeout(timer);
     }
