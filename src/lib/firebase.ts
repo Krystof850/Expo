@@ -1,9 +1,7 @@
 import { initializeApp, getApps, getApp } from "firebase/app";
 import {
-  initializeAuth,
   getAuth,
   Auth,
-  browserLocalPersistence,
 } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
@@ -57,14 +55,14 @@ if (
 
 const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
 
-// Firebase Auth - use standard getAuth which automatically handles persistence
+// Firebase Auth - Expo automatically handles persistence with AsyncStorage
 let auth: Auth;
 try {
   // For Expo/React Native, getAuth automatically uses AsyncStorage for persistence
   auth = getAuth(app);
   console.log('[Firebase] Auth initialized successfully with automatic persistence');
 } catch (e) {
-  // Pri HMR a opakovaném importu může být auth již inicializovaný
+  // Handle double initialization during HMR
   auth = getAuth();
   console.log('[Firebase] Using existing auth instance');
 }
