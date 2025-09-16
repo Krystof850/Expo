@@ -3,7 +3,7 @@ import { router, Redirect } from "expo-router";
 import { View, Text, Alert, StyleSheet } from "react-native";
 import * as Haptics from 'expo-haptics';
 import { Ionicons } from '@expo/vector-icons';
-import { signInWithGoogle } from "../../src/services/auth";
+import { signInWithGoogle, signInWithApple, isAppleSignInAvailable } from "../../src/services/auth";
 import { useAuth } from "../../src/context/AuthContext";
 import { FirebaseConfigBanner } from "../../src/components/FirebaseConfigBanner";
 import { AuthErrorBoundary } from "../../src/components/AuthErrorBoundary";
@@ -17,7 +17,18 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 export default function SignIn() {
   const { user } = useAuth();
   const [googleLoading, setGoogleLoading] = useState(false);
+  const [appleLoading, setAppleLoading] = useState(false);
+  const [appleAvailable, setAppleAvailable] = useState(false);
   const insets = useSafeAreaInsets();
+
+  // Check Apple Sign In availability on component mount
+  React.useEffect(() => {
+    const checkAppleAvailability = async () => {
+      const available = await isAppleSignInAvailable();
+      setAppleAvailable(available);
+    };
+    checkAppleAvailability();
+  }, []);
 
 
   const handleGoogleSignIn = async () => {
@@ -35,10 +46,14 @@ export default function SignIn() {
   const handleAppleSignIn = async () => {
     await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     try {
-      // TODO: Implement Apple Sign In with Firebase
-      Alert.alert("Apple Sign In", "Apple Sign In coming soon!");
+      setAppleLoading(true);
+      const result = await signInWithApple();
+      console.log('[SignIn] Apple Sign In successful for user:', result.user.uid);
     } catch (e: any) {
+      console.error('[SignIn] Apple Sign In failed:', e);
       Alert.alert("Error", e.message || "Apple Sign In failed.");
+    } finally {
+      setAppleLoading(false);
     }
   };
 
@@ -62,13 +77,18 @@ export default function SignIn() {
 
             <View style={styles.buttonContainer}>
               {/* Apple Sign In Button */}
-              <HapticButton 
-                style={styles.signInButton}
-                onPress={handleAppleSignIn}
-              >
-                <Ionicons name="logo-apple" size={24} color="#000000" style={styles.buttonIcon} />
-                <TitleText animated={false} style={styles.buttonText}>Continue with Apple</TitleText>
-              </HapticButton>
+              {appleAvailable && (
+                <HapticButton 
+                  style={[styles.signInButton, appleLoading && styles.disabledButton]}
+                  onPress={handleAppleSignIn}
+                  disabled={appleLoading}
+                >
+                  <Ionicons name="logo-apple" size={24} color="#000000" style={styles.buttonIcon} />
+                  <TitleText animated={false} style={styles.buttonText}>
+                    {appleLoading ? "Signing in..." : "Continue with Apple"}
+                  </TitleText>
+                </HapticButton>
+              )}
 
               {/* Google Sign In Button */}
               <HapticButton 

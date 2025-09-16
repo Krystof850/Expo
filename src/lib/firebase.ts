@@ -56,13 +56,15 @@ if (
 
 const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
 
-// Firebase Auth - použijeme základní getAuth, AsyncStorage persistence přidáme později
+// Firebase Auth - use standard getAuth for now (AsyncStorage persistence can be configured later)
 let auth: Auth;
 try {
   auth = getAuth(app);
+  console.log('[Firebase] Auth initialized successfully');
 } catch (e) {
   // Pri HMR a opakovaném importu může být auth již inicializovaný
   auth = getAuth();
+  console.log('[Firebase] Using existing auth instance');
 }
 
 const db = getFirestore(app);

@@ -5,7 +5,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as Haptics from 'expo-haptics';
 import { Formik } from "formik";
 import * as Yup from "yup";
-import { signUpWithEmail, signInWithGoogle } from "../../src/services/auth";
+import { signUpWithEmail, signInWithGoogle, signInWithApple, isAppleSignInAvailable } from "../../src/services/auth";
 import { useAuth } from "../../src/context/AuthContext";
 import { FirebaseConfigBanner } from "../../src/components/FirebaseConfigBanner";
 import { AuthErrorBoundary } from "../../src/components/AuthErrorBoundary";
@@ -23,6 +23,17 @@ export default function SignUp() {
   const { user } = useAuth();
   const [submitting, setSubmitting] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
+  const [appleLoading, setAppleLoading] = useState(false);
+  const [appleAvailable, setAppleAvailable] = useState(false);
+
+  // Check Apple Sign In availability on component mount
+  React.useEffect(() => {
+    const checkAppleAvailability = async () => {
+      const available = await isAppleSignInAvailable();
+      setAppleAvailable(available);
+    };
+    checkAppleAvailability();
+  }, []);
 
   const handleGoogleSignIn = async () => {
     try {
@@ -33,6 +44,20 @@ export default function SignUp() {
       Alert.alert("Error", e.message || "Failed to sign in with Google.");
     } finally {
       setGoogleLoading(false);
+    }
+  };
+
+  const handleAppleSignIn = async () => {
+    try {
+      await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+      setAppleLoading(true);
+      const result = await signInWithApple();
+      console.log('[SignUp] Apple Sign In successful for user:', result.user.uid);
+    } catch (e: any) {
+      console.error('[SignUp] Apple Sign In failed:', e);
+      Alert.alert("Error", e.message || "Failed to sign in with Apple.");
+    } finally {
+      setAppleLoading(false);
     }
   };
 
@@ -107,6 +132,20 @@ export default function SignUp() {
               <DescriptionText animated={false} style={styles.dividerText}>or</DescriptionText>
               <View style={styles.dividerLine} />
             </View>
+
+            {/* Apple Sign In Button */}
+            {appleAvailable && (
+              <HapticButton 
+                style={[styles.googleButton, appleLoading && styles.disabledButton]}
+                onPress={handleAppleSignIn}
+                disabled={appleLoading || submitting}
+              >
+                <Ionicons name="logo-apple" size={20} color="#000000" style={{ marginRight: SPACING.sm }} />
+                <DescriptionText animated={false} style={[styles.googleButtonText, { color: '#000000' }]}>
+                  {appleLoading ? "Signing up with Apple..." : "Sign up with Apple"}
+                </DescriptionText>
+              </HapticButton>
+            )}
 
             {/* Google Sign In Button */}
             <HapticButton 

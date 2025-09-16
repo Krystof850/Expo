@@ -43,9 +43,9 @@ export const signInWithApple = async (): Promise<AppleSignInResult> => {
       throw new Error('Apple Sign In is not available on this device');
     }
 
-    // Generate a secure nonce for the request
-    const rawNonce = Math.random().toString(36).substring(2, 15) + 
-                     Math.random().toString(36).substring(2, 15);
+    // Generate a cryptographically secure nonce using expo-crypto  
+    const randomBytes = await Crypto.getRandomBytesAsync(32);
+    const rawNonce = Array.from(randomBytes, byte => byte.toString(16).padStart(2, '0')).join('');
     
     // Hash the nonce using SHA256
     const hashedNonce = await Crypto.digestStringAsync(
@@ -111,7 +111,7 @@ export const signInWithApple = async (): Promise<AppleSignInResult> => {
   } catch (error: any) {
     console.error('[AppleAuth] Apple Sign In failed:', error);
     
-    // Handle specific Apple Sign In errors
+    // Handle specific Apple Sign In errors using string codes
     if (error.code === 'ERR_REQUEST_CANCELED') {
       throw new Error('Apple Sign In was canceled by the user');
     } else if (error.code === 'ERR_REQUEST_FAILED') {
