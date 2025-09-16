@@ -16,11 +16,15 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   ios: {
     ...(config.ios ?? {}),
     supportsTablet: true,
-    bundleIdentifier: "com.kkdigitalsolutions.procrastination",
+    bundleIdentifier: "com.unloopapp",
     infoPlist: {
       ...(config.ios?.infoPlist ?? {}),
       ITSAppUsesNonExemptEncryption: false,
     },
+    entitlements: {
+      "com.apple.developer.applesignin": ["Default"],
+    },
+    usesAppleSignIn: true,
   },
 
   android: {
@@ -30,7 +34,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       backgroundColor: '#ffffff',
     },
     edgeToEdgeEnabled: true,
-    package: "com.kkdigitalsolutions.procrastination",
+    package: "com.unloopapp",
   },
 
   web: {
@@ -70,11 +74,11 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   extra: {
     ...(config.extra ?? {}),
     FIREBASE_API_KEY: process.env.FIREBASE_API_KEY,
-    FIREBASE_AUTH_DOMAIN: process.env.FIREBASE_AUTH_DOMAIN,
-    FIREBASE_PROJECT_ID: process.env.FIREBASE_PROJECT_ID,
-    FIREBASE_STORAGE_BUCKET: process.env.FIREBASE_STORAGE_BUCKET,
-    FIREBASE_MESSAGING_SENDER_ID: process.env.FIREBASE_MESSAGING_SENDER_ID,
-    FIREBASE_APP_ID: process.env.FIREBASE_APP_ID,
+    FIREBASE_AUTH_DOMAIN: "procrastination-app-ddf27.firebaseapp.com",
+    FIREBASE_PROJECT_ID: "procrastination-app-ddf27",
+    FIREBASE_STORAGE_BUCKET: "procrastination-app-ddf27.firebasestorage.app",
+    FIREBASE_MESSAGING_SENDER_ID: "576633089196",
+    FIREBASE_APP_ID: "1:576633089196:web:cab74d64e4665a735fc309",
     GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
     SUPERWALL_API_KEY: process.env.SUPERWALL_API_KEY,
   },
