@@ -25,6 +25,7 @@ import Animated, {
 
 import { useAuth } from '../../src/context/AuthContext';
 import { Protected } from '../../src/components/Protected';
+import { router } from 'expo-router';
 
 const { width } = Dimensions.get('window');
 
@@ -143,21 +144,8 @@ export default function Homepage() {
   const handleTempted = async () => {
     await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
     
-    Alert.alert(
-      'Feeling Tempted?',
-      'Remember your goals! You\'ve come so far. Take a deep breath and stay strong.',
-      [
-        {
-          text: 'Keep Going!',
-          style: 'default',
-        },
-        {
-          text: 'I Gave In',
-          style: 'destructive',
-          onPress: handleResetTimer,
-        },
-      ]
-    );
+    // Start the procrastination workflow
+    router.push('/(workflow)/procrastination-input');
   };
 
   const formatNumber = (num: number): string => {

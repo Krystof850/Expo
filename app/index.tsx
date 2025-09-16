@@ -31,10 +31,6 @@ export default function Index() {
     router.push('/(auth)/sign-in');
   };
 
-  const handleIFeelTempted = async () => {
-    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    router.push('/(workflow)/procrastination-input');
-  };
 
 
 
@@ -65,10 +61,6 @@ export default function Index() {
             <Text style={styles.primaryButtonText}>Start Assessment Quiz</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.temptedButton} onPress={handleIFeelTempted}>
-            <Ionicons name="warning-outline" size={20} color="#E74C3C" style={styles.buttonIcon} />
-            <Text style={styles.temptedButtonText}>I feel tempted</Text>
-          </TouchableOpacity>
 
           <TouchableOpacity style={styles.secondaryButton} onPress={handleSkipToLogin}>
             <Ionicons name="log-in-outline" size={20} color="#2C3E50" style={styles.buttonIcon} />

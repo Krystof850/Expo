@@ -46,7 +46,7 @@ export default function ProcrastinationInput() {
           {/* Header with back button */}
           <View style={styles.header}>
             <TouchableOpacity style={styles.backButton} onPress={handleBack}>
-              <Ionicons name="arrow-back-ios" size={24} color="#0C4A6E" />
+              <Ionicons name="chevron-back" size={24} color="#0C4A6E" />
             </TouchableOpacity>
           </View>
 
