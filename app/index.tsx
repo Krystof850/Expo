@@ -6,6 +6,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { useAuth } from '../src/context/AuthContext';
+import { usePlacement } from 'expo-superwall';
 
 export default function Index() {
   const { user, loading } = useAuth();
@@ -28,6 +29,26 @@ export default function Index() {
   const handleSkipToLogin = async () => {
     await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     router.push('/(auth)/sign-in');
+  };
+
+  const { registerPlacement } = usePlacement({
+    onError: (error) => console.log('Paywall error:', error),
+    onPresent: (info) => console.log('Paywall presented:', info),
+    onDismiss: (info, result) => console.log('Paywall dismissed:', info, result),
+  });
+
+  const handleShowPaywall = async () => {
+    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    try {
+      await registerPlacement({
+        placement: 'zario-template-3a85-2025-09-10',
+        feature() {
+          console.log('Premium feature unlocked!');
+        }
+      });
+    } catch (error) {
+      console.log('Paywall presentation error:', error);
+    }
   };
 
   return (
@@ -60,6 +81,11 @@ export default function Index() {
           <TouchableOpacity style={styles.secondaryButton} onPress={handleSkipToLogin}>
             <Ionicons name="log-in-outline" size={20} color="#2C3E50" style={styles.buttonIcon} />
             <Text style={styles.secondaryButtonText}>Skip to Login</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.paywallButton} onPress={handleShowPaywall}>
+            <Ionicons name="diamond-outline" size={20} color="#E67E22" style={styles.buttonIcon} />
+            <Text style={styles.paywallButtonText}>View Premium</Text>
           </TouchableOpacity>
         </View>
 
@@ -154,6 +180,26 @@ const styles = StyleSheet.create({
   footer: {
     alignItems: 'center',
     paddingBottom: 40,
+  },
+  paywallButton: {
+    backgroundColor: 'rgba(230, 126, 34, 0.1)',
+    borderWidth: 2,
+    borderColor: '#E67E22',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 16,
+    borderRadius: 28,
+    shadowColor: 'rgba(230, 126, 34, 0.2)',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 1,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  paywallButtonText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#E67E22',
   },
   footerText: {
     fontSize: 14,
