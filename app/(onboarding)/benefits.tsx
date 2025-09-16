@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { Image } from 'expo-image';
 import { router } from 'expo-router';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as Haptics from 'expo-haptics';
 
 import AppBackground from '../../components/AppBackground';
@@ -21,6 +22,7 @@ const { width } = Dimensions.get('window');
 const chartImageSource = require('@/attached_assets/ChatGPT Image Sep 13, 2025, 03_26_59 PM_1757748428786.png');
 
 export default function BenefitsScreen() {
+  const insets = useSafeAreaInsets();
   // No preloading needed for local assets - they load instantly
 
   const handleContinue = () => {
@@ -60,13 +62,14 @@ export default function BenefitsScreen() {
           </View>
         </View>
 
-        {/* CTA Button */}
-        <View style={styles.buttonContainer}>
-          <NextButton
-            title="Continue"
-            onPress={handleContinue}
-          />
-        </View>
+      </View>
+      
+      {/* CTA Button - OUTSIDE of main content, matching other onboarding pages */}
+      <View style={[styles.buttonContainer, { paddingBottom: insets.bottom + SPACING.page }]}>
+        <NextButton
+          title="Continue"
+          onPress={handleContinue}
+        />
       </View>
     </AppBackground>
   );
@@ -75,15 +78,13 @@ export default function BenefitsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 40,
-    paddingBottom: 24,
-    paddingHorizontal: 0, // Remove container padding since titleContainer handles it
+    justifyContent: 'space-between', // Match other onboarding pages
   },
   titleContainer: {
     alignItems: 'center',
     marginBottom: 24,
-    paddingHorizontal: 32,
-    marginTop: 20, // Space above title after image
+    paddingHorizontal: SPACING.page,
+    marginTop: 40, // Consistent with other pages
   },
   titleText: {
     fontSize: 20,
@@ -98,8 +99,8 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 32,
-    paddingTop: 40, // Add top padding to center content better
+    paddingHorizontal: SPACING.page,
+    paddingBottom: 120, // Space for button, matching other onboarding pages
   },
   imageSection: {
     alignItems: 'center',
@@ -131,8 +132,8 @@ const styles = StyleSheet.create({
     color: COLORS.mainText,
   },
   buttonContainer: {
-    width: '100%',
-    paddingHorizontal: 32,
+    paddingHorizontal: SPACING.page,
+    zIndex: 10, // Match other onboarding pages
   },
   // NextButton handles all styling
 });
