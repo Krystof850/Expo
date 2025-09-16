@@ -24,20 +24,15 @@ export default function CommitmentSignatureScreen() {
   const signatureRef = useRef<any>(null);
   const [hasSignature, setHasSignature] = useState<boolean>(false);
 
-  const handleOK = async (signature: string) => {
-    try {
-      // Save signature
-      await AsyncStorage.setItem('commitment_signature', signature);
-      console.log('✍️ Signature saved');
-      setHasSignature(true);
-    } catch (error) {
-      console.log('Error saving signature:', error);
-    }
-  };
 
   const handleEmpty = () => {
     console.log('⚠️ No signature provided');
     setHasSignature(false);
+    Alert.alert(
+      'Signature Missing',
+      'Please sign your commitment before continuing.',
+      [{ text: 'OK', style: 'default' }]
+    );
   };
 
   const handleClear = () => {
@@ -54,19 +49,12 @@ export default function CommitmentSignatureScreen() {
 
   const handleSignatureCapture = async (signature: string) => {
     try {
-      if (signature) {
-        await AsyncStorage.setItem('commitment_signature', signature);
-        console.log('✍️ Signature captured and saved');
-        setHasSignature(true);
-        // Navigate to typing page after successful signature capture
-        router.push('/(onboarding)/typing');
-      } else {
-        Alert.alert(
-          'Signature Missing',
-          'Please sign your commitment before continuing.',
-          [{ text: 'OK', style: 'default' }]
-        );
-      }
+      // Save any non-empty signature (onEmpty handles empty case)
+      await AsyncStorage.setItem('commitment_signature', signature);
+      console.log('✍️ Signature captured and saved');
+      setHasSignature(true);
+      // Navigate to typing page after successful signature capture
+      router.push('/(onboarding)/typing');
     } catch (error) {
       console.log('Error saving signature:', error);
       Alert.alert(
