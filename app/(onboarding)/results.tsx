@@ -8,6 +8,7 @@ import {
   Animated,
   Dimensions,
 } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 
@@ -18,6 +19,7 @@ import * as Haptics from 'expo-haptics';
 const { width } = Dimensions.get('window');
 
 export default function ResultsScreen() {
+  const insets = useSafeAreaInsets();
   const emojiScale = useRef(new Animated.Value(0.8)).current;
   const emojiRotation = useRef(new Animated.Value(0)).current;
   const yourBarHeight = useRef(new Animated.Value(0)).current;
@@ -128,7 +130,7 @@ export default function ResultsScreen() {
           <View style={styles.headlineSection}>
             <Text style={styles.headlineText}>Oof. That's rough.</Text>
             <Text style={styles.descriptionText}>
-              You're procrastinating more than <Text style={styles.percentageHighlight}>78%</Text> of people your age. But hey, that's why you're here, right?
+              Based on your responses, you procrastinate more than <Text style={styles.percentageHighlight}>78%</Text> of people. But don't worry - you're in the right place to change that!
             </Text>
           </View>
 
@@ -168,14 +170,21 @@ export default function ResultsScreen() {
               </View>
             </View>
           </View>
+          
+          {/* Disclaimer */}
+          <View style={styles.disclaimerSection}>
+            <Text style={styles.disclaimerText}>
+              * This assessment is for educational purposes and provides general insights based on your responses.
+            </Text>
+          </View>
         </Animated.View>
-
-        {/* CTA Button */}
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.ctaButton} onPress={handleContinue}>
-            <Text style={styles.ctaButtonText}>Let's Fix This!</Text>
-          </TouchableOpacity>
-        </View>
+      </View>
+      
+      {/* CTA Button - OUTSIDE of main content, matching other onboarding pages */}
+      <View style={[styles.buttonContainer, { paddingBottom: insets.bottom + SPACING.page }]}>
+        <TouchableOpacity style={styles.ctaButton} onPress={handleContinue}>
+          <Text style={styles.ctaButtonText}>Let's Fix This!</Text>
+        </TouchableOpacity>
       </View>
     </AppBackground>
   );
@@ -184,15 +193,13 @@ export default function ResultsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 40,
-    paddingBottom: 24,
-    paddingHorizontal: 0, // Remove container padding since titleContainer handles it
+    justifyContent: 'space-between', // Match other onboarding pages
   },
   titleContainer: {
     alignItems: 'center',
     marginBottom: 28, // Same spacing as other question pages
-    paddingHorizontal: 32, // Same as other pages
-    paddingTop: 8, // Same as other pages
+    paddingHorizontal: SPACING.page, // Same as other pages
+    marginTop: 40, // Consistent with other pages
   },
   titleText: {
     fontSize: 20,
@@ -207,6 +214,8 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-start',
+    paddingHorizontal: SPACING.page,
+    paddingBottom: 120, // Space for button, matching other onboarding pages
   },
   emojiSection: {
     alignItems: 'center',
@@ -298,7 +307,21 @@ const styles = StyleSheet.create({
     marginTop: 6,
   },
   buttonContainer: {
-    width: '100%',
+    paddingHorizontal: SPACING.page,
+    zIndex: 10, // Match other onboarding pages
+  },
+  disclaimerSection: {
+    alignItems: 'center',
+    marginTop: 20,
+    paddingHorizontal: 16,
+  },
+  disclaimerText: {
+    fontSize: 12,
+    fontWeight: '400',
+    color: 'rgba(186, 230, 253, 0.6)', // sky-200/60 - more subtle
+    textAlign: 'center',
+    lineHeight: 16,
+    fontStyle: 'italic',
   },
   ctaButton: {
     backgroundColor: '#FFFFFF', // var(--vibrant-cta)
