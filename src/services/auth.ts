@@ -11,6 +11,9 @@ import * as AuthSession from 'expo-auth-session';
 import * as WebBrowser from 'expo-web-browser';
 import Constants from 'expo-constants';
 
+// Re-export Apple Sign In functionality
+export { signInWithApple, isAppleSignInAvailable, isAppleUser } from './appleAuth';
+
 export async function signUpWithEmail(email: string, password: string): Promise<User> {
   try {
     console.log('[Auth] Attempting sign up for:', email);
