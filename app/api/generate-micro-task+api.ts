@@ -36,7 +36,6 @@ Respond with just the micro-task text, nothing else. Keep it under 60 characters
       model: "gpt-4o-mini",
       messages: [{ role: "user", content: prompt }],
       max_completion_tokens: 50,
-      temperature: 0.7,
     });
 
     const task = response.choices[0].message.content?.trim();
