@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "expo-on-replit",
-    "slug": "expo-on-replit",
+    "name": "Unloop Dev",
+    "slug": "unloop-dev",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "myapp",
+    "scheme": "unloop",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
@@ -14,7 +14,6 @@
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
       },
-      "buildNumber": "3"
     },
     "android": {
       "adaptiveIcon": {
@@ -44,7 +43,10 @@
       "typedRoutes": true
     },
     "extra": {
-      "SUPERWALL_API_KEY": "pk_f9ba235999f864d522d3f012ab9894eaae53a30698086993"
+      "SUPERWALL_API_KEY": "pk_f9ba235999f864d522d3f012ab9894eaae53a30698086993",
+      "eas": {
+        "projectId": "563e5ff7-8a02-40da-9108-50fa5aacf44a"
+      }
     },
     "owner": "krystofkapka1"
   }

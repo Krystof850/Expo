@@ -3,9 +3,9 @@ import { ConfigContext, ExpoConfig } from "expo/config";
 
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
-  name: config.name ?? "expo-on-replit",
-  slug: config.slug ?? "expo-on-replit",
-  owner: 'krystof_kapka',
+  name: config.name ?? "Unloop Dev",
+  slug: config.slug ?? "unloop-dev",
+  owner: 'krystofkapka1',
   version: '1.0.0',
   orientation: 'portrait',
   icon: './assets/images/icon.png',
