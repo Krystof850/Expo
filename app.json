@@ -44,18 +44,8 @@
       "typedRoutes": true
     },
     "extra": {
-      "FIREBASE_API_KEY": "AIzaSyAX2Zd9CiZjecLwYisC6SundzMeLvBsuzA",
-      "FIREBASE_AUTH_DOMAIN": "procrastination-app-ddf27.firebaseapp.com",
-      "FIREBASE_PROJECT_ID": "procrastination-app-ddf27",
-      "FIREBASE_STORAGE_BUCKET": "procrastination-app-ddf27.firebasestorage.app",
-      "FIREBASE_MESSAGING_SENDER_ID": "576633089196",
-      "FIREBASE_APP_ID": "1:576633089196:web:cab74d64e4665a735fc309",
-      "GOOGLE_CLIENT_ID": "576633089196-qve25li3qj5a043cqh2ug03bs1kr3r12.apps.googleusercontent.com",
-      "SUPERWALL_API_KEY": "pk_f9ba235999f864d522d3f012ab9894eaae53a30698086993",
-      "router": {},
-      "eas": {
-        "projectId": "73574016-d0df-4efd-ba6b-1e1dc7c865ce"
-      }
-    }
+      "SUPERWALL_API_KEY": "pk_f9ba235999f864d522d3f012ab9894eaae53a30698086993"
+    },
+    "owner": "krystofkapka1"
   }
 }

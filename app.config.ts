@@ -77,9 +77,5 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     FIREBASE_APP_ID: process.env.FIREBASE_APP_ID,
     GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
     SUPERWALL_API_KEY: process.env.SUPERWALL_API_KEY,
-    eas: {
-      ...(config.extra as any)?.eas,
-      projectId: "73574016-d0df-4efd-ba6b-1e1dc7c865ce",
-    },
   },
 });
