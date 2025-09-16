@@ -1,0 +1,23 @@
+Chci ať provedeš tyto změny v onboardingu které ti teď napíšu:
+
+1. chci ať změníš možné odpovědi u jednotlivých otázek. nechci ať měníš barvy, design, fodny, ani nic dalšího. pouze přidej uprav nebo odeber možné odpovědi se stejný designem jako teď.
+
+Důležitá věc. Pokud v mých úpravách budou gramatické chyby nebo kdekoliv jinde na stránkaćh tak je oprav. 
+
+- question 2: Frequently, Occasionally, Rarely or never
+- question 3: Yes!, I'm not sure, No
+- question 4: (jako první změn otázku na: How many times a day do you catch yourself procrastinating on important tasks?) Poté uprav odpovědi na Never, 1 times, 1-3 times, 3+ times
+- question 5: Změň na: Do you find it harder now to finish simple tasks that used to feel easy? Frequently, Occasionally, Rarely or never
+- question 6: 5+ times, 5-3 times, 3-1 times, Never
+- question 7: místo "Dont know how to start" dej "Lack of motivation"
+- question 8: Yes, a lot,  A little bit, Not at all
+- question 9: Absolutely!, Yes, it would, I don't think so
+
+- Symptoms page: I feel overwhelmed by simple tasks, I lack motivation to do anything, I can't concetrate, I prioritize worthles tasks over importat ones, I have chronic feeling of guilt about postponed tasks, My perfectionism leads to delays, Fear of failuer prevents my action, I have dificulties with time management (také nastav aby na této stránce musel být zvolen alespoň jeden symptom pro pokračování dále)
+
+- Na všech stránkách kde je napsáno PROCRAP nebo podobná verze tohoto názvu tak to přepiš na Unloop (nový název)
+
+stránka s obrázkem (předělej název z Procrapp benefits na Unloop benefits). Poté dej tlačítko continue stejně vysoko na stránce jako jsou vysoko tlačítka na ostatních stránkách. (jinými slovy tlačítko je moc dole na stránce)
+
+
+oprava: na stránce Your analysis is complete uprav cta tlačítko. Dej ho výše na obrazovce (tak jako je umístění tlačítek v otázkach předem, a udělej tlačítko méně široké (tak široké jako tlačítka v otázkach předtím)). poté dej nápis average těsně nad menší graf tak aby to bylo stejně dalego od grafu jako you u velkého grafu. poté dolů na stránku umísti malým písmem: * This result is an indication only, not a medical diagnosis.

@@ -25,7 +25,7 @@ export default function OnboardingQuestion7() {
   const triggerOptions = [
     { label: "Don't know where to start", value: 'no_start_place' },
     { label: "Don't have the energy", value: 'no_energy' },
-    { label: "Don't know how to start", value: 'no_know_how' },
+    { label: "Lack of motivation", value: 'no_motivation' },
     { label: 'Other reasons', value: 'other' }
   ];
 

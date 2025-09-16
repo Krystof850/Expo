@@ -1,0 +1,35 @@
+Chci ať provedeš tyto změny v onboardingu které ti teď napíšu:
+
+1. chci ať změníš možné odpovědi u jednotlivých otázek. nechci ať měníš barvy, design, fodny, ani nic dalšího. pouze přidej uprav nebo odeber možné odpovědi se stejný designem jako teď.
+
+Důležitá věc. Pokud v mých úpravách budou gramatické chyby nebo kdekoliv jinde na stránkaćh tak je oprav. 
+
+- question 2: Frequently, Occasionally, Rarely or Never
+- question 3: Yes!, I'm not sure, No
+- question 4: (jako první změn otázku na: How many times a day do you catch yourself procrastinating on important tasks?) Poté uprav odpovědi na Never, 1 times, 1-3 times, 3+ times
+- question 5: Změň na: Do you find it harder now to finish simple tasks that used to feel easy? Frequently, Occasionally, Rarely or Never
+- question 6: 5+ times, 5-3 times, 3-1 times, Never
+- question 7: místo "Don't know how to start" dej "Lack of motivation"
+- question 8: Yes, a lot,  A little bit, Not at all
+- question 9: Absolutely!, Yes, it would, I don't think so
+
+- Symptoms page: I feel overwhelmed by simple tasks, I lack motivation to do anything, I can't concentrate, I prioritize worthless tasks over important ones, I have a chronic feeling of guilt about postponed tasks, My perfectionism leads to delays, Fear of failure prevents my action, I have difficulties with time management (také nastav aby na této stránce musel být zvolen alespoň jeden symptom pro pokračování dále)
+
+- Na všech stránkách kde je napsáno PROCRAP nebo podobná verze tohoto názvu tak to přepiš na Unloop (nový název)
+
+stránka s obrázkem (předělej název z Procrapp benefits na Unloop benefits). Poté dej tlačítko continue stejně vysoko na stránce jako jsou vysoko tlačítka na ostatních stránkách. (jinými slovy tlačítko je moc dole na stránce)
+
+
+oprava: na stránce Your analysis is complete uprav cta tlačítko. Dej ho výše na obrazovce (tak jako je umístění tlačítek v otázkach předem, a udělej tlačítko méně široké (tak široké jako tlačítka v otázkach předtím)). poté dej nápis average těsně nad menší graf tak aby to bylo stejně dalego od grafu jako you u velkého grafu. poté dolů na stránku umísti malým písmem: * This result is an indication only, not a medical diagnosis.
+
+Na stránce select your goals přidej goal: Improve my confidence
+
+Na stránce give us a rating: místo @anna_stevens dej @annaa11, místo @tom_colins dej @coln_tomas, místo @sarah_johnson dej @johnson.s
+
+Oprav open space na podpisy na strance sign your commitment. Plocha na psani se chova divine a pri dotyku se delaji horizontalni cary
+
+Na nasledujicich strankach s postupne generujicim se textem pridej rychos generovani textu o 1.3x
+
+Na strance almost there posuň všechny prvky na stránce torchu nahoru aby tam byli viďet zřetelně i prvky jako cance anytime. Pote na teto strance zakaž scrolovani 
+
+Na strance sign in odstraň animaci podtexu. Nechej všechny texty bez automaticke animace ktera se aktivuje pri otevreni stranky. To stejne plati pro stranku continue with email, take odstran automaticke animace textu pri otevreni a na strance continue with email dej šipku zpět pro přechod na minulou stránku do levého horního rohu. Tedka ma spatnou pozici

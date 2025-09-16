@@ -89,16 +89,28 @@ export default function OnboardingQuestion5() {
             <View style={styles.fullBleed}>
               <View style={styles.answersSection}>
                 <SelectButton
-                  title="Yes"
-                selected={selectedAnswer === 'Yes'}
-                onPress={() => handleAnswerSelect('Yes')}
+                  title="Frequently"
+                selected={selectedAnswer === 'Frequently'}
+                onPress={() => handleAnswerSelect('Frequently')}
               />
 
               <SelectButton
-                title="No"
-                selected={selectedAnswer === 'No'}
-                onPress={() => handleAnswerSelect('No')}
-                />
+                title="Occasionally"
+                selected={selectedAnswer === 'Occasionally'}
+                onPress={() => handleAnswerSelect('Occasionally')}
+              />
+
+              <SelectButton
+                title="Rarely"
+                selected={selectedAnswer === 'Rarely'}
+                onPress={() => handleAnswerSelect('Rarely')}
+              />
+
+              <SelectButton
+                title="Never"
+                selected={selectedAnswer === 'Never'}
+                onPress={() => handleAnswerSelect('Never')}
+              />
               </View>
             </View>
           </AnimatedContent>

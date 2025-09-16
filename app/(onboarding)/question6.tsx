@@ -23,10 +23,10 @@ export default function OnboardingQuestion6() {
   const headerRef = useRef<OnboardingHeaderRef>(null);
 
   const frequencyOptions = [
-    { label: '1-2 times', value: '1-2' },
-    { label: '3-5 times', value: '3-5' },
-    { label: '6-10 times', value: '6-10' },
-    { label: 'More than 10 times', value: '10+' }
+    { label: '5+ times', value: '5+' },
+    { label: '5-3 times', value: '5-3' },
+    { label: '3-1 times', value: '3-1' },
+    { label: 'Never', value: 'never' }
   ];
 
   // Blokování hardware back button pouze na Androidu

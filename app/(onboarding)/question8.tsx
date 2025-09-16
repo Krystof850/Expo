@@ -89,15 +89,21 @@ export default function OnboardingQuestion8() {
             <View style={styles.fullBleed}>
               <View style={styles.answersSection}>
                 <SelectButton
-                  title="Yes"
-                selected={selectedAnswer === 'Yes'}
-                onPress={() => handleAnswerSelect('Yes')}
+                  title="Yes, a lot"
+                selected={selectedAnswer === 'Yes, a lot'}
+                onPress={() => handleAnswerSelect('Yes, a lot')}
               />
 
               <SelectButton
-                title="No"
-                selected={selectedAnswer === 'No'}
-                onPress={() => handleAnswerSelect('No')}
+                title="A little bit"
+                selected={selectedAnswer === 'A little bit'}
+                onPress={() => handleAnswerSelect('A little bit')}
+              />
+
+              <SelectButton
+                title="Not at all"
+                selected={selectedAnswer === 'Not at all'}
+                onPress={() => handleAnswerSelect('Not at all')}
                 />
               </View>
             </View>

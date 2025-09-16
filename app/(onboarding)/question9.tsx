@@ -89,15 +89,21 @@ export default function OnboardingQuestion9() {
             <View style={styles.fullBleed}>
               <View style={styles.answersSection}>
                 <SelectButton
-                  title="Yes"
-                selected={selectedAnswer === 'Yes'}
-                onPress={() => handleAnswerSelect('Yes')}
+                  title="Absolutely!"
+                selected={selectedAnswer === 'Absolutely!'}
+                onPress={() => handleAnswerSelect('Absolutely!')}
               />
 
               <SelectButton
-                title="No"
-                selected={selectedAnswer === 'No'}
-                onPress={() => handleAnswerSelect('No')}
+                title="Yes, it would"
+                selected={selectedAnswer === 'Yes, it would'}
+                onPress={() => handleAnswerSelect('Yes, it would')}
+              />
+
+              <SelectButton
+                title="I don't think so"
+                selected={selectedAnswer === "I don't think so"}
+                onPress={() => handleAnswerSelect("I don't think so")}
                 />
               </View>
             </View>

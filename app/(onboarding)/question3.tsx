@@ -88,9 +88,15 @@ export default function OnboardingQuestion3() {
             <View style={styles.fullBleed}>
               <View style={styles.answersSection}>
                 <SelectButton
-                  title="Yes"
-                selected={selectedAnswer === 'Yes'}
-                onPress={() => handleAnswerSelect('Yes')}
+                  title="Yes!"
+                selected={selectedAnswer === 'Yes!'}
+                onPress={() => handleAnswerSelect('Yes!')}
+              />
+
+              <SelectButton
+                title="I'm not sure"
+                selected={selectedAnswer === "I'm not sure"}
+                onPress={() => handleAnswerSelect("I'm not sure")}
               />
 
               <SelectButton

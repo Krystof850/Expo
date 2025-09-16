@@ -24,9 +24,9 @@ export default function OnboardingQuestion4() {
 
   const frequencyOptions = [
     { label: 'Never', value: 'never' },
+    { label: '1 times', value: '1' },
     { label: '1-3 times', value: '1-3' },
-    { label: '4-7 times', value: '4-7' },
-    { label: '8+ times', value: '8+' }
+    { label: '3+ times', value: '3+' }
   ];
 
   // Blokování hardware back button pouze na Androidu
@@ -88,7 +88,7 @@ export default function OnboardingQuestion4() {
         <View style={styles.content}>
           <AnimatedContent delay={100}>
             <View style={styles.questionSection}>
-              <TitleText animated={false}>How many times a day do you catch yourself procrastinating on tasks that matter?</TitleText>
+              <TitleText animated={false}>How many times a day do you catch yourself procrastinating on important tasks?</TitleText>
             </View>
           </AnimatedContent>
           
