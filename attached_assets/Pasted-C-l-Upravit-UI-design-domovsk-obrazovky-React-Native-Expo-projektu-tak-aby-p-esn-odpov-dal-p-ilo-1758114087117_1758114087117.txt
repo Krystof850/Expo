@@ -1,0 +1,123 @@
+Cíl: Upravit UI design domovské obrazovky React Native Expo projektu tak, aby přesně odpovídal přiložené referenční předloze (Image 1). Zaměřit se na spacing, velikosti prvků, fonty, šířku textu, hrany kontejnerů a jemné vizuální detaily, aby se dosáhlo 1:1 shody.
+
+Referenční obrázky:
+
+Image 1: Správná předloha (referenční obrázek UI).
+
+Image 2: Aktuální stav homepage (aktuální obrázek UI).
+
+Analýza a specifické úpravy:
+
+Níže jsou body, které je třeba upravit. Všechny hodnoty (padding, margin, font size, atd.) by měly být optimalizovány tak, aby odpovídaly vizuálně předloze. Kde není uvedena přesná hodnota, je potřeba ji vizuálně odhadnout pro co nejpřesnější shodu.
+
+1. Horní lišta (Status Bar a Nastavení):
+Hodiny, 5G, Baterie: Váš status bar (čas, ikony 5G/baterie) má příliš velký padding shora a z boků. Zmenšit vertikální i horizontální padding, aby se více přiblížil hornímu okraji a levému/pravému okraji displeje, jako na předloze.
+
+Ikona Nastavení (ozubené kolo):
+
+Velikost: Ikona je na předloze mírně menší. Zmenšit velikost ikony ozubeného kola.
+
+Pozice: Posunout ikonu mírně výše a mírně blíže k pravému okraji, aby byla v jedné rovině s ostatními prvky status baru a ne tak nízko.
+
+"1" vedle ikony: Ujistit se, že číslo "1" je stejně velké a stejně blízko ikoně ozubeného kola jako na předloze.
+
+2. Horní Orb/Kruh (Hlavní časovač):
+Vnější prstenec:
+
+Tloušťka: Na předloze je vnější prstenec tenčí. Zmenšit jeho tloušťku.
+
+Zář (Glow): Mírně zmenšit intenzitu nebo rozptyl vnější modré záře, aby působila jemněji, jako na předloze.
+
+Vnitřní kruh: Zvětšit vnitřní bílý kruh tak, aby zabíral více místa uvnitř vnějšího prstence, jako na předloze.
+
+3. Popisek "Procrastination-free for":
+Font: Zkontrolovat font. Na předloze je písmo lehce tenčí a má menší mezery mezi písmeny (letter spacing). Přizpůsobit font-weight a letter-spacing.
+
+Velikost: Mírně zvětšit font-size, aby byl text lépe čitelný, ale zároveň menší než časovač.
+
+Spacing pod orbem: Zmenšit vertikální vzdálenost mezi spodní částí orbu a tímto textem.
+
+4. Hlavní Časovač (05.18.45):
+Font: Klíčové! Font na předloze je výrazně jiný. Je tučnější (bold/heavy font-weight) a má mírně menší mezery mezi číslicemi. Upravit font-family nebo font-weight pro dosažení co nejpřesnější shody s předlohou.
+
+Velikost: Zvětšit font-size, aby byl dominantním prvkem, jako na předloze.
+
+Spacing pod popiskem: Zmenšit vertikální vzdálenost mezi textem "Procrastination-free for" a samotným časovačem.
+
+5. Popisky Dny/Hodiny/Mins (days, hours, mins):
+Font: Font na předloze je menší, tenčí a má výraznější letter-spacing. Upravit font-size, font-weight a letter-spacing.
+
+Pozice: Na předloze jsou tyto popisky umístěny mírně výše, blíže k samotným číslům časovače. Zmenšit vertikální mezery mezi čísly časovače a těmito popisky.
+
+"mins" místo "secs": Změnit popisek "secs" na "mins" a odstranit "s" na konci "days" a "hours" tak, aby zůstalo "day", "hour", "min". (Předpokládám, že na předloze je "mins" a ne "secs".) Pozor: Na referenčním obrázku je "mins" a pod tím "23s". Zkontrolujte logiku, zda má být text "mins" a pod ním čas v sekundách (23s), nebo zda se jedná o překlep v popisování "secs" vs "mins". Pokud má být jen "mins" jako jednotka, zrušte "23s" box pod tím. Pokud má být "mins" a pod tím vteřiny, upravte popisek "secs" na "mins" a přesuňte "23s" box níže.
+
+6. Box s vteřinami (23s):
+Velikost a tvar: Na předloze je box užší a mírně vyšší. Zmenšit horizontální padding a zvětšit vertikální padding.
+
+Barva pozadí: Mírně zesvětlit barvu pozadí boxu, aby se více přiblížila předloze.
+
+Zaoblení rohů: Zkontrolovat radius zaoblení rohů, aby odpovídal předloze.
+
+Font: Zkontrolovat velikost a tloušťku fontu uvnitř boxu.
+
+Pozice: Posunout box mírně výše, aby byl blíže k popiskům "day/hour/min".
+
+7. Tlačítko "I Feel Tempted":
+Výška: Tlačítko je na předloze mírně nižší a širší. Zmenšit výšku a mírně zvětšit šířku (nebo upravit horizontální padding).
+
+Zaoblení rohů: Zkontrolovat borderRadius, aby odpovídal předloze (zdá se mírně menší na předloze).
+
+Font: Zkontrolovat font-weight textu tlačítka.
+
+Spacing: Snížit vertikální vzdálenost mezi boxem "23s" a tímto tlačítkem.
+
+8. Spodní ikony (Refresh, Edit):
+Velikost: Obě ikony (refresh a edit) jsou na předloze o něco větší. Zvětšit jejich velikost.
+
+Velikost a zaoblení kontejnerů: Zvětšit velikost jejich kruhových kontejnerů a zkontrolovat borderRadius, aby byly perfektně kruhové.
+
+Barva pozadí kontejnerů: Mírně zesvětlit modrou barvu pozadí těchto kruhových kontejnerů.
+
+Spacing: Zmenšit vertikální vzdálenost mezi tlačítkem "I Feel Tempted" a těmito ikonami. Zvětšit horizontální vzdálenost mezi ikonami refresh a edit, aby byly dále od sebe.
+
+9. Progress Bar "Brain Rewiring":
+Spacing: Snížit vertikální vzdálenost mezi spodními ikonami (refresh/edit) a celým kontejnerem progress baru.
+
+Výška kontejneru: Na předloze se zdá být celý kontejner progress baru o něco nižší. Zmenšit jeho výšku.
+
+Text "Brain Rewiring": Zkontrolovat font-size a font-weight.
+
+Text "70%": Zkontrolovat font-size a font-weight, na předloze je text mírně tenčí.
+
+Samotný Progress Bar:
+
+Výška: Zmenšit výšku zeleného i šedého pruhu.
+
+Zaoblení rohů: Zajistit, že zaoblení rohů pruhu je přesně stejné jako na předloze.
+
+Barva: Zkontrolovat odstín zelené barvy.
+
+10. Navigační lišta (Spodní Menu):
+Tvar a pozadí: Zkontrolovat zaoblení horních rohů navigační lišty a odstín bílého/světle šedého pozadí.
+
+Ikony a text:
+
+"Home": Změnit barvu ikony domů a textu "Home" na světle modrou (aktuálně jsou modré, ale na předloze jsou světlejší odstín).
+
+"Statistics" a "Profile": Změnit barvu ikon a textu na šedou, jako na předloze.
+
+Velikost ikon a textu: Zkontrolovat, zda jsou velikosti ikon a textu stejné jako na předloze.
+
+Spacing: Zkontrolovat rovnoměrné horizontální rozložení všech tří položek (Home, Statistics, Profile).
+
+Obecné pokyny pro Agenta:
+
+Použít pixel-perfect přístup, kde je to možné.
+
+Dávat přednost relativním jednotkám (např. flexbox, procenta) tam, kde to dává smysl pro responzivitu, ale primárně cílit na vizuální shodu s předlohou.
+
+Pokud je to nutné, ladit hodnoty (padding, margin, font-size, atd.) iterativně, dokud nebude vizuální shoda s předlohou maximální.
+
+Zachovat stávající strukturu komponent, ale upravit styly.
+
+Zajistit, že změny jsou kompatibilní s Expo projektem.

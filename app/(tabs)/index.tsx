@@ -186,7 +186,10 @@ export default function Homepage() {
         {/* Header with Settings */}
         <View style={styles.header}>
           <TouchableOpacity style={styles.settingsButton}>
-            <Ionicons name="settings-outline" size={28} color="#64748B" />
+            <Ionicons name="settings-outline" size={22} color="#64748B" />
+            <View style={styles.badgeContainer}>
+              <Text style={styles.badgeText}>1</Text>
+            </View>
           </TouchableOpacity>
         </View>
 
@@ -325,23 +328,24 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-end',
     alignItems: 'center',
-    paddingHorizontal: 24,
-    paddingTop: 20,
-    paddingBottom: 10,
+    paddingHorizontal: 16,
+    paddingTop: 8,
+    paddingBottom: 6,
   },
   settingsButton: {
-    padding: 8,
+    padding: 6,
   },
   main: {
     flex: 1,
     paddingHorizontal: 24,
-    paddingBottom: 120, // Space for bottom navigation
-    justifyContent: 'center',
+    paddingBottom: 100,
+    justifyContent: 'flex-start',
     alignItems: 'center',
+    paddingTop: 40,
   },
   orbSection: {
     alignItems: 'center',
-    marginBottom: 32,
+    marginBottom: 12,
   },
   orbContainer: {
     width: 192,
@@ -525,5 +529,21 @@ const styles = StyleSheet.create({
     width: '70%',
     height: '100%',
     borderRadius: 5,
+  },
+  badgeContainer: {
+    position: 'absolute',
+    top: -4,
+    right: -4,
+    backgroundColor: '#EF4444',
+    borderRadius: 8,
+    width: 16,
+    height: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  badgeText: {
+    color: 'white',
+    fontSize: 10,
+    fontWeight: 'bold',
   },
 });
