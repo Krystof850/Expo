@@ -25,7 +25,6 @@ import Animated, {
 
 import { useAuth } from '../../src/context/AuthContext';
 import { Protected } from '../../src/components/Protected';
-import AppBackground from '../../components/AppBackground';
 import { router } from 'expo-router';
 
 const { width } = Dimensions.get('window');
@@ -44,34 +43,13 @@ export default function Homepage() {
   const [startTime, setStartTime] = useState<number | null>(null);
   const [streak, setStreak] = useState(0);
 
-  // Animation values for aura orb
+  // Animation values (only for aura)
   const auraPulse = useSharedValue(0);
-  const auraRotation = useSharedValue(0);
-  const auraFlow = useSharedValue(0);
-  const auraGlow = useSharedValue(0);
 
   useEffect(() => {
-    // Multiple animation layers for energy movement
+    // Aura pulsing animation
     auraPulse.value = withRepeat(
-      withTiming(1, { duration: 2500 }),
-      -1,
-      true
-    );
-    
-    auraRotation.value = withRepeat(
-      withTiming(360, { duration: 15000 }),
-      -1,
-      false
-    );
-    
-    auraFlow.value = withRepeat(
-      withTiming(1, { duration: 3000 }),
-      -1,
-      true
-    );
-    
-    auraGlow.value = withRepeat(
-      withTiming(1, { duration: 4000 }),
+      withTiming(1, { duration: 2000 }),
       -1,
       true
     );
@@ -174,50 +152,26 @@ export default function Homepage() {
     return num.toString().padStart(2, '0');
   };
 
-  // Animated styles for aura orb layers
-  const auraOuterStyle = useAnimatedStyle(() => {
-    const scale = interpolate(auraPulse.value, [0, 1], [1, 1.08]);
-    const opacity = interpolate(auraGlow.value, [0, 1], [0.6, 0.9]);
-    const rotate = `${auraRotation.value}deg`;
-    return {
-      transform: [{ scale }, { rotate }],
-      opacity,
-    };
-  });
-  
-  const auraMiddleStyle = useAnimatedStyle(() => {
+  // Animated styles (only aura)
+  const auraAnimatedStyle = useAnimatedStyle(() => {
     const scale = interpolate(auraPulse.value, [0, 1], [1, 1.05]);
-    const opacity = interpolate(auraFlow.value, [0, 1], [0.7, 1]);
-    const rotate = `${-auraRotation.value * 0.7}deg`;
-    return {
-      transform: [{ scale }, { rotate }],
-      opacity,
-    };
-  });
-  
-  const auraInnerStyle = useAnimatedStyle(() => {
-    const scale = interpolate(auraPulse.value, [0, 1], [1, 1.03]);
-    const opacity = interpolate(auraFlow.value, [0, 1], [0.8, 1]);
     return {
       transform: [{ scale }],
-      opacity,
-    };
-  });
-  
-  const auraCoreStyle = useAnimatedStyle(() => {
-    const scale = interpolate(auraPulse.value, [0, 1], [1, 1.02]);
-    const opacity = interpolate(auraGlow.value, [0, 1], [0.9, 1]);
-    return {
-      transform: [{ scale }],
-      opacity,
     };
   });
 
   return (
     <Protected>
-      <AppBackground>
-        <SafeAreaView style={styles.container}>
-          <StatusBar barStyle="dark-content" backgroundColor="transparent" translucent />
+      <SafeAreaView style={styles.container}>
+        <StatusBar barStyle="dark-content" backgroundColor="transparent" translucent />
+        
+        {/* Static Background */}
+        <LinearGradient
+          colors={['#DBEAFE', '#BFDBFE']}
+          style={styles.backgroundGradient}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 0, y: 1 }}
+        />
 
         {/* HEADER - Proper Safe Area */}
         <View style={styles.header}>
@@ -252,48 +206,21 @@ export default function Homepage() {
 
           {/* Main Content */}
           <View style={styles.mainContent}>
-            {/* Aura Orb Element */}
-            <View style={styles.auraContainer}>
-              {/* Outer Glow Layer */}
-              <Animated.View style={[styles.auraOuter, auraOuterStyle]}>
-                <LinearGradient
-                  colors={['#1E40AF', '#3B82F6', '#60A5FA', '#93C5FD']}
-                  style={styles.auraOuterGradient}
-                  start={{ x: 0, y: 0 }}
-                  end={{ x: 1, y: 1 }}
-                />
-              </Animated.View>
-              
-              {/* Middle Energy Layer */}
-              <Animated.View style={[styles.auraMiddle, auraMiddleStyle]}>
-                <LinearGradient
-                  colors={['#3B82F6', '#60A5FA', '#93C5FD', '#DBEAFE']}
-                  style={styles.auraMiddleGradient}
-                  start={{ x: 0.2, y: 0.2 }}
-                  end={{ x: 0.8, y: 0.8 }}
-                />
-              </Animated.View>
-              
-              {/* Inner Bright Layer */}
-              <Animated.View style={[styles.auraInner, auraInnerStyle]}>
-                <LinearGradient
-                  colors={['#60A5FA', '#93C5FD', '#DBEAFE', '#F0F9FF']}
-                  style={styles.auraInnerGradient}
-                  start={{ x: 0.3, y: 0.3 }}
-                  end={{ x: 0.7, y: 0.7 }}
-                />
-              </Animated.View>
-              
-              {/* Core Light */}
-              <Animated.View style={[styles.auraCore, auraCoreStyle]}>
-                <LinearGradient
-                  colors={['#DBEAFE', '#F0F9FF', '#FFFFFF', '#F0F9FF']}
-                  style={styles.auraCoreGradient}
-                  start={{ x: 0.4, y: 0.4 }}
-                  end={{ x: 0.6, y: 0.6 }}
-                />
-              </Animated.View>
-            </View>
+            {/* Aura Element */}
+            <Animated.View style={[styles.auraContainer, auraAnimatedStyle]}>
+              <LinearGradient
+                colors={['#87CEEB', '#67D7E8', '#87CEEB']}
+                style={styles.auraOuter}
+              />
+              <LinearGradient
+                colors={['rgba(135,206,235,0.8)', 'rgba(178,216,235,0.9)']}
+                style={styles.auraMiddle}
+              />
+              <LinearGradient
+                colors={['rgba(255,255,255,0.9)', 'rgba(255,255,255,0.7)']}
+                style={styles.auraInner}
+              />
+            </Animated.View>
 
             {/* Timer */}
             <View style={styles.timerSection}>
@@ -357,8 +284,7 @@ export default function Homepage() {
             </View>
           </View>
         </View>
-        </SafeAreaView>
-      </AppBackground>
+      </SafeAreaView>
     </Protected>
   );
 }
@@ -366,7 +292,10 @@ export default function Homepage() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'transparent',
+    backgroundColor: '#F0F9FF',
+  },
+  backgroundGradient: {
+    ...StyleSheet.absoluteFillObject,
   },
   content: {
     flex: 1,
@@ -409,81 +338,38 @@ const styles = StyleSheet.create({
   },
   auraContainer: {
     position: 'relative',
-    width: 220,
-    height: 220,
-    marginBottom: 32,
+    width: 192,
+    height: 192,
+    marginBottom: 24,
     alignItems: 'center',
     justifyContent: 'center',
   },
   auraOuter: {
     position: 'absolute',
-    width: 220,
-    height: 220,
-    borderRadius: 110,
-  },
-  auraOuterGradient: {
-    width: '100%',
-    height: '100%',
-    borderRadius: 110,
-    shadowColor: '#3B82F6',
+    width: 192,
+    height: 192,
+    borderRadius: 96,
+    shadowColor: 'rgba(56, 189, 248, 0.4)',
     shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.6,
-    shadowRadius: 50,
-    elevation: 12,
+    shadowOpacity: 1,
+    shadowRadius: 40,
+    elevation: 10,
   },
   auraMiddle: {
     position: 'absolute',
-    width: 180,
-    height: 180,
-    borderRadius: 90,
-    top: 20,
-    left: 20,
-  },
-  auraMiddleGradient: {
-    width: '100%',
-    height: '100%',
-    borderRadius: 90,
-    shadowColor: '#60A5FA',
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.5,
-    shadowRadius: 30,
-    elevation: 8,
+    width: 182,
+    height: 182,
+    borderRadius: 91,
+    alignSelf: 'center',
+    top: 5,
   },
   auraInner: {
     position: 'absolute',
-    width: 140,
-    height: 140,
-    borderRadius: 70,
-    top: 40,
-    left: 40,
-  },
-  auraInnerGradient: {
-    width: '100%',
-    height: '100%',
-    borderRadius: 70,
-    shadowColor: '#93C5FD',
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.4,
-    shadowRadius: 20,
-    elevation: 6,
-  },
-  auraCore: {
-    position: 'absolute',
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    top: 60,
-    left: 60,
-  },
-  auraCoreGradient: {
-    width: '100%',
-    height: '100%',
-    borderRadius: 50,
-    shadowColor: '#DBEAFE',
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.8,
-    shadowRadius: 15,
-    elevation: 4,
+    width: 154,
+    height: 154,
+    borderRadius: 77,
+    alignSelf: 'center',
+    top: 19,
   },
   timerSection: {
     alignItems: 'center',
