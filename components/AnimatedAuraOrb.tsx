@@ -7,127 +7,74 @@ import Animated, {
   withTiming,
   interpolate,
   Easing,
-  useAnimatedProps,
-  withSequence,
 } from 'react-native-reanimated';
-import { Svg, Circle, Defs, RadialGradient, Stop } from 'react-native-svg';
 import { LinearGradient } from 'expo-linear-gradient';
-
-const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
 interface AnimatedAuraOrbProps {
   size?: number;
 }
 
 export default function AnimatedAuraOrb({ size = 192 }: AnimatedAuraOrbProps) {
-  // Animation values
+  // Animation values for obvious visual difference
   const mainPulse = useSharedValue(0);
-  const energyFlow1 = useSharedValue(0);
-  const energyFlow2 = useSharedValue(0);
-  const energyFlow3 = useSharedValue(0);
-  const auraGlow = useSharedValue(0);
-  const innerMovement = useSharedValue(0);
+  const rotation = useSharedValue(0);
+  const innerGlow = useSharedValue(0);
+  const outerRing = useSharedValue(0);
 
   useEffect(() => {
-    // Main pulsating animation - slow and gentle
+    // VERY obvious pulsing animation
     mainPulse.value = withRepeat(
-      withTiming(1, { duration: 3000, easing: Easing.inOut(Easing.ease) }),
+      withTiming(1, { duration: 1500, easing: Easing.inOut(Easing.ease) }),
       -1,
       true
     );
 
-    // Energy flow animations - different speeds for organic movement
-    energyFlow1.value = withRepeat(
-      withTiming(1, { duration: 4000, easing: Easing.linear }),
+    // Continuous rotation for obvious movement
+    rotation.value = withRepeat(
+      withTiming(360, { duration: 3000, easing: Easing.linear }),
       -1,
       false
     );
 
-    energyFlow2.value = withRepeat(
-      withTiming(1, { duration: 5500, easing: Easing.linear }),
+    // Inner glow pulsing
+    innerGlow.value = withRepeat(
+      withTiming(1, { duration: 2000, easing: Easing.inOut(Easing.ease) }),
       -1,
-      false
+      true
     );
 
-    energyFlow3.value = withRepeat(
-      withTiming(1, { duration: 7000, easing: Easing.linear }),
-      -1,
-      false
-    );
-
-    // Aura glow - gentle pulsing
-    auraGlow.value = withRepeat(
-      withSequence(
-        withTiming(1, { duration: 2500, easing: Easing.inOut(Easing.ease) }),
-        withTiming(0.7, { duration: 2500, easing: Easing.inOut(Easing.ease) }),
-      ),
-      -1,
-      false
-    );
-
-    // Inner energy movement
-    innerMovement.value = withRepeat(
-      withTiming(1, { duration: 6000, easing: Easing.inOut(Easing.ease) }),
+    // Outer ring animation
+    outerRing.value = withRepeat(
+      withTiming(1, { duration: 2500, easing: Easing.inOut(Easing.ease) }),
       -1,
       true
     );
   }, []);
 
-  // Main orb scale animation
-  const orbAnimatedStyle = useAnimatedStyle(() => {
-    const scale = interpolate(mainPulse.value, [0, 1], [0.98, 1.02]);
+  // Main orb dramatic pulsing
+  const orbStyle = useAnimatedStyle(() => {
+    const scale = interpolate(mainPulse.value, [0, 1], [0.8, 1.2]); // Much more dramatic scaling
     return {
       transform: [{ scale }],
     };
   });
 
-  // Aura glow animation
-  const auraAnimatedStyle = useAnimatedStyle(() => {
-    const scale = interpolate(auraGlow.value, [0, 1], [1, 1.15]);
-    const opacity = interpolate(auraGlow.value, [0, 1], [0.6, 0.9]);
+  // Rotating outer ring
+  const ringStyle = useAnimatedStyle(() => {
+    const rotateZ = interpolate(rotation.value, [0, 360], [0, 360]);
+    const scale = interpolate(outerRing.value, [0, 1], [1, 1.15]);
     return {
+      transform: [{ rotate: `${rotateZ}deg` }, { scale }],
+    };
+  });
+
+  // Inner glow animation
+  const glowStyle = useAnimatedStyle(() => {
+    const opacity = interpolate(innerGlow.value, [0, 1], [0.3, 0.9]);
+    const scale = interpolate(innerGlow.value, [0, 1], [0.9, 1.1]);
+    return {
+      opacity,
       transform: [{ scale }],
-      opacity,
-    };
-  });
-
-  // Inner energy layers animations
-  const energy1Style = useAnimatedStyle(() => {
-    const rotation = interpolate(energyFlow1.value, [0, 1], [0, 360]);
-    const scale = interpolate(innerMovement.value, [0, 1], [0.9, 1.1]);
-    return {
-      transform: [
-        { rotate: `${rotation}deg` },
-        { scale },
-      ],
-    };
-  });
-
-  const energy2Style = useAnimatedStyle(() => {
-    const rotation = interpolate(energyFlow2.value, [0, 1], [360, 0]);
-    const scale = interpolate(innerMovement.value, [0, 1], [1.1, 0.95]);
-    return {
-      transform: [
-        { rotate: `${rotation}deg` },
-        { scale },
-      ],
-    };
-  });
-
-  const energy3Style = useAnimatedStyle(() => {
-    const rotation = interpolate(energyFlow3.value, [0, 1], [0, 270]);
-    return {
-      transform: [{ rotate: `${rotation}deg` }],
-    };
-  });
-
-  // SVG circle animated props for inner energy
-  const innerCircleProps = useAnimatedProps(() => {
-    const r = interpolate(innerMovement.value, [0, 1], [size * 0.3, size * 0.35]);
-    const opacity = interpolate(innerMovement.value, [0, 1], [0.4, 0.7]);
-    return {
-      r,
-      opacity,
     };
   });
 
@@ -135,110 +82,64 @@ export default function AnimatedAuraOrb({ size = 192 }: AnimatedAuraOrbProps) {
 
   return (
     <View style={[styles.container, { width: size, height: size }]}>
-      {/* Outer Aura Glow */}
-      <Animated.View style={[styles.auraGlow, auraAnimatedStyle, { width: size * 1.3, height: size * 1.3 }]}>
+      {/* Dramatic outer glow - PURPLE/PINK to be obviously different */}
+      <Animated.View style={[styles.outerGlow, { width: size * 1.4, height: size * 1.4 }]}>
         <LinearGradient
           colors={[
-            'rgba(103, 215, 232, 0.3)',
-            'rgba(135, 206, 235, 0.2)',
-            'rgba(56, 189, 248, 0.1)',
+            'rgba(147, 51, 234, 0.4)', // Purple
+            'rgba(168, 85, 247, 0.3)', // Lighter purple  
+            'rgba(236, 72, 153, 0.2)', // Pink
             'transparent',
           ]}
-          style={styles.glowGradient}
+          style={[styles.glowGradient, { borderRadius: radius * 1.4 }]}
         />
       </Animated.View>
 
-      {/* Main Orb Container */}
-      <Animated.View style={[styles.orbContainer, orbAnimatedStyle, { width: size, height: size }]}>
-        
-        {/* Energy Flow Layer 1 - Rotating background energy */}
-        <Animated.View style={[styles.energyLayer, energy1Style]}>
-          <LinearGradient
-            colors={[
-              'rgba(135, 206, 235, 0.4)',
-              'rgba(103, 215, 232, 0.6)',
-              'rgba(135, 206, 235, 0.4)',
-            ]}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
-            style={[styles.energyGradient, { borderRadius: radius }]}
-          />
-        </Animated.View>
-
-        {/* Energy Flow Layer 2 - Counter-rotating energy */}
-        <Animated.View style={[styles.energyLayer, energy2Style]}>
-          <LinearGradient
-            colors={[
-              'rgba(103, 215, 232, 0.3)',
-              'rgba(56, 189, 248, 0.5)',
-              'rgba(103, 215, 232, 0.3)',
-            ]}
-            start={{ x: 1, y: 0 }}
-            end={{ x: 0, y: 1 }}
-            style={[styles.energyGradient, { borderRadius: radius }]}
-          />
-        </Animated.View>
-
-        {/* SVG Inner Energy Particles */}
-        <Animated.View style={[styles.svgContainer, energy3Style]}>
-          <Svg width={size} height={size} style={styles.svg}>
-            <Defs>
-              <RadialGradient id="innerEnergy" cx="50%" cy="50%" r="50%">
-                <Stop offset="0%" stopColor="rgba(255, 255, 255, 0.8)" />
-                <Stop offset="50%" stopColor="rgba(135, 206, 235, 0.6)" />
-                <Stop offset="100%" stopColor="rgba(56, 189, 248, 0.3)" />
-              </RadialGradient>
-              <RadialGradient id="coreEnergy" cx="50%" cy="50%" r="30%">
-                <Stop offset="0%" stopColor="rgba(255, 255, 255, 0.9)" />
-                <Stop offset="100%" stopColor="rgba(178, 216, 235, 0.7)" />
-              </RadialGradient>
-            </Defs>
-            
-            {/* Animated inner energy circle */}
-            <AnimatedCircle
-              cx={radius}
-              cy={radius}
-              fill="url(#innerEnergy)"
-              animatedProps={innerCircleProps}
-            />
-            
-            {/* Core energy dot */}
-            <Circle
-              cx={radius}
-              cy={radius}
-              r={size * 0.12}
-              fill="url(#coreEnergy)"
-              opacity={0.8}
-            />
-          </Svg>
-        </Animated.View>
-
-        {/* Main Orb Shell */}
+      {/* Rotating outer ring - OBVIOUSLY MOVING */}
+      <Animated.View style={[styles.rotatingRing, ringStyle, { width: size * 1.2, height: size * 1.2 }]}>
         <LinearGradient
           colors={[
-            'rgba(56, 189, 248, 0.7)',  // Outer edge - darker blue
-            'rgba(103, 215, 232, 0.5)', // Middle layer
-            'rgba(135, 206, 235, 0.6)', // Inner layer  
-            'rgba(178, 216, 235, 0.4)', // Center - lightest
+            'rgba(219, 39, 119, 0.6)', // Pink
+            'transparent',
+            'rgba(147, 51, 234, 0.6)', // Purple  
+            'transparent',
           ]}
-          style={[styles.orbShell, { borderRadius: radius }]}
+          style={[styles.ringGradient, { borderRadius: radius * 1.2 }]}
         />
-
-        {/* Highlight overlay for 3D effect */}
-        <View style={[styles.highlight, { borderRadius: radius }]}>
-          <LinearGradient
-            colors={[
-              'rgba(255, 255, 255, 0.6)',
-              'rgba(255, 255, 255, 0.2)',
-              'transparent',
-              'transparent',
-            ]}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
-            style={[styles.highlightGradient, { borderRadius: radius }]}
-          />
-        </View>
       </Animated.View>
+
+      {/* Main orb - DRAMATICALLY PULSING */}
+      <Animated.View style={[styles.mainOrb, orbStyle, { width: size, height: size }]}>
+        <LinearGradient
+          colors={[
+            '#EC4899', // Bright pink
+            '#F97316', // Orange
+            '#EF4444', // Red
+            '#DC2626', // Dark red
+          ]}
+          style={[styles.orbGradient, { borderRadius: radius }]}
+        />
+      </Animated.View>
+
+      {/* Inner animated glow */}
+      <Animated.View style={[styles.innerGlow, glowStyle, { width: size * 0.6, height: size * 0.6 }]}>
+        <LinearGradient
+          colors={[
+            'rgba(255, 255, 255, 0.9)',
+            'rgba(251, 191, 36, 0.8)', // Yellow glow
+            'transparent',
+          ]}
+          style={[styles.innerGlowGradient, { borderRadius: radius * 0.6 }]}
+        />
+      </Animated.View>
+
+      {/* Central bright core */}
+      <View style={[styles.core, { width: size * 0.2, height: size * 0.2, borderRadius: radius * 0.2 }]}>
+        <LinearGradient
+          colors={['#FFFFFF', '#FDE047']} // White to bright yellow
+          style={[styles.coreGradient, { borderRadius: radius * 0.2 }]}
+        />
+      </View>
     </View>
   );
 }
@@ -248,56 +149,55 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  auraGlow: {
+  outerGlow: {
     position: 'absolute',
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignSelf: 'center',
   },
   glowGradient: {
     width: '100%',
     height: '100%',
-    borderRadius: 1000, // Large radius for perfect circle
   },
-  orbContainer: {
-    position: 'relative',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  energyLayer: {
+  rotatingRing: {
     position: 'absolute',
+    alignSelf: 'center',
+  },
+  ringGradient: {
     width: '100%',
     height: '100%',
+    borderWidth: 3,
+    borderColor: 'rgba(147, 51, 234, 0.3)',
   },
-  energyGradient: {
-    width: '100%',
-    height: '100%',
-  },
-  svgContainer: {
+  mainOrb: {
     position: 'absolute',
-    width: '100%',
-    height: '100%',
-  },
-  svg: {
-    position: 'absolute',
-  },
-  orbShell: {
-    position: 'absolute',
-    width: '100%',
-    height: '100%',
-    shadowColor: 'rgba(56, 189, 248, 0.4)',
+    alignSelf: 'center',
+    shadowColor: 'rgba(236, 72, 153, 0.8)', // Pink shadow
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 1,
-    shadowRadius: 30,
-    elevation: 15,
+    shadowRadius: 25,
+    elevation: 20,
   },
-  highlight: {
+  orbGradient: {
+    width: '100%',
+    height: '100%',
+  },
+  innerGlow: {
     position: 'absolute',
-    width: '85%',
-    height: '85%',
-    top: '7.5%',
-    left: '7.5%',
+    alignSelf: 'center',
   },
-  highlightGradient: {
+  innerGlowGradient: {
+    width: '100%',
+    height: '100%',
+  },
+  core: {
+    position: 'absolute',
+    alignSelf: 'center',
+    shadowColor: '#FDE047',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 1,
+    shadowRadius: 10,
+    elevation: 25,
+  },
+  coreGradient: {
     width: '100%',
     height: '100%',
   },
