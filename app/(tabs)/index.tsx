@@ -386,13 +386,13 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     color: '#0C4A6E',
     letterSpacing: 0.3,
-    marginBottom: 2,
+    marginBottom: 8,
   },
   timerRow: {
     flexDirection: 'row',
     alignItems: 'flex-end',
     justifyContent: 'center',
-    marginBottom: 4,
+    marginBottom: -6,
   },
   timeUnit: {
     alignItems: 'center',
@@ -423,7 +423,7 @@ const styles = StyleSheet.create({
   },
   secondsContainer: {
     alignItems: 'center',
-    marginTop: 4,
+    marginTop: 14,
   },
   secondsBox: {
     paddingHorizontal: 8,
