@@ -10,7 +10,7 @@ export default function TabLayout() {
         headerShown: false,
         tabBarStyle: {
           position: 'absolute',
-          bottom: 20,
+          bottom: 200,
           left: 12,
           right: 12,
           backgroundColor: 'rgba(255, 255, 255, 0.7)',
