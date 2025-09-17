@@ -81,7 +81,37 @@ export default function Homepage() {
   const float4TranslateY = useSharedValue(0);
   const float4Rotate = useSharedValue(0);
 
-  // Start floating animations
+  // Background gradient animation values
+  const gradientOpacity = useSharedValue(1);
+  const gradientScale = useSharedValue(1);
+  const gradientRotate = useSharedValue(0);
+
+  // Start animations
+  useEffect(() => {
+    // Background gradient animation (20s cycle like template)
+    gradientOpacity.value = withRepeat(
+      withSequence(
+        withTiming(0.7, { duration: 10000 }),
+        withTiming(1, { duration: 10000 })
+      ), -1, false
+    );
+    gradientScale.value = withRepeat(
+      withSequence(
+        withTiming(1.1, { duration: 10000 }),
+        withTiming(1, { duration: 10000 })
+      ), -1, false
+    );
+    gradientRotate.value = withRepeat(
+      withSequence(
+        withTiming(5, { duration: 10000 }),
+        withTiming(-5, { duration: 10000 })
+      ), -1, false
+    );
+
+    // Start floating animations
+  }, []);
+
+  // Continue with floating animations
   useEffect(() => {
     // Float 1 animation (9s cycle)
     float1TranslateX.value = withRepeat(
@@ -222,6 +252,17 @@ export default function Homepage() {
     };
   });
 
+  // Animated gradient background styles  
+  const gradientAnimatedStyle = useAnimatedStyle(() => {
+    return {
+      opacity: gradientOpacity.value,
+      transform: [
+        { scale: gradientScale.value },
+        { rotate: `${gradientRotate.value}deg` },
+      ],
+    };
+  });
+
 
   // Load saved timer data
   useEffect(() => {
@@ -353,13 +394,23 @@ export default function Homepage() {
       <SafeAreaView style={styles.container}>
         <StatusBar barStyle="dark-content" backgroundColor="transparent" translucent />
         
-        {/* Animated Gradient Background */}
+        {/* Animated Gradient Background - Base Layer */}
         <LinearGradient
           colors={['#E0F2FE', '#BFDBFE', '#93C5FD', '#BFDBFE', '#E0F2FE']}
           style={styles.animatedBackground}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
         />
+        
+        {/* Animated Gradient Background - Top Layer with Animation */}
+        <Animated.View style={[styles.animatedBackground, gradientAnimatedStyle]}>
+          <LinearGradient
+            colors={['#DBEAFE', '#A5B4FC', '#BFDBFE', '#93C5FD', '#DBEAFE']}
+            style={StyleSheet.absoluteFill}
+            start={{ x: 0, y: 1 }}
+            end={{ x: 1, y: 0 }}
+          />
+        </Animated.View>
 
         {/* Floating Background Elements */}
         <View style={styles.floatingContainer}>
