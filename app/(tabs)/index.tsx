@@ -276,13 +276,13 @@ export default function Homepage() {
                 onPress={handleResetTimer}
                 activeOpacity={0.8}
               >
-                <Ionicons name="refresh" size={24} color="#0C4A6E" />
+                <Ionicons name="refresh" size={28} color="#0284C7" />
               </TouchableOpacity>
               <TouchableOpacity 
                 style={styles.actionButton}
                 activeOpacity={0.8}
               >
-                <Ionicons name="create-outline" size={24} color="#0C4A6E" />
+                <Ionicons name="create-outline" size={28} color="#0284C7" />
               </TouchableOpacity>
             </View>
           </View>
@@ -445,13 +445,13 @@ const styles = StyleSheet.create({
   },
   buttonSection: {
     width: '100%',
-    maxWidth: 320,
+    maxWidth: 340,
     alignItems: 'center',
-    marginBottom: 16,
+    marginBottom: 12,
   },
   temptedButton: {
     width: '100%',
-    borderRadius: 50,
+    borderRadius: 32,
     shadowColor: '#0284C7',
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 1,
@@ -461,24 +461,24 @@ const styles = StyleSheet.create({
   },
   temptedButtonGradient: {
     width: '100%',
-    paddingVertical: 20,
+    paddingVertical: 16,
     alignItems: 'center',
-    borderRadius: 50,
+    borderRadius: 32,
   },
   temptedButtonText: {
-    fontSize: 20,
-    fontWeight: '700',
+    fontSize: 18,
+    fontWeight: '600',
     color: '#FFFFFF',
   },
   actionButtons: {
     flexDirection: 'row',
-    gap: 16,
+    gap: 20,
   },
   actionButton: {
-    width: 56,
-    height: 56,
-    borderRadius: 28,
-    backgroundColor: 'rgba(255, 255, 255, 0.6)',
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    backgroundColor: 'rgba(255, 255, 255, 0.8)',
     alignItems: 'center',
     justifyContent: 'center',
     shadowColor: 'rgba(0, 0, 0, 0.1)',
@@ -493,7 +493,7 @@ const styles = StyleSheet.create({
   },
   progressCard: {
     backgroundColor: 'rgba(255, 255, 255, 0.4)',
-    padding: 14,
+    padding: 12,
     borderRadius: 16,
     shadowColor: 'rgba(0, 0, 0, 0.1)',
     shadowOffset: { width: 0, height: 4 },
@@ -505,15 +505,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 8,
+    marginBottom: 6,
   },
   progressTitle: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: '600',
     color: '#0C4A6E',
   },
   progressPercentage: {
-    fontSize: 14,
+    fontSize: 12,
     fontWeight: '700',
     color: '#082F49',
   },
@@ -522,15 +522,15 @@ const styles = StyleSheet.create({
   },
   progressBarBackground: {
     width: '100%',
-    height: 10,
+    height: 8,
     backgroundColor: '#E2E8F0',
-    borderRadius: 5,
+    borderRadius: 4,
     overflow: 'hidden',
   },
   progressBarFill: {
     width: '70%',
     height: '100%',
-    borderRadius: 5,
+    borderRadius: 4,
   },
   badgeContainer: {
     position: 'absolute',
