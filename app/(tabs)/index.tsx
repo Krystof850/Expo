@@ -408,7 +408,7 @@ const styles = StyleSheet.create({
     textShadowRadius: 4,
   },
   timeLabel: {
-    fontSize: 12,
+    fontSize: 14,
     fontWeight: '400',
     color: '#64748B',
     letterSpacing: 0.2,
