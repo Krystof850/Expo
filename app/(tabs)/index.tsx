@@ -398,10 +398,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   timeNumber: {
-    fontSize: 58,
+    fontSize: 40,
     fontWeight: '800',
     color: '#082F49',
-    lineHeight: 58,
+    lineHeight: 40,
     letterSpacing: -1.5,
     textShadowColor: 'rgba(0, 0, 0, 0.1)',
     textShadowOffset: { width: 0, height: 2 },
