@@ -415,7 +415,7 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   separator: {
-    fontSize: 56,
+    fontSize: 68,
     fontWeight: '800',
     color: '#082F49',
     marginHorizontal: 8,
