@@ -4,7 +4,8 @@ import {
   setDoc, 
   updateDoc, 
   serverTimestamp,
-  Timestamp 
+  Timestamp,
+  onSnapshot 
 } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 import { UserProgress } from '../types/achievement';
@@ -30,14 +31,14 @@ export class ProgressService {
           bestStreak: data.bestStreak || 0,
           currentOrbLevel: data.currentOrbLevel || 1,
           totalResets: data.totalResets || 0,
-          lastUpdated: data.lastUpdated?.toMillis() || Date.now(),
+          lastUpdated: (data.lastUpdated instanceof Timestamp) ? data.lastUpdated.toMillis() : (typeof data.lastUpdated === 'number' ? data.lastUpdated : Date.now()),
         };
       }
       
       return null;
     } catch (error) {
       console.error('Error getting user progress:', error);
-      return null;
+      throw error; // Propagate error to prevent accidental data overwrite
     }
   }
 
@@ -171,12 +172,55 @@ export class ProgressService {
    * Get or create user progress
    */
   static async getOrCreateUserProgress(userId: string): Promise<UserProgress> {
-    let progress = await this.getUserProgress(userId);
-    
-    if (!progress) {
-      progress = await this.initializeUserProgress(userId);
+    try {
+      let progress = await this.getUserProgress(userId);
+      
+      if (!progress) {
+        progress = await this.initializeUserProgress(userId);
+      }
+      
+      return progress;
+    } catch (error) {
+      console.error('Error in getOrCreateUserProgress, falling back to local storage:', error);
+      throw error; // Let caller handle fallback to prevent data loss
     }
-    
-    return progress;
+  }
+
+  /**
+   * Subscribe to real-time user progress updates
+   */
+  static subscribeToUserProgress(
+    userId: string, 
+    callback: (progress: UserProgress | null) => void
+  ): () => void {
+    try {
+      const docRef = doc(db, this.COLLECTION_NAME, userId);
+      
+      const unsubscribe = onSnapshot(docRef, (docSnap) => {
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          const progress: UserProgress = {
+            userId,
+            startTime: data.startTime || Date.now(),
+            currentStreak: data.currentStreak || 0,
+            bestStreak: data.bestStreak || 0,
+            currentOrbLevel: data.currentOrbLevel || 1,
+            totalResets: data.totalResets || 0,
+            lastUpdated: (data.lastUpdated instanceof Timestamp) ? data.lastUpdated.toMillis() : (typeof data.lastUpdated === 'number' ? data.lastUpdated : Date.now()),
+          };
+          callback(progress);
+        } else {
+          callback(null);
+        }
+      }, (error) => {
+        console.error('Real-time listener error:', error);
+        callback(null);
+      });
+      
+      return unsubscribe;
+    } catch (error) {
+      console.error('Error setting up real-time listener:', error);
+      return () => {};
+    }
   }
 }

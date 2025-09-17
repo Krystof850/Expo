@@ -78,6 +78,41 @@ export default function Homepage() {
     loadTimerData();
   }, []);
 
+  // Setup real-time Firebase listener for bidirectional sync
+  useEffect(() => {
+    if (!user?.uid) return;
+
+    const unsubscribe = ProgressService.subscribeToUserProgress(user.uid, (progress) => {
+      if (progress) {
+        console.log('🔄 Real-time update from Firebase:', progress);
+        setUserProgress(progress);
+        
+        // Apply Firebase changes to timer immediately (avoid stale closure)
+        setStartTime(currentStartTime => {
+          if (progress.startTime !== currentStartTime) {
+            calculateTime(progress.startTime);
+            AsyncStorage.setItem('procrastination_start_time', progress.startTime.toString());
+            console.log('🔄 StartTime updated from real-time sync');
+            return progress.startTime;
+          }
+          return currentStartTime;
+        });
+        
+        setStreak(currentStreak => {
+          const newStreak = Math.floor(progress.currentStreak);
+          if (newStreak !== currentStreak) {
+            AsyncStorage.setItem('procrastination_streak', progress.currentStreak.toString());
+            console.log('🔄 Streak updated from real-time sync');
+            return newStreak;
+          }
+          return currentStreak;
+        });
+      }
+    });
+
+    return () => unsubscribe && unsubscribe();
+  }, [user?.uid]);
+
   // Update orb when time changes
   useEffect(() => {
     const totalDays = convertTimeToDays(time);
@@ -98,21 +133,39 @@ export default function Homepage() {
 
   const loadTimerData = async () => {
     try {
-      // Always start with local storage first for immediate response
-      await loadTimerDataFallback();
-      
-      // Try Firebase sync in background (non-blocking)
-      if (user?.uid) {
-        try {
-          const progress = await ProgressService.getOrCreateUserProgress(user.uid);
-          setUserProgress(progress);
-          console.log('✅ Firebase sync successful');
-        } catch (firebaseError) {
-          console.log('⚠️ Firebase sync failed, using local storage:', firebaseError);
+      if (!user?.uid) {
+        // If no user, use local storage fallback
+        await loadTimerDataFallback();
+        return;
+      }
+
+      // For authenticated users, Firebase is the authoritative source
+      try {
+        const progress = await ProgressService.getOrCreateUserProgress(user.uid);
+        setUserProgress(progress);
+        
+        // Apply Firebase data to timer (this ensures persistence across sessions)
+        if (progress.startTime && progress.currentStreak >= 0) {
+          setStartTime(progress.startTime);
+          setStreak(Math.floor(progress.currentStreak));
+          calculateTime(progress.startTime);
+          
+          // Also update local storage as backup
+          await AsyncStorage.setItem('procrastination_start_time', progress.startTime.toString());
+          await AsyncStorage.setItem('procrastination_streak', progress.currentStreak.toString());
+          
+          console.log('✅ Timer loaded from Firebase:', {
+            startTime: new Date(progress.startTime).toISOString(),
+            currentStreak: progress.currentStreak
+          });
         }
+      } catch (firebaseError) {
+        console.log('⚠️ Firebase sync failed, using local storage:', firebaseError);
+        await loadTimerDataFallback();
       }
     } catch (error) {
       console.log('Error loading timer data:', error);
+      await loadTimerDataFallback();
     }
   };
 
@@ -208,11 +261,10 @@ export default function Homepage() {
 
   const resetTimerFallback = async () => {
     const now = Date.now();
-    const nextStreak = streak + 1;
     setStartTime(now);
-    setStreak(nextStreak);
+    setStreak(0); // Reset to 0 to align with Firebase resetUserTimer logic
     await AsyncStorage.setItem('procrastination_start_time', now.toString());
-    await AsyncStorage.setItem('procrastination_streak', nextStreak.toString());
+    await AsyncStorage.setItem('procrastination_streak', '0');
     setTime({ days: 0, hours: 0, minutes: 0, seconds: 0 });
     setCurrentOrbType('basic');
   };
