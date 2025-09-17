@@ -386,14 +386,14 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     color: '#0C4A6E',
     letterSpacing: 0.3,
-    marginBottom: 8,
+    marginBottom: 27,
   },
   timerRow: {
     flexDirection: 'row',
     alignItems: 'flex-end',
     justifyContent: 'center',
     marginBottom: 4,
-    marginTop: -18,
+    marginTop: -24,  
   },
   timeUnit: {
     alignItems: 'center',
@@ -416,7 +416,7 @@ const styles = StyleSheet.create({
     marginTop: -6,
   },
   separator: {
-    fontSize: 68,
+    fontSize: 50,
     fontWeight: '800',
     color: '#082F49',
     marginHorizontal: 8,
@@ -427,8 +427,8 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   secondsBox: {
-    paddingHorizontal: 8,
-    paddingVertical: 10,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
     borderRadius: 8,
     backgroundColor: 'rgba(248, 250, 252, 0.5)',
     borderWidth: 1,
@@ -441,7 +441,7 @@ const styles = StyleSheet.create({
   secondsText: {
     fontSize: 22,
     fontWeight: '700',
-    color: '#0C4A6E',
+    color: '#082F49',
     letterSpacing: -0.3,
   },
   buttonSection: {
@@ -452,7 +452,7 @@ const styles = StyleSheet.create({
   },
   temptedButton: {
     width: '100%',
-    borderRadius: 32,
+    borderRadius: 52,
     shadowColor: '#0284C7',
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 1,
@@ -462,13 +462,13 @@ const styles = StyleSheet.create({
   },
   temptedButtonGradient: {
     width: '100%',
-    paddingVertical: 16,
+    paddingVertical: 20,
     alignItems: 'center',
-    borderRadius: 32,
+    borderRadius: 52,
   },
   temptedButtonText: {
-    fontSize: 18,
-    fontWeight: '600',
+    fontSize: 22,
+    fontWeight: '800',
     color: '#FFFFFF',
   },
   actionButtons: {
