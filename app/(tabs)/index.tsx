@@ -425,7 +425,6 @@ const styles = StyleSheet.create({
   secondsContainer: {
     alignItems: 'center',
     marginTop: 4,
-    marginBottom: 20,
   },
   secondsBox: {
     paddingHorizontal: 10,
