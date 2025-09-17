@@ -47,7 +47,9 @@ export default function Homepage() {
   const [streak, setStreak] = useState(0);
 
   // Animation shared values for timer
-  const secondsAnimation = useSharedValue(1);
+  const secondsScale = useSharedValue(1);
+  const secondsOpacity = useSharedValue(1);
+  const secondsTranslateY = useSharedValue(0);
   const tickAnimation = useSharedValue(1);
 
   // No need for aura animation - handled by AnimatedAuraOrb component
@@ -55,7 +57,11 @@ export default function Homepage() {
   // Animated styles for timer components
   const secondsAnimatedStyle = useAnimatedStyle(() => {
     return {
-      transform: [{ scale: secondsAnimation.value }],
+      transform: [
+        { scale: secondsScale.value },
+        { translateY: secondsTranslateY.value }
+      ],
+      opacity: secondsOpacity.value,
     };
   });
 
@@ -127,10 +133,18 @@ export default function Homepage() {
         withSpring(1, { damping: 15, stiffness: 400 })
       );
       
-      // Subtle pulse for seconds counter
-      secondsAnimation.value = withSequence(
-        withTiming(1.06, { duration: 150 }),
-        withTiming(1, { duration: 250 })
+      // Score counter effect for seconds
+      secondsScale.value = withSequence(
+        withTiming(1.2, { duration: 100 }),
+        withTiming(1, { duration: 200 })
+      );
+      secondsOpacity.value = withSequence(
+        withTiming(0.7, { duration: 50 }),
+        withTiming(1, { duration: 150 })
+      );
+      secondsTranslateY.value = withSequence(
+        withTiming(-3, { duration: 100 }),
+        withTiming(0, { duration: 200 })
       );
     }
   };
@@ -345,16 +359,16 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingBottom: 140, // Account for tab bar
+    paddingBottom: 100, // Account for tab bar
   },
   auraContainer: {
-    marginBottom: 32,
+    marginBottom: 20,
     alignItems: 'center',
     justifyContent: 'center',
   },
   timerSection: {
     alignItems: 'center',
-    marginBottom: 32,
+    marginBottom: 20,
   },
   timerLabel: {
     fontSize: 14,
@@ -381,24 +395,24 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     color: '#64748B',
     marginTop: 2,
-    marginBottom: 12,
+    marginBottom: 8,
     textAlign: 'center',
   },
   secondsContainer: {
     alignItems: 'center',
-    marginVertical: 8,
+    marginVertical: 6,
   },
   timerSeconds: {
-    fontSize: 32,
+    fontSize: 28,
     fontWeight: '700',
-    color: '#0284C7',
+    color: '#082F49',
     letterSpacing: -1,
     textShadowColor: 'rgba(0, 0, 0, 0.1)',
-    textShadowOffset: { width: 0, height: 1 },
-    textShadowRadius: 2,
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 4,
   },
   secondsLabel: {
-    fontSize: 11,
+    fontSize: 10,
     fontWeight: '500',
     color: '#64748B',
     marginTop: 2,
@@ -432,7 +446,7 @@ const styles = StyleSheet.create({
     width: '100%',
     maxWidth: 320,
     alignItems: 'center',
-    marginBottom: 24,
+    marginBottom: 16,
   },
   temptedButton: {
     width: '100%',
@@ -442,11 +456,11 @@ const styles = StyleSheet.create({
     shadowOpacity: 1,
     shadowRadius: 80,
     elevation: 15,
-    marginBottom: 16,
+    marginBottom: 12,
   },
   temptedButtonInner: {
     width: '100%',
-    paddingVertical: 20,
+    paddingVertical: 16,
     alignItems: 'center',
     borderRadius: 50,
   },
@@ -483,7 +497,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 1,
     shadowRadius: 12,
     elevation: 6,
-    marginTop: 24,
+    marginTop: 16,
   },
   progressHeader: {
     flexDirection: 'row',
