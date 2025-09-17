@@ -386,7 +386,7 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     color: '#0C4A6E',
     letterSpacing: 0.3,
-    marginBottom: 8,
+    marginBottom: 2,
   },
   timerRow: {
     flexDirection: 'row',
