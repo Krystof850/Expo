@@ -392,7 +392,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-end',
     justifyContent: 'center',
-    marginBottom: -6,
+    marginBottom: 4,
+    marginTop: -6,
   },
   timeUnit: {
     alignItems: 'center',
@@ -423,7 +424,7 @@ const styles = StyleSheet.create({
   },
   secondsContainer: {
     alignItems: 'center',
-    marginTop: 14,
+    marginTop: 4,
   },
   secondsBox: {
     paddingHorizontal: 8,
