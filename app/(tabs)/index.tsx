@@ -341,7 +341,7 @@ const styles = StyleSheet.create({
     paddingBottom: 100,
     justifyContent: 'flex-start',
     alignItems: 'center',
-    paddingTop: 40,
+    paddingTop: 20,
   },
   orbSection: {
     alignItems: 'center',
