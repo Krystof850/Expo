@@ -223,7 +223,7 @@ export default function Homepage() {
         
         {/* Simple Blue Background */}
         <LinearGradient
-          colors={['#60A5FA', '#3B82F6']}
+          colors={['#93C5FD', '#60A5FA']}
           style={styles.animatedBackground}
           start={{ x: 0, y: 0 }}
           end={{ x: 0, y: 1 }}
@@ -233,26 +233,17 @@ export default function Homepage() {
 
         {/* HEADER - Template Design */}
         <View style={styles.header}>
-          {/* LEFT: UNLOOP AI TEXT */}
-          <Text style={styles.logoText}>Unloop AI</Text>
+          {/* EMPTY LEFT SIDE */}
+          <View />
           
-          {/* RIGHT: STREAKS + SETTINGS */}
-          <View style={styles.headerRight}>
-            {/* Streaks with flame icon + number */}
-            <View style={styles.streakContainer}>
-              <Ionicons name="flame" size={30} color="#F97316" style={styles.flameIcon} />
-              <Text style={styles.streakNumber}>{streak}</Text>
-            </View>
-            
-            {/* Settings button */}
-            <TouchableOpacity 
-              style={styles.settingsButton}
-              hitSlop={{ top: 8, left: 8, right: 8, bottom: 8 }}
-              accessibilityLabel="Settings"
-            >
-              <Ionicons name="settings-outline" size={30} color="#64748B" />
-            </TouchableOpacity>
-          </View>
+          {/* RIGHT: SETTINGS ONLY */}
+          <TouchableOpacity 
+            style={styles.settingsButton}
+            hitSlop={{ top: 8, left: 8, right: 8, bottom: 8 }}
+            accessibilityLabel="Settings"
+          >
+            <Ionicons name="settings-outline" size={22} color="#475569" />
+          </TouchableOpacity>
         </View>
 
         <View style={styles.content}>
@@ -309,10 +300,10 @@ export default function Homepage() {
               {/* Action Buttons */}
               <View style={styles.actionButtons}>
                 <TouchableOpacity style={styles.actionButton} onPress={handleResetTimer}>
-                  <Ionicons name="refresh" size={28} color="#0C4A6E" />
+                  <Ionicons name="refresh" size={22} color="#0C4A6E" />
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.actionButton}>
-                  <Ionicons name="create-outline" size={28} color="#0C4A6E" />
+                  <Ionicons name="create-outline" size={22} color="#0C4A6E" />
                 </TouchableOpacity>
               </View>
             </View>
@@ -491,7 +482,7 @@ const styles = StyleSheet.create({
   timerLabel: {
     fontSize: 14,
     fontWeight: '500',
-    color: COLORS.secondaryBackground,
+    color: '#475569',
     marginBottom: 16,
   },
   timerDisplay: {
@@ -525,7 +516,7 @@ const styles = StyleSheet.create({
   secondsBox: {
     paddingHorizontal: 12,
     paddingVertical: 8,
-    backgroundColor: 'rgba(226, 232, 240, 0.8)',
+    backgroundColor: 'rgba(255, 255, 255, 0.4)',
     borderRadius: 8,
     borderWidth: 1,
     borderColor: 'rgba(148, 163, 184, 0.3)',
@@ -557,7 +548,7 @@ const styles = StyleSheet.create({
   timeLabel: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#64748B',
+    color: '#475569',
     marginTop: 4,
   },
   timeSeparator: {
@@ -599,9 +590,9 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   actionButton: {
-    width: 56,
-    height: 56,
-    borderRadius: 28,
+    width: 48,
+    height: 48,
+    borderRadius: 24,
     backgroundColor: 'rgba(255, 255, 255, 0.6)',
     alignItems: 'center',
     justifyContent: 'center',

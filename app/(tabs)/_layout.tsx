@@ -10,15 +10,15 @@ export default function TabLayout() {
         headerShown: false,
         tabBarStyle: {
           position: 'absolute',
-          bottom: 24,
-          left: 8,
-          right: 8,
+          bottom: 28,
+          left: 24,
+          right: 24,
           backgroundColor: 'rgba(255, 255, 255, 0.5)',
           borderRadius: 50,
-          height: 60,
-          paddingBottom: 0,
-          paddingTop: 0,
-          paddingHorizontal: 4,
+          height: 64,
+          paddingBottom: 6,
+          paddingTop: 6,
+          paddingHorizontal: 8,
           borderTopWidth: 0,
           ...Platform.select({
             ios: {
