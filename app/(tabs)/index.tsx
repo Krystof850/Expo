@@ -26,7 +26,10 @@ import Animated, {
 import { useAuth } from '../../src/context/AuthContext';
 import { Protected } from '../../src/components/Protected';
 import { router } from 'expo-router';
-import BasicBlueOrb from '../../components/BasicBlueOrb';
+import DynamicOrb from '../../src/components/DynamicOrb';
+import { ProgressService } from '../../src/services/progressService';
+import { getCurrentOrbLevel, convertTimeToDays } from '../../src/utils/orbLogic';
+import { UserProgress } from '../../src/types/achievement';
 
 const { width, height } = Dimensions.get('window');
 
@@ -43,6 +46,8 @@ export default function Homepage() {
   const [time, setTime] = useState<TimeState>({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   const [startTime, setStartTime] = useState<number | null>(null);
   const [streak, setStreak] = useState(0);
+  const [currentOrbType, setCurrentOrbType] = useState<'basic' | 'aura' | 'galaxy' | 'heartbeat' | 'lightning' | 'fire' | 'wave' | 'nature'>('basic');
+  const [userProgress, setUserProgress] = useState<UserProgress | null>(null);
 
   // Orb animation values
   const orbScale = useSharedValue(1);
@@ -68,10 +73,17 @@ export default function Homepage() {
     );
   }, []);
 
-  // Load saved timer data
+  // Load saved timer data and user progress
   useEffect(() => {
     loadTimerData();
   }, []);
+
+  // Update orb when time changes
+  useEffect(() => {
+    const totalDays = convertTimeToDays(time);
+    const orbLevel = getCurrentOrbLevel(totalDays);
+    setCurrentOrbType(orbLevel.orbType);
+  }, [time]);
 
   // Update timer every second
   useEffect(() => {
@@ -86,6 +98,36 @@ export default function Homepage() {
 
   const loadTimerData = async () => {
     try {
+      if (!user?.uid) {
+        console.log('No user ID available');
+        return;
+      }
+
+      // Get or create user progress from Firebase
+      const progress = await ProgressService.getOrCreateUserProgress(user.uid);
+      setUserProgress(progress);
+      
+      if (progress.startTime && progress.currentStreak > 0) {
+        setStartTime(progress.startTime);
+        setStreak(Math.floor(progress.currentStreak));
+        calculateTime(progress.startTime);
+      } else {
+        // Initialize new timer
+        const now = Date.now();
+        setStartTime(now);
+        setStreak(0);
+        await ProgressService.initializeUserProgress(user.uid);
+        calculateTime(now);
+      }
+    } catch (error) {
+      console.log('Error loading timer data:', error);
+      // Fallback to local storage if Firebase fails
+      await loadTimerDataFallback();
+    }
+  };
+
+  const loadTimerDataFallback = async () => {
+    try {
       const savedStartTime = await AsyncStorage.getItem('procrastination_start_time');
       const savedStreak = await AsyncStorage.getItem('procrastination_streak');
       
@@ -95,7 +137,6 @@ export default function Homepage() {
         setStreak(savedStreak ? parseInt(savedStreak) : 0);
         calculateTime(start);
       } else {
-        // First time - start timer
         const now = Date.now();
         setStartTime(now);
         setStreak(1);
@@ -103,7 +144,7 @@ export default function Homepage() {
         await AsyncStorage.setItem('procrastination_streak', '1');
       }
     } catch (error) {
-      console.log('Error loading timer data:', error);
+      console.log('Error with fallback timer data:', error);
     }
   };
 
@@ -119,18 +160,40 @@ export default function Homepage() {
     setTime({ days, hours, minutes, seconds });
   };
 
-  const updateTimer = () => {
+  const updateTimer = async () => {
     if (startTime) {
-      calculateTime(startTime);
+      // Calculate time locally to use for both state and Firebase check
+      const now = Date.now();
+      const diff = Math.floor((now - startTime) / 1000);
+      
+      const computedTime = {
+        days: Math.floor(diff / (24 * 60 * 60)),
+        hours: Math.floor((diff % (24 * 60 * 60)) / (60 * 60)),
+        minutes: Math.floor((diff % (60 * 60)) / 60),
+        seconds: diff % 60
+      };
+      
+      setTime(computedTime);
+      
+      // Update Firebase progress every minute to avoid too many calls
+      if (user?.uid && computedTime.seconds === 0) {
+        try {
+          await ProgressService.updateUserProgress(user.uid, computedTime, startTime);
+          console.log('Progress updated at minute mark:', computedTime.minutes);
+        } catch (error) {
+          console.log('Error updating progress:', error);
+        }
+      }
     }
   };
+
 
   const handleResetTimer = async () => {
     await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     
     Alert.alert(
       'Reset Timer',
-      'Are you sure you want to reset your procrastination-free timer?',
+      'Are you sure you want to reset your procrastination-free timer? This will reset your current orb back to Starting Journey.',
       [
         {
           text: 'Cancel',
@@ -140,17 +203,38 @@ export default function Homepage() {
           text: 'Reset',
           style: 'destructive',
           onPress: async () => {
-            const now = Date.now();
-            const nextStreak = streak + 1;
-            setStartTime(now);
-            setStreak(nextStreak);
-            await AsyncStorage.setItem('procrastination_start_time', now.toString());
-            await AsyncStorage.setItem('procrastination_streak', nextStreak.toString());
-            setTime({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+            if (user?.uid) {
+              try {
+                // Reset in Firebase
+                const resetProgress = await ProgressService.resetUserTimer(user.uid);
+                setUserProgress(resetProgress);
+                setStartTime(resetProgress.startTime);
+                setStreak(0);
+                setTime({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+                setCurrentOrbType('basic'); // Reset to basic orb
+              } catch (error) {
+                console.log('Error resetting timer:', error);
+                // Fallback to local reset
+                await resetTimerFallback();
+              }
+            } else {
+              await resetTimerFallback();
+            }
           },
         },
       ]
     );
+  };
+
+  const resetTimerFallback = async () => {
+    const now = Date.now();
+    const nextStreak = streak + 1;
+    setStartTime(now);
+    setStreak(nextStreak);
+    await AsyncStorage.setItem('procrastination_start_time', now.toString());
+    await AsyncStorage.setItem('procrastination_streak', nextStreak.toString());
+    setTime({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+    setCurrentOrbType('basic');
   };
 
   const handleTempted = async () => {
@@ -203,22 +287,8 @@ export default function Homepage() {
               activeOpacity={0.9}
               accessibilityLabel="View achievements"
             >
-              <Animated.View style={[styles.orbContainer, orbAnimatedStyle]}>
-                {/* Outer animated ring */}
-                <LinearGradient
-                  colors={['#7DD3FC', '#67E8F9', '#7DD3FC']}
-                  style={styles.orbOuter}
-                />
-                {/* Middle layer */}
-                <LinearGradient
-                  colors={['#E0F2FE', '#BAE6FD']}
-                  style={styles.orbMiddle}
-                />
-                {/* Inner white center */}
-                <LinearGradient
-                  colors={['#FFFFFF', '#F1F5F9']}
-                  style={styles.orbInner}
-                />
+              <Animated.View style={[orbAnimatedStyle]}>
+                <DynamicOrb orbType={currentOrbType} size={120} />
               </Animated.View>
             </TouchableOpacity>
 
