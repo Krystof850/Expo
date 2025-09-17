@@ -287,8 +287,8 @@ export default function Homepage() {
               activeOpacity={0.9}
               accessibilityLabel="View achievements"
             >
-              <Animated.View style={[orbAnimatedStyle]}>
-                <DynamicOrb orbType={currentOrbType} size={120} />
+              <Animated.View style={[styles.orbContainer, orbAnimatedStyle]}>
+                <DynamicOrb orbType={currentOrbType} size={192} />
               </Animated.View>
             </TouchableOpacity>
 
