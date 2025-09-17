@@ -11,7 +11,7 @@ export default function TabLayout() {
         tabBarStyle: {
           position: 'absolute',
           bottom: 20,
-          width: Dimensions.get('window').width - 72,
+          width: Dimensions.get('window').width - 10,
           alignSelf: 'center',
           backgroundColor: 'rgba(255, 255, 255, 0.7)',
           borderRadius: 32,
