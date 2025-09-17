@@ -148,32 +148,17 @@ export default function AchievementsScreen() {
                 {/* Orb Container */}
                 <View style={styles.gridOrbContainer}>
                   <AnimatedAuraOrb size={80} />
-                  
-                  {/* Lock Overlay for locked achievements */}
-                  {!achievement.isUnlocked && (
-                    <View style={styles.gridLockOverlay}>
-                      <View style={styles.gridLockIconContainer}>
-                        <Ionicons name="lock-closed" size={20} color="#FFFFFF" />
-                      </View>
-                    </View>
-                  )}
                 </View>
 
                 {/* Achievement Info */}
                 <View style={styles.gridAchievementInfo}>
-                  <Text style={[
-                    styles.gridAchievementTitle,
-                    !achievement.isUnlocked && styles.lockedText
-                  ]}>
+                  <Text style={styles.gridAchievementTitle}>
                     {achievement.title}
                   </Text>
-                  <Text style={[
-                    styles.gridAchievementDescription,
-                    !achievement.isUnlocked && styles.lockedText
-                  ]}>
+                  <Text style={styles.gridAchievementDescription}>
                     {achievement.description}
                   </Text>
-                  {achievement.target && !achievement.isUnlocked && (
+                  {achievement.target && (
                     <View style={styles.gridTargetContainer}>
                       <Text style={styles.gridTargetText}>{achievement.target}</Text>
                     </View>
