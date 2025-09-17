@@ -413,7 +413,7 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     color: '#64748B',
     letterSpacing: 0.2,
-    marginTop: 20,
+    marginTop: -6,
   },
   separator: {
     fontSize: 68,
