@@ -139,6 +139,13 @@ export default function Homepage() {
     router.push('/(workflow)/procrastination-input');
   };
 
+  const handleOrbPress = async () => {
+    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    
+    // Navigate to achievements screen
+    router.push('/(protected)/achievements');
+  };
+
   const formatNumber = (num: number): string => {
     return num.toString().padStart(2, '0');
   };
@@ -192,9 +199,14 @@ export default function Homepage() {
           {/* Main Content */}
           <View style={styles.mainContent}>
             {/* Animated Aura Orb */}
-            <View style={styles.auraContainer}>
+            <TouchableOpacity 
+              style={styles.auraContainer}
+              onPress={handleOrbPress}
+              activeOpacity={0.8}
+              accessibilityLabel="View achievements"
+            >
               <AnimatedAuraOrb size={140} />
-            </View>
+            </TouchableOpacity>
 
             {/* Timer */}
             <View style={styles.timerSection}>
