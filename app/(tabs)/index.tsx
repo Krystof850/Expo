@@ -448,6 +448,7 @@ const styles = StyleSheet.create({
     width: '100%',
     maxWidth: 340,
     alignItems: 'center',
+    marginTop: 20,
     marginBottom: 12,
   },
   temptedButton: {
