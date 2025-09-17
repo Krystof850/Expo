@@ -7,7 +7,6 @@ import {
   Text,
   Dimensions,
   TouchableOpacity,
-  Image,
   SafeAreaView,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -24,13 +23,26 @@ import Animated, {
   withSequence,
   interpolate,
 } from 'react-native-reanimated';
+import { BlurView } from 'expo-blur';
 
 import { useAuth } from '../../src/context/AuthContext';
 import { Protected } from '../../src/components/Protected';
 import { router } from 'expo-router';
 import AnimatedAuraOrb from '../../components/AnimatedAuraOrb';
 
-const { width } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
+
+// Design system colors from template
+const COLORS = {
+  primaryAction: '#0284C7',
+  secondaryBackground: '#0C4A6E', 
+  mainText: '#082F49',
+  ctaText: '#FFFFFF',
+  accentGreen: '#10B981',
+  defaultBg: '#F0F9FF',
+  vibrantCta: '#FFFFFF',
+  vibrantCtaText: '#0B1120',
+};
 
 interface TimeState {
   days: number;
@@ -52,7 +64,105 @@ export default function Homepage() {
   const secondsTranslateY = useSharedValue(0);
   const tickAnimation = useSharedValue(1);
 
-  // No need for aura animation - handled by AnimatedAuraOrb component
+  // Floating background animations
+  const float1TranslateX = useSharedValue(0);
+  const float1TranslateY = useSharedValue(0);
+  const float1Rotate = useSharedValue(0);
+  const float1Scale = useSharedValue(1);
+
+  const float2TranslateX = useSharedValue(0);
+  const float2TranslateY = useSharedValue(0);
+  const float2Rotate = useSharedValue(0);
+  const float2Scale = useSharedValue(1);
+
+  const float3TranslateY = useSharedValue(0);
+  const float3Rotate = useSharedValue(0);
+
+  const float4TranslateY = useSharedValue(0);
+  const float4Rotate = useSharedValue(0);
+
+  // Start floating animations
+  useEffect(() => {
+    // Float 1 animation (9s cycle)
+    float1TranslateX.value = withRepeat(
+      withSequence(
+        withTiming(30, { duration: 4500 }),
+        withTiming(0, { duration: 4500 })
+      ), -1, false
+    );
+    float1TranslateY.value = withRepeat(
+      withSequence(
+        withTiming(-50, { duration: 4500 }),
+        withTiming(0, { duration: 4500 })
+      ), -1, false
+    );
+    float1Rotate.value = withRepeat(
+      withSequence(
+        withTiming(35, { duration: 4500 }),
+        withTiming(0, { duration: 4500 })
+      ), -1, false
+    );
+    float1Scale.value = withRepeat(
+      withSequence(
+        withTiming(1.2, { duration: 4500 }),
+        withTiming(1, { duration: 4500 })
+      ), -1, false
+    );
+
+    // Float 2 animation (11s cycle)
+    float2TranslateX.value = withRepeat(
+      withSequence(
+        withTiming(-40, { duration: 5500 }),
+        withTiming(0, { duration: 5500 })
+      ), -1, false
+    );
+    float2TranslateY.value = withRepeat(
+      withSequence(
+        withTiming(-70, { duration: 5500 }),
+        withTiming(0, { duration: 5500 })
+      ), -1, false
+    );
+    float2Rotate.value = withRepeat(
+      withSequence(
+        withTiming(-40, { duration: 5500 }),
+        withTiming(0, { duration: 5500 })
+      ), -1, false
+    );
+    float2Scale.value = withRepeat(
+      withSequence(
+        withTiming(1.3, { duration: 5500 }),
+        withTiming(1, { duration: 5500 })
+      ), -1, false
+    );
+
+    // Float 3 animation (13s cycle)
+    float3TranslateY.value = withRepeat(
+      withSequence(
+        withTiming(-40, { duration: 6500 }),
+        withTiming(0, { duration: 6500 })
+      ), -1, false
+    );
+    float3Rotate.value = withRepeat(
+      withSequence(
+        withTiming(20, { duration: 6500 }),
+        withTiming(0, { duration: 6500 })
+      ), -1, false
+    );
+
+    // Float 4 animation (10s cycle) 
+    float4TranslateY.value = withRepeat(
+      withSequence(
+        withTiming(-35, { duration: 5000 }),
+        withTiming(0, { duration: 5000 })
+      ), -1, false
+    );
+    float4Rotate.value = withRepeat(
+      withSequence(
+        withTiming(-15, { duration: 5000 }),
+        withTiming(0, { duration: 5000 })
+      ), -1, false
+    );
+  }, []);
 
   // Animated styles for timer components
   const secondsAnimatedStyle = useAnimatedStyle(() => {
@@ -68,6 +178,47 @@ export default function Homepage() {
   const tickAnimatedStyle = useAnimatedStyle(() => {
     return {
       transform: [{ scale: tickAnimation.value }],
+    };
+  });
+
+  // Floating element animated styles
+  const float1AnimatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [
+        { translateX: float1TranslateX.value },
+        { translateY: float1TranslateY.value },
+        { rotate: `${float1Rotate.value}deg` },
+        { scale: float1Scale.value },
+      ],
+    };
+  });
+
+  const float2AnimatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [
+        { translateX: float2TranslateX.value },
+        { translateY: float2TranslateY.value },
+        { rotate: `${float2Rotate.value}deg` },
+        { scale: float2Scale.value },
+      ],
+    };
+  });
+
+  const float3AnimatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [
+        { translateY: float3TranslateY.value },
+        { rotate: `${float3Rotate.value}deg` },
+      ],
+    };
+  });
+
+  const float4AnimatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [
+        { translateY: float4TranslateY.value },
+        { rotate: `${float4Rotate.value}deg` },
+      ],
     };
   });
 
@@ -202,13 +353,58 @@ export default function Homepage() {
       <SafeAreaView style={styles.container}>
         <StatusBar barStyle="dark-content" backgroundColor="transparent" translucent />
         
-        {/* Static Background */}
+        {/* Animated Gradient Background */}
         <LinearGradient
-          colors={['#DBEAFE', '#BFDBFE']}
-          style={styles.backgroundGradient}
+          colors={['#E0F2FE', '#BFDBFE', '#93C5FD', '#BFDBFE', '#E0F2FE']}
+          style={styles.animatedBackground}
           start={{ x: 0, y: 0 }}
-          end={{ x: 0, y: 1 }}
+          end={{ x: 1, y: 1 }}
         />
+
+        {/* Floating Background Elements */}
+        <View style={styles.floatingContainer}>
+          {/* Float 1 - Large Sky Blue */}
+          <Animated.View style={[styles.float1, float1AnimatedStyle]}>
+            <LinearGradient
+              colors={['rgba(56, 189, 248, 0.3)', 'rgba(56, 189, 248, 0.1)']}
+              style={styles.floatGradient1}
+            />
+          </Animated.View>
+
+          {/* Float 2 - Large Blue */}
+          <Animated.View style={[styles.float2, float2AnimatedStyle]}>
+            <LinearGradient
+              colors={['rgba(29, 78, 216, 0.2)', 'rgba(29, 78, 216, 0)']}
+              style={styles.floatGradient2}
+            />
+          </Animated.View>
+
+          {/* Float 3 - Medium Primary Action */}
+          <Animated.View style={[styles.float3, float3AnimatedStyle]}>
+            <View style={[styles.floatCircle3, { backgroundColor: `${COLORS.primaryAction}33` }]} />
+          </Animated.View>
+
+          {/* Float 4 - Medium Green */}
+          <Animated.View style={[styles.float4, float4AnimatedStyle]}>
+            <View style={[styles.floatCircle4, { backgroundColor: `${COLORS.accentGreen}33` }]} />
+          </Animated.View>
+
+          {/* Extra Float 5 - Sky Gradient */}
+          <Animated.View style={[styles.float5, float3AnimatedStyle]}>
+            <LinearGradient
+              colors={['rgba(14, 165, 233, 0.2)', 'transparent']}
+              style={styles.floatGradient5}
+            />
+          </Animated.View>
+
+          {/* Extra Float 6 - Blue Gradient */}
+          <Animated.View style={[styles.float6, float2AnimatedStyle]}>
+            <LinearGradient
+              colors={['rgba(30, 64, 175, 0.2)', 'transparent']}
+              style={styles.floatGradient6}
+            />
+          </Animated.View>
+        </View>
 
         {/* HEADER - Proper Safe Area */}
         <View style={styles.header}>
@@ -317,10 +513,92 @@ export default function Homepage() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F0F9FF',
+    backgroundColor: COLORS.defaultBg,
   },
-  backgroundGradient: {
+  animatedBackground: {
     ...StyleSheet.absoluteFillObject,
+  },
+  floatingContainer: {
+    ...StyleSheet.absoluteFillObject,
+    overflow: 'hidden',
+  },
+  float1: {
+    position: 'absolute',
+    left: -width * 0.33,
+    top: -height * 0.25,
+    width: 650,
+    height: 650,
+  },
+  floatGradient1: {
+    width: '100%',
+    height: '100%',
+    borderRadius: 325,
+    opacity: 0.4,
+  },
+  float2: {
+    position: 'absolute',
+    right: -width * 0.25,
+    bottom: -height * 0.45,
+    width: 750,
+    height: 750,
+  },
+  floatGradient2: {
+    width: '100%',
+    height: '100%',
+    borderRadius: 375,
+    opacity: 0.3,
+  },
+  float3: {
+    position: 'absolute',
+    bottom: height * 0.33,
+    right: width * 0.25,
+    width: 288,
+    height: 288,
+  },
+  floatCircle3: {
+    width: '100%',
+    height: '100%',
+    borderRadius: 144,
+    opacity: 0.3,
+  },
+  float4: {
+    position: 'absolute',
+    left: width * 0.25,
+    top: height * 0.33,
+    width: 256,
+    height: 256,
+  },
+  floatCircle4: {
+    width: '100%',
+    height: '100%',
+    borderRadius: 128,
+    opacity: 0.3,
+  },
+  float5: {
+    position: 'absolute',
+    left: -width * 0.25,
+    top: height * 0.1,
+    width: 550,
+    height: 550,
+  },
+  floatGradient5: {
+    width: '100%',
+    height: '100%',
+    borderRadius: 275,
+    opacity: 0.3,
+  },
+  float6: {
+    position: 'absolute',
+    right: -width * 0.25,
+    bottom: height * 0.05,
+    width: 450,
+    height: 450,
+  },
+  floatGradient6: {
+    width: '100%',
+    height: '100%',
+    borderRadius: 225,
+    opacity: 0.3,
   },
   content: {
     flex: 1,
