@@ -28,7 +28,7 @@ import { Protected } from '../../src/components/Protected';
 import { router } from 'expo-router';
 import DynamicOrb from '../../src/components/DynamicOrb';
 import { ProgressService } from '../../src/services/progressService';
-import { getCurrentOrbLevel, convertTimeToDays } from '../../src/utils/orbLogic';
+import { getCurrentOrbLevel, convertTimeToDays, getOrbLevelById } from '../../src/utils/orbLogic';
 import { UserProgress } from '../../src/types/achievement';
 
 const { width, height } = Dimensions.get('window');
@@ -113,12 +113,22 @@ export default function Homepage() {
     return () => unsubscribe && unsubscribe();
   }, [user?.uid]);
 
-  // Update orb when time changes
+  // Update orb when time changes or Firebase data updates
   useEffect(() => {
+    // If we have Firebase progress data, use currentOrbLevel from there (for manual testing)
+    if (user?.uid && userProgress?.currentOrbLevel) {
+      const orbLevelData = getOrbLevelById(userProgress.currentOrbLevel);
+      if (orbLevelData) {
+        setCurrentOrbType(orbLevelData.orbType);
+        return;
+      }
+    }
+    
+    // Otherwise, calculate orb level from current time (normal operation)
     const totalDays = convertTimeToDays(time);
     const orbLevel = getCurrentOrbLevel(totalDays);
     setCurrentOrbType(orbLevel.orbType);
-  }, [time]);
+  }, [time, userProgress?.currentOrbLevel, user?.uid]);
 
   // Update timer every second
   useEffect(() => {

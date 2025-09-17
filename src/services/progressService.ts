@@ -82,12 +82,12 @@ export class ProgressService {
   ): Promise<UserProgress> {
     try {
       const totalDays = convertTimeToDays(time);
-      const currentLevel = getCurrentOrbLevel(totalDays);
+      // Don't auto-update currentOrbLevel - preserve manual database changes
       
       const updatedProgress: Partial<UserProgress> = {
         startTime,
         currentStreak: totalDays,
-        currentOrbLevel: currentLevel.id,
+        // currentOrbLevel removed - let database keep manual values
         lastUpdated: Date.now(),
       };
 
@@ -110,7 +110,7 @@ export class ProgressService {
         startTime,
         currentStreak: totalDays,
         bestStreak: updatedProgress.bestStreak || totalDays,
-        currentOrbLevel: currentLevel.id,
+        currentOrbLevel: 1, // Default fallback if no existing progress
         totalResets: 0,
         lastUpdated: Date.now(),
       };

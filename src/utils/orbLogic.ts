@@ -132,3 +132,10 @@ export function getProgressToNextLevel(currentDays: number): number {
   
   return Math.min(100, (progressDays / totalDaysRequired) * 100);
 }
+
+/**
+ * Get orb level by ID (for Firebase manual testing)
+ */
+export function getOrbLevelById(id: number): OrbLevel | null {
+  return ORB_LEVELS.find(level => level.id === id) || null;
+}
