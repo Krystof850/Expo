@@ -406,21 +406,16 @@ export default function Homepage() {
           </Animated.View>
         </View>
 
-        {/* HEADER - Proper Safe Area */}
+        {/* HEADER - Template Design */}
         <View style={styles.header}>
-          {/* LEFT: LOGO */}
-          <Image 
-            source={require('../../assets/images/unloop-logo-black.png')} 
-            style={styles.logoImage}
-            resizeMode="contain"
-            accessibilityLabel="Unloop AI"
-          />
+          {/* LEFT: UNLOOP AI TEXT */}
+          <Text style={styles.logoText}>Unloop AI</Text>
           
           {/* RIGHT: STREAKS + SETTINGS */}
           <View style={styles.headerRight}>
             {/* Streaks with flame icon + number */}
             <View style={styles.streakContainer}>
-              <Ionicons name="flame" size={22} color="#F97316" style={{ marginRight: 6 }} />
+              <Ionicons name="flame" size={30} color="#F97316" style={styles.flameIcon} />
               <Text style={styles.streakNumber}>{streak}</Text>
             </View>
             
@@ -430,7 +425,7 @@ export default function Homepage() {
               hitSlop={{ top: 8, left: 8, right: 8, bottom: 8 }}
               accessibilityLabel="Settings"
             >
-              <Ionicons name="settings-outline" size={22} color="#64748B" />
+              <Ionicons name="settings-outline" size={30} color="#64748B" />
             </TouchableOpacity>
           </View>
         </View>
@@ -611,9 +606,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingVertical: 12,
   },
-  logoImage: {
-    width: 120,
-    height: 28,
+  logoText: {
+    fontSize: 24,
+    fontWeight: '700',
+    color: COLORS.mainText,
   },
   headerRight: {
     flexDirection: 'row',
@@ -624,10 +620,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
+  flameIcon: {
+    marginRight: 8,
+    textShadowColor: '#F97316',
+    textShadowOffset: { width: 0, height: 0 },
+    textShadowRadius: 10,
+  },
   streakNumber: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#082F49',
+    fontSize: 24,
+    fontWeight: '700',
+    color: COLORS.mainText,
   },
   settingsButton: {
     width: 22,
