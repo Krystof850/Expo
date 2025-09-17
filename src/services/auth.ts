@@ -6,6 +6,8 @@ import {
   signInWithCredential,
   GoogleAuthProvider,
   User,
+  sendEmailVerification,
+  fetchSignInMethodsForEmail,
 } from "firebase/auth";
 import * as AuthSession from 'expo-auth-session';
 import * as WebBrowser from 'expo-web-browser';
@@ -19,11 +21,20 @@ export async function signUpWithEmail(email: string, password: string): Promise<
     console.log('[Auth] Attempting sign up for:', email);
     const cred = await createUserWithEmailAndPassword(auth, email, password);
     console.log('[Auth] Sign up successful for:', email);
+    
+    // Send email verification immediately after signup
+    try {
+      await sendEmailVerification(cred.user);
+      console.log('[Auth] Email verification sent to:', email);
+    } catch (verificationError) {
+      console.error('[Auth] Failed to send verification email:', verificationError);
+      // Don't throw error here, just log it - user is still created
+    }
+    
     return cred.user;
   } catch (e: any) {
     console.error('[Auth] Sign up failed:', e);
-    const friendlyError = mapAuthError(e);
-    throw new Error(friendlyError);
+    throw createAuthError(e);
   }
 }
 
@@ -35,8 +46,7 @@ export async function signInWithEmail(email: string, password: string): Promise<
     return cred.user;
   } catch (e: any) {
     console.error('[Auth] Sign in failed:', e);
-    const friendlyError = mapAuthError(e);
-    throw new Error(friendlyError);
+    throw createAuthError(e);
   }
 }
 
@@ -47,8 +57,25 @@ export async function sendResetEmail(email: string): Promise<void> {
     console.log('[Auth] Password reset email sent successfully');
   } catch (e: any) {
     console.error('[Auth] Password reset failed:', e);
-    const friendlyError = mapAuthError(e);
-    throw new Error(friendlyError);
+    throw createAuthError(e);
+  }
+}
+
+/**
+ * Check if email already exists in Firebase Auth and return provider info
+ */
+export async function checkEmailExists(email: string): Promise<{ exists: boolean; methods: string[]; hasPassword: boolean }> {
+  try {
+    console.log('[Auth] Checking if email exists:', email);
+    const signInMethods = await fetchSignInMethodsForEmail(auth, email);
+    const exists = signInMethods.length > 0;
+    const hasPassword = signInMethods.includes('password');
+    console.log('[Auth] Email exists:', exists, 'Methods:', signInMethods, 'Has password:', hasPassword);
+    return { exists, methods: signInMethods, hasPassword };
+  } catch (e: any) {
+    console.error('[Auth] Failed to check email existence:', e);
+    // If we can't check, assume it doesn't exist to allow signup attempt
+    return { exists: false, methods: [], hasPassword: false };
   }
 }
 
@@ -152,25 +179,34 @@ export async function signInWithGoogle(): Promise<User> {
     }
   } catch (e: any) {
     console.error('[Auth] Google Sign In failed:', e);
-    const friendlyError = mapAuthError(e);
-    throw new Error(friendlyError);
+    throw createAuthError(e);
   }
 }
 
-function mapAuthError(e: any): string {
-  const code = e?.code || "";
-  const message = e?.message || "";
+function createAuthError(e: any, customMessage?: string): Error {
+  const originalCode = e?.code || "";
+  const originalMessage = e?.message || "";
   
-  if (code.includes("auth/invalid-credential")) return "Špatný email nebo heslo.";
-  if (code.includes("auth/user-not-found")) return "Účet s tímto emailem neexistuje.";
-  if (code.includes("auth/wrong-password")) return "Špatné heslo.";
-  if (code.includes("auth/email-already-in-use")) return "Email je již registrován.";
-  if (code.includes("auth/weak-password")) return "Heslo je příliš slabé (min. 6 znaků).";
-  if (code.includes("auth/invalid-email")) return "Neplatný formát emailu.";
-  if (code.includes("auth/account-exists-with-different-credential")) {
-    return "Účet s tímto emailem již existuje s jinou metodou přihlášení.";
+  // Create friendly message based on error code
+  let friendlyMessage = customMessage;
+  if (!friendlyMessage) {
+    if (originalCode.includes("auth/invalid-credential")) friendlyMessage = "Incorrect email or password.";
+    else if (originalCode.includes("auth/user-not-found")) friendlyMessage = "Account with this email does not exist.";
+    else if (originalCode.includes("auth/wrong-password")) friendlyMessage = "Incorrect password.";
+    else if (originalCode.includes("auth/email-already-in-use")) friendlyMessage = "Email is already registered.";
+    else if (originalCode.includes("auth/weak-password")) friendlyMessage = "Password is too weak (min. 6 characters).";
+    else if (originalCode.includes("auth/invalid-email")) friendlyMessage = "Invalid email format.";
+    else if (originalCode.includes("auth/user-disabled")) friendlyMessage = "This account has been disabled. Please contact support.";
+    else if (originalCode.includes("auth/too-many-requests")) friendlyMessage = "Too many failed attempts. Please try again later.";
+    else if (originalCode.includes("auth/account-exists-with-different-credential")) {
+      friendlyMessage = "Account with this email already exists with a different sign-in method.";
+    }
+    else if (originalMessage.includes("Client ID")) friendlyMessage = "Google sign-in is not properly configured.";
+    else friendlyMessage = originalMessage || "Action failed. Please try again.";
   }
-  if (message.includes("Client ID")) return "Google přihlášení není správně nakonfigurováno.";
   
-  return e?.message || "Akce selhala. Zkus to znovu.";
+  // Create new error with friendly message but preserve original code
+  const authError = new Error(friendlyMessage);
+  (authError as any).code = originalCode;
+  return authError;
 }
