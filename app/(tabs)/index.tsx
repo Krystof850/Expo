@@ -20,6 +20,8 @@ import Animated, {
   useAnimatedStyle,
   withRepeat,
   withTiming,
+  withSpring,
+  withSequence,
   interpolate,
 } from 'react-native-reanimated';
 
@@ -44,7 +46,24 @@ export default function Homepage() {
   const [startTime, setStartTime] = useState<number | null>(null);
   const [streak, setStreak] = useState(0);
 
+  // Animation shared values for timer
+  const secondsAnimation = useSharedValue(1);
+  const tickAnimation = useSharedValue(1);
+
   // No need for aura animation - handled by AnimatedAuraOrb component
+
+  // Animated styles for timer components
+  const secondsAnimatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{ scale: secondsAnimation.value }],
+    };
+  });
+
+  const tickAnimatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{ scale: tickAnimation.value }],
+    };
+  });
 
 
   // Load saved timer data
@@ -101,6 +120,18 @@ export default function Homepage() {
   const updateTimer = () => {
     if (startTime) {
       calculateTime(startTime);
+      
+      // Cool but decent tick animation
+      tickAnimation.value = withSequence(
+        withSpring(1.08, { damping: 15, stiffness: 400 }),
+        withSpring(1, { damping: 15, stiffness: 400 })
+      );
+      
+      // Subtle pulse for seconds counter
+      secondsAnimation.value = withSequence(
+        withTiming(1.06, { duration: 150 }),
+        withTiming(1, { duration: 250 })
+      );
     }
   };
 
@@ -211,22 +242,16 @@ export default function Homepage() {
             {/* Timer */}
             <View style={styles.timerSection}>
               <Text style={styles.timerLabel}>Procrastination-free for</Text>
-              <View style={styles.timerDisplay}>
-                <View style={styles.timeUnit}>
-                  <Text style={styles.timeNumber}>{formatNumber(time.days)}</Text>
-                  <Text style={styles.timeLabel}>days</Text>
-                </View>
-                <Text style={styles.timeSeparator}>:</Text>
-                <View style={styles.timeUnit}>
-                  <Text style={styles.timeNumber}>{formatNumber(time.hours)}</Text>
-                  <Text style={styles.timeLabel}>hours</Text>
-                </View>
-                <Text style={styles.timeSeparator}>:</Text>
-                <View style={styles.timeUnit}>
-                  <Text style={styles.timeNumber}>{formatNumber(time.seconds)}</Text>
-                  <Text style={styles.timeLabel}>secs</Text>
-                </View>
-              </View>
+              <Animated.View style={[styles.timerDisplay, tickAnimatedStyle]}>
+                <Text style={styles.timerTimeMain}>
+                  {formatNumber(time.days)}:{formatNumber(time.hours)}:{formatNumber(time.minutes)}
+                </Text>
+                <Text style={styles.timerMainLabel}>days : hours : minutes</Text>
+                <Animated.View style={[styles.secondsContainer, secondsAnimatedStyle]}>
+                  <Text style={styles.timerSeconds}>{formatNumber(time.seconds)}</Text>
+                  <Text style={styles.secondsLabel}>seconds</Text>
+                </Animated.View>
+              </Animated.View>
             </View>
 
             {/* Main Button */}
@@ -338,9 +363,45 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   timerDisplay: {
-    flexDirection: 'row',
-    alignItems: 'flex-end',
-    gap: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  timerTimeMain: {
+    fontSize: 42,
+    fontWeight: '800',
+    color: '#082F49',
+    letterSpacing: -1,
+    textAlign: 'center',
+    textShadowColor: 'rgba(0, 0, 0, 0.1)',
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 4,
+  },
+  timerMainLabel: {
+    fontSize: 12,
+    fontWeight: '500',
+    color: '#64748B',
+    marginTop: 2,
+    marginBottom: 12,
+    textAlign: 'center',
+  },
+  secondsContainer: {
+    alignItems: 'center',
+    marginVertical: 8,
+  },
+  timerSeconds: {
+    fontSize: 32,
+    fontWeight: '700',
+    color: '#0284C7',
+    letterSpacing: -1,
+    textShadowColor: 'rgba(0, 0, 0, 0.1)',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 2,
+  },
+  secondsLabel: {
+    fontSize: 11,
+    fontWeight: '500',
+    color: '#64748B',
+    marginTop: 2,
   },
   timeUnit: {
     alignItems: 'center',

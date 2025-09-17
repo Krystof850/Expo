@@ -8,10 +8,7 @@ import * as Haptics from 'expo-haptics';
 import Animated, {
   useSharedValue,
   useAnimatedProps,
-  useAnimatedStyle,
   withTiming,
-  withSpring,
-  withSequence,
   interpolate,
 } from 'react-native-reanimated';
 import Svg, { Circle } from 'react-native-svg';
@@ -31,8 +28,6 @@ export default function TaskTimer() {
 
   // Animation values
   const timerProgress = useSharedValue(1);
-  const secondsAnimation = useSharedValue(1);
-  const tickAnimation = useSharedValue(1);
 
   useEffect(() => {
     if (procrastinationText) {
@@ -49,18 +44,6 @@ export default function TaskTimer() {
         const newTime = prev - 1;
         // Update progress animation (from 1 to 0)
         timerProgress.value = withTiming(newTime / 180, { duration: 1000 });
-        
-        // Cool but decent tick animation
-        tickAnimation.value = withSequence(
-          withSpring(1.08, { damping: 15, stiffness: 400 }),
-          withSpring(1, { damping: 15, stiffness: 400 })
-        );
-        
-        // Subtle pulse for seconds counter
-        secondsAnimation.value = withSequence(
-          withTiming(1.06, { duration: 150 }),
-          withTiming(1, { duration: 250 })
-        );
         
         if (newTime <= 0) {
           setIsTimerRunning(false);
@@ -149,19 +132,11 @@ export default function TaskTimer() {
     });
   };
 
-  const formatTime = (totalSeconds: number) => {
-    const days = Math.floor(totalSeconds / (24 * 60 * 60));
-    const hours = Math.floor((totalSeconds % (24 * 60 * 60)) / (60 * 60));
-    const minutes = Math.floor((totalSeconds % (60 * 60)) / 60);
-    const seconds = totalSeconds % 60;
-    
-    return {
-      main: `${days.toString().padStart(2, '0')}:${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`,
-      seconds: seconds.toString().padStart(2, '0')
-    };
+  const formatTime = (seconds: number): string => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
-
-  const timeDisplay = formatTime(timeLeft);
 
   // Constants for circle progress
   const radius = 100;
@@ -177,19 +152,6 @@ export default function TaskTimer() {
     
     return {
       strokeDashoffset,
-    };
-  });
-
-  // Animated styles for timer components
-  const secondsAnimatedStyle = useAnimatedStyle(() => {
-    return {
-      transform: [{ scale: secondsAnimation.value }],
-    };
-  });
-
-  const tickAnimatedStyle = useAnimatedStyle(() => {
-    return {
-      transform: [{ scale: tickAnimation.value }],
     };
   });
 
@@ -247,15 +209,10 @@ export default function TaskTimer() {
               />
             </Svg>
             
-            <Animated.View style={[styles.timerContent, tickAnimatedStyle]}>
-              <Text style={styles.timerTimeMain}>{timeDisplay.main}</Text>
-              <Text style={styles.timerMainLabel}>days : hours : minutes</Text>
-              <Animated.View style={[styles.secondsContainer, secondsAnimatedStyle]}>
-                <Text style={styles.timerSeconds}>{timeDisplay.seconds}</Text>
-                <Text style={styles.secondsLabel}>seconds</Text>
-              </Animated.View>
+            <View style={styles.timerContent}>
+              <Text style={styles.timerTime}>{formatTime(timeLeft)}</Text>
               <Text style={styles.timerLabel}>remaining</Text>
-            </Animated.View>
+            </View>
           </View>
 
           {/* Action Buttons */}
@@ -337,36 +294,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  timerTimeMain: {
-    fontSize: 42,
+  timerTime: {
+    fontSize: 48,
     fontWeight: '800',
     color: '#082F49',
-    letterSpacing: -1,
-    textAlign: 'center',
-  },
-  timerMainLabel: {
-    fontSize: 12,
-    fontWeight: '500',
-    color: '#64748B',
-    marginTop: 2,
-    marginBottom: 12,
-    textAlign: 'center',
-  },
-  secondsContainer: {
-    alignItems: 'center',
-    marginVertical: 8,
-  },
-  timerSeconds: {
-    fontSize: 32,
-    fontWeight: '700',
-    color: '#0284C7',
-    letterSpacing: -1,
-  },
-  secondsLabel: {
-    fontSize: 11,
-    fontWeight: '500',
-    color: '#64748B',
-    marginTop: 2,
+    letterSpacing: -2,
   },
   timerLabel: {
     fontSize: 16,
