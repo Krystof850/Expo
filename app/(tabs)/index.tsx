@@ -276,13 +276,13 @@ export default function Homepage() {
                 onPress={handleResetTimer}
                 activeOpacity={0.8}
               >
-                <Ionicons name="refresh" size={28} color="#0284C7" />
+                <Ionicons name="refresh" size={28} color="#30475e" />
               </TouchableOpacity>
               <TouchableOpacity 
                 style={styles.actionButton}
                 activeOpacity={0.8}
               >
-                <Ionicons name="create-outline" size={28} color="#0284C7" />
+                <Ionicons name="create-outline" size={28} color="#30475e" />
               </TouchableOpacity>
             </View>
           </View>
@@ -480,7 +480,7 @@ const styles = StyleSheet.create({
     width: 64,
     height: 64,
     borderRadius: 32,
-    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+    backgroundColor: 'rgba(222, 230, 255, 0.8)',
     alignItems: 'center',
     justifyContent: 'center',
     shadowColor: 'rgba(0, 0, 0, 0.1)',
@@ -492,6 +492,7 @@ const styles = StyleSheet.create({
   progressSection: {
     width: '100%',
     maxWidth: 384,
+    marginTop: 10,
   },
   progressCard: {
     backgroundColor: 'rgba(255, 255, 255, 0.4)',
