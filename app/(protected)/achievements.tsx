@@ -19,6 +19,10 @@ import AnimatedAuraOrb from '../../components/AnimatedAuraOrb';
 import CrystalOrb from '../../components/CrystalOrb';
 import SpiralGalaxyOrb from '../../components/SpiralGalaxyOrb';
 import HeartbeatOrb from '../../components/HeartbeatOrb';
+import LightningOrb from '../../components/LightningOrb';
+import FireOrb from '../../components/FireOrb';
+import WaveOrb from '../../components/WaveOrb';
+import NatureOrb from '../../components/NatureOrb';
 import { Protected } from '../../src/components/Protected';
 
 const { width } = Dimensions.get('window');
@@ -30,7 +34,7 @@ interface Achievement {
   description: string;
   isUnlocked: boolean;
   target?: string;
-  orbType: 'aura' | 'crystal' | 'galaxy' | 'heartbeat';
+  orbType: 'aura' | 'crystal' | 'galaxy' | 'heartbeat' | 'lightning' | 'fire' | 'wave' | 'nature';
 }
 
 const achievementsList: Achievement[] = [
@@ -67,35 +71,35 @@ const achievementsList: Achievement[] = [
   },
   {
     id: 5,
-    title: "Aura Master",
+    title: "Lightning Strike",
     description: "Achieve 90 days of consistent focus",
     isUnlocked: false,
     target: "90 days",
-    orbType: 'aura',
+    orbType: 'lightning',
   },
   {
     id: 6,
-    title: "Crystal Sage",
+    title: "Fire Keeper",
     description: "Reach 180 days of productivity",
     isUnlocked: false,
     target: "180 days",
-    orbType: 'crystal',
+    orbType: 'fire',
   },
   {
     id: 7,
-    title: "Galaxy Guardian",
+    title: "Wave Master",
     description: "Complete a full year transformation",
     isUnlocked: false,
     target: "365 days",
-    orbType: 'galaxy',
+    orbType: 'wave',
   },
   {
     id: 8,
-    title: "Heartbeat Legend",
+    title: "Nature Guardian",
     description: "Master of endless dedication",
     isUnlocked: false,
     target: "500 days",
-    orbType: 'heartbeat',
+    orbType: 'nature',
   },
 ];
 
@@ -170,6 +174,10 @@ export default function AchievementsScreen() {
                   {achievement.orbType === 'crystal' && <CrystalOrb size={80} />}
                   {achievement.orbType === 'galaxy' && <SpiralGalaxyOrb size={80} />}
                   {achievement.orbType === 'heartbeat' && <HeartbeatOrb size={80} />}
+                  {achievement.orbType === 'lightning' && <LightningOrb size={80} />}
+                  {achievement.orbType === 'fire' && <FireOrb size={80} />}
+                  {achievement.orbType === 'wave' && <WaveOrb size={80} />}
+                  {achievement.orbType === 'nature' && <NatureOrb size={80} />}
                 </View>
 
                 {/* Achievement Info */}
