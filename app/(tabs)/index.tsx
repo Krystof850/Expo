@@ -193,7 +193,7 @@ export default function Homepage() {
           <View style={styles.mainContent}>
             {/* Animated Aura Orb */}
             <View style={styles.auraContainer}>
-              <AnimatedAuraOrb size={220} />
+              <AnimatedAuraOrb size={140} />
             </View>
 
             {/* Timer */}
