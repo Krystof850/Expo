@@ -1,0 +1,72 @@
+Prompt pro Replit Agenta (Revidovaný):
+Cíl: Vytvořit animovaný 3D orb v React Native Expo projektu, který bude vizuálně co nejvěrnější dodanému referenčnímu obrázku orbu. Orb by měl mít jasný 3D obrys, vnitřní jemnou strukturu, zřetelné vnitřní záření a jednu vnější záři (glow). Tento komponent nahradí stávající statický kruh na domovské obrazovce.
+
+Klíčové vlastnosti orbu, které je třeba replikovat:
+
+3D Vzhled a Hloubka: Orb by měl působit jako skutečná 3D koule s objemem a hloubkou, ne jako plochý 2D kruh.
+
+Barva: Světle modrá (jako na referenčním obrázku).
+
+Vnitřní struktura: Jemná, "mlhová" nebo "kouřová" struktura uvnitř koule, která se pomalu přelévá a mění. Není to pevná textura, ale spíše difúzní vnitřní světlo a tvar.
+
+Vnitřní záření: Střed orbu by měl výrazněji zářit a postupně se rozplývat směrem k okrajům.
+
+Vnější záře (Outer Glow): Orb by měl mít kolem sebe jednu, jasně definovanou, ale jemnou vnější záři, která se rozplývá. Tato záře má být samostatná a zřetelná od vnitřního záření koule.
+
+Transparentnost pozadí: Komponent musí mít transparentní pozadí.
+
+Animace:
+
+Jemné pulzování: Celý orb (nebo jeho záře) by měl jemně a pomalu pulzovat.
+
+Vnitřní pohyb: Vnitřní "mlhová" struktura by se měla neustále a plynule přelévat/měnit tvar, aby působila živě.
+
+Rotační animace (volitelné, ale doporučené pro 3D efekt): Celý orb se může velmi pomalu otáčet kolem své osy, aby zdůraznil 3D efekt.
+
+Technologický požadavek (Klíčová změna):
+
+Musí se použít WebGL/OpenGL ES pro 3D renderování. To znamená integraci knihovny jako react-three-fiber (což je doporučený způsob použití Three.js v React Native) nebo přímé použití expo-gl s vlastním GLSL shaderem.
+
+Doporučeno: Integrace react-three-fiber je nejlepší cesta, protože zjednodušuje práci s Three.js v React Native.
+
+Požadavky na implementaci:
+
+Komponenta: Vytvořit samostatný React Native komponent pro animovaný orb (např. ThreeDAnimatedOrb.js).
+
+Integrace react-three-fiber:
+
+Nainstalovat expo-gl a react-three-fiber a three.
+
+Vytvořit základní 3D scénu s kamerou a světlem.
+
+Renderovat 3D kouli (Sphere z drei nebo mesh s sphereGeometry).
+
+Materiál a shadery:
+
+Vytvořit vlastní GLSL shader nebo upravit existující MeshStandardMaterial (three.js) pro dosažení vzhledu.
+
+Vnitřní mlhová struktura: Využít technik s noise shadery (např. Perlin noise) animovanými v čase pro dynamický efekt mlhy.
+
+Vnitřní záření: Implementovat emissive mapu nebo shader, který simuluje jasné centrum a postupně se rozplývající záři.
+
+Vnější záře (Outer Glow): To je kritické. Může být implementováno buď jako post-processing efekt ve Three.js (např. bloom efekt) nebo jako další, mírně větší a rozmazaná koule s nízkou opacitou, umístěná těsně za hlavní koulí.
+
+Animace:
+
+Použít useFrame hook z react-three-fiber pro animaci parametrů shaderu (posun noise textury, intenzita záře) a rotaci koule.
+
+Zajistit plynulé a necyklické animace.
+
+Transparentnost: Zajistit, že Canvas z react-three-fiber má transparentní pozadí, aby se orb mohl překrývat s UI.
+
+Integrace na homepage: Nahradit stávající statický kruh na domovské stránce nově vytvořeným ThreeDAnimatedOrb komponentem. Upravit velikost a pozici, aby odpovídala původnímu rozložení.
+
+Optimalizace: Ujistit se, že scéna je optimalizovaná pro mobilní zařízení, aby nedocházelo k propadům FPS.
+
+Důraz pro Agenta:
+
+Ignorovat předchozí pokusy s 2D SVG/Reanimated, pokud nedokázaly dosáhnout 3D hloubky.
+
+Priorita číslo jedna je vizuální věrnost referenčnímu obrázku, i když to vyžaduje použití pokročilejších 3D knihoven.
+
+Výsledkem by měl být komponent, který působí jako 3D objekt, který jemně svítí a uvnitř se v něm něco děje, s jasným 3D obrysem a zřetelnou vnější září.
