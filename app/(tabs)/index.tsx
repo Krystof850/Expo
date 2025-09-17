@@ -448,13 +448,24 @@ export default function Homepage() {
             <View style={styles.timerSection}>
               <Text style={styles.timerLabel}>Procrastination-free for</Text>
               <Animated.View style={[styles.timerDisplay, tickAnimatedStyle]}>
-                <Text style={styles.timerTimeMain}>
-                  {formatNumber(time.days)}:{formatNumber(time.hours)}:{formatNumber(time.minutes)}
-                </Text>
-                <Text style={styles.timerMainLabel}>days : hours : minutes</Text>
-                <Animated.View style={[styles.secondsContainer, secondsAnimatedStyle]}>
-                  <Text style={styles.timerSeconds}>{formatNumber(time.seconds)}</Text>
-                  <Text style={styles.secondsLabel}>seconds</Text>
+                <View style={styles.timerUnitsRow}>
+                  <View style={styles.timeUnit}>
+                    <Text style={styles.timeNumber}>{formatNumber(time.days)}</Text>
+                    <Text style={styles.timeLabel}>days</Text>
+                  </View>
+                  <Text style={styles.timeSeparator}>:</Text>
+                  <View style={styles.timeUnit}>
+                    <Text style={styles.timeNumber}>{formatNumber(time.hours)}</Text>
+                    <Text style={styles.timeLabel}>hours</Text>
+                  </View>
+                  <Text style={styles.timeSeparator}>:</Text>
+                  <View style={styles.timeUnit}>
+                    <Text style={styles.timeNumber}>{formatNumber(time.minutes)}</Text>
+                    <Text style={styles.timeLabel}>mins</Text>
+                  </View>
+                </View>
+                <Animated.View style={[styles.secondsBox, secondsAnimatedStyle]}>
+                  <Text style={styles.secondsText}>{formatNumber(time.seconds)}s</Text>
                 </Animated.View>
               </Animated.View>
             </View>
@@ -653,12 +664,18 @@ const styles = StyleSheet.create({
   timerLabel: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#0C4A6E',
-    marginBottom: 8,
+    color: COLORS.secondaryBackground,
+    marginBottom: 16,
   },
   timerDisplay: {
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  timerUnitsRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    justifyContent: 'center',
+    marginBottom: 16,
   },
   timerTimeMain: {
     fontSize: 42,
@@ -678,49 +695,50 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     textAlign: 'center',
   },
-  secondsContainer: {
-    alignItems: 'center',
-    marginVertical: 6,
+  secondsBox: {
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    backgroundColor: 'rgba(226, 232, 240, 0.8)',
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: 'rgba(148, 163, 184, 0.3)',
+    shadowColor: 'rgba(0, 0, 0, 0.1)',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 1,
+    shadowRadius: 4,
+    elevation: 2,
   },
-  timerSeconds: {
-    fontSize: 28,
-    fontWeight: '700',
-    color: '#082F49',
-    letterSpacing: -1,
-    textShadowColor: 'rgba(0, 0, 0, 0.1)',
-    textShadowOffset: { width: 0, height: 2 },
-    textShadowRadius: 4,
-  },
-  secondsLabel: {
-    fontSize: 10,
-    fontWeight: '500',
+  secondsText: {
+    fontSize: 24,
+    fontWeight: '600',
     color: '#64748B',
-    marginTop: 2,
+    letterSpacing: -0.5,
   },
   timeUnit: {
     alignItems: 'center',
   },
   timeNumber: {
-    fontSize: 48,
+    fontSize: 64,
     fontWeight: '700',
-    color: '#082F49',
-    lineHeight: 52,
-    letterSpacing: -1,
+    color: COLORS.mainText,
+    lineHeight: 64,
+    letterSpacing: -2,
     textShadowColor: 'rgba(0, 0, 0, 0.1)',
     textShadowOffset: { width: 0, height: 2 },
     textShadowRadius: 4,
   },
   timeLabel: {
-    fontSize: 12,
+    fontSize: 14,
     fontWeight: '500',
     color: '#64748B',
-    marginTop: -8,
+    marginTop: 4,
   },
   timeSeparator: {
-    fontSize: 40,
+    fontSize: 56,
     fontWeight: '700',
-    color: '#082F49',
-    marginBottom: 12,
+    color: COLORS.mainText,
+    marginBottom: 18,
+    marginHorizontal: 8,
   },
   buttonSection: {
     width: '100%',
