@@ -492,7 +492,7 @@ const styles = StyleSheet.create({
   progressSection: {
     width: '100%',
     maxWidth: 384,
-    marginTop: 10,
+    marginTop: 20,
   },
   progressCard: {
     backgroundColor: 'rgba(255, 255, 255, 0.4)',
