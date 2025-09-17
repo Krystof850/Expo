@@ -408,10 +408,11 @@ const styles = StyleSheet.create({
     textShadowRadius: 4,
   },
   timeLabel: {
-    fontSize: 14,
-    fontWeight: '500',
+    fontSize: 12,
+    fontWeight: '400',
     color: '#64748B',
-    marginTop: 4,
+    letterSpacing: 0.2,
+    marginTop: 2,
   },
   separator: {
     fontSize: 56,
@@ -422,11 +423,11 @@ const styles = StyleSheet.create({
   },
   secondsContainer: {
     alignItems: 'center',
-    marginTop: 8,
+    marginTop: 4,
   },
   secondsBox: {
-    paddingHorizontal: 12,
-    paddingVertical: 8,
+    paddingHorizontal: 8,
+    paddingVertical: 10,
     borderRadius: 8,
     backgroundColor: 'rgba(248, 250, 252, 0.5)',
     borderWidth: 1,
@@ -437,10 +438,10 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
   },
   secondsText: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: '#64748B',
-    letterSpacing: -0.5,
+    fontSize: 22,
+    fontWeight: '700',
+    color: '#0C4A6E',
+    letterSpacing: -0.3,
   },
   buttonSection: {
     width: '100%',
