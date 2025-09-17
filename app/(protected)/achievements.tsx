@@ -15,8 +15,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
 import * as Haptics from 'expo-haptics';
 
+import BasicBlueOrb from '../../components/BasicBlueOrb';
 import AnimatedAuraOrb from '../../components/AnimatedAuraOrb';
-import CrystalOrb from '../../components/CrystalOrb';
 import SpiralGalaxyOrb from '../../components/SpiralGalaxyOrb';
 import HeartbeatOrb from '../../components/HeartbeatOrb';
 import LightningOrb from '../../components/LightningOrb';
@@ -34,25 +34,25 @@ interface Achievement {
   description: string;
   isUnlocked: boolean;
   target?: string;
-  orbType: 'aura' | 'crystal' | 'galaxy' | 'heartbeat' | 'lightning' | 'fire' | 'wave' | 'nature';
+  orbType: 'basic' | 'aura' | 'galaxy' | 'heartbeat' | 'lightning' | 'fire' | 'wave' | 'nature';
 }
 
 const achievementsList: Achievement[] = [
   {
     id: 1,
-    title: "First Steps",
-    description: "Start your procrastination-free journey",
+    title: "Starting Journey",
+    description: "Begin your procrastination-free transformation",
     isUnlocked: true,
     target: "Registration",
-    orbType: 'aura',
+    orbType: 'basic',
   },
   {
     id: 2,
-    title: "Crystal Clear",
+    title: "First Steps",
     description: "Stay focused for the first few days",
     isUnlocked: false,
     target: "3 days",
-    orbType: 'crystal',
+    orbType: 'aura',
   },
   {
     id: 3,
@@ -171,8 +171,8 @@ export default function AchievementsScreen() {
               >
                 {/* Orb Container */}
                 <View style={styles.gridOrbContainer}>
+                  {achievement.orbType === 'basic' && <BasicBlueOrb size={80} />}
                   {achievement.orbType === 'aura' && <AnimatedAuraOrb size={80} />}
-                  {achievement.orbType === 'crystal' && <CrystalOrb size={80} />}
                   {achievement.orbType === 'galaxy' && <SpiralGalaxyOrb size={80} />}
                   {achievement.orbType === 'heartbeat' && <HeartbeatOrb size={80} />}
                   {achievement.orbType === 'lightning' && <LightningOrb size={80} />}
