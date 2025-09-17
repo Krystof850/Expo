@@ -64,135 +64,7 @@ export default function Homepage() {
   const secondsTranslateY = useSharedValue(0);
   const tickAnimation = useSharedValue(1);
 
-  // Floating background animations
-  const float1TranslateX = useSharedValue(0);
-  const float1TranslateY = useSharedValue(0);
-  const float1Rotate = useSharedValue(0);
-  const float1Scale = useSharedValue(1);
-
-  const float2TranslateX = useSharedValue(0);
-  const float2TranslateY = useSharedValue(0);
-  const float2Rotate = useSharedValue(0);
-  const float2Scale = useSharedValue(1);
-
-  const float3TranslateY = useSharedValue(0);
-  const float3Rotate = useSharedValue(0);
-
-  const float4TranslateY = useSharedValue(0);
-  const float4Rotate = useSharedValue(0);
-
-  // Background gradient animation values
-  const gradientOpacity = useSharedValue(1);
-  const gradientScale = useSharedValue(1);
-  const gradientRotate = useSharedValue(0);
-
-  // Start animations
-  useEffect(() => {
-    // Background gradient animation (20s cycle like template)
-    gradientOpacity.value = withRepeat(
-      withSequence(
-        withTiming(0.7, { duration: 10000 }),
-        withTiming(1, { duration: 10000 })
-      ), -1, false
-    );
-    gradientScale.value = withRepeat(
-      withSequence(
-        withTiming(1.1, { duration: 10000 }),
-        withTiming(1, { duration: 10000 })
-      ), -1, false
-    );
-    gradientRotate.value = withRepeat(
-      withSequence(
-        withTiming(5, { duration: 10000 }),
-        withTiming(-5, { duration: 10000 })
-      ), -1, false
-    );
-
-    // Start floating animations
-  }, []);
-
-  // Continue with floating animations
-  useEffect(() => {
-    // Float 1 animation (9s cycle)
-    float1TranslateX.value = withRepeat(
-      withSequence(
-        withTiming(30, { duration: 4500 }),
-        withTiming(0, { duration: 4500 })
-      ), -1, false
-    );
-    float1TranslateY.value = withRepeat(
-      withSequence(
-        withTiming(-50, { duration: 4500 }),
-        withTiming(0, { duration: 4500 })
-      ), -1, false
-    );
-    float1Rotate.value = withRepeat(
-      withSequence(
-        withTiming(35, { duration: 4500 }),
-        withTiming(0, { duration: 4500 })
-      ), -1, false
-    );
-    float1Scale.value = withRepeat(
-      withSequence(
-        withTiming(1.2, { duration: 4500 }),
-        withTiming(1, { duration: 4500 })
-      ), -1, false
-    );
-
-    // Float 2 animation (11s cycle)
-    float2TranslateX.value = withRepeat(
-      withSequence(
-        withTiming(-40, { duration: 5500 }),
-        withTiming(0, { duration: 5500 })
-      ), -1, false
-    );
-    float2TranslateY.value = withRepeat(
-      withSequence(
-        withTiming(-70, { duration: 5500 }),
-        withTiming(0, { duration: 5500 })
-      ), -1, false
-    );
-    float2Rotate.value = withRepeat(
-      withSequence(
-        withTiming(-40, { duration: 5500 }),
-        withTiming(0, { duration: 5500 })
-      ), -1, false
-    );
-    float2Scale.value = withRepeat(
-      withSequence(
-        withTiming(1.3, { duration: 5500 }),
-        withTiming(1, { duration: 5500 })
-      ), -1, false
-    );
-
-    // Float 3 animation (13s cycle)
-    float3TranslateY.value = withRepeat(
-      withSequence(
-        withTiming(-40, { duration: 6500 }),
-        withTiming(0, { duration: 6500 })
-      ), -1, false
-    );
-    float3Rotate.value = withRepeat(
-      withSequence(
-        withTiming(20, { duration: 6500 }),
-        withTiming(0, { duration: 6500 })
-      ), -1, false
-    );
-
-    // Float 4 animation (10s cycle) 
-    float4TranslateY.value = withRepeat(
-      withSequence(
-        withTiming(-35, { duration: 5000 }),
-        withTiming(0, { duration: 5000 })
-      ), -1, false
-    );
-    float4Rotate.value = withRepeat(
-      withSequence(
-        withTiming(-15, { duration: 5000 }),
-        withTiming(0, { duration: 5000 })
-      ), -1, false
-    );
-  }, []);
+  // Simplified - keep minimal animations
 
   // Animated styles for timer components
   const secondsAnimatedStyle = useAnimatedStyle(() => {
@@ -211,57 +83,12 @@ export default function Homepage() {
     };
   });
 
-  // Floating element animated styles
-  const float1AnimatedStyle = useAnimatedStyle(() => {
-    return {
-      transform: [
-        { translateX: float1TranslateX.value },
-        { translateY: float1TranslateY.value },
-        { rotate: `${float1Rotate.value}deg` },
-        { scale: float1Scale.value },
-      ],
-    };
-  });
+  // Remove floating element animated styles
 
-  const float2AnimatedStyle = useAnimatedStyle(() => {
-    return {
-      transform: [
-        { translateX: float2TranslateX.value },
-        { translateY: float2TranslateY.value },
-        { rotate: `${float2Rotate.value}deg` },
-        { scale: float2Scale.value },
-      ],
-    };
-  });
 
-  const float3AnimatedStyle = useAnimatedStyle(() => {
-    return {
-      transform: [
-        { translateY: float3TranslateY.value },
-        { rotate: `${float3Rotate.value}deg` },
-      ],
-    };
-  });
 
-  const float4AnimatedStyle = useAnimatedStyle(() => {
-    return {
-      transform: [
-        { translateY: float4TranslateY.value },
-        { rotate: `${float4Rotate.value}deg` },
-      ],
-    };
-  });
 
-  // Animated gradient background styles  
-  const gradientAnimatedStyle = useAnimatedStyle(() => {
-    return {
-      opacity: gradientOpacity.value,
-      transform: [
-        { scale: gradientScale.value },
-        { rotate: `${gradientRotate.value}deg` },
-      ],
-    };
-  });
+  // Removed gradient animation styles
 
 
   // Load saved timer data
@@ -394,68 +221,15 @@ export default function Homepage() {
       <SafeAreaView style={styles.container}>
         <StatusBar barStyle="dark-content" backgroundColor="transparent" translucent />
         
-        {/* Animated Gradient Background - Base Layer */}
+        {/* Simple Blue Background */}
         <LinearGradient
-          colors={['#E0F2FE', '#BFDBFE', '#93C5FD', '#BFDBFE', '#E0F2FE']}
+          colors={['#60A5FA', '#3B82F6']}
           style={styles.animatedBackground}
           start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
+          end={{ x: 0, y: 1 }}
         />
         
-        {/* Animated Gradient Background - Top Layer with Animation */}
-        <Animated.View style={[styles.animatedBackground, gradientAnimatedStyle]}>
-          <LinearGradient
-            colors={['#DBEAFE', '#A5B4FC', '#BFDBFE', '#93C5FD', '#DBEAFE']}
-            style={StyleSheet.absoluteFill}
-            start={{ x: 0, y: 1 }}
-            end={{ x: 1, y: 0 }}
-          />
-        </Animated.View>
 
-        {/* Floating Background Elements */}
-        <View style={styles.floatingContainer}>
-          {/* Float 1 - Large Sky Blue */}
-          <Animated.View style={[styles.float1, float1AnimatedStyle]}>
-            <LinearGradient
-              colors={['rgba(56, 189, 248, 0.3)', 'rgba(56, 189, 248, 0.1)']}
-              style={styles.floatGradient1}
-            />
-          </Animated.View>
-
-          {/* Float 2 - Large Blue */}
-          <Animated.View style={[styles.float2, float2AnimatedStyle]}>
-            <LinearGradient
-              colors={['rgba(29, 78, 216, 0.2)', 'rgba(29, 78, 216, 0)']}
-              style={styles.floatGradient2}
-            />
-          </Animated.View>
-
-          {/* Float 3 - Medium Primary Action */}
-          <Animated.View style={[styles.float3, float3AnimatedStyle]}>
-            <View style={[styles.floatCircle3, { backgroundColor: `${COLORS.primaryAction}33` }]} />
-          </Animated.View>
-
-          {/* Float 4 - Medium Green */}
-          <Animated.View style={[styles.float4, float4AnimatedStyle]}>
-            <View style={[styles.floatCircle4, { backgroundColor: `${COLORS.accentGreen}33` }]} />
-          </Animated.View>
-
-          {/* Extra Float 5 - Sky Gradient */}
-          <Animated.View style={[styles.float5, float3AnimatedStyle]}>
-            <LinearGradient
-              colors={['rgba(14, 165, 233, 0.2)', 'transparent']}
-              style={styles.floatGradient5}
-            />
-          </Animated.View>
-
-          {/* Extra Float 6 - Blue Gradient */}
-          <Animated.View style={[styles.float6, float2AnimatedStyle]}>
-            <LinearGradient
-              colors={['rgba(30, 64, 175, 0.2)', 'transparent']}
-              style={styles.floatGradient6}
-            />
-          </Animated.View>
-        </View>
 
         {/* HEADER - Template Design */}
         <View style={styles.header}>
@@ -498,7 +272,7 @@ export default function Homepage() {
             {/* Timer */}
             <View style={styles.timerSection}>
               <Text style={styles.timerLabel}>Procrastination-free for</Text>
-              <Animated.View style={[styles.timerDisplay, tickAnimatedStyle]}>
+              <View style={styles.timerDisplay}>
                 <View style={styles.timerUnitsRow}>
                   <View style={styles.timeUnit}>
                     <Text style={styles.timeNumber}>{formatNumber(time.days)}</Text>
@@ -515,10 +289,10 @@ export default function Homepage() {
                     <Text style={styles.timeLabel}>mins</Text>
                   </View>
                 </View>
-                <Animated.View style={[styles.secondsBox, secondsAnimatedStyle]}>
+                <View style={styles.secondsBox}>
                   <Text style={styles.secondsText}>{formatNumber(time.seconds)}s</Text>
-                </Animated.View>
-              </Animated.View>
+                </View>
+              </View>
             </View>
 
             {/* Main Button */}
@@ -694,8 +468,10 @@ const styles = StyleSheet.create({
     color: COLORS.mainText,
   },
   settingsButton: {
-    width: 22,
-    height: 22,
+    width: 44,
+    height: 44,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   mainContent: {
     flex: 1,
@@ -704,7 +480,7 @@ const styles = StyleSheet.create({
     paddingBottom: 100, // Account for tab bar
   },
   auraContainer: {
-    marginBottom: 20,
+    marginBottom: 40,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -769,11 +545,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   timeNumber: {
-    fontSize: 64,
+    fontSize: 48,
     fontWeight: '700',
     color: COLORS.mainText,
-    lineHeight: 64,
-    letterSpacing: -2,
+    lineHeight: 48,
+    letterSpacing: -1.5,
     textShadowColor: 'rgba(0, 0, 0, 0.1)',
     textShadowOffset: { width: 0, height: 2 },
     textShadowRadius: 4,
