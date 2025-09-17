@@ -98,31 +98,21 @@ export default function Homepage() {
 
   const loadTimerData = async () => {
     try {
-      if (!user?.uid) {
-        console.log('No user ID available');
-        return;
-      }
-
-      // Get or create user progress from Firebase
-      const progress = await ProgressService.getOrCreateUserProgress(user.uid);
-      setUserProgress(progress);
+      // Always start with local storage first for immediate response
+      await loadTimerDataFallback();
       
-      if (progress.startTime && progress.currentStreak > 0) {
-        setStartTime(progress.startTime);
-        setStreak(Math.floor(progress.currentStreak));
-        calculateTime(progress.startTime);
-      } else {
-        // Initialize new timer
-        const now = Date.now();
-        setStartTime(now);
-        setStreak(0);
-        await ProgressService.initializeUserProgress(user.uid);
-        calculateTime(now);
+      // Try Firebase sync in background (non-blocking)
+      if (user?.uid) {
+        try {
+          const progress = await ProgressService.getOrCreateUserProgress(user.uid);
+          setUserProgress(progress);
+          console.log('✅ Firebase sync successful');
+        } catch (firebaseError) {
+          console.log('⚠️ Firebase sync failed, using local storage:', firebaseError);
+        }
       }
     } catch (error) {
       console.log('Error loading timer data:', error);
-      // Fallback to local storage if Firebase fails
-      await loadTimerDataFallback();
     }
   };
 
@@ -175,14 +165,12 @@ export default function Homepage() {
       
       setTime(computedTime);
       
-      // Update Firebase progress every minute to avoid too many calls
+      // Try Firebase update every minute (non-blocking)
       if (user?.uid && computedTime.seconds === 0) {
-        try {
-          await ProgressService.updateUserProgress(user.uid, computedTime, startTime);
-          console.log('Progress updated at minute mark:', computedTime.minutes);
-        } catch (error) {
-          console.log('Error updating progress:', error);
-        }
+        // Don't await - do it in background
+        ProgressService.updateUserProgress(user.uid, computedTime, startTime)
+          .then(() => console.log('✅ Progress synced to Firebase'))
+          .catch(error => console.log('⚠️ Firebase sync failed (continuing with local):', error));
       }
     }
   };
@@ -203,22 +191,14 @@ export default function Homepage() {
           text: 'Reset',
           style: 'destructive',
           onPress: async () => {
+            // Always reset locally first for immediate response
+            await resetTimerFallback();
+            
+            // Try Firebase reset in background
             if (user?.uid) {
-              try {
-                // Reset in Firebase
-                const resetProgress = await ProgressService.resetUserTimer(user.uid);
-                setUserProgress(resetProgress);
-                setStartTime(resetProgress.startTime);
-                setStreak(0);
-                setTime({ days: 0, hours: 0, minutes: 0, seconds: 0 });
-                setCurrentOrbType('basic'); // Reset to basic orb
-              } catch (error) {
-                console.log('Error resetting timer:', error);
-                // Fallback to local reset
-                await resetTimerFallback();
-              }
-            } else {
-              await resetTimerFallback();
+              ProgressService.resetUserTimer(user.uid)
+                .then(() => console.log('✅ Timer reset synced to Firebase'))
+                .catch(error => console.log('⚠️ Firebase reset failed (local reset done):', error));
             }
           },
         },
