@@ -50,9 +50,7 @@ export default function Profile() {
 
   return (
     <Protected>
-      <View style={styles.container}>
-        <AppBackground />
-        
+      <AppBackground>
         <ScrollView 
           style={styles.scrollView}
           contentContainerStyle={[styles.content, { paddingTop: insets.top + SPACING.xl }]}
@@ -122,7 +120,7 @@ export default function Profile() {
             </HapticButton>
           </View>
         </ScrollView>
-      </View>
+      </AppBackground>
     </Protected>
   );
 }
@@ -130,7 +128,7 @@ export default function Profile() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.defaultBg,
+    backgroundColor: 'transparent',
   },
   scrollView: {
     flex: 1,

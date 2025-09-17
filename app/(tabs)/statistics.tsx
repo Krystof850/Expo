@@ -13,9 +13,7 @@ export default function Statistics() {
 
   return (
     <Protected>
-      <View style={styles.container}>
-        <AppBackground />
-        
+      <AppBackground>
         <ScrollView 
           style={styles.scrollView}
           contentContainerStyle={[styles.content, { paddingTop: insets.top + SPACING.xl }]}
@@ -90,7 +88,7 @@ export default function Statistics() {
             </View>
           </View>
         </ScrollView>
-      </View>
+      </AppBackground>
     </Protected>
   );
 }
@@ -98,7 +96,7 @@ export default function Statistics() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.defaultBg,
+    backgroundColor: 'transparent',
   },
   scrollView: {
     flex: 1,
