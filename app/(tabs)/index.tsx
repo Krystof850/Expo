@@ -393,7 +393,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     justifyContent: 'center',
     marginBottom: 4,
-    marginTop: -6,
+    marginTop: -18,
   },
   timeUnit: {
     alignItems: 'center',
