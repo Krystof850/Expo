@@ -16,6 +16,9 @@ import { router } from 'expo-router';
 import * as Haptics from 'expo-haptics';
 
 import AnimatedAuraOrb from '../../components/AnimatedAuraOrb';
+import CrystalOrb from '../../components/CrystalOrb';
+import SpiralGalaxyOrb from '../../components/SpiralGalaxyOrb';
+import HeartbeatOrb from '../../components/HeartbeatOrb';
 import { Protected } from '../../src/components/Protected';
 
 const { width } = Dimensions.get('window');
@@ -27,6 +30,7 @@ interface Achievement {
   description: string;
   isUnlocked: boolean;
   target?: string;
+  orbType: 'aura' | 'crystal' | 'galaxy' | 'heartbeat';
 }
 
 const achievementsList: Achievement[] = [
@@ -35,48 +39,63 @@ const achievementsList: Achievement[] = [
     title: "First Steps",
     description: "Start your procrastination-free journey",
     isUnlocked: true,
+    orbType: 'aura',
   },
   {
     id: 2,
-    title: "One Day Strong",
+    title: "Crystal Clear",
     description: "Stay focused for 24 hours",
     isUnlocked: false,
     target: "1 day",
+    orbType: 'crystal',
   },
   {
     id: 3,
-    title: "Week Warrior", 
+    title: "Galactic Focus", 
     description: "Maintain focus for a full week",
     isUnlocked: false,
     target: "7 days",
+    orbType: 'galaxy',
   },
   {
     id: 4,
-    title: "Monthly Master",
+    title: "Heartbeat Rhythm",
     description: "Complete 30 days without procrastination",
     isUnlocked: false,
     target: "30 days",
+    orbType: 'heartbeat',
   },
   {
     id: 5,
-    title: "Quarter Champion",
+    title: "Aura Master",
     description: "Achieve 90 days of consistent focus",
     isUnlocked: false,
     target: "90 days",
+    orbType: 'aura',
   },
   {
     id: 6,
-    title: "Half-Year Hero",
+    title: "Crystal Sage",
     description: "Reach 180 days of productivity",
     isUnlocked: false,
     target: "180 days",
+    orbType: 'crystal',
   },
   {
     id: 7,
-    title: "Year Legend",
+    title: "Galaxy Guardian",
     description: "Complete a full year transformation",
     isUnlocked: false,
     target: "365 days",
+    orbType: 'galaxy',
+  },
+  {
+    id: 8,
+    title: "Heartbeat Legend",
+    description: "Master of endless dedication",
+    isUnlocked: false,
+    target: "500 days",
+    orbType: 'heartbeat',
   },
 ];
 
@@ -147,7 +166,10 @@ export default function AchievementsScreen() {
               >
                 {/* Orb Container */}
                 <View style={styles.gridOrbContainer}>
-                  <AnimatedAuraOrb size={80} />
+                  {achievement.orbType === 'aura' && <AnimatedAuraOrb size={80} />}
+                  {achievement.orbType === 'crystal' && <CrystalOrb size={80} />}
+                  {achievement.orbType === 'galaxy' && <SpiralGalaxyOrb size={80} />}
+                  {achievement.orbType === 'heartbeat' && <HeartbeatOrb size={80} />}
                 </View>
 
                 {/* Achievement Info */}
