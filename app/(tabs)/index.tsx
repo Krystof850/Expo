@@ -382,10 +382,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   timerLabel: {
-    fontSize: 14,
-    fontWeight: '500',
+    fontSize: 16,
+    fontWeight: '400',
     color: '#0C4A6E',
-    marginBottom: 16,
+    letterSpacing: 0.3,
+    marginBottom: 8,
   },
   timerRow: {
     flexDirection: 'row',
