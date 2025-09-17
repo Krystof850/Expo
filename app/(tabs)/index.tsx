@@ -203,7 +203,23 @@ export default function Homepage() {
               activeOpacity={0.9}
               accessibilityLabel="View achievements"
             >
-              <BasicBlueOrb size={120} />
+              <Animated.View style={[styles.orbContainer, orbAnimatedStyle]}>
+                {/* Outer animated ring */}
+                <LinearGradient
+                  colors={['#7DD3FC', '#67E8F9', '#7DD3FC']}
+                  style={styles.orbOuter}
+                />
+                {/* Middle layer */}
+                <LinearGradient
+                  colors={['#E0F2FE', '#BAE6FD']}
+                  style={styles.orbMiddle}
+                />
+                {/* Inner white center */}
+                <LinearGradient
+                  colors={['#FFFFFF', '#F1F5F9']}
+                  style={styles.orbInner}
+                />
+              </Animated.View>
             </TouchableOpacity>
 
             {/* Timer Display */}
