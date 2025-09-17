@@ -1,0 +1,86 @@
+Dobře, zde je podrobný prompt pro Replit Agenta, který by měl vést k vytvoření animovaného orbu ve vašem React Native Expo projektu. Cílem je dosáhnout vzhledu podobného vašemu obrázku a umístit ho na homepage.
+
+Důležité poznámky před promptem:
+
+Realismus vs. jednoduchost: Je potřeba si uvědomit, že v React Native Expo je těžké dosáhnout přesně stejné fotorealistické 3D grafiky jako na obrázku jen pomocí běžných knihoven bez použití react-three-fiber nebo podobného. Replit Agentovi dám instrukce, aby se pokusil o co nejbližší vizuální styl s ohledem na omezení RN Expo.
+
+Technologie: Předpokládám, že agent použije buď react-native-svg pro vektorovou grafiku s animacemi (jednodušší, ale méně 3D) nebo kombinaci react-native-reanimated a expo-gl (pro OpenGL/WebGL, což je pokročilejší a blíže k 3D, ale komplexnější). Vzhledem k vašim předchozím problémům se pokusíme o něco, co se bude držet spíše jednodušších, ale efektových animací, které se dají dobře ovládat.
+
+Umístění: "Chráněná zóna na homepage" by se měla chápat jako místo, kde je nyní statická modrá koule (kruh) na vašem screenshotu aplikace.
+
+Prompt pro Replit Agenta:
+Cíl: Vytvořit animovaný, minimalistický "orb" v React Native Expo projektu, který bude vizuálně podobný dodanému referenčnímu obrázku, a integrovat ho na domovskou obrazovku místo stávajícího statického kruhu. Orb by měl působit jemně, zářit a mít vnitřní pulzující "mlhovou" strukturu.
+
+Referenční obrázek: (Předpokládá se, že Replit Agent má přístup k vašemu poslednímu obrázku modrého orbu)
+
+Klíčové vlastnosti orbu:
+
+Tvar: Perfektní kruh/koule.
+
+Barva: Jemná, světle modrá, podobná barvě na referenčním obrázku.
+
+Záře: Měl by mít jemnou, vnější záři (glow), která se postupně rozplývá do ztracena.
+
+Vnitřní struktura: Měla by být viditelná jemná, pulzující, mlhová nebo kouřová struktura uvnitř orbu. Nemá to být pevná textura, ale něco, co se pomalu přelévá a mění tvar.
+
+Transparentnost pozadí: Celý komponent by měl mít transparentní pozadí, aby se dal snadno umístit na jakékoli pozadí UI.
+
+Animace:
+
+Pulzování záře: Vnější záře (nebo celá koule) by měla jemně pulzovat, měnit intenzitu/velikost v pomalém, rytmickém cyklu.
+
+Vnitřní pohyb: Vnitřní "mlhová" struktura by se měla pomalu a plynule přelévat/měnit tvar, aby působila dynamicky, ale ne rušivě.
+
+Požadavky na implementaci:
+
+Komponenta: Vytvořit samostatný React Native komponent pro tento animovaný orb (např. AnimatedOrb.js).
+
+Integrace: Nahradit stávající statický kruh na domovské stránce (HomeScreen.js nebo podobný) tímto novým komponentem AnimatedOrb.
+
+Knihovny: Preferovat použití standardních Expo/React Native knihoven. Zvažovat:
+
+react-native-svg pro vektorové tvary a gradienty.
+
+react-native-reanimated pro pokročilé a plynulé animace.
+
+Volitelně a pokud je to proveditelné, zvážit expo-gl pro shader efekty, pokud je potřeba dosáhnout komplexnějšího vnitřního mlhového efektu, ale ne za cenu zbytečné složitosti.
+
+Výkon: Animace by měla být plynulá a efektivní, aby nezatěžovala výkon aplikace.
+
+Rozměry: Komponent by měl být responzivní nebo přijímat prop size pro definici rozměrů, aby se dal snadno upravit na homepage. Na homepage by měl mít podobnou velikost jako stávající statický kruh.
+
+Konkrétní kroky pro Agenta:
+
+Analyzovat projekt: Získat přehled o struktuře existujícího React Native Expo projektu, zejména soubory jako App.js, HomeScreen.js (nebo ekvivalent domovské obrazovky), a stylizace.
+
+Vytvořit AnimatedOrb.js:
+
+Implementovat základní kruhový tvar.
+
+Použít gradienty (react-native-svg) pro vnitřní barvu a jemné přechody.
+
+Pro vnější záři použít DropShadow (pokud je k dispozici v react-native-svg a dobře se chová) nebo duplikované a rozmazané kruhy s nízkou opacitou, animované přes reanimated.
+
+Pro vnitřní "mlhovou" strukturu:
+
+Pokud je to možné, použít kombinaci SVG forem a reanimated pro animaci jejich transformace a opacit, aby simulovaly plynoucí mlhu.
+
+Alternativně (pokud je to proveditelné a agent to umí) použít expo-gl s jednoduchým shaderem generujícím noise texturu, kterou bude animovat.
+
+Přidat animace:
+
+Použít react-native-reanimated pro pulzování vnější záře (např. změnou velikosti nebo opacitou).
+
+Použít react-native-reanimated pro animaci vnitřní mlhové struktury (posunem, rotací nebo změnou opacit vnitřních tvarů).
+
+Integrovat na homepage: Najít komponentu na homepage, kde je nyní zobrazen statický kruh, a nahradit ho nově vytvořeným AnimatedOrb komponentem. Upravit styl, aby orb zapadl vizuálně a velikostně.
+
+Testování: Zajistit, že animace běží plynule a komponent má transparentní pozadí.
+
+Doplňující informace pro Agenta (interní myšlenkový proces):
+
+Záměrně se vyhnout složitým 3D knihovnám jako react-three-fiber v prvním kroku, pokud to není absolutně nezbytné, kvůli možné komplexnosti integrace do existujícího Expo projektu a preferenci klienta pro "minimalistický" přístup, který by mohl být lépe simulován pokročilými 2D technikami.
+
+Základem bude pravděpodobně SVG s animacemi. Pokročilé shadery jsou sice ideální, ale je to velký skok v komplexnosti.
+
+Zaměřit se na dosažení "pocitu" orbu s jemnými animacemi, nikoli perfektní fotorealistické simulace.

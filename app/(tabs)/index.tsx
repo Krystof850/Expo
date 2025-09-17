@@ -26,6 +26,7 @@ import Animated, {
 import { useAuth } from '../../src/context/AuthContext';
 import { Protected } from '../../src/components/Protected';
 import { router } from 'expo-router';
+import AnimatedAuraOrb from '../../components/AnimatedAuraOrb';
 
 const { width } = Dimensions.get('window');
 
@@ -43,17 +44,7 @@ export default function Homepage() {
   const [startTime, setStartTime] = useState<number | null>(null);
   const [streak, setStreak] = useState(0);
 
-  // Animation values (only for aura)
-  const auraPulse = useSharedValue(0);
-
-  useEffect(() => {
-    // Aura pulsing animation
-    auraPulse.value = withRepeat(
-      withTiming(1, { duration: 2000 }),
-      -1,
-      true
-    );
-  }, []);
+  // No need for aura animation - handled by AnimatedAuraOrb component
 
 
   // Load saved timer data
@@ -152,13 +143,7 @@ export default function Homepage() {
     return num.toString().padStart(2, '0');
   };
 
-  // Animated styles (only aura)
-  const auraAnimatedStyle = useAnimatedStyle(() => {
-    const scale = interpolate(auraPulse.value, [0, 1], [1, 1.05]);
-    return {
-      transform: [{ scale }],
-    };
-  });
+  // Animation styles removed - handled by AnimatedAuraOrb component
 
   return (
     <Protected>
@@ -206,21 +191,10 @@ export default function Homepage() {
 
           {/* Main Content */}
           <View style={styles.mainContent}>
-            {/* Aura Element */}
-            <Animated.View style={[styles.auraContainer, auraAnimatedStyle]}>
-              <LinearGradient
-                colors={['#87CEEB', '#67D7E8', '#87CEEB']}
-                style={styles.auraOuter}
-              />
-              <LinearGradient
-                colors={['rgba(135,206,235,0.8)', 'rgba(178,216,235,0.9)']}
-                style={styles.auraMiddle}
-              />
-              <LinearGradient
-                colors={['rgba(255,255,255,0.9)', 'rgba(255,255,255,0.7)']}
-                style={styles.auraInner}
-              />
-            </Animated.View>
+            {/* Animated Aura Orb */}
+            <View style={styles.auraContainer}>
+              <AnimatedAuraOrb size={220} />
+            </View>
 
             {/* Timer */}
             <View style={styles.timerSection}>
@@ -337,39 +311,9 @@ const styles = StyleSheet.create({
     paddingBottom: 140, // Account for tab bar
   },
   auraContainer: {
-    position: 'relative',
-    width: 192,
-    height: 192,
-    marginBottom: 24,
+    marginBottom: 32,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  auraOuter: {
-    position: 'absolute',
-    width: 192,
-    height: 192,
-    borderRadius: 96,
-    shadowColor: 'rgba(56, 189, 248, 0.4)',
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 1,
-    shadowRadius: 40,
-    elevation: 10,
-  },
-  auraMiddle: {
-    position: 'absolute',
-    width: 182,
-    height: 182,
-    borderRadius: 91,
-    alignSelf: 'center',
-    top: 5,
-  },
-  auraInner: {
-    position: 'absolute',
-    width: 154,
-    height: 154,
-    borderRadius: 77,
-    alignSelf: 'center',
-    top: 19,
   },
   timerSection: {
     alignItems: 'center',
