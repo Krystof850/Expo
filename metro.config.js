@@ -7,4 +7,7 @@ config.transformer.babelTransformerPath = require.resolve('react-native-svg-tran
 config.resolver.assetExts = config.resolver.assetExts.filter((ext) => ext !== 'svg');
 config.resolver.sourceExts = [...config.resolver.sourceExts, 'svg'];
 
+// Replit environment configuration for web
+// Note: Metro server configuration is handled by Expo CLI directly
+
 module.exports = config;

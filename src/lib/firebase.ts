@@ -10,15 +10,17 @@ import { Platform } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const extra = (Constants.expoConfig?.extra || {}) as Record<string, string>;
+const isWeb = Platform.OS === 'web';
 
-// Use Expo Constants for all platforms with fallback to EXPO_PUBLIC_ env vars
+// On web, use direct process.env access (works with Replit secrets)
+// On native, prefer Constants.expoConfig.extra then fallback to process.env
 const firebaseConfig = {
-  apiKey: extra.FIREBASE_API_KEY || process.env.EXPO_PUBLIC_FIREBASE_API_KEY,
-  authDomain: extra.FIREBASE_AUTH_DOMAIN || process.env.EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN,
-  projectId: extra.FIREBASE_PROJECT_ID || process.env.EXPO_PUBLIC_FIREBASE_PROJECT_ID,
-  storageBucket: extra.FIREBASE_STORAGE_BUCKET || process.env.EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: extra.FIREBASE_MESSAGING_SENDER_ID || process.env.EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-  appId: extra.FIREBASE_APP_ID || process.env.EXPO_PUBLIC_FIREBASE_APP_ID,
+  apiKey: isWeb ? process.env.FIREBASE_API_KEY : (extra.FIREBASE_API_KEY || process.env.FIREBASE_API_KEY),
+  authDomain: isWeb ? process.env.FIREBASE_AUTH_DOMAIN : (extra.FIREBASE_AUTH_DOMAIN || process.env.FIREBASE_AUTH_DOMAIN),
+  projectId: isWeb ? process.env.FIREBASE_PROJECT_ID : (extra.FIREBASE_PROJECT_ID || process.env.FIREBASE_PROJECT_ID),
+  storageBucket: isWeb ? process.env.FIREBASE_STORAGE_BUCKET : (extra.FIREBASE_STORAGE_BUCKET || process.env.FIREBASE_STORAGE_BUCKET),
+  messagingSenderId: isWeb ? process.env.FIREBASE_MESSAGING_SENDER_ID : (extra.FIREBASE_MESSAGING_SENDER_ID || process.env.FIREBASE_MESSAGING_SENDER_ID),
+  appId: isWeb ? process.env.FIREBASE_APP_ID : (extra.FIREBASE_APP_ID || process.env.FIREBASE_APP_ID),
 };
 
 // Debug log pro kontrolu configu
