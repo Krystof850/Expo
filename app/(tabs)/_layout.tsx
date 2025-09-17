@@ -1,6 +1,6 @@
 import { Tabs } from 'expo-router';
 import React from 'react';
-import { Platform } from 'react-native';
+import { Platform, Dimensions } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 export default function TabLayout() {
@@ -11,8 +11,8 @@ export default function TabLayout() {
         tabBarStyle: {
           position: 'absolute',
           bottom: 20,
-          left: 36,
-          right: 36,
+          width: Dimensions.get('window').width - 72,
+          alignSelf: 'center',
           backgroundColor: 'rgba(255, 255, 255, 0.7)',
           borderRadius: 32,
           height: 60,
