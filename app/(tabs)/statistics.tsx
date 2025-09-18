@@ -174,7 +174,6 @@ export default function Statistics() {
           <View style={styles.section}>
             <View style={styles.achievementsHeader}>
               <Text style={styles.sectionTitle}>Orbs</Text>
-              <Text style={styles.achievementsCount}>Level 1</Text>
             </View>
             <View style={styles.orbsContainer}>
               {[
