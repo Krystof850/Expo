@@ -9,7 +9,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { Protected } from '../../src/components/Protected';
 import { TitleText, DescriptionText } from '../../components/Text';
-import { COLORS, SPACING } from '@/constants/theme';
+import { COLORS, SPACING, TYPOGRAPHY } from '@/constants/theme';
 import { useAuth } from '../../src/context/AuthContext';
 import { ProgressService } from '../../src/services/progressService';
 import { UserProgress } from '../../src/types/achievement';
@@ -507,11 +507,13 @@ const styles = StyleSheet.create({
     elevation: 6,
   },
   progressTitle: {
+    fontFamily: TYPOGRAPHY.title.fontFamily,
     fontSize: 18,
     fontWeight: '600',
     color: '#0C4A6E',
     marginBottom: 16,
     textAlign: 'center',
+    // No text shadow properties
   },
   progressSubtitle: {
     fontSize: 14,
