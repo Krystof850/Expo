@@ -225,10 +225,18 @@ export default function Statistics() {
 
   return (
     <Protected>
-      <AppBackground>
+      <View style={[styles.container, { paddingTop: insets.top }]}>
+        {/* Background Gradient */}
+        <ExpoLinearGradient
+          colors={['#E0F2FE', '#BFDBFE', '#A5B4FC']}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={styles.background}
+        />
+        
         <ScrollView 
           style={styles.scrollView}
-          contentContainerStyle={[styles.content, { paddingTop: insets.top + SPACING.xl, paddingBottom: tabBarHeight + 20 }]}
+          contentContainerStyle={[styles.content, { paddingBottom: tabBarHeight + 20 }]}
           showsVerticalScrollIndicator={false}
         >
           {/* Header */}
@@ -244,9 +252,9 @@ export default function Statistics() {
 
           {/* Progress Circle Section */}
           <View style={styles.progressCircleSection}>
-            <TitleText style={styles.progressTitle}>You will be free in: {targetDate}</TitleText>
+            <Text style={styles.progressTitle}>You will be free in: {targetDate}</Text>
             <CircularProgress percentage={progressPercentage} />
-            <DescriptionText style={styles.progressSubtitle}>Procrastination-free</DescriptionText>
+            <Text style={styles.progressSubtitle}>Procrastination-free</Text>
           </View>
 
           {/* Three Stats Grid */}
@@ -431,7 +439,7 @@ export default function Statistics() {
             </View>
           </View>
         </ScrollView>
-      </AppBackground>
+      </View>
     </Protected>
   );
 }
