@@ -123,21 +123,52 @@ export default function Profile() {
     await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     
     try {
+      console.log('🌟 Rate App: Starting review request...');
+      
+      // Check if store review is available on this device
       const isAvailable = await StoreReview.isAvailableAsync();
-      if (isAvailable) {
-        await StoreReview.requestReview();
-      } else {
+      console.log('🌟 Rate App: isAvailable =', isAvailable);
+      
+      if (!isAvailable) {
+        console.log('🌟 Rate App: Not available (likely Expo Go/development mode)');
         Alert.alert(
           'Rate App',
-          'Thank you for wanting to rate our app! Please visit the App Store to leave a review.',
+          'Rating functionality is not available in development mode. In the production app, this would show the native review dialog.',
+          [{ text: 'OK', style: 'default' }]
+        );
+        return;
+      }
+      
+      // Check if platform can use requestReview()
+      const hasAction = await StoreReview.hasAction();
+      console.log('🌟 Rate App: hasAction =', hasAction);
+      
+      if (hasAction) {
+        console.log('🌟 Rate App: Requesting native review...');
+        await StoreReview.requestReview();
+        console.log('🌟 Rate App: Review request completed');
+        
+        // Show feedback since native dialog might not appear
+        setTimeout(() => {
+          Alert.alert(
+            'Thank You!',
+            'Thank you for wanting to rate our app! The review dialog should have appeared, or you can rate us directly in the App Store.',
+            [{ text: 'OK', style: 'default' }]
+          );
+        }, 1000);
+      } else {
+        console.log('🌟 Rate App: No native action available, showing fallback');
+        Alert.alert(
+          'Rate App',
+          'Please visit the App Store to leave a review for our app. Thank you for your support!',
           [{ text: 'OK', style: 'default' }]
         );
       }
     } catch (error) {
-      console.error('Rate app error:', error);
+      console.error('🌟 Rate App: Error occurred:', error);
       Alert.alert(
         'Rate App', 
-        'Thank you for your interest! Please visit the App Store to rate our app.',
+        'Thank you for your interest in rating our app! Please visit the App Store to leave a review.',
         [{ text: 'OK', style: 'default' }]
       );
     }
