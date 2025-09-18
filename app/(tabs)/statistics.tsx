@@ -30,6 +30,11 @@ export default function Statistics() {
   const [progressPercentage, setProgressPercentage] = useState<number>(0);
   const [currentTime, setCurrentTime] = useState({ days: 0, hours: 0, minutes: 0 });
   const [targetDate, setTargetDate] = useState<string>('');
+  
+  // Stats for the three cards
+  const [currentStreak, setCurrentStreak] = useState<number>(0);
+  const [longestStreak, setLongestStreak] = useState<number>(0);
+  const [totalDaysActive, setTotalDaysActive] = useState<number>(0);
 
   // Load initial timer data
   useEffect(() => {
@@ -45,12 +50,27 @@ export default function Statistics() {
         console.log('📊 Statistics: Real-time update from Firebase:', progress);
         setUserProgress(progress);
         setStartTime(progress.startTime);
+        
+        // Update longest streak from Firebase bestStreak
+        setLongestStreak(Math.floor(progress.bestStreak || 0));
+        
         AsyncStorage.setItem('procrastination_start_time', progress.startTime.toString());
       }
     });
 
     return () => unsubscribe && unsubscribe();
   }, [user?.uid]);
+
+  // Calculate total days active (account creation date)
+  useEffect(() => {
+    if (user?.metadata?.creationTime) {
+      const creationDate = new Date(user.metadata.creationTime);
+      const now = new Date();
+      const diffInMs = now.getTime() - creationDate.getTime();
+      const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
+      setTotalDaysActive(diffInDays);
+    }
+  }, [user]);
 
   // Calculate progress percentage every second
   useEffect(() => {
@@ -100,6 +120,9 @@ export default function Statistics() {
     const minutes = Math.floor((diff % (60 * 60)) / 60);
     
     setCurrentTime({ days, hours, minutes });
+    
+    // Update current streak (same as current timer days)
+    setCurrentStreak(days);
     
     // Calculate target date (start time + 60 days)
     const targetDateMs = start + (60 * 24 * 60 * 60 * 1000); // 60 days in milliseconds
@@ -207,7 +230,7 @@ export default function Statistics() {
                 <Ionicons name="flame" size={24} color="#0284C7" />
               </View>
               <Text style={styles.statLabel}>Current Streak</Text>
-              <Text style={styles.statValue}>5 days</Text>
+              <Text style={styles.statValue}>{currentStreak} days</Text>
             </View>
             
             <View style={styles.statCard}>
@@ -215,7 +238,7 @@ export default function Statistics() {
                 <Ionicons name="star" size={24} color="#0284C7" />
               </View>
               <Text style={styles.statLabel}>Longest Streak</Text>
-              <Text style={styles.statValue}>21 days</Text>
+              <Text style={styles.statValue}>{longestStreak} days</Text>
             </View>
             
             <View style={styles.statCard}>
@@ -223,7 +246,7 @@ export default function Statistics() {
                 <Ionicons name="calendar" size={24} color="#0284C7" />
               </View>
               <Text style={styles.statLabel}>Total Days Active</Text>
-              <Text style={styles.statValue}>42</Text>
+              <Text style={styles.statValue}>{totalDaysActive}</Text>
             </View>
           </View>
 
