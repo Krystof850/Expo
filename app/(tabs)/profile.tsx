@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { View, StyleSheet, ScrollView, Alert, Linking, Platform, TextInput, Modal, Text, TouchableOpacity } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
 import * as Haptics from 'expo-haptics';
 import * as Clipboard from 'expo-clipboard';
 import * as StoreReview from 'expo-store-review';
@@ -177,41 +176,50 @@ export default function Profile() {
           </View>
 
           {/* User Information Card */}
-          <View style={styles.userSection}>
-            <View style={styles.avatarContainer}>
-              <Ionicons name="person" size={48} color={COLORS.mainText} />
+          <View style={styles.userInfoCard}>
+            <Text style={styles.userEmail}>{user?.email || 'User'}</Text>
+            <View style={styles.premiumBadge}>
+              <Text style={styles.premiumBadgeText}>Premium Member</Text>
             </View>
-            <TitleText style={styles.userEmail}>{user?.email || 'User'}</TitleText>
-            <DescriptionText style={styles.userStatus}>Premium Member</DescriptionText>
           </View>
 
           {/* Menu Options Card */}
-          <View style={styles.menuSection}>
+          <View style={styles.menuCard}>
             <TouchableOpacity style={styles.menuItem} onPress={handlePasswordChange}>
-              <Ionicons name="key-outline" size={24} color={COLORS.secondaryBackground} />
-              <DescriptionText style={styles.menuText}>Change Password</DescriptionText>
-              <Ionicons name="chevron-forward" size={20} color={COLORS.secondaryBackground} />
+              <View style={styles.menuItemLeft}>
+                <Ionicons name="key-outline" size={24} color={COLORS.primaryAction} />
+                <Text style={styles.menuText}>Change Password</Text>
+              </View>
+              <Ionicons name="chevron-forward" size={20} color="#94A3B8" />
             </TouchableOpacity>
+
+            <View style={styles.menuDivider} />
 
             <TouchableOpacity style={styles.menuItem} onPress={handleSupport}>
-              <Ionicons name="help-circle-outline" size={24} color={COLORS.secondaryBackground} />
-              <DescriptionText style={styles.menuText}>Support</DescriptionText>
-              <Ionicons name="chevron-forward" size={20} color={COLORS.secondaryBackground} />
+              <View style={styles.menuItemLeft}>
+                <Ionicons name="help-circle-outline" size={24} color={COLORS.primaryAction} />
+                <Text style={styles.menuText}>Support</Text>
+              </View>
+              <Ionicons name="chevron-forward" size={20} color="#94A3B8" />
             </TouchableOpacity>
+
+            <View style={styles.menuDivider} />
 
             <TouchableOpacity style={styles.menuItem} onPress={handleRateApp}>
-              <Ionicons name="star-outline" size={24} color={COLORS.secondaryBackground} />
-              <DescriptionText style={styles.menuText}>Rate App</DescriptionText>
-              <Ionicons name="chevron-forward" size={20} color={COLORS.secondaryBackground} />
+              <View style={styles.menuItemLeft}>
+                <Ionicons name="star-outline" size={24} color={COLORS.primaryAction} />
+                <Text style={styles.menuText}>Rate App</Text>
+              </View>
+              <Ionicons name="chevron-forward" size={20} color="#94A3B8" />
             </TouchableOpacity>
           </View>
 
-          {/* Logout Button */}
-          <View style={styles.logoutSection}>
-            <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-              <TitleText style={styles.logoutButtonText}>Sign Out</TitleText>
-            </TouchableOpacity>
-          </View>
+          <View style={styles.spacer} />
+
+          {/* Sign Out Button */}
+          <TouchableOpacity style={styles.signOutButton} onPress={handleLogout}>
+            <Text style={styles.signOutButtonText}>Sign Out</Text>
+          </TouchableOpacity>
         </ScrollView>
 
         {/* Password Change Modal */}
@@ -232,7 +240,7 @@ export default function Profile() {
                     setIsPasswordModalVisible(false);
                   }}
                 >
-                  <Ionicons name="close" size={24} color={COLORS.mainText} />
+                  <Ionicons name="close" size={24} color="#64748B" />
                 </TouchableOpacity>
               </View>
 
@@ -244,7 +252,7 @@ export default function Profile() {
                   onChangeText={setCurrentPassword}
                   secureTextEntry
                   placeholder="Enter current password"
-                  placeholderTextColor="rgba(255, 255, 255, 0.6)"
+                  placeholderTextColor="#94A3B8"
                 />
 
                 <DescriptionText style={styles.inputLabel}>New Password</DescriptionText>
@@ -254,7 +262,7 @@ export default function Profile() {
                   onChangeText={setNewPassword}
                   secureTextEntry
                   placeholder="Enter new password"
-                  placeholderTextColor="rgba(255, 255, 255, 0.6)"
+                  placeholderTextColor="#94A3B8"
                 />
 
                 <DescriptionText style={styles.inputLabel}>Confirm New Password</DescriptionText>
@@ -264,7 +272,7 @@ export default function Profile() {
                   onChangeText={setConfirmPassword}
                   secureTextEntry
                   placeholder="Confirm new password"
-                  placeholderTextColor="rgba(255, 255, 255, 0.6)"
+                  placeholderTextColor="#94A3B8"
                 />
               </View>
 
@@ -309,91 +317,104 @@ const styles = StyleSheet.create({
     marginBottom: SPACING.xl,
   },
   title: {
-    fontSize: 32,
+    fontSize: 28,
     fontWeight: '700',
     textAlign: 'center',
-    textShadowColor: 'rgba(0, 0, 0, 0.4)',
-    textShadowOffset: { width: 0, height: 3 },
-    textShadowRadius: 6,
+    color: '#082F49', // Dark blue text to match template
   },
-  userSection: {
-    backgroundColor: 'rgba(255, 255, 255, 0.4)',
+  
+  // User Info Card
+  userInfoCard: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 16,
     padding: SPACING.lg,
-    borderRadius: SPACING.md,
-    alignItems: 'center',
     marginBottom: SPACING.lg,
-    shadowColor: 'rgba(0, 0, 0, 0.1)',
-    shadowOffset: { width: 0, height: 4 },
+    shadowColor: 'rgba(0, 0, 0, 0.05)',
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 1,
-    shadowRadius: 8,
-    elevation: 4,
-  },
-  avatarContainer: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    backgroundColor: 'rgba(255, 255, 255, 0.8)',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: SPACING.md,
+    shadowRadius: 4,
+    elevation: 2,
+    alignItems: 'flex-start',
   },
   userEmail: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: COLORS.mainText,
-    marginBottom: SPACING.xs,
+    fontSize: 16,
+    fontWeight: '500',
+    color: '#475569', // Slate-600 for email text
+    marginBottom: SPACING.sm,
   },
-  userStatus: {
+  premiumBadge: {
+    backgroundColor: '#E0F2FE', // Light blue background
+    borderRadius: 20,
+    paddingHorizontal: 12,
+    paddingVertical: 4,
+  },
+  premiumBadgeText: {
     fontSize: 14,
-    color: 'rgba(255, 255, 255, 0.8)',
+    fontWeight: '600',
+    color: COLORS.primaryAction, // Our primary blue color
   },
-  menuSection: {
-    backgroundColor: 'rgba(255, 255, 255, 0.4)',
-    borderRadius: SPACING.md,
+
+  // Menu Card
+  menuCard: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 16,
     marginBottom: SPACING.lg,
-    overflow: 'hidden',
-    shadowColor: 'rgba(0, 0, 0, 0.1)',
-    shadowOffset: { width: 0, height: 4 },
+    shadowColor: 'rgba(0, 0, 0, 0.05)',
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 1,
-    shadowRadius: 8,
-    elevation: 4,
+    shadowRadius: 4,
+    elevation: 2,
+    overflow: 'hidden',
   },
   menuItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: SPACING.md,
-    paddingHorizontal: SPACING.lg,
-    borderBottomWidth: 1,
-    borderBottomColor: 'rgba(255, 255, 255, 0.2)',
+    justifyContent: 'space-between',
+    paddingVertical: 16,
+    paddingHorizontal: 16,
+  },
+  menuItemLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
   },
   menuText: {
-    flex: 1,
     fontSize: 16,
-    color: COLORS.secondaryBackground,
     fontWeight: '500',
-    marginLeft: SPACING.md,
+    color: '#475569', // Slate-600 for menu text
+    marginLeft: 16,
   },
-  logoutSection: {
+  menuDivider: {
+    height: 1,
+    backgroundColor: '#E2E8F0', // Light gray divider
+    marginHorizontal: 16,
+  },
+
+  // Spacer to push Sign Out button down
+  spacer: {
+    flex: 1,
+    minHeight: 20,
+  },
+
+  // Sign Out Button
+  signOutButton: {
+    backgroundColor: COLORS.primaryAction, // Our primary blue
+    borderRadius: 12,
+    paddingVertical: 14,
     alignItems: 'center',
+    shadowColor: 'rgba(0, 0, 0, 0.1)',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 1,
+    shadowRadius: 4,
+    elevation: 2,
   },
-  logoutButton: {
-    backgroundColor: '#FF6B6B',
-    paddingVertical: SPACING.md,
-    paddingHorizontal: SPACING.xl * 2,
-    borderRadius: 25,
-    shadowColor: '#FF6B6B',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 4,
-  },
-  logoutButtonText: {
-    color: COLORS.mainText,
+  signOutButtonText: {
     fontSize: 16,
     fontWeight: '600',
+    color: '#FFFFFF', // White text on blue button
   },
   
-  // Modal Styles
+  // Modal Styles (keeping existing modal styles with slight adjustments)
   modalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
@@ -402,8 +423,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: SPACING.lg,
   },
   modalContent: {
-    backgroundColor: 'rgba(255, 255, 255, 0.95)',
-    borderRadius: SPACING.lg + 4,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 20,
     padding: SPACING.lg,
     width: '100%',
     maxWidth: 400,
@@ -422,7 +443,7 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: COLORS.mainText,
+    color: '#082F49',
   },
   closeButton: {
     padding: SPACING.xs,
@@ -433,19 +454,19 @@ const styles = StyleSheet.create({
   inputLabel: {
     fontSize: 14,
     fontWeight: '600',
-    color: COLORS.mainText,
+    color: '#475569',
     marginBottom: SPACING.xs,
     marginTop: SPACING.md,
   },
   passwordInput: {
-    backgroundColor: 'rgba(255, 255, 255, 0.8)',
-    borderRadius: SPACING.sm + 4,
+    backgroundColor: '#F8FAFC',
+    borderRadius: 12,
     paddingHorizontal: SPACING.md,
     paddingVertical: SPACING.md,
     fontSize: 16,
-    color: COLORS.mainText,
+    color: '#082F49',
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.3)',
+    borderColor: '#E2E8F0',
   },
   modalButtons: {
     flexDirection: 'row',
@@ -454,13 +475,13 @@ const styles = StyleSheet.create({
   },
   cancelButton: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.1)',
+    backgroundColor: '#F1F5F9',
     paddingVertical: SPACING.md,
-    borderRadius: SPACING.sm + 4,
+    borderRadius: 12,
     alignItems: 'center',
   },
   cancelButtonText: {
-    color: COLORS.mainText,
+    color: '#64748B',
     fontSize: 16,
     fontWeight: '600',
   },
@@ -468,11 +489,11 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: COLORS.primaryAction,
     paddingVertical: SPACING.md,
-    borderRadius: SPACING.sm + 4,
+    borderRadius: 12,
     alignItems: 'center',
   },
   updateButtonText: {
-    color: COLORS.mainText,
+    color: '#FFFFFF',
     fontSize: 16,
     fontWeight: '600',
   },
