@@ -8,8 +8,9 @@ import { LinearGradient as ExpoLinearGradient } from 'expo-linear-gradient';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { Protected } from '../../src/components/Protected';
+import AppBackground from '../../components/AppBackground';
 import { TitleText, DescriptionText } from '../../components/Text';
-import { COLORS, SPACING, TYPOGRAPHY } from '@/constants/theme';
+import { COLORS, SPACING } from '@/constants/theme';
 import { useAuth } from '../../src/context/AuthContext';
 import { ProgressService } from '../../src/services/progressService';
 import { UserProgress } from '../../src/types/achievement';
@@ -224,13 +225,7 @@ export default function Statistics() {
 
   return (
     <Protected>
-      <View style={styles.container}>
-        <ExpoLinearGradient
-          colors={['#E0F2FE', '#BFDBFE', '#A5B4FC']}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-          style={styles.background}
-        />
+      <AppBackground>
         <ScrollView 
           style={styles.scrollView}
           contentContainerStyle={[styles.content, { paddingTop: insets.top + SPACING.xl, paddingBottom: tabBarHeight + 20 }]}
@@ -249,9 +244,9 @@ export default function Statistics() {
 
           {/* Progress Circle Section */}
           <View style={styles.progressCircleSection}>
-            <TitleText>You will be free in: {targetDate}</TitleText>
+            <TitleText style={styles.progressTitle}>You will be free in: {targetDate}</TitleText>
             <CircularProgress percentage={progressPercentage} />
-            <DescriptionText>Procrastination-free</DescriptionText>
+            <DescriptionText style={styles.progressSubtitle}>Procrastination-free</DescriptionText>
           </View>
 
           {/* Three Stats Grid */}
@@ -436,7 +431,7 @@ export default function Statistics() {
             </View>
           </View>
         </ScrollView>
-      </View>
+      </AppBackground>
     </Protected>
   );
 }
@@ -507,13 +502,11 @@ const styles = StyleSheet.create({
     elevation: 6,
   },
   progressTitle: {
-    fontFamily: TYPOGRAPHY.title.fontFamily,
     fontSize: 18,
     fontWeight: '600',
     color: '#0C4A6E',
     marginBottom: 16,
     textAlign: 'center',
-    // No text shadow properties
   },
   progressSubtitle: {
     fontSize: 14,

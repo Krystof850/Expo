@@ -11,8 +11,9 @@ import { updatePassword, EmailAuthProvider, reauthenticateWithCredential } from 
 
 import { useAuth } from '../../src/context/AuthContext';
 import { Protected } from '../../src/components/Protected';
+import AppBackground from '../../components/AppBackground';
 import { TitleText, DescriptionText } from '../../components/Text';
-import { COLORS, SPACING, TYPOGRAPHY } from '@/constants/theme';
+import { COLORS, SPACING } from '@/constants/theme';
 
 export default function Profile() {
   const { user, logout } = useAuth();
@@ -164,16 +165,10 @@ export default function Profile() {
 
   return (
     <Protected>
-      <View style={styles.container}>
-        <LinearGradient
-          colors={['#E0F2FE', '#BFDBFE', '#A5B4FC']}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-          style={styles.background}
-        />
+      <AppBackground>
         <ScrollView 
           style={styles.scrollView}
-          contentContainerStyle={[styles.content, { paddingTop: insets.top + SPACING.xl + 20 }]}
+          contentContainerStyle={[styles.content, { paddingTop: insets.top + SPACING.xl }]}
           showsVerticalScrollIndicator={false}
         >
           {/* Header */}
@@ -182,50 +177,41 @@ export default function Profile() {
           </View>
 
           {/* User Information Card */}
-          <View style={styles.userInfoCard}>
-            <Text style={styles.userEmail}>{user?.email || 'User'}</Text>
-            <View style={styles.premiumBadge}>
-              <Text style={styles.premiumBadgeText}>Premium Member</Text>
+          <View style={styles.userSection}>
+            <View style={styles.avatarContainer}>
+              <Ionicons name="person" size={48} color={COLORS.mainText} />
             </View>
+            <TitleText style={styles.userEmail}>{user?.email || 'User'}</TitleText>
+            <DescriptionText style={styles.userStatus}>Premium Member</DescriptionText>
           </View>
 
           {/* Menu Options Card */}
-          <View style={styles.menuCard}>
+          <View style={styles.menuSection}>
             <TouchableOpacity style={styles.menuItem} onPress={handlePasswordChange}>
-              <View style={styles.menuItemLeft}>
-                <Ionicons name="key-outline" size={24} color={COLORS.primaryAction} />
-                <Text style={styles.menuText}>Change Password</Text>
-              </View>
-              <Ionicons name="chevron-forward" size={20} color="#94A3B8" />
+              <Ionicons name="key-outline" size={24} color={COLORS.secondaryBackground} />
+              <DescriptionText style={styles.menuText}>Change Password</DescriptionText>
+              <Ionicons name="chevron-forward" size={20} color={COLORS.secondaryBackground} />
             </TouchableOpacity>
-
-            <View style={styles.menuDivider} />
 
             <TouchableOpacity style={styles.menuItem} onPress={handleSupport}>
-              <View style={styles.menuItemLeft}>
-                <Ionicons name="help-circle-outline" size={24} color={COLORS.primaryAction} />
-                <Text style={styles.menuText}>Support</Text>
-              </View>
-              <Ionicons name="chevron-forward" size={20} color="#94A3B8" />
+              <Ionicons name="help-circle-outline" size={24} color={COLORS.secondaryBackground} />
+              <DescriptionText style={styles.menuText}>Support</DescriptionText>
+              <Ionicons name="chevron-forward" size={20} color={COLORS.secondaryBackground} />
             </TouchableOpacity>
 
-            <View style={styles.menuDivider} />
-
             <TouchableOpacity style={styles.menuItem} onPress={handleRateApp}>
-              <View style={styles.menuItemLeft}>
-                <Ionicons name="star-outline" size={24} color={COLORS.primaryAction} />
-                <Text style={styles.menuText}>Rate App</Text>
-              </View>
-              <Ionicons name="chevron-forward" size={20} color="#94A3B8" />
+              <Ionicons name="star-outline" size={24} color={COLORS.secondaryBackground} />
+              <DescriptionText style={styles.menuText}>Rate App</DescriptionText>
+              <Ionicons name="chevron-forward" size={20} color={COLORS.secondaryBackground} />
             </TouchableOpacity>
           </View>
 
-          <View style={styles.spacer} />
-
-          {/* Sign Out Button */}
-          <TouchableOpacity style={styles.signOutButton} onPress={handleLogout}>
-            <Text style={styles.signOutButtonText}>Sign Out</Text>
-          </TouchableOpacity>
+          {/* Logout Button */}
+          <View style={styles.logoutSection}>
+            <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+              <TitleText style={styles.logoutButtonText}>Sign Out</TitleText>
+            </TouchableOpacity>
+          </View>
         </ScrollView>
 
         {/* Password Change Modal */}
@@ -246,7 +232,7 @@ export default function Profile() {
                     setIsPasswordModalVisible(false);
                   }}
                 >
-                  <Ionicons name="close" size={24} color="#64748B" />
+                  <Ionicons name="close" size={24} color={COLORS.mainText} />
                 </TouchableOpacity>
               </View>
 
@@ -258,7 +244,7 @@ export default function Profile() {
                   onChangeText={setCurrentPassword}
                   secureTextEntry
                   placeholder="Enter current password"
-                  placeholderTextColor="#94A3B8"
+                  placeholderTextColor="rgba(255, 255, 255, 0.6)"
                 />
 
                 <DescriptionText style={styles.inputLabel}>New Password</DescriptionText>
@@ -268,7 +254,7 @@ export default function Profile() {
                   onChangeText={setNewPassword}
                   secureTextEntry
                   placeholder="Enter new password"
-                  placeholderTextColor="#94A3B8"
+                  placeholderTextColor="rgba(255, 255, 255, 0.6)"
                 />
 
                 <DescriptionText style={styles.inputLabel}>Confirm New Password</DescriptionText>
@@ -278,7 +264,7 @@ export default function Profile() {
                   onChangeText={setConfirmPassword}
                   secureTextEntry
                   placeholder="Confirm new password"
-                  placeholderTextColor="#94A3B8"
+                  placeholderTextColor="rgba(255, 255, 255, 0.6)"
                 />
               </View>
 
@@ -305,22 +291,12 @@ export default function Profile() {
             </View>
           </View>
         </Modal>
-      </View>
+      </AppBackground>
     </Protected>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  background: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-  },
   scrollView: {
     flex: 1,
   },
@@ -333,109 +309,91 @@ const styles = StyleSheet.create({
     marginBottom: SPACING.xl,
   },
   title: {
-    fontSize: 58,
-    fontWeight: '800',
-    color: '#082F49',
-    lineHeight: 58,
-    letterSpacing: -1.5,
-    textShadowColor: 'rgba(0, 0, 0, 0.1)',
-    textShadowOffset: { width: 0, height: 2 },
-    textShadowRadius: 4,
+    fontSize: 32,
+    fontWeight: '700',
     textAlign: 'center',
+    textShadowColor: 'rgba(0, 0, 0, 0.4)',
+    textShadowOffset: { width: 0, height: 3 },
+    textShadowRadius: 6,
   },
-  
-  // User Info Card
-  userInfoCard: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 16,
+  userSection: {
+    backgroundColor: 'rgba(255, 255, 255, 0.4)',
     padding: SPACING.lg,
+    borderRadius: SPACING.md,
+    alignItems: 'center',
     marginBottom: SPACING.lg,
-    shadowColor: 'rgba(0, 0, 0, 0.05)',
-    shadowOffset: { width: 0, height: 2 },
+    shadowColor: 'rgba(0, 0, 0, 0.1)',
+    shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 1,
-    shadowRadius: 4,
-    elevation: 2,
-    alignItems: 'flex-start',
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  avatarContainer: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: SPACING.md,
   },
   userEmail: {
-    fontSize: 16,
-    fontWeight: '500',
-    color: '#475569', // Slate-600 for email text
-    marginBottom: SPACING.sm,
-  },
-  premiumBadge: {
-    backgroundColor: '#E0F2FE', // Light blue background
-    borderRadius: 20,
-    paddingHorizontal: 12,
-    paddingVertical: 4,
-  },
-  premiumBadgeText: {
-    fontSize: 14,
+    fontSize: 18,
     fontWeight: '600',
-    color: COLORS.primaryAction, // Our primary blue color
+    color: COLORS.mainText,
+    marginBottom: SPACING.xs,
   },
-
-  // Menu Card
-  menuCard: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 16,
+  userStatus: {
+    fontSize: 14,
+    color: 'rgba(255, 255, 255, 0.8)',
+  },
+  menuSection: {
+    backgroundColor: 'rgba(255, 255, 255, 0.4)',
+    borderRadius: SPACING.md,
     marginBottom: SPACING.lg,
-    shadowColor: 'rgba(0, 0, 0, 0.05)',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 1,
-    shadowRadius: 4,
-    elevation: 2,
     overflow: 'hidden',
+    shadowColor: 'rgba(0, 0, 0, 0.1)',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 1,
+    shadowRadius: 8,
+    elevation: 4,
   },
   menuItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingVertical: 16,
-    paddingHorizontal: 16,
-  },
-  menuItemLeft: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    flex: 1,
+    paddingVertical: SPACING.md,
+    paddingHorizontal: SPACING.lg,
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(255, 255, 255, 0.2)',
   },
   menuText: {
-    fontSize: 16,
-    fontWeight: '500',
-    color: '#475569', // Slate-600 for menu text
-    marginLeft: 16,
-  },
-  menuDivider: {
-    height: 1,
-    backgroundColor: '#E2E8F0', // Light gray divider
-    marginHorizontal: 16,
-  },
-
-  // Spacer to push Sign Out button down
-  spacer: {
     flex: 1,
-    minHeight: 20,
+    fontSize: 16,
+    color: COLORS.secondaryBackground,
+    fontWeight: '500',
+    marginLeft: SPACING.md,
   },
-
-  // Sign Out Button
-  signOutButton: {
-    backgroundColor: COLORS.primaryAction, // Our primary blue
-    borderRadius: 12,
-    paddingVertical: 14,
+  logoutSection: {
     alignItems: 'center',
-    shadowColor: 'rgba(0, 0, 0, 0.1)',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 1,
-    shadowRadius: 4,
-    elevation: 2,
   },
-  signOutButtonText: {
+  logoutButton: {
+    backgroundColor: '#FF6B6B',
+    paddingVertical: SPACING.md,
+    paddingHorizontal: SPACING.xl * 2,
+    borderRadius: 25,
+    shadowColor: '#FF6B6B',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  logoutButtonText: {
+    color: COLORS.mainText,
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFFFFF', // White text on blue button
   },
   
-  // Modal Styles (keeping existing modal styles with slight adjustments)
+  // Modal Styles
   modalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
@@ -444,8 +402,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: SPACING.lg,
   },
   modalContent: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 20,
+    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+    borderRadius: SPACING.lg + 4,
     padding: SPACING.lg,
     width: '100%',
     maxWidth: 400,
@@ -464,7 +422,7 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#082F49',
+    color: COLORS.mainText,
   },
   closeButton: {
     padding: SPACING.xs,
@@ -475,19 +433,19 @@ const styles = StyleSheet.create({
   inputLabel: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#475569',
+    color: COLORS.mainText,
     marginBottom: SPACING.xs,
     marginTop: SPACING.md,
   },
   passwordInput: {
-    backgroundColor: '#F8FAFC',
-    borderRadius: 12,
+    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+    borderRadius: SPACING.sm + 4,
     paddingHorizontal: SPACING.md,
     paddingVertical: SPACING.md,
     fontSize: 16,
-    color: '#082F49',
+    color: COLORS.mainText,
     borderWidth: 1,
-    borderColor: '#E2E8F0',
+    borderColor: 'rgba(255, 255, 255, 0.3)',
   },
   modalButtons: {
     flexDirection: 'row',
@@ -496,13 +454,13 @@ const styles = StyleSheet.create({
   },
   cancelButton: {
     flex: 1,
-    backgroundColor: '#F1F5F9',
+    backgroundColor: 'rgba(0, 0, 0, 0.1)',
     paddingVertical: SPACING.md,
-    borderRadius: 12,
+    borderRadius: SPACING.sm + 4,
     alignItems: 'center',
   },
   cancelButtonText: {
-    color: '#64748B',
+    color: COLORS.mainText,
     fontSize: 16,
     fontWeight: '600',
   },
@@ -510,11 +468,11 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: COLORS.primaryAction,
     paddingVertical: SPACING.md,
-    borderRadius: 12,
+    borderRadius: SPACING.sm + 4,
     alignItems: 'center',
   },
   updateButtonText: {
-    color: '#FFFFFF',
+    color: COLORS.mainText,
     fontSize: 16,
     fontWeight: '600',
   },
