@@ -6,10 +6,17 @@ import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { Formik } from "formik";
 import * as Yup from "yup";
-import {
-  GoogleSigninButton,
-  GoogleSignin,
-} from '@react-native-google-signin/google-signin';
+import { Platform } from 'react-native';
+
+// Google Sign-In imports - only on native platforms
+let GoogleSigninButton: any;
+let GoogleSignin: any;
+
+if (Platform.OS !== 'web') {
+  const googleSigninModule = require('@react-native-google-signin/google-signin');
+  GoogleSigninButton = googleSigninModule.GoogleSigninButton;
+  GoogleSignin = googleSigninModule.GoogleSignin;
+}
 import { signUpWithEmail, signInWithGoogle, signInWithApple, isAppleSignInAvailable } from "../../src/services/auth";
 import { useAuth } from "../../src/context/AuthContext";
 import { FirebaseConfigBanner } from "../../src/components/FirebaseConfigBanner";

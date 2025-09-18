@@ -7,13 +7,22 @@ import {
   GoogleAuthProvider,
   User,
 } from "firebase/auth";
-import {
-  GoogleSignin,
-  statusCodes,
-  isErrorWithCode,
-  isSuccessResponse,
-} from '@react-native-google-signin/google-signin';
 import Constants from 'expo-constants';
+import { Platform } from 'react-native';
+
+// Google Sign-In imports - only on native platforms
+let GoogleSignin: any;
+let statusCodes: any;
+let isErrorWithCode: any;
+let isSuccessResponse: any;
+
+if (Platform.OS !== 'web') {
+  const googleSigninModule = require('@react-native-google-signin/google-signin');
+  GoogleSignin = googleSigninModule.GoogleSignin;
+  statusCodes = googleSigninModule.statusCodes;
+  isErrorWithCode = googleSigninModule.isErrorWithCode;
+  isSuccessResponse = googleSigninModule.isSuccessResponse;
+}
 
 // Re-export Apple Sign In functionality
 export { signInWithApple, isAppleSignInAvailable, isAppleUser } from './appleAuth';
@@ -62,6 +71,17 @@ let isGoogleConfigured = false;
 function configureGoogleSignIn() {
   if (isGoogleConfigured) return;
   
+  // Only configure on native platforms
+  if (Platform.OS === 'web') {
+    console.log('[Auth] Google Sign-In not available on web platform');
+    return;
+  }
+  
+  if (!GoogleSignin) {
+    console.warn('[Auth] Google Sign-In module not available');
+    return;
+  }
+  
   try {
     const extra = (Constants.expoConfig?.extra || {}) as Record<string, string>;
     const webClientId = extra.GOOGLE_CLIENT_ID || process.env.GOOGLE_CLIENT_ID;
@@ -94,6 +114,15 @@ function configureGoogleSignIn() {
 configureGoogleSignIn();
 
 export async function signInWithGoogle(): Promise<User> {
+  // Platform check
+  if (Platform.OS === 'web') {
+    throw new Error('Google Sign-In není dostupný na web platformě. Použijte email/password přihlášení.');
+  }
+  
+  if (!GoogleSignin || !isSuccessResponse) {
+    throw new Error('Google Sign-In není dostupný na této platformě');
+  }
+  
   try {
     console.log('[Auth] Starting Google Sign In with react-native-google-signin...');
     

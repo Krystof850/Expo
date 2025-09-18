@@ -2,6 +2,9 @@ import { initializeApp, getApps, getApp } from "firebase/app";
 import {
   getAuth,
   Auth,
+  initializeAuth,
+  // @ts-ignore - TypeScript definitions missing but function exists in runtime
+  getReactNativePersistence,
 } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
@@ -57,12 +60,20 @@ if (
 
 const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
 
-// Firebase Auth - Expo automatically handles persistence with AsyncStorage
+// Firebase Auth - Use proper persistence configuration
 let auth: Auth;
 try {
-  // For Expo/React Native, getAuth automatically uses AsyncStorage for persistence
-  auth = getAuth(app);
-  console.log('[Firebase] Auth initialized successfully with automatic persistence');
+  if (isWeb) {
+    // On web, use standard getAuth
+    auth = getAuth(app);
+    console.log('[Firebase] Auth initialized for web platform');
+  } else {
+    // On React Native, use initializeAuth with AsyncStorage persistence
+    auth = initializeAuth(app, {
+      persistence: getReactNativePersistence(AsyncStorage)
+    });
+    console.log('[Firebase] Auth initialized with AsyncStorage persistence for React Native');
+  }
 } catch (e) {
   // Handle double initialization during HMR
   auth = getAuth();
