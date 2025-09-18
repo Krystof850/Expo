@@ -76,17 +76,24 @@ export default function Statistics() {
     }
   }, [user]);
 
-  // Load temptation statistics
+  // Load temptation statistics from the existing progress listener
   useEffect(() => {
-    if (!user?.uid) return;
-
-    const loadTemptationStats = async () => {
-      const stats = await TemptationService.getUserTemptationStats(user.uid);
-      setTemptationData(stats);
-    };
-
-    loadTemptationStats();
-  }, [user?.uid]);
+    if (userProgress) {
+      // Extract temptation data from userProgress
+      const temptationStats: TemptationData = {
+        userId: user?.uid || '',
+        temptationsOvercome: userProgress.temptationsOvercome || 0,
+        temptationsByTimeOfDay: userProgress.temptationsByTimeOfDay || {
+          morning: 0,
+          afternoon: 0,
+          evening: 0,
+          night: 0,
+        },
+        lastUpdated: userProgress.lastTemptationUpdate || Date.now()
+      };
+      setTemptationData(temptationStats);
+    }
+  }, [userProgress, user?.uid]);
 
   // Calculate progress percentage every second
   useEffect(() => {

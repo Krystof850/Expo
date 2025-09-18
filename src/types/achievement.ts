@@ -15,4 +15,13 @@ export interface UserProgress {
   currentOrbLevel: number;
   totalResets: number;
   lastUpdated: number;
+  // Temptation tracking fields
+  temptationsOvercome?: number;
+  temptationsByTimeOfDay?: {
+    morning: number;
+    afternoon: number;
+    evening: number;
+    night: number;
+  };
+  lastTemptationUpdate?: number;
 }

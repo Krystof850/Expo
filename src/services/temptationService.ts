@@ -1,4 +1,4 @@
-import { doc, getDoc, setDoc, updateDoc, increment, serverTimestamp } from 'firebase/firestore';
+import { doc, getDoc, setDoc, updateDoc, increment } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 
 export interface TemptationData {
@@ -32,18 +32,27 @@ export class TemptationService {
         timeOfDay = 'night';
       }
 
-      const userTemptationRef = doc(db, 'temptations', userId);
-      const userTemptationDoc = await getDoc(userTemptationRef);
+      // Use existing progress collection with temptation data
+      const userProgressRef = doc(db, 'progress', userId);
+      const userProgressDoc = await getDoc(userProgressRef);
 
-      if (userTemptationDoc.exists()) {
+      if (userProgressDoc.exists()) {
+        const existingData = userProgressDoc.data();
+        const currentTemptations = existingData.temptationsByTimeOfDay || {
+          morning: 0,
+          afternoon: 0,
+          evening: 0,
+          night: 0,
+        };
+
         // Update existing document
-        await updateDoc(userTemptationRef, {
-          [`temptationsByTimeOfDay.${timeOfDay}`]: increment(1),
-          lastUpdated: Date.now()
+        await updateDoc(userProgressRef, {
+          [`temptationsByTimeOfDay.${timeOfDay}`]: (currentTemptations[timeOfDay] || 0) + 1,
+          lastTemptationUpdate: Date.now()
         });
       } else {
-        // Create new document
-        const initialData: TemptationData = {
+        // Create new document with temptation data
+        const initialData = {
           userId,
           temptationsOvercome: 0,
           temptationsByTimeOfDay: {
@@ -52,9 +61,16 @@ export class TemptationService {
             evening: timeOfDay === 'evening' ? 1 : 0,
             night: timeOfDay === 'night' ? 1 : 0,
           },
+          lastTemptationUpdate: Date.now(),
+          // Add default progress fields to avoid conflicts
+          startTime: Date.now(),
+          currentStreak: 0,
+          bestStreak: 0,
+          totalResets: 0,
+          currentOrbLevel: 1,
           lastUpdated: Date.now()
         };
-        await setDoc(userTemptationRef, initialData);
+        await setDoc(userProgressRef, initialData);
       }
 
       console.log(`📊 Temptation tracked: ${timeOfDay} (hour: ${hour})`);
@@ -66,18 +82,22 @@ export class TemptationService {
   // Track when user successfully completes a task
   static async trackTemptationOvercome(userId: string): Promise<void> {
     try {
-      const userTemptationRef = doc(db, 'temptations', userId);
-      const userTemptationDoc = await getDoc(userTemptationRef);
+      // Use existing progress collection
+      const userProgressRef = doc(db, 'progress', userId);
+      const userProgressDoc = await getDoc(userProgressRef);
 
-      if (userTemptationDoc.exists()) {
+      if (userProgressDoc.exists()) {
+        const existingData = userProgressDoc.data();
+        const currentOvercome = existingData.temptationsOvercome || 0;
+
         // Update existing document
-        await updateDoc(userTemptationRef, {
-          temptationsOvercome: increment(1),
-          lastUpdated: Date.now()
+        await updateDoc(userProgressRef, {
+          temptationsOvercome: currentOvercome + 1,
+          lastTemptationUpdate: Date.now()
         });
       } else {
         // Create new document with first successful completion
-        const initialData: TemptationData = {
+        const initialData = {
           userId,
           temptationsOvercome: 1,
           temptationsByTimeOfDay: {
@@ -86,9 +106,16 @@ export class TemptationService {
             evening: 0,
             night: 0,
           },
+          lastTemptationUpdate: Date.now(),
+          // Add default progress fields
+          startTime: Date.now(),
+          currentStreak: 0,
+          bestStreak: 0,
+          totalResets: 0,
+          currentOrbLevel: 1,
           lastUpdated: Date.now()
         };
-        await setDoc(userTemptationRef, initialData);
+        await setDoc(userProgressRef, initialData);
       }
 
       console.log('🎉 Temptation overcome tracked successfully');
@@ -97,14 +124,25 @@ export class TemptationService {
     }
   }
 
-  // Get user's temptation statistics
+  // Get user's temptation statistics from progress collection
   static async getUserTemptationStats(userId: string): Promise<TemptationData | null> {
     try {
-      const userTemptationRef = doc(db, 'temptations', userId);
-      const userTemptationDoc = await getDoc(userTemptationRef);
+      const userProgressRef = doc(db, 'progress', userId);
+      const userProgressDoc = await getDoc(userProgressRef);
 
-      if (userTemptationDoc.exists()) {
-        return userTemptationDoc.data() as TemptationData;
+      if (userProgressDoc.exists()) {
+        const data = userProgressDoc.data();
+        return {
+          userId,
+          temptationsOvercome: data.temptationsOvercome || 0,
+          temptationsByTimeOfDay: data.temptationsByTimeOfDay || {
+            morning: 0,
+            afternoon: 0,
+            evening: 0,
+            night: 0,
+          },
+          lastUpdated: data.lastTemptationUpdate || Date.now()
+        };
       } else {
         // Return default empty stats
         return {
@@ -121,46 +159,17 @@ export class TemptationService {
       }
     } catch (error) {
       console.error('❌ Error fetching temptation stats:', error);
-      return null;
-    }
-  }
-
-  // Subscribe to real-time updates for temptation statistics
-  static subscribeToTemptationStats(
-    userId: string, 
-    callback: (stats: TemptationData | null) => void
-  ): (() => void) | null {
-    try {
-      const userTemptationRef = doc(db, 'temptations', userId);
-      
-      // Import onSnapshot dynamically to avoid import issues
-      import('firebase/firestore').then(({ onSnapshot }) => {
-        const unsubscribe = onSnapshot(userTemptationRef, (doc) => {
-          if (doc.exists()) {
-            callback(doc.data() as TemptationData);
-          } else {
-            // Return default empty stats
-            callback({
-              userId,
-              temptationsOvercome: 0,
-              temptationsByTimeOfDay: {
-                morning: 0,
-                afternoon: 0,
-                evening: 0,
-                night: 0,
-              },
-              lastUpdated: Date.now()
-            });
-          }
-        });
-        
-        return unsubscribe;
-      });
-      
-      return () => {}; // Placeholder return
-    } catch (error) {
-      console.error('❌ Error setting up temptation stats subscription:', error);
-      return null;
+      return {
+        userId,
+        temptationsOvercome: 0,
+        temptationsByTimeOfDay: {
+          morning: 0,
+          afternoon: 0,
+          evening: 0,
+          night: 0,
+        },
+        lastUpdated: Date.now()
+      };
     }
   }
 }
