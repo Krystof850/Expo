@@ -170,59 +170,65 @@ export default function Statistics() {
             </View>
           </View>
 
-          {/* Achievements Section */}
+          {/* Orbs Section */}
           <View style={styles.section}>
             <View style={styles.achievementsHeader}>
-              <Text style={styles.sectionTitle}>Achievements</Text>
-              <Text style={styles.achievementsCount}>5 / 15 Unlocked</Text>
+              <Text style={styles.sectionTitle}>Orbs</Text>
+              <Text style={styles.achievementsCount}>Level 1</Text>
             </View>
-            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.achievementsList}>
+            <View style={styles.orbsContainer}>
               {[
                 { 
-                  name: '1-Day Streak', 
+                  name: 'Fire Orb', 
                   unlocked: true,
-                  image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDQZNl8lNg7LqO81NzRM9HeA74ZOY0ny8Jfm1STbcz5gHTOYZCe2fguZ4AI_a0gaPwgzMtn0kxvw4F4VYxRuyCA7T3q7AZhC-A-WszlRAPxnKjvRjiBLJRe_fvuT6g13RPgciKb43rDLZXrxIemam0BRnGIM9YZivVNYQKwA233k_9Rd8AVd3__rnBJh5ez--f2JFsmbmz6yDAi1ylLWZR1WBUHhLIs587_psSFG1zr8fw7TnhNsHj6eb7c_DUY58ac3v0kG5Fu53Bp'
+                  icon: 'flame',
+                  color: '#EF4444'
                 },
                 { 
-                  name: '7-Day Streak', 
+                  name: 'Water Orb', 
                   unlocked: true,
-                  image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC1HOPcitfeC2j827JlDFK3hxjAJCxYOoF4au3XtRq6Fsqh13RYBtsBpOyulYbJTpIke-NaXOHQIaX2jyjg8MHHjjpliHuva6fatfq_Ci2Oc955MUxnHwhJubQKTbe1FM8IJDFqGJeZy2nB7SGQwF1xmsVjDtRaCpa7PuXHV73jeVsx5HViE6Inrh2iwoPUezFpyWJG1GKOhP-IbdshCsgcYJLt3V-jfpdpIJSLYqn--oyiqknhNlkdifoIaPqwmKJ3Zpw5tWwaHE-a'
+                  icon: 'water',
+                  color: '#0EA5E9'
                 },
                 { 
-                  name: 'First Win', 
+                  name: 'Earth Orb', 
                   unlocked: true,
-                  image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCRtVWuarCg0RG0Ho_aaW4TleaYLkAyKY7oNS4nLJiMX8beZY1UcAyUo4YlbfrIM1cB6cJAGLWYQeTrfWC_BS5QLDeVMO2Tv6xJ-yB2p97OkOvj4NmK8Zq4Scg-vuuvq_10RXrUuDRMJho3GUTVvasAm2fm6TtZgtP7Qeizhprh1hTyLLjTcQXVpoC2tXdYJLoUvo6TvqZFFaMPB3PiyVDZIIYlUOQt4-7iMJot_j-rvPIg-1RVyS9R1yqV-yTgTC3yuC78Q9MJ_js3'
+                  icon: 'leaf',
+                  color: '#10B981'
                 },
                 { 
-                  name: 'Perfect Day', 
-                  unlocked: true,
-                  image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAt-bviLY8dTl8dr3hpklxMG6yDTa7N8o9MwYhrxBdFJreRkIlFfOlSS2wZY4CbF3_XY_sERXZp4m8C4nPU6xXlYtHFSO5FmOSKMX5y-F4AccyxtXQMBzAGM4RHVHhl1IaC6vWhUFyoX31NQLOsoRroPLcGFciQ_b3Yz8sGmnGe5DVSzfUJQSE4T3dwALjfdCiU1tsfc-oHGjfPDaFQwaiXKm8WIuH4jIkd3koCE_Oh15SX_L4Wtyz3Ac8YiMiDNaSI_5uNtiYaakfr'
-                },
-                { 
-                  name: 'Master', 
-                  unlocked: true,
-                  image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDeW1spfj-O8T1gCknWMFRq86pGiENl-6ecJbjrbPmB13esAstMe7XnDr_myrDNsbnBaugveAUqVdgHx6loA2AFKNWnwsVuyRTDdjU6sNRoB8J_KWBpkA9ZGLsdcLhAmrbKnmTTBMOKIxPkLvtw_y9u3Z3KbLF3DuaVEfknRRlEnTJMP8huU5tQW3UnhqYrrmKAGeV7RMUHJUL8CiXANc14Ii0ZCIUlw87QsD1rC4SJUOkkZlqEPQ8uteP2D1xeBlRVOI5m5mdgriJw'
-                },
-                { 
-                  name: 'Locked', 
+                  name: 'Air Orb', 
                   unlocked: false,
-                  image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDj6q4fmbveVRg2qEsQN-p0vxk-2AxYq1tM9BZYVq0gl_dtpCXUIf2ui1A6XrhqKdSWJyEYxD1alWj8dG33Syg3xFLgV-j6tqZlSL2OhXEOJdSX1ilwPS7CgObsEstI1InQHAPScIWjxvrl_zs-5_DiMljuNnf6OGnTJeD5M64EXXhBJijorHXLndVZMk6ENGVwzD3EEkQOyoOLwBiXbK1jvZ6beNzNqhrPexeLduygI-eRou6-9sGXSUh6ECukXSPoYFPSZwy4qDbL'
+                  icon: 'cloudy',
+                  color: '#8B5CF6'
                 },
-              ].map((achievement, index) => (
-                <View key={index} style={[styles.achievementItem, !achievement.unlocked && styles.achievementLocked]}>
-                  <View style={styles.achievementBadge}>
-                    <Image 
-                      source={{ uri: achievement.image }}
-                      style={styles.badgeImage}
-                      resizeMode="contain"
+                { 
+                  name: 'Lightning Orb', 
+                  unlocked: false,
+                  icon: 'flash',
+                  color: '#F59E0B'
+                },
+                { 
+                  name: 'Ice Orb', 
+                  unlocked: false,
+                  icon: 'snow',
+                  color: '#06B6D4'
+                },
+              ].map((orb, index) => (
+                <View key={index} style={[styles.orbItem, !orb.unlocked && styles.orbLocked]}>
+                  <View style={[styles.orbIcon, { backgroundColor: orb.unlocked ? orb.color : '#F1F5F9' }]}>
+                    <Ionicons 
+                      name={orb.icon as any} 
+                      size={28} 
+                      color={orb.unlocked ? '#FFFFFF' : '#94A3B8'} 
                     />
                   </View>
-                  <Text style={[styles.achievementName, !achievement.unlocked && styles.achievementNameLocked]}>
-                    {achievement.name}
+                  <Text style={[styles.orbName, !orb.unlocked && styles.orbNameLocked]}>
+                    {orb.name}
                   </Text>
                 </View>
               ))}
-            </ScrollView>
+            </View>
           </View>
 
           {/* Focus Score Chart */}
@@ -460,7 +466,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   
-  // Achievements Section
+  // Orbs Section
   achievementsHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -472,38 +478,40 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: '#082F49',
   },
-  achievementsList: {
+  orbsContainer: {
     flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    gap: 8,
   },
-  achievementItem: {
+  orbItem: {
     alignItems: 'center',
-    marginRight: 12,
-    width: 64,
+    width: '30%',
+    marginBottom: 12,
   },
-  achievementLocked: {
-    opacity: 0.4,
+  orbLocked: {
+    opacity: 0.5,
   },
-  achievementBadge: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
+  orbIcon: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 4,
-    overflow: 'hidden',
+    marginBottom: 6,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
   },
-  badgeImage: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-  },
-  achievementName: {
+  orbName: {
     fontSize: 12,
-    fontWeight: '500',
+    fontWeight: '600',
     color: '#082F49',
     textAlign: 'center',
   },
-  achievementNameLocked: {
+  orbNameLocked: {
     color: '#94A3B8',
   },
 });
