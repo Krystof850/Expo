@@ -92,17 +92,18 @@ export default function SignIn() {
                 </HapticButton>
               )}
 
-              {/* Google Sign In Button - Native only */}
-              {Platform.OS !== 'web' && GoogleSigninButton && (
-                <View style={[styles.signInButton, googleLoading && styles.disabledButton]}>
-                  <GoogleSigninButton
-                    style={styles.googleButton}
-                    size={GoogleSigninButton.Size.Wide}
-                    color={GoogleSigninButton.Color.Light}
-                    onPress={handleGoogleSignIn}
-                    disabled={googleLoading}
-                  />
-                </View>
+              {/* Google Sign In Button */}
+              {Platform.OS !== 'web' && (
+                <HapticButton 
+                  style={[styles.signInButton, googleLoading && styles.disabledButton]}
+                  onPress={handleGoogleSignIn}
+                  disabled={googleLoading}
+                >
+                  <Ionicons name="logo-google" size={20} color="#4285F4" style={styles.buttonIcon} />
+                  <TitleText animated={false} style={styles.buttonText}>
+                    {googleLoading ? "Signing in..." : "Continue with Google"}
+                  </TitleText>
+                </HapticButton>
               )}
 
               {/* Email Sign In Button */}

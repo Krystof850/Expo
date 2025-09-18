@@ -140,7 +140,13 @@ export async function signInWithGoogle(): Promise<User> {
     // Try to configure Google Sign-In
     const isConfigured = configureGoogleSignIn();
     if (!isConfigured || !GoogleSignin || !isSuccessResponse) {
-      throw new Error('Google Sign-In není dostupný v tomto buildu aplikace. Možná potřebujete nový development build.');
+      // Check if we're in Expo Go
+      const isExpoGo = Constants.appOwnership === 'expo';
+      if (isExpoGo) {
+        throw new Error('Google Sign-In není podporován v Expo Go aplikaci. Použijte email přihlášení nebo si stáhněte development build.');
+      } else {
+        throw new Error('Google Sign-In není dostupný v tomto buildu aplikace. Potřebujete nový development build s Google Sign-In modulem.');
+      }
     }
 
     // Check if device has Google Play Services (Android only)

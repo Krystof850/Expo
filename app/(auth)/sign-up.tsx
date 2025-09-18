@@ -150,17 +150,18 @@ export default function SignUp() {
               </HapticButton>
             )}
 
-            {/* Google Sign In Button - Native only */}
-            {Platform.OS !== 'web' && GoogleSigninButton && (
-              <View style={[styles.googleButton, googleLoading && styles.disabledButton]}>
-                <GoogleSigninButton
-                  style={styles.nativeGoogleButton}
-                  size={GoogleSigninButton.Size.Wide}
-                  color={GoogleSigninButton.Color.Light}
-                  onPress={handleGoogleSignIn}
-                  disabled={googleLoading || submitting}
-                />
-              </View>
+            {/* Google Sign In Button */}
+            {Platform.OS !== 'web' && (
+              <HapticButton 
+                style={[styles.googleButton, googleLoading && styles.disabledButton]}
+                onPress={handleGoogleSignIn}
+                disabled={googleLoading || submitting}
+              >
+                <Ionicons name="logo-google" size={20} color="#4285F4" style={{ marginRight: SPACING.sm }} />
+                <DescriptionText animated={false} style={[styles.googleButtonText, { color: '#000000' }]}>
+                  {googleLoading ? "Signing up with Google..." : "Sign up with Google"}
+                </DescriptionText>
+              </HapticButton>
             )}
 
             {/* Sign In Section */}
