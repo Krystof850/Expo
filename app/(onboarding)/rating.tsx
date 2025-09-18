@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   View,
   Text,
@@ -17,6 +17,7 @@ import AppBackground from '../../components/AppBackground';
 import { COLORS, SPACING } from '@/constants/theme';
 import { Image } from 'expo-image';
 import * as Haptics from 'expo-haptics';
+import * as StoreReview from 'expo-store-review';
 
 // Profile images - declared first to avoid TDZ errors
 const profileImages = [
@@ -74,6 +75,45 @@ export default function RatingScreen() {
   const insets = useSafeAreaInsets();
   
   // Note: require() assets in React Native load instantly, no preloading needed
+  
+  // Automatically request review when page loads
+  useEffect(() => {
+    const requestReview = async () => {
+      try {
+        console.log('⭐ Onboarding Rating: Starting automatic review request...');
+        
+        // Check if store review is available on this device
+        const isAvailable = await StoreReview.isAvailableAsync();
+        console.log('⭐ Onboarding Rating: isAvailable =', isAvailable);
+        
+        if (!isAvailable) {
+          console.log('⭐ Onboarding Rating: Not available (likely Expo Go/development mode)');
+          return;
+        }
+        
+        // Check if platform can use requestReview()
+        const hasAction = await StoreReview.hasAction();
+        console.log('⭐ Onboarding Rating: hasAction =', hasAction);
+        
+        if (hasAction) {
+          console.log('⭐ Onboarding Rating: Requesting native review dialog...');
+          await StoreReview.requestReview();
+          console.log('⭐ Onboarding Rating: Review request completed');
+        } else {
+          console.log('⭐ Onboarding Rating: No native action available');
+        }
+      } catch (error) {
+        console.error('⭐ Onboarding Rating: Error occurred:', error);
+      }
+    };
+    
+    // Add a small delay to let the page fully load first
+    const timer = setTimeout(() => {
+      requestReview();
+    }, 1000);
+    
+    return () => clearTimeout(timer);
+  }, []);
 
   const handleContinue = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
