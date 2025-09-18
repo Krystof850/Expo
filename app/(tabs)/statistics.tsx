@@ -15,6 +15,9 @@ const { width } = Dimensions.get('window');
 
 export default function Statistics() {
   const insets = useSafeAreaInsets();
+  
+  // Tab bar height calculation - modern tab bar is about 80px + safe area bottom  
+  const tabBarHeight = 80 + insets.bottom;
 
   // Component for circular progress indicator
   const CircularProgress = ({ percentage }: { percentage: number }) => {
@@ -77,7 +80,7 @@ export default function Statistics() {
         
         <ScrollView 
           style={styles.scrollView}
-          contentContainerStyle={styles.content}
+          contentContainerStyle={[styles.content, { paddingBottom: tabBarHeight + 20 }]}
           showsVerticalScrollIndicator={false}
         >
           {/* Header */}
@@ -286,7 +289,6 @@ const styles = StyleSheet.create({
   },
   content: {
     paddingHorizontal: 24,
-    paddingBottom: 80,
     paddingTop: 24,
   },
   header: {
