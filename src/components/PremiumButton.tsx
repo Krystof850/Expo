@@ -24,7 +24,7 @@ const SuperwallEnabledButton: React.FC<PremiumButtonProps> = ({ style, textStyle
     
     try {
       await registerPlacement({
-        placement: 'zario-template-3a85-2025-09-10',
+        placement: 'campaign_trigger',
         feature() {
           console.log('Premium feature unlocked!');
         }

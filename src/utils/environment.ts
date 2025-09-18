@@ -1,4 +1,5 @@
 import Constants, { ExecutionEnvironment } from 'expo-constants';
+import { Platform } from 'react-native';
 
 export interface AppEnvironment {
   isExpoGo: boolean;
@@ -19,6 +20,11 @@ export const detectAppEnvironment = (): AppEnvironment => {
 };
 
 export const isSuperwallSupported = (): boolean => {
+  // Superwall nefunguje na webu ani v Expo Go
+  if (Platform.OS === 'web') {
+    return false;
+  }
+  
   const { isExpoGo } = detectAppEnvironment();
-  return !isExpoGo; // Superwall funguje jen mimo Expo Go
+  return !isExpoGo; // Superwall funguje jen na native platformách mimo Expo Go
 };
