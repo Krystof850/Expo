@@ -10,19 +10,31 @@ import {
 import Constants from 'expo-constants';
 import { Platform } from 'react-native';
 
-// Google Sign-In imports - only on native platforms
-let GoogleSignin: any;
-let statusCodes: any;
-let isErrorWithCode: any;
-let isSuccessResponse: any;
+// Google Sign-In imports - lazy loading with error handling
+let GoogleSignin: any = null;
+let statusCodes: any = null;
+let isErrorWithCode: any = null;
+let isSuccessResponse: any = null;
+let GoogleSigninButton: any = null;
 
-if (Platform.OS !== 'web') {
-  const googleSigninModule = require('@react-native-google-signin/google-signin');
-  GoogleSignin = googleSigninModule.GoogleSignin;
-  statusCodes = googleSigninModule.statusCodes;
-  isErrorWithCode = googleSigninModule.isErrorWithCode;
-  isSuccessResponse = googleSigninModule.isSuccessResponse;
-}
+// Lazy load Google Sign-In module with error handling
+const loadGoogleSignIn = () => {
+  if (Platform.OS === 'web' || GoogleSignin) return GoogleSignin !== null;
+  
+  try {
+    const googleSigninModule = require('@react-native-google-signin/google-signin');
+    GoogleSignin = googleSigninModule.GoogleSignin;
+    statusCodes = googleSigninModule.statusCodes;
+    isErrorWithCode = googleSigninModule.isErrorWithCode;
+    isSuccessResponse = googleSigninModule.isSuccessResponse;
+    GoogleSigninButton = googleSigninModule.GoogleSigninButton;
+    console.log('[Auth] ✅ Google Sign-In module loaded successfully');
+    return true;
+  } catch (error: any) {
+    console.log('[Auth] ⚠️ Google Sign-In module not available in this build:', error.message);
+    return false;
+  }
+};
 
 // Re-export Apple Sign In functionality
 export { signInWithApple, isAppleSignInAvailable, isAppleUser } from './appleAuth';
@@ -69,17 +81,19 @@ export async function sendResetEmail(email: string): Promise<void> {
 let isGoogleConfigured = false;
 
 function configureGoogleSignIn() {
-  if (isGoogleConfigured) return;
+  if (isGoogleConfigured) return true;
   
   // Only configure on native platforms
   if (Platform.OS === 'web') {
     console.log('[Auth] Google Sign-In not available on web platform');
-    return;
+    return false;
   }
   
-  if (!GoogleSignin) {
-    console.warn('[Auth] Google Sign-In module not available');
-    return;
+  // Try to load Google Sign-In module first
+  const isLoaded = loadGoogleSignIn();
+  if (!isLoaded || !GoogleSignin) {
+    console.warn('[Auth] ⚠️ Google Sign-In module not available - app will work without it');
+    return false;
   }
   
   try {
@@ -104,14 +118,15 @@ function configureGoogleSignIn() {
     });
     
     isGoogleConfigured = true;
-    console.log('[Auth] Google Sign-In configured successfully');
+    console.log('[Auth] ✅ Google Sign-In configured successfully');
+    return true;
   } catch (error) {
-    console.error('[Auth] Failed to configure Google Sign-In:', error);
+    console.error('[Auth] ❌ Failed to configure Google Sign-In:', error);
+    return false;
   }
 }
 
-// Configure Google Sign-In immediately
-configureGoogleSignIn();
+// Note: Google Sign-In will be configured when first needed
 
 export async function signInWithGoogle(): Promise<User> {
   // Platform check
@@ -119,18 +134,13 @@ export async function signInWithGoogle(): Promise<User> {
     throw new Error('Google Sign-In není dostupný na web platformě. Použijte email/password přihlášení.');
   }
   
-  if (!GoogleSignin || !isSuccessResponse) {
-    throw new Error('Google Sign-In není dostupný na této platformě');
-  }
-  
   try {
     console.log('[Auth] Starting Google Sign In with react-native-google-signin...');
     
-    // Ensure Google Sign-In is configured
-    configureGoogleSignIn();
-    
-    if (!isGoogleConfigured) {
-      throw new Error("Google Client ID není nakonfigurovaný. Přidejte GOOGLE_CLIENT_ID do app.config.ts");
+    // Try to configure Google Sign-In
+    const isConfigured = configureGoogleSignIn();
+    if (!isConfigured || !GoogleSignin || !isSuccessResponse) {
+      throw new Error('Google Sign-In není dostupný v tomto buildu aplikace. Možná potřebujete nový development build.');
     }
 
     // Check if device has Google Play Services (Android only)
@@ -177,7 +187,7 @@ export async function signInWithGoogle(): Promise<User> {
   } catch (error: any) {
     console.error('[Auth] Google Sign In failed:', error);
     
-    if (isErrorWithCode(error)) {
+    if (isErrorWithCode && isErrorWithCode(error)) {
       switch (error.code) {
         case statusCodes.IN_PROGRESS:
           throw new Error('Google přihlášení již probíhá');
@@ -217,3 +227,13 @@ function mapAuthError(e: any): string {
   
   return e?.message || "Akce selhala. Zkus to znovu.";
 }
+
+// Export Google Sign-In button component and availability check
+export { GoogleSigninButton };
+
+export const isGoogleSignInAvailable = (): boolean => {
+  if (Platform.OS === 'web') return false;
+  
+  const isLoaded = loadGoogleSignIn();
+  return isLoaded && GoogleSignin !== null;
+};
