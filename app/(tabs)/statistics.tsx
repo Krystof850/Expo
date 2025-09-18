@@ -430,42 +430,12 @@ export default function Statistics() {
           {/* Focus Score Chart */}
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Focus Score - Last 7 days</Text>
-            <View style={styles.chartContainer}>
-              <LineChart
-                data={{
-                  labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-                  datasets: [{
-                    data: [65, 70, 80, 75, 85, 90, 88],
-                    color: (opacity = 1) => `rgba(16, 185, 129, ${opacity})`,
-                    strokeWidth: 3
-                  }]
-                }}
-                width={width - 80}
-                height={180}
-                yAxisLabel=""
-                yAxisSuffix=""
-                chartConfig={{
-                  backgroundColor: 'transparent',
-                  backgroundGradientFrom: 'rgba(255, 255, 255, 0)',
-                  backgroundGradientTo: 'rgba(255, 255, 255, 0)',
-                  decimalPlaces: 0,
-                  color: (opacity = 1) => `rgba(16, 185, 129, ${opacity})`,
-                  labelColor: (opacity = 1) => `rgba(8, 47, 73, ${opacity})`,
-                  style: {
-                    borderRadius: 16
-                  },
-                  propsForDots: {
-                    r: "4",
-                    strokeWidth: "2",
-                    stroke: "#10B981"
-                  }
-                }}
-                bezier
-                style={{
-                  marginVertical: 8,
-                  borderRadius: 16,
-                }}
-              />
+            <View style={styles.comingSoonContainer}>
+              <Ionicons name="time-outline" size={48} color="#9CA3AF" />
+              <Text style={styles.comingSoonTitle}>Coming Soon</Text>
+              <Text style={styles.comingSoonSubtitle}>
+                We're working on advanced focus tracking features
+              </Text>
             </View>
           </View>
         </ScrollView>
@@ -668,6 +638,26 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 12,
     fontStyle: 'italic',
+  },
+  comingSoonContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 40,
+    paddingHorizontal: 20,
+  },
+  comingSoonTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#6B7280',
+    marginTop: 12,
+    marginBottom: 8,
+  },
+  comingSoonSubtitle: {
+    fontSize: 14,
+    fontWeight: '400',
+    color: '#9CA3AF',
+    textAlign: 'center',
+    lineHeight: 20,
   },
   
   // Orbs Section
