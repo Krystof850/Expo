@@ -1,23 +1,111 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, ScrollView, Text, TouchableOpacity, Dimensions, Image } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import Svg, { Circle, LinearGradient, Stop, Defs } from 'react-native-svg';
 import { LineChart, BarChart } from 'react-native-chart-kit';
 import { LinearGradient as ExpoLinearGradient } from 'expo-linear-gradient';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { Protected } from '../../src/components/Protected';
 import AppBackground from '../../components/AppBackground';
 import { TitleText, DescriptionText } from '../../components/Text';
 import { COLORS, SPACING } from '@/constants/theme';
+import { useAuth } from '../../src/context/AuthContext';
+import { ProgressService } from '../../src/services/progressService';
+import { UserProgress } from '../../src/types/achievement';
 
 const { width } = Dimensions.get('window');
 
 export default function Statistics() {
+  const { user } = useAuth();
   const insets = useSafeAreaInsets();
   
   // Tab bar height calculation - modern tab bar is about 80px + safe area bottom  
   const tabBarHeight = 80 + insets.bottom;
+
+  // Timer state synchronized with homepage
+  const [startTime, setStartTime] = useState<number | null>(null);
+  const [userProgress, setUserProgress] = useState<UserProgress | null>(null);
+  const [progressPercentage, setProgressPercentage] = useState<number>(0);
+  const [currentTime, setCurrentTime] = useState({ days: 0, hours: 0, minutes: 0 });
+
+  // Load initial timer data
+  useEffect(() => {
+    loadTimerData();
+  }, []);
+
+  // Setup real-time Firebase listener for timer sync
+  useEffect(() => {
+    if (!user?.uid) return;
+
+    const unsubscribe = ProgressService.subscribeToUserProgress(user.uid, (progress) => {
+      if (progress) {
+        console.log('📊 Statistics: Real-time update from Firebase:', progress);
+        setUserProgress(progress);
+        setStartTime(progress.startTime);
+        AsyncStorage.setItem('procrastination_start_time', progress.startTime.toString());
+      }
+    });
+
+    return () => unsubscribe && unsubscribe();
+  }, [user?.uid]);
+
+  // Calculate progress percentage every second
+  useEffect(() => {
+    if (!startTime) return;
+
+    const interval = setInterval(() => {
+      calculateProgressPercentage(startTime);
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [startTime]);
+
+  const loadTimerData = async () => {
+    try {
+      if (user?.uid) {
+        // Try loading from Firebase first
+        const progress = await ProgressService.getUserProgress(user.uid);
+        if (progress?.startTime) {
+          setUserProgress(progress);
+          setStartTime(progress.startTime);
+          calculateProgressPercentage(progress.startTime);
+          console.log('📊 Statistics: Timer loaded from Firebase');
+          return;
+        }
+      }
+
+      // Fallback to AsyncStorage
+      const stored = await AsyncStorage.getItem('procrastination_start_time');
+      if (stored) {
+        const start = parseInt(stored);
+        setStartTime(start);
+        calculateProgressPercentage(start);
+        console.log('📊 Statistics: Timer loaded from AsyncStorage');
+      }
+    } catch (error) {
+      console.log('📊 Statistics: Error loading timer data:', error);
+    }
+  };
+
+  const calculateProgressPercentage = (start: number) => {
+    const now = Date.now();
+    const diff = Math.floor((now - start) / 1000); // difference in seconds
+    
+    // Calculate time components
+    const days = Math.floor(diff / (24 * 60 * 60));
+    const hours = Math.floor((diff % (24 * 60 * 60)) / (60 * 60));
+    const minutes = Math.floor((diff % (60 * 60)) / 60);
+    
+    setCurrentTime({ days, hours, minutes });
+    
+    // Calculate percentage (60 days = 100%)
+    const diffInDays = (now - start) / (1000 * 60 * 60 * 24);
+    const maxDays = 60;
+    const percentage = Math.min((diffInDays / maxDays) * 100, 100);
+    setProgressPercentage(percentage);
+  };
 
   // Component for circular progress indicator
   const CircularProgress = ({ percentage }: { percentage: number }) => {
@@ -61,7 +149,8 @@ export default function Statistics() {
           />
         </Svg>
         <View style={styles.circularProgressText}>
-          <Text style={styles.percentageText}>{percentage}%</Text>
+          <Text style={styles.daysText}>{currentTime.days}d {currentTime.hours}h</Text>
+          <Text style={styles.percentageText}>{percentage.toFixed(1)}%</Text>
         </View>
       </View>
     );
@@ -97,8 +186,8 @@ export default function Statistics() {
           {/* Progress Circle Section */}
           <View style={styles.progressCircleSection}>
             <Text style={styles.progressTitle}>You will be free in:</Text>
-            <CircularProgress percentage={70} />
-            <Text style={styles.progressSubtitle}>Procrastination-free</Text>
+            <CircularProgress percentage={progressPercentage} />
+            <Text style={styles.progressSubtitle}>{progressPercentage.toFixed(1)}% to 60 days</Text>
           </View>
 
           {/* Three Stats Grid */}
@@ -373,11 +462,19 @@ const styles = StyleSheet.create({
     position: 'absolute',
     alignItems: 'center',
     justifyContent: 'center',
+    width: '100%',
+    height: '100%',
+  },
+  daysText: {
+    fontSize: 24,
+    fontWeight: '700',
+    color: '#082F49',
+    marginBottom: 4,
   },
   percentageText: {
-    fontSize: 32,
-    fontWeight: '800',
-    color: '#082F49',
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#0284C7',
   },
   
   // Three Stats Grid
