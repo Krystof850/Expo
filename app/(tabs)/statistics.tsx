@@ -29,6 +29,7 @@ export default function Statistics() {
   const [userProgress, setUserProgress] = useState<UserProgress | null>(null);
   const [progressPercentage, setProgressPercentage] = useState<number>(0);
   const [currentTime, setCurrentTime] = useState({ days: 0, hours: 0, minutes: 0 });
+  const [targetDate, setTargetDate] = useState<string>('');
 
   // Load initial timer data
   useEffect(() => {
@@ -99,6 +100,16 @@ export default function Statistics() {
     const minutes = Math.floor((diff % (60 * 60)) / 60);
     
     setCurrentTime({ days, hours, minutes });
+    
+    // Calculate target date (start time + 60 days)
+    const targetDateMs = start + (60 * 24 * 60 * 60 * 1000); // 60 days in milliseconds
+    const targetDateObj = new Date(targetDateMs);
+    const formattedDate = targetDateObj.toLocaleDateString('en-US', { 
+      month: 'short', 
+      day: 'numeric',
+      year: 'numeric'
+    });
+    setTargetDate(formattedDate);
     
     // Calculate percentage (60 days = 100%)
     const diffInDays = (now - start) / (1000 * 60 * 60 * 24);
@@ -184,9 +195,9 @@ export default function Statistics() {
 
           {/* Progress Circle Section */}
           <View style={styles.progressCircleSection}>
-            <Text style={styles.progressTitle}>You will be free in:</Text>
+            <Text style={styles.progressTitle}>You will be free in: {targetDate}</Text>
             <CircularProgress percentage={progressPercentage} />
-            <Text style={styles.progressSubtitle}>{progressPercentage.toFixed(1)}% to 60 days</Text>
+            <Text style={styles.progressSubtitle}>Procrastination-free</Text>
           </View>
 
           {/* Three Stats Grid */}
