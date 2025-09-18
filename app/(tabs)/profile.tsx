@@ -114,7 +114,7 @@ export default function Profile() {
     
     Alert.alert(
       'Support',
-      'Pro pomoc nám napište na unloop.app.tech@gmail.com',
+      'For support, please email us at unloop.app.tech@gmail.com',
       [{ text: 'OK', style: 'default' }]
     );
   };
@@ -123,10 +123,23 @@ export default function Profile() {
     await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     
     try {
-      await StoreReview.requestReview();
+      const isAvailable = await StoreReview.isAvailableAsync();
+      if (isAvailable) {
+        await StoreReview.requestReview();
+      } else {
+        Alert.alert(
+          'Rate App',
+          'Thank you for wanting to rate our app! Please visit the App Store to leave a review.',
+          [{ text: 'OK', style: 'default' }]
+        );
+      }
     } catch (error) {
       console.error('Rate app error:', error);
-      Alert.alert('Error', 'Unable to open rating interface');
+      Alert.alert(
+        'Rate App', 
+        'Thank you for your interest! Please visit the App Store to rate our app.',
+        [{ text: 'OK', style: 'default' }]
+      );
     }
   };
 
@@ -214,7 +227,7 @@ export default function Profile() {
                   style={styles.closeButton}
                   onPress={() => setIsPasswordModalVisible(false)}
                 >
-                  <Ionicons name="close" size={24} color="#FFFFFF" />
+                  <Ionicons name="close" size={24} color="#64748B" />
                 </TouchableOpacity>
               </View>
 
@@ -294,12 +307,11 @@ const styles = StyleSheet.create({
   header: {
     alignItems: 'center',
     marginBottom: 32,
-    backgroundColor: '#082F49',
   },
   title: {
     fontSize: 32,
     fontWeight: '700',
-    color: COLORS.mainText || '#082F49',
+    color: '#082F49',
     textAlign: 'center',
   },
 
@@ -400,7 +412,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
   },
   modalContent: {
-    backgroundColor: '#1E293B',
+    backgroundColor: 'rgba(255, 255, 255, 0.95)',
     borderRadius: 20,
     padding: 24,
     width: '100%',
@@ -420,7 +432,7 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: '#082F49',
   },
   closeButton: {
     padding: 8,
@@ -431,19 +443,19 @@ const styles = StyleSheet.create({
   inputLabel: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: '#64748B',
     marginBottom: 8,
     marginTop: 16,
   },
   passwordInput: {
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    backgroundColor: 'rgba(255, 255, 255, 0.8)',
     borderRadius: 12,
     paddingHorizontal: 16,
     paddingVertical: 16,
     fontSize: 16,
-    color: '#FFFFFF',
+    color: '#082F49',
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.3)',
+    borderColor: 'rgba(203, 213, 225, 0.5)',
   },
   modalButtons: {
     flexDirection: 'row',
@@ -458,7 +470,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   cancelButtonText: {
-    color: '#FFFFFF',
+    color: '#64748B',
     fontSize: 16,
     fontWeight: '600',
   },
