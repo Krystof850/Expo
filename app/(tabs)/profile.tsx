@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, ScrollView, Alert, Linking, Platform, TextInput, Modal } from 'react-native';
+import { View, StyleSheet, ScrollView, Alert, Linking, Platform, TextInput, Modal, Text, TouchableOpacity } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 import * as Haptics from 'expo-haptics';
 import * as Clipboard from 'expo-clipboard';
 import * as StoreReview from 'expo-store-review';
@@ -12,7 +13,6 @@ import { useAuth } from '../../src/context/AuthContext';
 import { Protected } from '../../src/components/Protected';
 import AppBackground from '../../components/AppBackground';
 import { TitleText, DescriptionText } from '../../components/Text';
-import HapticButton from '../../components/HapticButton';
 import { COLORS, SPACING } from '@/constants/theme';
 
 export default function Profile() {
@@ -47,7 +47,7 @@ export default function Profile() {
     );
   };
 
-  const handleChangePassword = async () => {
+  const handlePasswordChange = async () => {
     await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     setIsPasswordModalVisible(true);
   };
@@ -111,43 +111,10 @@ export default function Profile() {
   const handleSupport = async () => {
     await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     
-    try {
-      const extra = (Constants.expoConfig?.extra || {}) as Record<string, string>;
-      const supportEmail = extra.SUPPORT_EMAIL || 'unloop.app.tech@gmail.com';
-      const subject = 'Support Request - Unloop App';
-      const body = 'Hello Unloop Team,\n\nI need help with:\n\n';
-      
-      const mailto = `mailto:${supportEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-      
-      const supported = await Linking.canOpenURL(mailto);
-      if (supported) {
-        await Linking.openURL(mailto);
-      } else {
-        Alert.alert(
-          'Email Client Not Available',
-          `Please send an email to: ${supportEmail}`,
-          [
-            {
-              text: 'Copy Email',
-              onPress: async () => {
-                try {
-                  await Clipboard.setStringAsync(supportEmail);
-                  Alert.alert('Email Copied', `${supportEmail} has been copied to your clipboard`);
-                  await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-                } catch (error) {
-                  console.error('Clipboard error:', error);
-                  Alert.alert('Email Address', supportEmail);
-                }
-              }
-            },
-            { text: 'OK' }
-          ]
-        );
-      }
-    } catch (error) {
-      console.error('Support email error:', error);
-      Alert.alert('Error', 'Unable to open email client');
-    }
+    Alert.alert(
+      'Support',
+      'For support, contact us at:\n\nunloop.app.tech@gmail.com'
+    );
   };
 
   const handleRateApp = async () => {
@@ -209,7 +176,7 @@ export default function Profile() {
             <TitleText style={styles.title}>Profile</TitleText>
           </View>
 
-          {/* User Info */}
+          {/* User Information Card */}
           <View style={styles.userSection}>
             <View style={styles.avatarContainer}>
               <Ionicons name="person" size={48} color={COLORS.mainText} />
@@ -218,33 +185,32 @@ export default function Profile() {
             <DescriptionText style={styles.userStatus}>Premium Member</DescriptionText>
           </View>
 
-
-          {/* Menu Items */}
+          {/* Menu Options Card */}
           <View style={styles.menuSection}>
-            <HapticButton style={styles.menuItem} onPress={handleChangePassword}>
+            <TouchableOpacity style={styles.menuItem} onPress={handlePasswordChange}>
               <Ionicons name="key-outline" size={24} color={COLORS.secondaryBackground} />
               <DescriptionText style={styles.menuText}>Change Password</DescriptionText>
               <Ionicons name="chevron-forward" size={20} color={COLORS.secondaryBackground} />
-            </HapticButton>
+            </TouchableOpacity>
 
-            <HapticButton style={styles.menuItem} onPress={handleSupport}>
+            <TouchableOpacity style={styles.menuItem} onPress={handleSupport}>
               <Ionicons name="help-circle-outline" size={24} color={COLORS.secondaryBackground} />
               <DescriptionText style={styles.menuText}>Support</DescriptionText>
               <Ionicons name="chevron-forward" size={20} color={COLORS.secondaryBackground} />
-            </HapticButton>
+            </TouchableOpacity>
 
-            <HapticButton style={styles.menuItem} onPress={handleRateApp}>
+            <TouchableOpacity style={styles.menuItem} onPress={handleRateApp}>
               <Ionicons name="star-outline" size={24} color={COLORS.secondaryBackground} />
               <DescriptionText style={styles.menuText}>Rate App</DescriptionText>
               <Ionicons name="chevron-forward" size={20} color={COLORS.secondaryBackground} />
-            </HapticButton>
+            </TouchableOpacity>
           </View>
 
           {/* Logout Button */}
           <View style={styles.logoutSection}>
-            <HapticButton style={styles.logoutButton} onPress={handleLogout}>
+            <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
               <TitleText style={styles.logoutButtonText}>Sign Out</TitleText>
-            </HapticButton>
+            </TouchableOpacity>
           </View>
         </ScrollView>
 
@@ -259,12 +225,15 @@ export default function Profile() {
             <View style={styles.modalContent}>
               <View style={styles.modalHeader}>
                 <TitleText style={styles.modalTitle}>Change Password</TitleText>
-                <HapticButton 
+                <TouchableOpacity 
                   style={styles.closeButton}
-                  onPress={() => setIsPasswordModalVisible(false)}
+                  onPress={async () => {
+                    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                    setIsPasswordModalVisible(false);
+                  }}
                 >
                   <Ionicons name="close" size={24} color={COLORS.mainText} />
-                </HapticButton>
+                </TouchableOpacity>
               </View>
 
               <View style={styles.inputSection}>
@@ -300,10 +269,16 @@ export default function Profile() {
               </View>
 
               <View style={styles.modalButtons}>
-                <HapticButton style={styles.cancelButton} onPress={() => setIsPasswordModalVisible(false)}>
+                <TouchableOpacity 
+                  style={styles.cancelButton} 
+                  onPress={async () => {
+                    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                    setIsPasswordModalVisible(false);
+                  }}
+                >
                   <DescriptionText style={styles.cancelButtonText}>Cancel</DescriptionText>
-                </HapticButton>
-                <HapticButton 
+                </TouchableOpacity>
+                <TouchableOpacity 
                   style={[styles.updateButton, isUpdatingPassword && { opacity: 0.6 }]} 
                   onPress={handlePasswordUpdate}
                   disabled={isUpdatingPassword}
@@ -311,7 +286,7 @@ export default function Profile() {
                   <DescriptionText style={styles.updateButtonText}>
                     {isUpdatingPassword ? 'Updating...' : 'Update Password'}
                   </DescriptionText>
-                </HapticButton>
+                </TouchableOpacity>
               </View>
             </View>
           </View>
@@ -344,7 +319,7 @@ const styles = StyleSheet.create({
   userSection: {
     backgroundColor: 'rgba(255, 255, 255, 0.4)',
     padding: SPACING.lg,
-    borderRadius: 16,
+    borderRadius: SPACING.md,
     alignItems: 'center',
     marginBottom: SPACING.lg,
     shadowColor: 'rgba(0, 0, 0, 0.1)',
@@ -374,7 +349,7 @@ const styles = StyleSheet.create({
   },
   menuSection: {
     backgroundColor: 'rgba(255, 255, 255, 0.4)',
-    borderRadius: 16,
+    borderRadius: SPACING.md,
     marginBottom: SPACING.lg,
     overflow: 'hidden',
     shadowColor: 'rgba(0, 0, 0, 0.1)',
@@ -428,7 +403,7 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     backgroundColor: 'rgba(255, 255, 255, 0.95)',
-    borderRadius: 20,
+    borderRadius: SPACING.lg + 4,
     padding: SPACING.lg,
     width: '100%',
     maxWidth: 400,
@@ -464,7 +439,7 @@ const styles = StyleSheet.create({
   },
   passwordInput: {
     backgroundColor: 'rgba(255, 255, 255, 0.8)',
-    borderRadius: 12,
+    borderRadius: SPACING.sm + 4,
     paddingHorizontal: SPACING.md,
     paddingVertical: SPACING.md,
     fontSize: 16,
@@ -481,7 +456,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.1)',
     paddingVertical: SPACING.md,
-    borderRadius: 12,
+    borderRadius: SPACING.sm + 4,
     alignItems: 'center',
   },
   cancelButtonText: {
@@ -491,9 +466,9 @@ const styles = StyleSheet.create({
   },
   updateButton: {
     flex: 1,
-    backgroundColor: COLORS.primary || '#0284C7',
+    backgroundColor: COLORS.primaryAction,
     paddingVertical: SPACING.md,
-    borderRadius: 12,
+    borderRadius: SPACING.sm + 4,
     alignItems: 'center',
   },
   updateButtonText: {
