@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, ScrollView, Alert, Linking, Platform, TextInput, Modal } from 'react-native';
+import { View, StyleSheet, ScrollView, Alert, Linking, Platform, TextInput, Modal, Text, TouchableOpacity } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 import * as Haptics from 'expo-haptics';
 import * as Clipboard from 'expo-clipboard';
 import * as StoreReview from 'expo-store-review';
@@ -10,10 +11,7 @@ import { updatePassword, EmailAuthProvider, reauthenticateWithCredential } from 
 
 import { useAuth } from '../../src/context/AuthContext';
 import { Protected } from '../../src/components/Protected';
-import AppBackground from '../../components/AppBackground';
-import { TitleText, DescriptionText } from '../../components/Text';
-import HapticButton from '../../components/HapticButton';
-import { COLORS, SPACING } from '@/constants/theme';
+import { COLORS } from '@/constants/theme';
 
 export default function Profile() {
   const { user, logout } = useAuth();
@@ -23,6 +21,9 @@ export default function Profile() {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isUpdatingPassword, setIsUpdatingPassword] = useState(false);
+
+  // Tab bar height calculation - modern tab bar is about 80px + safe area bottom  
+  const tabBarHeight = 80 + insets.bottom;
 
   const handleLogout = async () => {
     await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
@@ -198,238 +199,276 @@ export default function Profile() {
 
   return (
     <Protected>
-      <AppBackground>
+      <View style={[styles.container, { paddingTop: insets.top }]}>
+        {/* Background Gradient - same as statistics page */}
+        <LinearGradient
+          colors={['#E0F2FE', '#BFDBFE', '#A5B4FC']}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={styles.background}
+        />
+        
         <ScrollView 
           style={styles.scrollView}
-          contentContainerStyle={[styles.content, { paddingTop: insets.top + SPACING.xl }]}
+          contentContainerStyle={[styles.content, { paddingBottom: tabBarHeight + 20 }]}
           showsVerticalScrollIndicator={false}
         >
           {/* Header */}
           <View style={styles.header}>
-            <TitleText style={styles.title}>Profile</TitleText>
+            <Text style={styles.title}>Profile</Text>
           </View>
 
-          {/* User Info */}
-          <View style={styles.userSection}>
-            <View style={styles.avatarContainer}>
-              <Ionicons name="person" size={48} color={COLORS.mainText} />
+          {/* User Info Card */}
+          <View style={styles.userInfoCard}>
+            <Text style={styles.userEmail}>{user?.email || 'No email available'}</Text>
+            <View style={styles.premiumBadge}>
+              <Text style={styles.premiumText}>Premium Member</Text>
             </View>
-            <TitleText style={styles.userEmail}>{user?.email || 'User'}</TitleText>
-            <DescriptionText style={styles.userStatus}>Premium Member</DescriptionText>
           </View>
-
 
           {/* Menu Items */}
-          <View style={styles.menuSection}>
-            <HapticButton style={styles.menuItem} onPress={handleChangePassword}>
-              <Ionicons name="key-outline" size={24} color={COLORS.secondaryBackground} />
-              <DescriptionText style={styles.menuText}>Change Password</DescriptionText>
-              <Ionicons name="chevron-forward" size={20} color={COLORS.secondaryBackground} />
-            </HapticButton>
+          <View style={styles.menuCard}>
+            <TouchableOpacity style={styles.menuItem} onPress={handleChangePassword}>
+              <View style={styles.menuItemLeft}>
+                <Ionicons name="lock-closed" size={24} color={COLORS.primaryAction || '#0284C7'} />
+                <Text style={styles.menuItemText}>Change Password</Text>
+              </View>
+              <Ionicons name="chevron-forward" size={20} color="#94A3B8" />
+            </TouchableOpacity>
 
-            <HapticButton style={styles.menuItem} onPress={handleSupport}>
-              <Ionicons name="help-circle-outline" size={24} color={COLORS.secondaryBackground} />
-              <DescriptionText style={styles.menuText}>Support</DescriptionText>
-              <Ionicons name="chevron-forward" size={20} color={COLORS.secondaryBackground} />
-            </HapticButton>
+            <View style={styles.menuSeparator} />
 
-            <HapticButton style={styles.menuItem} onPress={handleRateApp}>
-              <Ionicons name="star-outline" size={24} color={COLORS.secondaryBackground} />
-              <DescriptionText style={styles.menuText}>Rate App</DescriptionText>
-              <Ionicons name="chevron-forward" size={20} color={COLORS.secondaryBackground} />
-            </HapticButton>
+            <TouchableOpacity style={styles.menuItem} onPress={handleSupport}>
+              <View style={styles.menuItemLeft}>
+                <Ionicons name="help-circle" size={24} color={COLORS.primaryAction || '#0284C7'} />
+                <Text style={styles.menuItemText}>Support</Text>
+              </View>
+              <Ionicons name="chevron-forward" size={20} color="#94A3B8" />
+            </TouchableOpacity>
+
+            <View style={styles.menuSeparator} />
+
+            <TouchableOpacity style={styles.menuItem} onPress={handleRateApp}>
+              <View style={styles.menuItemLeft}>
+                <Ionicons name="star" size={24} color={COLORS.primaryAction || '#0284C7'} />
+                <Text style={styles.menuItemText}>Rate App</Text>
+              </View>
+              <Ionicons name="chevron-forward" size={20} color="#94A3B8" />
+            </TouchableOpacity>
           </View>
 
-          {/* Logout Button */}
-          <View style={styles.logoutSection}>
-            <HapticButton style={styles.logoutButton} onPress={handleLogout}>
-              <TitleText style={styles.logoutButtonText}>Sign Out</TitleText>
-            </HapticButton>
-          </View>
+          {/* Spacer */}
+          <View style={styles.spacer} />
+
+          {/* Sign Out Button */}
+          <TouchableOpacity style={styles.signOutButton} onPress={handleLogout}>
+            <Text style={styles.signOutText}>Sign Out</Text>
+          </TouchableOpacity>
         </ScrollView>
 
         {/* Password Change Modal */}
         <Modal
           visible={isPasswordModalVisible}
           transparent={true}
-          animationType="slide"
+          animationType="fade"
           onRequestClose={() => setIsPasswordModalVisible(false)}
         >
           <View style={styles.modalOverlay}>
             <View style={styles.modalContent}>
               <View style={styles.modalHeader}>
-                <TitleText style={styles.modalTitle}>Change Password</TitleText>
-                <HapticButton 
+                <Text style={styles.modalTitle}>Change Password</Text>
+                <TouchableOpacity
                   style={styles.closeButton}
                   onPress={() => setIsPasswordModalVisible(false)}
                 >
                   <Ionicons name="close" size={24} color={COLORS.mainText} />
-                </HapticButton>
+                </TouchableOpacity>
               </View>
 
               <View style={styles.inputSection}>
-                <DescriptionText style={styles.inputLabel}>Current Password</DescriptionText>
+                <Text style={styles.inputLabel}>Current Password</Text>
                 <TextInput
                   style={styles.passwordInput}
                   value={currentPassword}
                   onChangeText={setCurrentPassword}
                   secureTextEntry
                   placeholder="Enter current password"
-                  placeholderTextColor="rgba(255, 255, 255, 0.6)"
+                  autoCapitalize="none"
                 />
 
-                <DescriptionText style={styles.inputLabel}>New Password</DescriptionText>
+                <Text style={styles.inputLabel}>New Password</Text>
                 <TextInput
                   style={styles.passwordInput}
                   value={newPassword}
                   onChangeText={setNewPassword}
                   secureTextEntry
-                  placeholder="Enter new password"
-                  placeholderTextColor="rgba(255, 255, 255, 0.6)"
+                  placeholder="Enter new password (min 6 characters)"
+                  autoCapitalize="none"
                 />
 
-                <DescriptionText style={styles.inputLabel}>Confirm New Password</DescriptionText>
+                <Text style={styles.inputLabel}>Confirm New Password</Text>
                 <TextInput
                   style={styles.passwordInput}
                   value={confirmPassword}
                   onChangeText={setConfirmPassword}
                   secureTextEntry
                   placeholder="Confirm new password"
-                  placeholderTextColor="rgba(255, 255, 255, 0.6)"
+                  autoCapitalize="none"
                 />
               </View>
 
               <View style={styles.modalButtons}>
-                <HapticButton style={styles.cancelButton} onPress={() => setIsPasswordModalVisible(false)}>
-                  <DescriptionText style={styles.cancelButtonText}>Cancel</DescriptionText>
-                </HapticButton>
-                <HapticButton 
+                <TouchableOpacity style={styles.cancelButton} onPress={() => setIsPasswordModalVisible(false)}>
+                  <Text style={styles.cancelButtonText}>Cancel</Text>
+                </TouchableOpacity>
+                <TouchableOpacity 
                   style={[styles.updateButton, isUpdatingPassword && { opacity: 0.6 }]} 
                   onPress={handlePasswordUpdate}
                   disabled={isUpdatingPassword}
                 >
-                  <DescriptionText style={styles.updateButtonText}>
+                  <Text style={styles.updateButtonText}>
                     {isUpdatingPassword ? 'Updating...' : 'Update Password'}
-                  </DescriptionText>
-                </HapticButton>
+                  </Text>
+                </TouchableOpacity>
               </View>
             </View>
           </View>
         </Modal>
-      </AppBackground>
+      </View>
     </Protected>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    position: 'relative',
+  },
+  background: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  },
   scrollView: {
     flex: 1,
   },
   content: {
-    paddingHorizontal: SPACING.lg,
-    paddingBottom: SPACING.xl * 2,
+    paddingHorizontal: 24,
+    paddingTop: 24,
   },
   header: {
     alignItems: 'center',
-    marginBottom: SPACING.xl,
+    marginBottom: 32,
   },
   title: {
     fontSize: 32,
     fontWeight: '700',
+    color: COLORS.mainText || '#082F49',
     textAlign: 'center',
-    textShadowColor: 'rgba(0, 0, 0, 0.4)',
-    textShadowOffset: { width: 0, height: 3 },
-    textShadowRadius: 6,
   },
-  userSection: {
+
+  // User Info Card
+  userInfoCard: {
     backgroundColor: 'rgba(255, 255, 255, 0.4)',
-    padding: SPACING.lg,
     borderRadius: 16,
-    alignItems: 'center',
-    marginBottom: SPACING.lg,
+    padding: 24,
+    alignItems: 'flex-start',
+    marginBottom: 24,
     shadowColor: 'rgba(0, 0, 0, 0.1)',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 1,
-    shadowRadius: 8,
-    elevation: 4,
-  },
-  avatarContainer: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    backgroundColor: 'rgba(255, 255, 255, 0.8)',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: SPACING.md,
+    shadowRadius: 12,
+    elevation: 6,
   },
   userEmail: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: COLORS.mainText,
-    marginBottom: SPACING.xs,
+    fontSize: 16,
+    fontWeight: '500',
+    color: '#64748B',
+    marginBottom: 8,
   },
-  userStatus: {
+  premiumBadge: {
+    backgroundColor: '#E0F2FE',
+    paddingHorizontal: 12,
+    paddingVertical: 4,
+    borderRadius: 20,
+  },
+  premiumText: {
     fontSize: 14,
-    color: 'rgba(255, 255, 255, 0.8)',
+    fontWeight: '600',
+    color: COLORS.primaryAction || '#0284C7',
   },
-  menuSection: {
+
+  // Menu Card
+  menuCard: {
     backgroundColor: 'rgba(255, 255, 255, 0.4)',
     borderRadius: 16,
-    marginBottom: SPACING.lg,
-    overflow: 'hidden',
+    marginBottom: 24,
     shadowColor: 'rgba(0, 0, 0, 0.1)',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 1,
-    shadowRadius: 8,
-    elevation: 4,
+    shadowRadius: 12,
+    elevation: 6,
   },
   menuItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: SPACING.md,
-    paddingHorizontal: SPACING.lg,
-    borderBottomWidth: 1,
-    borderBottomColor: 'rgba(255, 255, 255, 0.2)',
+    justifyContent: 'space-between',
+    paddingHorizontal: 16,
+    paddingVertical: 16,
   },
-  menuText: {
-    flex: 1,
-    fontSize: 16,
-    color: COLORS.secondaryBackground,
-    fontWeight: '500',
-    marginLeft: SPACING.md,
-  },
-  logoutSection: {
+  menuItemLeft: {
+    flexDirection: 'row',
     alignItems: 'center',
   },
-  logoutButton: {
-    backgroundColor: '#FF6B6B',
-    paddingVertical: SPACING.md,
-    paddingHorizontal: SPACING.xl * 2,
-    borderRadius: 25,
-    shadowColor: '#FF6B6B',
+  menuItemText: {
+    fontSize: 16,
+    fontWeight: '500',
+    color: '#64748B',
+    marginLeft: 16,
+  },
+  menuSeparator: {
+    height: 1,
+    backgroundColor: '#E2E8F0',
+    marginHorizontal: 16,
+  },
+
+  // Spacer and Sign Out
+  spacer: {
+    flex: 1,
+    minHeight: 40,
+  },
+  signOutButton: {
+    backgroundColor: COLORS.primaryAction || '#0284C7',
+    borderRadius: 12,
+    paddingVertical: 14,
+    alignItems: 'center',
+    marginBottom: 40,
+    shadowColor: COLORS.primaryAction || '#0284C7',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 8,
     elevation: 4,
   },
-  logoutButtonText: {
-    color: COLORS.mainText,
+  signOutText: {
+    color: '#FFFFFF',
     fontSize: 16,
     fontWeight: '600',
   },
-  
+
   // Modal Styles
   modalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: SPACING.lg,
+    paddingHorizontal: 24,
   },
   modalContent: {
     backgroundColor: 'rgba(255, 255, 255, 0.95)',
     borderRadius: 20,
-    padding: SPACING.lg,
+    padding: 24,
     width: '100%',
     maxWidth: 400,
     shadowColor: 'rgba(0, 0, 0, 0.3)',
@@ -442,7 +481,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: SPACING.lg,
+    marginBottom: 24,
   },
   modalTitle: {
     fontSize: 20,
@@ -450,23 +489,23 @@ const styles = StyleSheet.create({
     color: COLORS.mainText,
   },
   closeButton: {
-    padding: SPACING.xs,
+    padding: 8,
   },
   inputSection: {
-    marginBottom: SPACING.lg,
+    marginBottom: 24,
   },
   inputLabel: {
     fontSize: 14,
     fontWeight: '600',
     color: COLORS.mainText,
-    marginBottom: SPACING.xs,
-    marginTop: SPACING.md,
+    marginBottom: 8,
+    marginTop: 16,
   },
   passwordInput: {
     backgroundColor: 'rgba(255, 255, 255, 0.8)',
     borderRadius: 12,
-    paddingHorizontal: SPACING.md,
-    paddingVertical: SPACING.md,
+    paddingHorizontal: 16,
+    paddingVertical: 16,
     fontSize: 16,
     color: COLORS.mainText,
     borderWidth: 1,
@@ -475,12 +514,12 @@ const styles = StyleSheet.create({
   modalButtons: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    gap: SPACING.md,
+    gap: 16,
   },
   cancelButton: {
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.1)',
-    paddingVertical: SPACING.md,
+    paddingVertical: 16,
     borderRadius: 12,
     alignItems: 'center',
   },
@@ -491,13 +530,13 @@ const styles = StyleSheet.create({
   },
   updateButton: {
     flex: 1,
-    backgroundColor: COLORS.primary || '#0284C7',
-    paddingVertical: SPACING.md,
+    backgroundColor: COLORS.primaryAction || '#0284C7',
+    paddingVertical: 16,
     borderRadius: 12,
     alignItems: 'center',
   },
   updateButtonText: {
-    color: COLORS.mainText,
+    color: '#FFFFFF',
     fontSize: 16,
     fontWeight: '600',
   },
