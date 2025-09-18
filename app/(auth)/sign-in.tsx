@@ -3,6 +3,10 @@ import { router, Redirect } from "expo-router";
 import { View, Text, Alert, StyleSheet } from "react-native";
 import * as Haptics from 'expo-haptics';
 import { Ionicons } from '@expo/vector-icons';
+import {
+  GoogleSigninButton,
+  GoogleSignin,
+} from '@react-native-google-signin/google-signin';
 import { signInWithGoogle, signInWithApple, isAppleSignInAvailable } from "../../src/services/auth";
 import { useAuth } from "../../src/context/AuthContext";
 import { FirebaseConfigBanner } from "../../src/components/FirebaseConfigBanner";
@@ -91,16 +95,15 @@ export default function SignIn() {
               )}
 
               {/* Google Sign In Button */}
-              <HapticButton 
-                style={[styles.signInButton, googleLoading && styles.disabledButton]}
-                onPress={handleGoogleSignIn}
-                disabled={googleLoading}
-              >
-                <Text style={styles.googleIcon}>G</Text>
-                <TitleText animated={false} style={styles.buttonText}>
-                  {googleLoading ? "Signing in..." : "Continue with Google"}
-                </TitleText>
-              </HapticButton>
+              <View style={[styles.signInButton, googleLoading && styles.disabledButton]}>
+                <GoogleSigninButton
+                  style={styles.googleButton}
+                  size={GoogleSigninButton.Size.Wide}
+                  color={GoogleSigninButton.Color.Light}
+                  onPress={handleGoogleSignIn}
+                  disabled={googleLoading}
+                />
+              </View>
 
               {/* Email Sign In Button */}
               <HapticButton 
@@ -172,12 +175,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
   },
-  googleIcon: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#4285f4',
-    marginRight: SPACING.sm,
-    width: 20,
-    textAlign: 'center',
+  googleButton: {
+    width: '100%',
+    height: 48,
   },
 });

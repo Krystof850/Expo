@@ -2,9 +2,14 @@ import React, { useState } from "react";
 import { Link, Redirect } from "expo-router";
 import { View, Text, TextInput, Alert, TouchableOpacity, StyleSheet, StatusBar, ScrollView } from "react-native";
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { Formik } from "formik";
 import * as Yup from "yup";
+import {
+  GoogleSigninButton,
+  GoogleSignin,
+} from '@react-native-google-signin/google-signin';
 import { signUpWithEmail, signInWithGoogle, signInWithApple, isAppleSignInAvailable } from "../../src/services/auth";
 import { useAuth } from "../../src/context/AuthContext";
 import { FirebaseConfigBanner } from "../../src/components/FirebaseConfigBanner";
@@ -148,16 +153,15 @@ export default function SignUp() {
             )}
 
             {/* Google Sign In Button */}
-            <HapticButton 
-              style={[styles.googleButton, googleLoading && styles.disabledButton]}
-              onPress={handleGoogleSignIn}
-              disabled={googleLoading || submitting}
-            >
-              <DescriptionText animated={false} style={styles.googleIcon}>G</DescriptionText>
-              <DescriptionText animated={false} style={styles.googleButtonText}>
-                {googleLoading ? "Signing up with Google..." : "Sign up with Google"}
-              </DescriptionText>
-            </HapticButton>
+            <View style={[styles.googleButton, googleLoading && styles.disabledButton]}>
+              <GoogleSigninButton
+                style={styles.nativeGoogleButton}
+                size={GoogleSigninButton.Size.Wide}
+                color={GoogleSigninButton.Color.Light}
+                onPress={handleGoogleSignIn}
+                disabled={googleLoading || submitting}
+              />
+            </View>
 
             {/* Sign In Section */}
             <View style={styles.authAlternatives}>
@@ -308,13 +312,9 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 4,
   },
-  googleIcon: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#4285f4',
-    marginRight: SPACING.sm,
-    width: 20,
-    textAlign: 'center',
+  nativeGoogleButton: {
+    width: '100%',
+    height: 48,
   },
   googleButtonText: {
     color: COLORS.defaultBg,

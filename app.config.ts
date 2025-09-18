@@ -4,12 +4,14 @@ import { ConfigContext, ExpoConfig } from "expo/config";
 const firebaseApiKey = process.env.FIREBASE_API_KEY;
 const superwallApiKey = process.env.SUPERWALL_API_KEY;
 const googleClientId = process.env.GOOGLE_CLIENT_ID;
+const iosGoogleClientId = process.env.IOS_GOOGLE_CLIENT_ID;
 const supportEmail = process.env.SUPPORT_EMAIL || 'unloop.app.tech@gmail.com';
 
 console.log('🔧 Loading environment variables:', {
   firebaseApiKey: firebaseApiKey ? 'loaded' : 'missing',
   superwallApiKey: superwallApiKey ? 'loaded' : 'missing',
   googleClientId: googleClientId ? 'loaded' : 'missing',
+  iosGoogleClientId: iosGoogleClientId ? 'loaded' : 'missing',
   supportEmail: supportEmail ? 'loaded' : 'missing'
 });
 
@@ -58,6 +60,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     'expo-dev-client',
     'expo-router',
     'expo-web-browser',
+    '@react-native-google-signin/google-signin',
     [
       'expo-splash-screen',
       {
@@ -92,6 +95,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     FIREBASE_MESSAGING_SENDER_ID: "576633089196",
     FIREBASE_APP_ID: "1:576633089196:web:cab74d64e4665a735fc309",
     GOOGLE_CLIENT_ID: googleClientId,
+    IOS_GOOGLE_CLIENT_ID: iosGoogleClientId,
     SUPERWALL_API_KEY: superwallApiKey,
     SUPPORT_EMAIL: supportEmail,
   },

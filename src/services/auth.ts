@@ -7,8 +7,12 @@ import {
   GoogleAuthProvider,
   User,
 } from "firebase/auth";
-import * as AuthSession from 'expo-auth-session';
-import * as WebBrowser from 'expo-web-browser';
+import {
+  GoogleSignin,
+  statusCodes,
+  isErrorWithCode,
+  isSuccessResponse,
+} from '@react-native-google-signin/google-signin';
 import Constants from 'expo-constants';
 
 // Re-export Apple Sign In functionality
@@ -52,107 +56,111 @@ export async function sendResetEmail(email: string): Promise<void> {
   }
 }
 
-// Konfigurace pro Google OAuth
-WebBrowser.maybeCompleteAuthSession();
+// Konfigurace pro Google Sign-In
+let isGoogleConfigured = false;
 
-// Nastavíme redirect URI přímo
-const redirectUri = 'expo-on-replit://';
+function configureGoogleSignIn() {
+  if (isGoogleConfigured) return;
+  
+  try {
+    const extra = (Constants.expoConfig?.extra || {}) as Record<string, string>;
+    const webClientId = extra.GOOGLE_CLIENT_ID || process.env.GOOGLE_CLIENT_ID;
+    const iosClientId = extra.IOS_GOOGLE_CLIENT_ID || process.env.IOS_GOOGLE_CLIENT_ID;
+    
+    if (!webClientId) {
+      console.warn('[Auth] Google Web Client ID not configured');
+      return;
+    }
+    
+    console.log('[Auth] Configuring Google Sign-In...');
+    console.log('[Auth] Web Client ID:', webClientId ? 'present' : 'missing');
+    console.log('[Auth] iOS Client ID:', iosClientId ? 'present' : 'missing');
+    
+    GoogleSignin.configure({
+      webClientId: webClientId,
+      iosClientId: iosClientId,
+      scopes: ['openid', 'profile', 'email'],
+      offlineAccess: false,
+    });
+    
+    isGoogleConfigured = true;
+    console.log('[Auth] Google Sign-In configured successfully');
+  } catch (error) {
+    console.error('[Auth] Failed to configure Google Sign-In:', error);
+  }
+}
 
-console.log('[Auth] Redirect URI:', redirectUri);
+// Configure Google Sign-In immediately
+configureGoogleSignIn();
 
 export async function signInWithGoogle(): Promise<User> {
   try {
-    console.log('[Auth] Starting Google Sign In with WebBrowser...');
+    console.log('[Auth] Starting Google Sign In with react-native-google-signin...');
     
-    // Získej Google Client ID z konfigurace
-    const extra = (Constants.expoConfig?.extra || {}) as Record<string, string>;
-    const googleClientId = extra.GOOGLE_CLIENT_ID || process.env.GOOGLE_CLIENT_ID;
+    // Ensure Google Sign-In is configured
+    configureGoogleSignIn();
     
-    if (!googleClientId) {
+    if (!isGoogleConfigured) {
       throw new Error("Google Client ID není nakonfigurovaný. Přidejte GOOGLE_CLIENT_ID do app.config.ts");
     }
 
-    // Použij WebBrowser přístup pro jednodušší OAuth flow
-    const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?` +
-      `client_id=${googleClientId}&` +
-      `redirect_uri=${encodeURIComponent(redirectUri)}&` +
-      `response_type=code&` +
-      `scope=${encodeURIComponent('openid profile email')}&` +
-      `state=google_sign_in`;
-
-    console.log('[Auth] Opening Google auth in WebBrowser...');
+    // Check if device has Google Play Services (Android only)
+    console.log('[Auth] Checking Google Play Services...');
+    await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
     
-    const result = await WebBrowser.openAuthSessionAsync(
-      authUrl,
-      redirectUri
-    );
-
-    console.log('[Auth] WebBrowser result type:', result.type);
-
-    if (result.type === 'success') {
-      console.log('[Auth] Auth session successful, processing URL...');
-      
-      // Extrahuj authorization code z URL
-      const url = new URL(result.url);
-      const code = url.searchParams.get('code');
-      
-      if (!code) {
-        throw new Error("Authorization code nebyl nalezen v odpovědi");
+    console.log('[Auth] Initiating Google Sign-In...');
+    const response = await GoogleSignin.signIn();
+    
+    if (!isSuccessResponse(response)) {
+      if (response.type === 'cancelled') {
+        throw new Error('Přihlášení přes Google bylo zrušeno');
       }
-
-      console.log('[Auth] Authorization code received, exchanging for token...');
-      
-      // Vyměň authorization code za access token
-      const tokenResponse = await fetch('https://oauth2.googleapis.com/token', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: new URLSearchParams({
-          client_id: googleClientId,
-          code: code,
-          grant_type: 'authorization_code',
-          redirect_uri: redirectUri,
-        }),
-      });
-
-      if (!tokenResponse.ok) {
-        throw new Error(`Token exchange failed: ${tokenResponse.status}`);
-      }
-
-      const tokenData = await tokenResponse.json();
-      console.log('[Auth] Token exchange successful');
-      console.log('[Auth] Has ID token:', !!tokenData.id_token);
-      console.log('[Auth] Has access token:', !!tokenData.access_token);
-
-      if (!tokenData.id_token) {
-        throw new Error("Google neposkytl ID token");
-      }
-
-      console.log('[Auth] Creating Firebase credential...');
-      
-      // Vytvoř Firebase credential z Google tokenu
-      const credential = GoogleAuthProvider.credential(
-        tokenData.id_token,
-        tokenData.access_token
-      );
-
-      console.log('[Auth] Firebase credential created, signing in...');
-
-      // Přihlaš se do Firebase
-      const firebaseResult = await signInWithCredential(auth, credential);
-      console.log('[Auth] Google Sign In successful for:', firebaseResult.user.email);
-      
-      return firebaseResult.user;
-      
-    } else if (result.type === 'cancel') {
-      throw new Error("Přihlášení přes Google bylo zrušeno");
-    } else {
-      throw new Error(`Google přihlášení selhalo: ${result.type}`);
+      throw new Error('Google přihlášení selhalo');
     }
-  } catch (e: any) {
-    console.error('[Auth] Google Sign In failed:', e);
-    const friendlyError = mapAuthError(e);
+    
+    const { data: userInfo } = response;
+    console.log('[Auth] Google Sign In successful for:', userInfo.user.email);
+    console.log('[Auth] Has ID token:', !!userInfo.idToken);
+    
+    if (!userInfo.idToken) {
+      throw new Error('Google neposkytl ID token');
+    }
+    
+    console.log('[Auth] Creating Firebase credential...');
+    
+    // Create Firebase credential from Google tokens
+    const credential = GoogleAuthProvider.credential(
+      userInfo.idToken,
+      userInfo.serverAuthCode
+    );
+    
+    console.log('[Auth] Firebase credential created, signing in...');
+    
+    // Sign in to Firebase
+    const firebaseResult = await signInWithCredential(auth, credential);
+    console.log('[Auth] Firebase Sign In successful for:', firebaseResult.user.email);
+    
+    return firebaseResult.user;
+    
+  } catch (error: any) {
+    console.error('[Auth] Google Sign In failed:', error);
+    
+    if (isErrorWithCode(error)) {
+      switch (error.code) {
+        case statusCodes.IN_PROGRESS:
+          throw new Error('Google přihlášení již probíhá');
+        case statusCodes.PLAY_SERVICES_NOT_AVAILABLE:
+          throw new Error('Google Play Services nejsou dostupné');
+        case statusCodes.SIGN_IN_CANCELLED:
+          throw new Error('Přihlášení přes Google bylo zrušeno');
+        case statusCodes.SIGN_IN_REQUIRED:
+          throw new Error('Je vyžadováno přihlášení přes Google');
+        default:
+          console.error('[Auth] Unknown Google Sign In error code:', error.code);
+      }
+    }
+    
+    const friendlyError = mapAuthError(error);
     throw new Error(friendlyError);
   }
 }
@@ -171,6 +179,9 @@ function mapAuthError(e: any): string {
     return "Účet s tímto emailem již existuje s jinou metodou přihlášení.";
   }
   if (message.includes("Client ID")) return "Google přihlášení není správně nakonfigurováno.";
+  if (message.includes("Play Services")) return "Google Play Services nejsou dostupné nebo jsou zastaralé.";
+  if (message.includes("SIGN_IN_CANCELLED")) return "Přihlášení přes Google bylo zrušeno.";
+  if (message.includes("IN_PROGRESS")) return "Google přihlášení již probíhá.";
   
   return e?.message || "Akce selhala. Zkus to znovu.";
 }
