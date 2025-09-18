@@ -42,7 +42,7 @@ export default function Statistics() {
             cx={size / 2}
             cy={size / 2}
             r={radius}
-            stroke="#E2E8F0"
+            stroke="#CBD5E1"
             strokeWidth={strokeWidth}
             fill="transparent"
           />
@@ -96,8 +96,8 @@ export default function Statistics() {
 
           {/* Progress Circle Section */}
           <View style={styles.progressCircleSection}>
+            <Text style={styles.progressTitle}>You will be free in:</Text>
             <CircularProgress percentage={70} />
-            <Text style={styles.progressInlineText}>You will be free in: 70%</Text>
             <Text style={styles.progressSubtitle}>Procrastination-free</Text>
           </View>
 
@@ -337,11 +337,11 @@ const styles = StyleSheet.create({
     shadowRadius: 12,
     elevation: 6,
   },
-  progressInlineText: {
-    fontSize: 16,
+  progressTitle: {
+    fontSize: 18,
     fontWeight: '600',
     color: '#0C4A6E',
-    marginTop: 12,
+    marginBottom: 16,
     textAlign: 'center',
   },
   progressSubtitle: {
