@@ -180,71 +180,55 @@ export default function Statistics() {
               {[
                 { 
                   days: '1d', 
-                  unlocked: true,
-                  color: '#EF4444',
-                  gradient: ['#EF4444', '#DC2626'],
-                  symbol: '🔥'
+                  gradient: ['#EF4444', '#DC2626'], // Červená
+                  number: 1
                 },
                 { 
                   days: '3d', 
-                  unlocked: true,
-                  color: '#0EA5E9',
-                  gradient: ['#0EA5E9', '#0284C7'],
-                  symbol: '💧'
+                  gradient: ['#F59E0B', '#D97706'], // Oranžová
+                  number: 2
                 },
                 { 
                   days: '7d', 
-                  unlocked: true,
-                  color: '#10B981',
-                  gradient: ['#10B981', '#059669'],
-                  symbol: '🌿'
+                  gradient: ['#FBBF24', '#F59E0B'], // Žlutá
+                  number: 3
                 },
                 { 
                   days: '14d', 
-                  unlocked: false,
-                  color: '#8B5CF6',
-                  gradient: ['#8B5CF6', '#7C3AED'],
-                  symbol: '⚡'
+                  gradient: ['#10B981', '#059669'], // Zelená
+                  number: 4
                 },
                 { 
                   days: '21d', 
-                  unlocked: false,
-                  color: '#F59E0B',
-                  gradient: ['#F59E0B', '#D97706'],
-                  symbol: '⭐'
+                  gradient: ['#0EA5E9', '#0284C7'], // Modrá
+                  number: 5
                 },
                 { 
                   days: '30d', 
-                  unlocked: false,
-                  color: '#06B6D4',
-                  gradient: ['#06B6D4', '#0891B2'],
-                  symbol: '❄️'
+                  gradient: ['#8B5CF6', '#7C3AED'], // Fialová
+                  number: 6
                 },
                 { 
                   days: '60d', 
-                  unlocked: false,
-                  color: '#EC4899',
-                  gradient: ['#EC4899', '#DB2777'],
-                  symbol: '🌙'
+                  gradient: ['#EC4899', '#DB2777'], // Růžová
+                  number: 7
                 },
                 { 
                   days: '100d', 
-                  unlocked: false,
-                  color: '#6366F1',
-                  gradient: ['#6366F1', '#4F46E5'],
-                  symbol: '💎'
+                  gradient: ['#6366F1', '#4F46E5'], // Indigo
+                  number: 8
                 },
               ].map((orb, index) => (
-                <View key={index} style={[styles.orbItem, !orb.unlocked && styles.orbLocked]}>
+                <View key={index} style={styles.orbItem}>
                   <ExpoLinearGradient
-                    colors={orb.unlocked ? orb.gradient : ['#F1F5F9', '#E2E8F0']}
+                    colors={orb.gradient}
                     style={styles.orbGradientContainer}
                   >
-                    <Text style={styles.orbSymbol}>
-                      {orb.unlocked ? orb.symbol : '🔒'}
+                    <Text style={styles.orbNumber}>
+                      {orb.number}
                     </Text>
                   </ExpoLinearGradient>
-                  <Text style={[styles.orbDays, !orb.unlocked && styles.orbDaysLocked]}>
+                  <Text style={styles.orbDays}>
                     {orb.days}
                   </Text>
                 </View>
@@ -510,9 +494,6 @@ const styles = StyleSheet.create({
     width: '22%',
     marginBottom: 12,
   },
-  orbLocked: {
-    opacity: 0.4,
-  },
   orbGradientContainer: {
     width: 52,
     height: 52,
@@ -526,16 +507,15 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 3,
   },
-  orbSymbol: {
-    fontSize: 24,
+  orbNumber: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#FFFFFF',
   },
   orbDays: {
     fontSize: 11,
     fontWeight: '700',
     color: '#082F49',
     textAlign: 'center',
-  },
-  orbDaysLocked: {
-    color: '#94A3B8',
   },
 });
