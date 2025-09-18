@@ -8,7 +8,6 @@ import { LinearGradient as ExpoLinearGradient } from 'expo-linear-gradient';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { Protected } from '../../src/components/Protected';
-import AppBackground from '../../components/AppBackground';
 import { TitleText, DescriptionText } from '../../components/Text';
 import { COLORS, SPACING } from '@/constants/theme';
 import { useAuth } from '../../src/context/AuthContext';
@@ -225,7 +224,13 @@ export default function Statistics() {
 
   return (
     <Protected>
-      <AppBackground>
+      <View style={styles.container}>
+        <ExpoLinearGradient
+          colors={['#E0F2FE', '#BFDBFE', '#A5B4FC']}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={styles.background}
+        />
         <ScrollView 
           style={styles.scrollView}
           contentContainerStyle={[styles.content, { paddingTop: insets.top + SPACING.xl, paddingBottom: tabBarHeight + 20 }]}
@@ -431,7 +436,7 @@ export default function Statistics() {
             </View>
           </View>
         </ScrollView>
-      </AppBackground>
+      </View>
     </Protected>
   );
 }

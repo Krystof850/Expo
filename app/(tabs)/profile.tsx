@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, StyleSheet, ScrollView, Alert, Linking, Platform, TextInput, Modal, Text, TouchableOpacity } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 import * as Haptics from 'expo-haptics';
 import * as Clipboard from 'expo-clipboard';
 import * as StoreReview from 'expo-store-review';
@@ -10,7 +11,6 @@ import { updatePassword, EmailAuthProvider, reauthenticateWithCredential } from 
 
 import { useAuth } from '../../src/context/AuthContext';
 import { Protected } from '../../src/components/Protected';
-import AppBackground from '../../components/AppBackground';
 import { TitleText, DescriptionText } from '../../components/Text';
 import { COLORS, SPACING } from '@/constants/theme';
 
@@ -164,7 +164,13 @@ export default function Profile() {
 
   return (
     <Protected>
-      <AppBackground>
+      <View style={styles.container}>
+        <LinearGradient
+          colors={['#E0F2FE', '#BFDBFE', '#A5B4FC']}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={styles.background}
+        />
         <ScrollView 
           style={styles.scrollView}
           contentContainerStyle={[styles.content, { paddingTop: insets.top + SPACING.xl }]}
@@ -299,12 +305,22 @@ export default function Profile() {
             </View>
           </View>
         </Modal>
-      </AppBackground>
+      </View>
     </Protected>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  background: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  },
   scrollView: {
     flex: 1,
   },
