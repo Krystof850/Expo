@@ -294,40 +294,71 @@ export default function Statistics() {
             <View>
               <Text style={styles.chartTitle}>Time of Day with Most Temptations</Text>
               <View style={styles.chartContainer}>
-                <BarChart
-                  data={{
-                    labels: ['Morning', 'Afternoon', 'Evening', 'Night'],
-                    datasets: [{
-                      data: [
-                        temptationData?.temptationsByTimeOfDay.morning || 0,
-                        temptationData?.temptationsByTimeOfDay.afternoon || 0,
-                        temptationData?.temptationsByTimeOfDay.evening || 0,
-                        temptationData?.temptationsByTimeOfDay.night || 0
-                      ]
-                    }]
-                  }}
-                  width={width - 80}
-                  height={160}
-                  yAxisLabel=""
-                  yAxisSuffix=""
-                  chartConfig={{
-                    backgroundColor: 'transparent',
-                    backgroundGradientFrom: 'rgba(255, 255, 255, 0)',
-                    backgroundGradientTo: 'rgba(255, 255, 255, 0)',
-                    decimalPlaces: 0,
-                    color: (opacity = 1) => `rgba(2, 132, 199, ${opacity})`,
-                    labelColor: (opacity = 1) => `rgba(8, 47, 73, ${opacity})`,
-                    style: {
-                      borderRadius: 16
-                    },
-                    barPercentage: 0.6,
-                  }}
-                  style={{
-                    marginVertical: 8,
-                    borderRadius: 16,
-                  }}
-                />
+                {(() => {
+                  // Calculate chart data and max value for dynamic Y-axis
+                  const chartData = [
+                    temptationData?.temptationsByTimeOfDay.morning || 0,
+                    temptationData?.temptationsByTimeOfDay.afternoon || 0,
+                    temptationData?.temptationsByTimeOfDay.evening || 0,
+                    temptationData?.temptationsByTimeOfDay.night || 0
+                  ];
+                  
+                  const maxValue = Math.max(...chartData);
+                  const hasData = maxValue > 0;
+                  
+                  // Ensure minimum scale for better visualization
+                  const chartMax = Math.max(maxValue, 3);
+                  
+                  // Calculate number of segments (aim for 3-5 segments)
+                  const segments = Math.min(Math.max(Math.ceil(chartMax / 2), 2), 5);
+                  
+                  return (
+                    <BarChart
+                      data={{
+                        labels: ['Morning', 'Afternoon', 'Evening', 'Night'],
+                        datasets: [{
+                          data: hasData ? chartData : [1, 1, 1, 1] // Show minimal data if no temptations
+                        }]
+                      }}
+                      width={width - 80}
+                      height={160}
+                      yAxisLabel=""
+                      yAxisSuffix=""
+                      fromZero={true}
+                      segments={segments}
+                      chartConfig={{
+                        backgroundColor: 'transparent',
+                        backgroundGradientFrom: 'rgba(255, 255, 255, 0)',
+                        backgroundGradientTo: 'rgba(255, 255, 255, 0)',
+                        decimalPlaces: 0,
+                        color: (opacity = 1) => hasData 
+                          ? `rgba(2, 132, 199, ${opacity})` 
+                          : `rgba(156, 163, 175, ${opacity})`, // Gray for empty state
+                        labelColor: (opacity = 1) => `rgba(8, 47, 73, ${opacity})`,
+                        style: {
+                          borderRadius: 16
+                        },
+                        barPercentage: 0.6,
+                      }}
+                      style={{
+                        marginVertical: 8,
+                        borderRadius: 16,
+                      }}
+                    />
+                  );
+                })()}
               </View>
+              {/* Show message when no data */}
+              {temptationData && Math.max(
+                temptationData.temptationsByTimeOfDay.morning,
+                temptationData.temptationsByTimeOfDay.afternoon,
+                temptationData.temptationsByTimeOfDay.evening,
+                temptationData.temptationsByTimeOfDay.night
+              ) === 0 && (
+                <Text style={styles.noDataText}>
+                  No temptations tracked yet. Generate your first AI task to see the data!
+                </Text>
+              )}
             </View>
           </View>
 
@@ -629,6 +660,14 @@ const styles = StyleSheet.create({
   },
   chartContainer: {
     alignItems: 'center',
+  },
+  noDataText: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: '#6B7280',
+    textAlign: 'center',
+    marginTop: 12,
+    fontStyle: 'italic',
   },
   
   // Orbs Section
