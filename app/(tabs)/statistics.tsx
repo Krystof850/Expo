@@ -185,12 +185,12 @@ export default function Statistics() {
                 },
                 { 
                   days: '3d', 
-                  gradient: ['#9333EA', '#A855F7'], // Animated Aura Orb (fialová)
+                  gradient: ['#F59E0B', '#D97706'], // Oranžová
                   number: 2
                 },
                 { 
                   days: '7d', 
-                  gradient: ['#1E1B4B', '#312E81'], // Spiral Galaxy Orb (tmavě fialová)
+                  gradient: ['#8B5CF6', '#7C3AED'], // Fialová
                   number: 3
                 },
                 { 
