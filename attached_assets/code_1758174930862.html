@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<title>Unloop AI - Statistics</title>
+<link href="data:image/x-icon;base64," rel="icon" type="image/x-icon"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style type="text/tailwindcss">
+    :root {
+      --primary-action: #0284C7;
+      --secondary-background: #0C4A6E;
+      --main-text: #082F49;
+      --cta-text: #FFFFFF;
+      --accent-green: #10B981;
+      --default-bg: #F0F9FF;
+    }
+    body {
+      font-family: 'Poppins', sans-serif;
+      min-height: max(884px, 100dvh);
+    }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0,
+      'wght' 400,
+      'GRAD' 0,
+      'opsz' 24
+    }
+    .nav-active .material-symbols-outlined {
+      font-variation-settings: 'FILL' 1,
+      'wght' 600
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-[var(--default-bg)] text-[var(--main-text)] antialiased">
+<div class="relative flex min-h-screen flex-col overflow-hidden">
+<div class="absolute inset-0 z-0 bg-gradient-to-br from-[#E0F2FE] via-[#BFDBFE] to-[#A5B4FC]"></div>
+<div class="flex-grow overflow-y-auto pb-28 pt-6 px-6">
+<header class="z-10 flex w-full items-center justify-between">
+<h1 class="text-3xl font-bold text-[var(--main-text)]">Statistics</h1>
+<button class="material-symbols-outlined text-3xl text-slate-500">settings</button>
+</header>
+<main class="z-10 mt-8 flex flex-col space-y-6">
+<section class="flex flex-col items-center space-y-4 rounded-2xl bg-white/40 p-6 backdrop-blur-md shadow-lg">
+<h2 class="text-lg font-semibold text-[var(--secondary-background)]">You will be free in:</h2>
+<div class="relative h-40 w-40">
+<svg class="h-full w-full" viewBox="0 0 100 100">
+<circle class="text-slate-200" cx="50" cy="50" fill="transparent" r="45" stroke="currentColor" stroke-width="10"></circle>
+<circle class="text-green-500" cx="50" cy="50" fill="transparent" r="45" stroke="url(#progressGradient)" stroke-linecap="round" stroke-width="10" style="stroke-dasharray: 282.6; stroke-dashoffset: 84.78; transform: rotate(-90deg); transform-origin: 50% 50%;"></circle>
+<defs>
+<linearGradient id="progressGradient" x1="0%" x2="0%" y1="0%" y2="100%">
+<stop offset="0%" style="stop-color:#10B981;stop-opacity:1"></stop>
+<stop offset="100%" style="stop-color:#2DD4BF;stop-opacity:1"></stop>
+</linearGradient>
+</defs>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="text-4xl font-bold text-[var(--main-text)]">70%</span>
+</div>
+</div>
+<p class="text-sm font-medium text-[var(--secondary-background)] -mt-2">Procrastination-free</p>
+</section>
+<section class="rounded-2xl bg-white/40 p-4 backdrop-blur-md shadow-lg">
+<div class="grid grid-cols-3 gap-4 text-center">
+<div>
+<div class="flex justify-center items-center h-10 w-10 mx-auto rounded-full bg-sky-100 mb-2">
+<span class="material-symbols-outlined text-2xl text-[var(--primary-action)]">local_fire_department</span>
+</div>
+<p class="text-xs font-medium text-[var(--secondary-background)]">Current Streak</p>
+<p class="text-lg font-bold">5 days</p>
+</div>
+<div>
+<div class="flex justify-center items-center h-10 w-10 mx-auto rounded-full bg-sky-100 mb-2">
+<span class="material-symbols-outlined text-2xl text-[var(--primary-action)]">star</span>
+</div>
+<p class="text-xs font-medium text-[var(--secondary-background)]">Longest Streak</p>
+<p class="text-lg font-bold">21 days</p>
+</div>
+<div>
+<div class="flex justify-center items-center h-10 w-10 mx-auto rounded-full bg-sky-100 mb-2">
+<span class="material-symbols-outlined text-2xl text-[var(--primary-action)]">calendar_today</span>
+</div>
+<p class="text-xs font-medium text-[var(--secondary-background)]">Total Days Active</p>
+<p class="text-lg font-bold">42</p>
+</div>
+</div>
+</section>
+<section class="space-y-4 rounded-2xl bg-white/40 p-4 backdrop-blur-md shadow-lg">
+<h3 class="font-semibold text-[var(--secondary-background)]">Temptations</h3>
+<div class="flex items-center justify-between rounded-lg bg-white/50 p-3">
+<p class="font-medium">Temptations Overcome</p>
+<span class="text-xl font-bold text-green-500">12</span>
+</div>
+<div>
+<p class="mb-2 text-sm font-medium text-center text-[var(--secondary-background)]">Time of Day with Most Temptations</p>
+<div class="h-40">
+<canvas id="temptationChart"></canvas>
+</div>
+</div>
+</section>
+<section class="rounded-2xl bg-white/40 p-4 backdrop-blur-md shadow-lg">
+<div class="flex items-center justify-between mb-3">
+<h3 class="font-semibold text-[var(--secondary-background)]">Achievements</h3>
+<p class="text-sm font-bold">5 / 15 Unlocked</p>
+</div>
+<div class="flex space-x-3 overflow-x-auto pb-2 -mb-2">
+<div class="flex-shrink-0 flex flex-col items-center text-center w-16">
+<img alt="1-Day Streak Badge" class="h-12 w-12" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDQZNl8lNg7LqO81NzRM9HeA74ZOY0ny8Jfm1STbcz5gHTOYZCe2fguZ4AI_a0gaPwgzMtn0kxvw4F4VYxRuyCA7T3q7AZhC-A-WszlRAPxnKjvRjiBLJRe_fvuT6g13RPgciKb43rDLZXrxIemam0BRnGIM9YZivVNYQKwA233k_9Rd8AVd3__rnBJh5ez--f2JFsmbmz6yDAi1ylLWZR1WBUHhLIs587_psSFG1zr8fw7TnhNsHj6eb7c_DUY58ac3v0kG5Fu53Bp"/>
+<p class="text-xs mt-1 font-medium">1-Day Streak</p>
+</div>
+<div class="flex-shrink-0 flex flex-col items-center text-center w-16">
+<img alt="7-Day Streak Badge" class="h-12 w-12" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC1HOPcitfeC2j827JlDFK3hxjAJCxYOoF4au3XtRq6Fsqh13RYBtsBpOyulYbJTpIke-NaXOHQIaX2jyjg8MHHjjpliHuva6fatfq_Ci2Oc955MUxnHwhJubQKTbe1FM8IJDFqGJeZy2nB7SGQwF1xmsVjDtRaCpa7PuXHV73jeVsx5HViE6Inrh2iwoPUezFpyWJG1GKOhP-IbdshCsgcYJLt3V-jfpdpIJSLYqn--oyiqknhNlkdifoIaPqwmKJ3Zpw5tWwaHE-a"/>
+<p class="text-xs mt-1 font-medium">7-Day Streak</p>
+</div>
+<div class="flex-shrink-0 flex flex-col items-center text-center w-16">
+<img alt="First Temptation Badge" class="h-12 w-12" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCRtVWuarCg0RG0Ho_aaW4TleaYLkAyKY7oNS4nLJiMX8beZY1UcAyUo4YlbfrIM1cB6cJAGLWYQeTrfWC_BS5QLDeVMO2Tv6xJ-yB2p97OkOvj4NmK8Zq4Scg-vuuvq_10RXrUuDRMJho3GUTVvasAm2fm6TtZgtP7Qeizhprh1hTyLLjTcQXVpoC2tXdYJLoUvo6TvqZFFaMPB3PiyVDZIIYlUOQt4-7iMJot_j-rvPIg-1RVyS9R1yqV-yTgTC3yuC78Q9MJ_js3"/>
+<p class="text-xs mt-1 font-medium">First Win</p>
+</div>
+<div class="flex-shrink-0 flex flex-col items-center text-center w-16">
+<img alt="Perfect Day Badge" class="h-12 w-12" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAt-bviLY8dTl8dr3hpklxMG6yDTa7N8o9MwYhrxBdFJreRkIlFfOlSS2wZY4CbF3_XY_sERXZp4m8C4nPU6xXlYtHFSO5FmOSKMX5y-F4AccyxtXQMBzAGM4RHVHhl1IaC6vWhUFyoX31NQLOsoRroPLcGFciQ_b3Yz8sGmnGe5DVSzfUJQSE4T3dwALjfdCiU1tsfc-oHGjfPDaFQwaiXKm8WIuH4jIkd3koCE_Oh15SX_L4Wtyz3Ac8YiMiDNaSI_5uNtiYaakfr"/>
+<p class="text-xs mt-1 font-medium">Perfect Day</p>
+</div>
+<div class="flex-shrink-0 flex flex-col items-center text-center w-16">
+<img alt="Master Badge" class="h-12 w-12" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDeW1spfj-O8T1gCknWMFRq86pGiENl-6ecJbjrbPmB13esAstMe7XnDr_myrDNsbnBaugveAUqVdgHx6loA2AFKNWnwsVuyRTDdjU6sNRoB8J_KWBpkA9ZGLsdcLhAmrbKnmTTBMOKIxPkLvtw_y9u3Z3KbLF3DuaVEfknRRlEnTJMP8huU5tQW3UnhqYrrmKAGeV7RMUHJUL8CiXANc14Ii0ZCIUlw87QsD1rC4SJUOkkZlqEPQ8uteP2D1xeBlRVOI5m5mdgriJw"/>
+<p class="text-xs mt-1 font-medium">Master</p>
+</div>
+<div class="flex-shrink-0 flex flex-col items-center text-center w-16 opacity-40">
+<img alt="Locked Badge" class="h-12 w-12" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDj6q4fmbveVRg2qEsQN-p0vxk-2AxYq1tM9BZYVq0gl_dtpCXUIf2ui1A6XrhqKdSWJyEYxD1alWj8dG33Syg3xFLgV-j6tqZlSL2OhXEOJdSX1ilwPS7CgObsEstI1InQHAPScIWjxvrl_zs-5_DiMljuNnf6OGnTJeD5M64EXXhBJijorHXLndVZMk6ENGVwzD3EEkQOyoOLwBiXbK1jvZ6beNzNqhrPexeLduygI-eRou6-9sGXSUh6ECukXSPoYFPSZwy4qDbL"/>
+<p class="text-xs mt-1 font-medium">Locked</p>
+</div>
+</div>
+</section>
+<section class="rounded-2xl bg-white/40 p-4 backdrop-blur-md shadow-lg">
+<h3 class="mb-2 font-semibold text-[var(--secondary-background)]">Focus Score - Last 7 days</h3>
+<div class="h-48">
+<canvas id="moodChart"></canvas>
+</div>
+</section>
+</main>
+</div>
+<footer class="fixed bottom-0 left-0 z-20 w-full px-2 pb-6">
+<nav class="flex justify-around rounded-full bg-white/50 p-1 backdrop-blur-xl shadow-lg ring-1 ring-black/5">
+<a class="flex flex-col items-center gap-0.5 rounded-full px-5 py-1.5 text-slate-500 hover:text-[var(--primary-action)] transition-colors duration-300" href="#">
+<span class="material-symbols-outlined text-3xl">home</span>
+<span class="text-xs font-medium">Home</span>
+</a>
+<a class="nav-active flex flex-col items-center gap-0.5 rounded-full px-5 py-1.5 text-[var(--primary-action)] transition-colors duration-300" href="#">
+<span class="material-symbols-outlined text-3xl">bar_chart</span>
+<span class="text-xs font-bold">Statistics</span>
+</a>
+<a class="flex flex-col items-center gap-0.5 rounded-full px-5 py-1.5 text-slate-500 hover:text-[var(--primary-action)] transition-colors duration-300" href="#">
+<span class="material-symbols-outlined text-3xl">account_circle</span>
+<span class="text-xs font-medium">Profile</span>
+</a>
+</nav>
+</footer>
+</div>
+<script>
+  const temptationCtx = document.getElementById('temptationChart').getContext('2d');
+  new Chart(temptationCtx, {
+    type: 'bar',
+    data: {
+      labels: ['Morning', 'Afternoon', 'Evening', 'Night'],
+      datasets: [{
+        label: 'Temptations',
+        data: [5, 9, 7, 3],
+        backgroundColor: 'rgba(2, 132, 199, 0.4)',
+        borderColor: 'rgba(2, 132, 199, 1)',
+        borderWidth: 1,
+        borderRadius: 4,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {display: false},
+        tooltip: {
+          backgroundColor: 'rgba(8, 47, 73, 0.8)',
+          titleFont: {family: 'Poppins'},
+          bodyFont: {family: 'Poppins'},
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          grid: {drawOnChartArea: false},
+          ticks: {color: '#082F49', font: {family: 'Poppins'}}
+        },
+        x: {
+          grid: {display: false},
+          ticks: {color: '#082F49', font: {family: 'Poppins'}}
+        }
+      }
+    }
+  });
+  const moodCtx = document.getElementById('moodChart').getContext('2d');
+  new Chart(moodCtx, {
+    type: 'line',
+    data: {
+      labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+      datasets: [{
+        label: 'Focus Score',
+        data: [65, 70, 80, 75, 85, 90, 88],
+        fill: false,
+        borderColor: '#10B981',
+        tension: 0.4,
+        borderWidth: 3,
+        pointBackgroundColor: '#10B981',
+        pointRadius: 4,
+        pointHoverRadius: 6,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {display: false},
+        tooltip: {
+          backgroundColor: 'rgba(8, 47, 73, 0.8)',
+          titleFont: {family: 'Poppins'},
+          bodyFont: {family: 'Poppins'},
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: false,
+          grid: {color: 'rgba(12, 74, 110, 0.1)'},
+          ticks: {color: '#082F49', font: {family: 'Poppins'}}
+        },
+        x: {
+          grid: {display: false},
+          ticks: {color: '#082F49', font: {family: 'Poppins'}}
+        }
+      }
+    }
+  });
+</script>
+
+</body></html>
