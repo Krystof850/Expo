@@ -13,12 +13,15 @@ import Animated, {
 } from 'react-native-reanimated';
 import Svg, { Circle } from 'react-native-svg';
 import { generateMicroTask } from '../../src/utils/openai';
+import { TemptationService } from '../../src/services/temptationService';
+import { useAuth } from '../../src/context/AuthContext';
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
 export default function TaskTimer() {
   const { procrastinationText } = useLocalSearchParams<{ procrastinationText: string }>();
   const insets = useSafeAreaInsets();
+  const { user } = useAuth();
   
   // Timer state (3 minutes = 180 seconds)
   const [timeLeft, setTimeLeft] = useState(180);
@@ -62,6 +65,11 @@ export default function TaskTimer() {
       setIsGeneratingTask(true);
       const aiTask = await generateMicroTask(procrastination);
       setMicroTask(aiTask);
+      
+      // Track temptation generation for time of day statistics
+      if (user?.uid) {
+        await TemptationService.trackTemptationGenerated(user.uid);
+      }
     } catch (error) {
       console.error('Failed to generate AI task:', error);
       // Fallback is handled in the generateMicroTask function

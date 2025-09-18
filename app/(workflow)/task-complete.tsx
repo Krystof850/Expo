@@ -5,6 +5,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
+import { TemptationService } from '../../src/services/temptationService';
+import { useAuth } from '../../src/context/AuthContext';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -22,6 +24,7 @@ export default function TaskComplete() {
   }>();
   
   const insets = useSafeAreaInsets();
+  const { user } = useAuth();
   const isSuccess = success === 'true';
   
   // Animation values
@@ -33,6 +36,11 @@ export default function TaskComplete() {
     // Play haptic feedback based on result
     if (isSuccess) {
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+      
+      // Track successful task completion for temptations overcome stat
+      if (user?.uid) {
+        TemptationService.trackTemptationOvercome(user.uid);
+      }
     } else {
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
     }
@@ -50,7 +58,7 @@ export default function TaskComplete() {
       
       contentOpacity.value = withDelay(200, withTiming(1, { duration: 600 }));
     }, 100);
-  }, [isSuccess]);
+  }, [isSuccess, user?.uid]);
 
   const handleBackToHome = async () => {
     await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);

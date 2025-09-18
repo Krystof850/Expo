@@ -14,6 +14,7 @@ import { COLORS, SPACING } from '@/constants/theme';
 import { useAuth } from '../../src/context/AuthContext';
 import { ProgressService } from '../../src/services/progressService';
 import { UserProgress } from '../../src/types/achievement';
+import { TemptationService, TemptationData } from '../../src/services/temptationService';
 
 const { width } = Dimensions.get('window');
 
@@ -35,6 +36,9 @@ export default function Statistics() {
   const [currentStreak, setCurrentStreak] = useState<number>(0);
   const [longestStreak, setLongestStreak] = useState<number>(0);
   const [totalDaysActive, setTotalDaysActive] = useState<number>(0);
+  
+  // Temptation stats
+  const [temptationData, setTemptationData] = useState<TemptationData | null>(null);
 
   // Load initial timer data
   useEffect(() => {
@@ -71,6 +75,18 @@ export default function Statistics() {
       setTotalDaysActive(diffInDays);
     }
   }, [user]);
+
+  // Load temptation statistics
+  useEffect(() => {
+    if (!user?.uid) return;
+
+    const loadTemptationStats = async () => {
+      const stats = await TemptationService.getUserTemptationStats(user.uid);
+      setTemptationData(stats);
+    };
+
+    loadTemptationStats();
+  }, [user?.uid]);
 
   // Calculate progress percentage every second
   useEffect(() => {
@@ -255,7 +271,7 @@ export default function Statistics() {
             <Text style={styles.sectionTitle}>Temptations</Text>
             <View style={styles.temptationOvercome}>
               <Text style={styles.temptationText}>Temptations Overcome</Text>
-              <Text style={styles.temptationNumber}>12</Text>
+              <Text style={styles.temptationNumber}>{temptationData?.temptationsOvercome || 0}</Text>
             </View>
             <View>
               <Text style={styles.chartTitle}>Time of Day with Most Temptations</Text>
@@ -264,7 +280,12 @@ export default function Statistics() {
                   data={{
                     labels: ['Morning', 'Afternoon', 'Evening', 'Night'],
                     datasets: [{
-                      data: [5, 9, 7, 3]
+                      data: [
+                        temptationData?.temptationsByTimeOfDay.morning || 0,
+                        temptationData?.temptationsByTimeOfDay.afternoon || 0,
+                        temptationData?.temptationsByTimeOfDay.evening || 0,
+                        temptationData?.temptationsByTimeOfDay.night || 0
+                      ]
                     }]
                   }}
                   width={width - 80}
