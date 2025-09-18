@@ -14,7 +14,18 @@ import { COLORS, SPACING } from '@/constants/theme';
 import { useAuth } from '../../src/context/AuthContext';
 import { ProgressService } from '../../src/services/progressService';
 import { UserProgress } from '../../src/types/achievement';
-import { TemptationService, TemptationData } from '../../src/services/temptationService';
+// TemptationData type for statistics display
+interface TemptationData {
+  userId: string;
+  temptationsOvercome: number;
+  temptationsByTimeOfDay: {
+    morning: number;
+    afternoon: number;
+    evening: number;
+    night: number;
+  };
+  lastUpdated: number;
+}
 
 const { width } = Dimensions.get('window');
 

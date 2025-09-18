@@ -32,6 +32,15 @@ export class ProgressService {
           currentOrbLevel: data.currentOrbLevel || 1,
           totalResets: data.totalResets || 0,
           lastUpdated: (data.lastUpdated instanceof Timestamp) ? data.lastUpdated.toMillis() : (typeof data.lastUpdated === 'number' ? data.lastUpdated : Date.now()),
+          // Temptation tracking fields
+          temptationsOvercome: data.temptationsOvercome || 0,
+          temptationsByTimeOfDay: data.temptationsByTimeOfDay || {
+            morning: 0,
+            afternoon: 0,
+            evening: 0,
+            night: 0,
+          },
+          lastTemptationUpdate: data.lastTemptationUpdate || Date.now(),
         };
       }
       
@@ -55,6 +64,15 @@ export class ProgressService {
       currentOrbLevel: 1,
       totalResets: 0,
       lastUpdated: now,
+      // Initialize temptation tracking
+      temptationsOvercome: 0,
+      temptationsByTimeOfDay: {
+        morning: 0,
+        afternoon: 0,
+        evening: 0,
+        night: 0,
+      },
+      lastTemptationUpdate: now,
     };
 
     try {
@@ -207,6 +225,15 @@ export class ProgressService {
             currentOrbLevel: data.currentOrbLevel || 1,
             totalResets: data.totalResets || 0,
             lastUpdated: (data.lastUpdated instanceof Timestamp) ? data.lastUpdated.toMillis() : (typeof data.lastUpdated === 'number' ? data.lastUpdated : Date.now()),
+            // Temptation tracking fields for real-time sync
+            temptationsOvercome: data.temptationsOvercome || 0,
+            temptationsByTimeOfDay: data.temptationsByTimeOfDay || {
+              morning: 0,
+              afternoon: 0,
+              evening: 0,
+              night: 0,
+            },
+            lastTemptationUpdate: data.lastTemptationUpdate || Date.now(),
           };
           callback(progress);
         } else {
@@ -221,6 +248,71 @@ export class ProgressService {
     } catch (error) {
       console.error('Error setting up real-time listener:', error);
       return () => {};
+    }
+  }
+
+  /**
+   * Track when AI generates a task (for time of day statistics)
+   */
+  static async trackTemptationGenerated(userId: string): Promise<void> {
+    try {
+      const now = new Date();
+      const hour = now.getHours();
+      
+      // Determine time of day category
+      let timeOfDay: 'morning' | 'afternoon' | 'evening' | 'night';
+      if (hour >= 6 && hour < 12) {
+        timeOfDay = 'morning';
+      } else if (hour >= 12 && hour < 18) {
+        timeOfDay = 'afternoon';
+      } else if (hour >= 18 && hour < 23) {
+        timeOfDay = 'evening';
+      } else {
+        timeOfDay = 'night';
+      }
+
+      // Get or create user progress first
+      const existingProgress = await this.getOrCreateUserProgress(userId);
+      
+      const currentTemptations = existingProgress.temptationsByTimeOfDay || {
+        morning: 0,
+        afternoon: 0,
+        evening: 0,
+        night: 0,
+      };
+
+      // Update existing document
+      const docRef = doc(db, this.COLLECTION_NAME, userId);
+      await updateDoc(docRef, {
+        [`temptationsByTimeOfDay.${timeOfDay}`]: (currentTemptations[timeOfDay] || 0) + 1,
+        lastTemptationUpdate: serverTimestamp(),
+      });
+
+      console.log(`📊 Temptation tracked: ${timeOfDay} (hour: ${hour})`);
+    } catch (error) {
+      console.error('❌ Error tracking temptation generation:', error);
+    }
+  }
+
+  /**
+   * Track when user successfully completes a task
+   */
+  static async trackTemptationOvercome(userId: string): Promise<void> {
+    try {
+      // Get or create user progress first
+      const existingProgress = await this.getOrCreateUserProgress(userId);
+      const currentOvercome = existingProgress.temptationsOvercome || 0;
+
+      // Update existing document
+      const docRef = doc(db, this.COLLECTION_NAME, userId);
+      await updateDoc(docRef, {
+        temptationsOvercome: currentOvercome + 1,
+        lastTemptationUpdate: serverTimestamp(),
+      });
+
+      console.log('🎉 Temptation overcome tracked successfully');
+    } catch (error) {
+      console.error('❌ Error tracking temptation overcome:', error);
     }
   }
 }

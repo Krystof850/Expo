@@ -13,7 +13,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import Svg, { Circle } from 'react-native-svg';
 import { generateMicroTask } from '../../src/utils/openai';
-import { TemptationService } from '../../src/services/temptationService';
+import { ProgressService } from '../../src/services/progressService';
 import { useAuth } from '../../src/context/AuthContext';
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
@@ -68,7 +68,7 @@ export default function TaskTimer() {
       
       // Track temptation generation for time of day statistics
       if (user?.uid) {
-        await TemptationService.trackTemptationGenerated(user.uid);
+        await ProgressService.trackTemptationGenerated(user.uid);
       }
     } catch (error) {
       console.error('Failed to generate AI task:', error);

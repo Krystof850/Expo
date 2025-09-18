@@ -5,7 +5,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
-import { TemptationService } from '../../src/services/temptationService';
+import { ProgressService } from '../../src/services/progressService';
 import { useAuth } from '../../src/context/AuthContext';
 import Animated, {
   useSharedValue,
@@ -39,7 +39,7 @@ export default function TaskComplete() {
       
       // Track successful task completion for temptations overcome stat
       if (user?.uid) {
-        TemptationService.trackTemptationOvercome(user.uid);
+        ProgressService.trackTemptationOvercome(user.uid);
       }
     } else {
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
