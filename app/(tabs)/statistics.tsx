@@ -180,42 +180,42 @@ export default function Statistics() {
               {[
                 { 
                   days: '1d', 
-                  gradient: ['#EF4444', '#DC2626'], // Červená
+                  gradient: ['#7DD3FC', '#67E8F9'], // Basic Blue Orb
                   number: 1
                 },
                 { 
                   days: '3d', 
-                  gradient: ['#F59E0B', '#D97706'], // Oranžová
+                  gradient: ['#9333EA', '#A855F7'], // Animated Aura Orb (fialová)
                   number: 2
                 },
                 { 
                   days: '7d', 
-                  gradient: ['#FBBF24', '#F59E0B'], // Žlutá
+                  gradient: ['#1E1B4B', '#312E81'], // Spiral Galaxy Orb (tmavě fialová)
                   number: 3
                 },
                 { 
                   days: '14d', 
-                  gradient: ['#10B981', '#059669'], // Zelená
+                  gradient: ['#EF4444', '#DC2626'], // Heartbeat Orb (červená)
                   number: 4
                 },
                 { 
                   days: '21d', 
-                  gradient: ['#0EA5E9', '#0284C7'], // Modrá
+                  gradient: ['#3B82F6', '#60A5FA'], // Lightning Orb (modrá/žlutá)
                   number: 5
                 },
                 { 
                   days: '30d', 
-                  gradient: ['#8B5CF6', '#7C3AED'], // Fialová
+                  gradient: ['#FF4500', '#FF8C00'], // Fire Orb (oranžová)
                   number: 6
                 },
                 { 
                   days: '60d', 
-                  gradient: ['#EC4899', '#DB2777'], // Růžová
+                  gradient: ['#0077BE', '#0096C7'], // Wave Orb (cyan)
                   number: 7
                 },
                 { 
                   days: '100d', 
-                  gradient: ['#6366F1', '#4F46E5'], // Indigo
+                  gradient: ['#228B22', '#32CD32'], // Nature Orb (zelená)
                   number: 8
                 },
               ].map((orb, index) => (
