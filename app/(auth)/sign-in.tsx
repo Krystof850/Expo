@@ -101,16 +101,18 @@ export default function SignIn() {
                 </HapticButton>
               )}
 
-              {/* Google Sign In Button */}
-              <View style={[styles.signInButton, googleLoading && styles.disabledButton]}>
-                <GoogleSigninButton
-                  style={styles.googleButton}
-                  size={GoogleSigninButton.Size.Wide}
-                  color={GoogleSigninButton.Color.Light}
-                  onPress={handleGoogleSignIn}
-                  disabled={googleLoading}
-                />
-              </View>
+              {/* Google Sign In Button - Native only */}
+              {Platform.OS !== 'web' && GoogleSigninButton && (
+                <View style={[styles.signInButton, googleLoading && styles.disabledButton]}>
+                  <GoogleSigninButton
+                    style={styles.googleButton}
+                    size={GoogleSigninButton.Size.Wide}
+                    color={GoogleSigninButton.Color.Light}
+                    onPress={handleGoogleSignIn}
+                    disabled={googleLoading}
+                  />
+                </View>
+              )}
 
               {/* Email Sign In Button */}
               <HapticButton 

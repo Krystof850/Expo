@@ -134,8 +134,10 @@ export async function signInWithGoogle(): Promise<User> {
     }
 
     // Check if device has Google Play Services (Android only)
-    console.log('[Auth] Checking Google Play Services...');
-    await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
+    if (Platform.OS === 'android') {
+      console.log('[Auth] Checking Google Play Services...');
+      await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
+    }
     
     console.log('[Auth] Initiating Google Sign-In...');
     const response = await GoogleSignin.signIn();
