@@ -5,7 +5,9 @@ import { Formik } from "formik";
 import * as Yup from "yup";
 import * as Haptics from 'expo-haptics';
 import { Ionicons } from '@expo/vector-icons';
-import { signInWithEmail, signUpWithEmail, checkEmailExists } from "../../src/services/auth";
+import { signInWithEmail, signUpWithEmail } from "../../src/services/auth";
+import { fetchSignInMethodsForEmail } from 'firebase/auth';
+import { auth } from '../../src/lib/firebase';
 import { useAuth } from "../../src/context/AuthContext";
 import { FirebaseConfigBanner } from "../../src/components/FirebaseConfigBanner";
 import { AuthErrorBoundary } from "../../src/components/AuthErrorBoundary";
@@ -54,60 +56,37 @@ export default function EmailSignIn() {
                   
                   const trimmedEmail = email.trim();
                   
-                  // Check if email already exists in database and get provider info
-                  const emailCheck = await checkEmailExists(trimmedEmail);
-                  
-                  if (emailCheck.exists) {
-                    if (emailCheck.hasPassword) {
-                      // Email exists with password -> Sign in flow
-                      console.log('[EmailSignIn] Email exists with password, attempting sign in');
-                      await signInWithEmail(trimmedEmail, password);
-                      console.log('[EmailSignIn] Sign in successful');
-                    } else {
-                      // Email exists but with different provider
-                      const providers = emailCheck.methods.map(method => {
-                        if (method.includes('google')) return 'Google';
-                        if (method.includes('apple')) return 'Apple';
-                        return method;
-                      }).join(', ');
-                      
-                      Alert.alert(
-                        "Account exists with different sign-in method",
-                        `This email is already registered using ${providers}. Please use that method to sign in, or use a different email address.`,
-                        [{ text: "OK" }]
-                      );
-                      return; // Exit early
-                    }
-                  } else {
-                    // Email doesn't exist -> Sign up flow with email verification
-                    console.log('[EmailSignIn] Email does not exist, creating new account');
-                    await signUpWithEmail(trimmedEmail, password);
-                    console.log('[EmailSignIn] Sign up successful with email verification sent');
+                  // Try to sign in first
+                  try {
+                    console.log('[EmailSignIn] Trying to sign in existing user');
+                    await signInWithEmail(trimmedEmail, password);
+                    console.log('[EmailSignIn] Sign in successful');
+                  } catch (signInError: any) {
+                    console.log('[EmailSignIn] Sign in failed:', signInError.code);
                     
-                    // Show success message about email verification
-                    Alert.alert(
-                      "Account Created!", 
-                      "We've sent a verification email to " + trimmedEmail + ". Please check your inbox and click the verification link to activate your account.",
-                      [{ text: "OK" }]
-                    );
+                    if (signInError.code === 'auth/user-not-found' || signInError.code === 'auth/invalid-credential') {
+                      // User doesn't exist, try to create new account
+                      console.log('[EmailSignIn] User not found, trying to create new account');
+                      await signUpWithEmail(trimmedEmail, password);
+                      console.log('[EmailSignIn] Sign up successful');
+                    } else {
+                      // Other sign in errors (wrong password, etc.)
+                      throw signInError;
+                    }
                   }
                 } catch (e: any) {
                   console.error('[EmailSignIn] Authentication failed:', e);
                   let errorMessage = "Authentication failed.";
                   if (e.code === 'auth/wrong-password' || e.code === 'auth/invalid-credential') {
-                    errorMessage = "Incorrect password. Please try again.";
+                    errorMessage = "Nesprávné heslo. Zkus to znovu.";
                   } else if (e.code === 'auth/email-already-in-use') {
-                    errorMessage = "This email is already registered. Please sign in instead.";
+                    errorMessage = "Tento email je již registrován. Zkus se přihlásit.";
                   } else if (e.code === 'auth/weak-password') {
-                    errorMessage = "Password is too weak. Choose a stronger password (min. 6 characters).";
+                    errorMessage = "Heslo je příliš slabé. Zvolte silnější heslo (min. 6 znaků).";
                   } else if (e.code === 'auth/invalid-email') {
-                    errorMessage = "Invalid email format.";
-                  } else if (e.code === 'auth/user-disabled') {
-                    errorMessage = "This account has been disabled. Please contact support.";
-                  } else if (e.code === 'auth/too-many-requests') {
-                    errorMessage = "Too many failed attempts. Please try again later.";
+                    errorMessage = "Neplatný formát emailu.";
                   }
-                  Alert.alert("Error", e.message || errorMessage);
+                  Alert.alert("Chyba", e.message || errorMessage);
                 } finally {
                   setSubmitting(false);
                 }
