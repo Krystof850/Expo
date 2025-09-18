@@ -179,52 +179,73 @@ export default function Statistics() {
             <View style={styles.orbsContainer}>
               {[
                 { 
-                  name: 'Fire Orb', 
+                  days: '1d', 
                   unlocked: true,
-                  icon: 'flame',
-                  color: '#EF4444'
+                  color: '#EF4444',
+                  gradient: ['#EF4444', '#DC2626'],
+                  symbol: '🔥'
                 },
                 { 
-                  name: 'Water Orb', 
+                  days: '3d', 
                   unlocked: true,
-                  icon: 'water',
-                  color: '#0EA5E9'
+                  color: '#0EA5E9',
+                  gradient: ['#0EA5E9', '#0284C7'],
+                  symbol: '💧'
                 },
                 { 
-                  name: 'Earth Orb', 
+                  days: '7d', 
                   unlocked: true,
-                  icon: 'leaf',
-                  color: '#10B981'
+                  color: '#10B981',
+                  gradient: ['#10B981', '#059669'],
+                  symbol: '🌿'
                 },
                 { 
-                  name: 'Air Orb', 
+                  days: '14d', 
                   unlocked: false,
-                  icon: 'cloudy',
-                  color: '#8B5CF6'
+                  color: '#8B5CF6',
+                  gradient: ['#8B5CF6', '#7C3AED'],
+                  symbol: '⚡'
                 },
                 { 
-                  name: 'Lightning Orb', 
+                  days: '21d', 
                   unlocked: false,
-                  icon: 'flash',
-                  color: '#F59E0B'
+                  color: '#F59E0B',
+                  gradient: ['#F59E0B', '#D97706'],
+                  symbol: '⭐'
                 },
                 { 
-                  name: 'Ice Orb', 
+                  days: '30d', 
                   unlocked: false,
-                  icon: 'snow',
-                  color: '#06B6D4'
+                  color: '#06B6D4',
+                  gradient: ['#06B6D4', '#0891B2'],
+                  symbol: '❄️'
+                },
+                { 
+                  days: '60d', 
+                  unlocked: false,
+                  color: '#EC4899',
+                  gradient: ['#EC4899', '#DB2777'],
+                  symbol: '🌙'
+                },
+                { 
+                  days: '100d', 
+                  unlocked: false,
+                  color: '#6366F1',
+                  gradient: ['#6366F1', '#4F46E5'],
+                  symbol: '💎'
                 },
               ].map((orb, index) => (
                 <View key={index} style={[styles.orbItem, !orb.unlocked && styles.orbLocked]}>
-                  <View style={[styles.orbIcon, { backgroundColor: orb.unlocked ? orb.color : '#F1F5F9' }]}>
-                    <Ionicons 
-                      name={orb.icon as any} 
-                      size={28} 
-                      color={orb.unlocked ? '#FFFFFF' : '#94A3B8'} 
-                    />
-                  </View>
-                  <Text style={[styles.orbName, !orb.unlocked && styles.orbNameLocked]}>
-                    {orb.name}
+                  <ExpoLinearGradient
+                    colors={orb.unlocked ? orb.gradient : ['#F1F5F9', '#E2E8F0']}
+                    style={styles.orbGradientContainer}
+                  >
+                    <Text style={styles.orbSymbol}>
+                      {orb.unlocked ? orb.symbol : '🔒'}
+                    </Text>
+                  </ExpoLinearGradient>
+                  <Text style={[styles.orbDays, !orb.unlocked && styles.orbDaysLocked]}>
+                    {orb.days}
                   </Text>
                 </View>
               ))}
@@ -486,32 +507,35 @@ const styles = StyleSheet.create({
   },
   orbItem: {
     alignItems: 'center',
-    width: '30%',
+    width: '22%',
     marginBottom: 12,
   },
   orbLocked: {
-    opacity: 0.5,
+    opacity: 0.4,
   },
-  orbIcon: {
-    width: 56,
-    height: 56,
-    borderRadius: 28,
+  orbGradientContainer: {
+    width: 52,
+    height: 52,
+    borderRadius: 26,
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 6,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
+    shadowOpacity: 0.2,
     shadowRadius: 4,
-    elevation: 2,
+    elevation: 3,
   },
-  orbName: {
-    fontSize: 12,
-    fontWeight: '600',
+  orbSymbol: {
+    fontSize: 24,
+  },
+  orbDays: {
+    fontSize: 11,
+    fontWeight: '700',
     color: '#082F49',
     textAlign: 'center',
   },
-  orbNameLocked: {
+  orbDaysLocked: {
     color: '#94A3B8',
   },
 });
