@@ -149,7 +149,6 @@ export default function Statistics() {
           />
         </Svg>
         <View style={styles.circularProgressText}>
-          <Text style={styles.daysText}>{currentTime.days}d {currentTime.hours}h</Text>
           <Text style={styles.percentageText}>{percentage.toFixed(1)}%</Text>
         </View>
       </View>
@@ -462,19 +461,11 @@ const styles = StyleSheet.create({
     position: 'absolute',
     alignItems: 'center',
     justifyContent: 'center',
-    width: '100%',
-    height: '100%',
-  },
-  daysText: {
-    fontSize: 24,
-    fontWeight: '700',
-    color: '#082F49',
-    marginBottom: 4,
   },
   percentageText: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#0284C7',
+    fontSize: 32,
+    fontWeight: '800',
+    color: '#082F49',
   },
   
   // Three Stats Grid
