@@ -129,9 +129,10 @@ export async function signInWithGoogle(): Promise<User> {
     console.log('[Auth] Creating Firebase credential...');
     
     // Create Firebase credential from Google tokens
+    // Use idToken for Firebase authentication (accessToken not needed for Firebase)
     const credential = GoogleAuthProvider.credential(
       userInfo.idToken,
-      userInfo.serverAuthCode
+      null // accessToken not required for Firebase
     );
     
     console.log('[Auth] Firebase credential created, signing in...');
