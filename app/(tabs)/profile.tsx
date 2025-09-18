@@ -112,85 +112,18 @@ export default function Profile() {
   const handleSupport = async () => {
     await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     
-    try {
-      const extra = (Constants.expoConfig?.extra || {}) as Record<string, string>;
-      const supportEmail = extra.SUPPORT_EMAIL || 'unloop.app.tech@gmail.com';
-      const subject = 'Support Request - Unloop App';
-      const body = 'Hello Unloop Team,\n\nI need help with:\n\n';
-      
-      const mailto = `mailto:${supportEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-      
-      const supported = await Linking.canOpenURL(mailto);
-      if (supported) {
-        await Linking.openURL(mailto);
-      } else {
-        Alert.alert(
-          'Email Client Not Available',
-          `Please send an email to: ${supportEmail}`,
-          [
-            {
-              text: 'Copy Email',
-              onPress: async () => {
-                try {
-                  await Clipboard.setStringAsync(supportEmail);
-                  Alert.alert('Email Copied', `${supportEmail} has been copied to your clipboard`);
-                  await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-                } catch (error) {
-                  console.error('Clipboard error:', error);
-                  Alert.alert('Email Address', supportEmail);
-                }
-              }
-            },
-            { text: 'OK' }
-          ]
-        );
-      }
-    } catch (error) {
-      console.error('Support email error:', error);
-      Alert.alert('Error', 'Unable to open email client');
-    }
+    Alert.alert(
+      'Support',
+      'Pro pomoc nám napište na unloop.app.tech@gmail.com',
+      [{ text: 'OK', style: 'default' }]
+    );
   };
 
   const handleRateApp = async () => {
     await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     
     try {
-      if (Platform.OS === 'ios') {
-        // Use expo-store-review for iOS in-app rating
-        const isAvailable = await StoreReview.isAvailableAsync();
-        if (isAvailable) {
-          await StoreReview.requestReview();
-        } else {
-          // Fallback for iOS - Note: this would need real App Store ID in production
-          Alert.alert(
-            'Rate App',
-            'Please rate our app in the App Store',
-            [
-              { text: 'Later', style: 'cancel' },
-              {
-                text: 'Rate Now',
-                onPress: () => {
-                  // In production, replace with actual App Store ID
-                  Alert.alert('App Store', 'This would open the App Store page for rating in production.');
-                }
-              }
-            ]
-          );
-        }
-      } else if (Platform.OS === 'android') {
-        // Android - open Play Store
-        const bundleId = 'com.unloopapp';
-        const playStoreUrl = `https://play.google.com/store/apps/details?id=${bundleId}`;
-        
-        const supported = await Linking.canOpenURL(playStoreUrl);
-        if (supported) {
-          await Linking.openURL(playStoreUrl);
-        } else {
-          Alert.alert('Error', 'Unable to open Google Play Store');
-        }
-      } else {
-        Alert.alert('Error', 'App rating is only available on mobile devices');
-      }
+      await StoreReview.requestReview();
     } catch (error) {
       console.error('Rate app error:', error);
       Alert.alert('Error', 'Unable to open rating interface');
@@ -281,7 +214,7 @@ export default function Profile() {
                   style={styles.closeButton}
                   onPress={() => setIsPasswordModalVisible(false)}
                 >
-                  <Ionicons name="close" size={24} color={COLORS.mainText} />
+                  <Ionicons name="close" size={24} color="#FFFFFF" />
                 </TouchableOpacity>
               </View>
 
@@ -361,6 +294,7 @@ const styles = StyleSheet.create({
   header: {
     alignItems: 'center',
     marginBottom: 32,
+    backgroundColor: '#082F49',
   },
   title: {
     fontSize: 32,
@@ -466,7 +400,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
   },
   modalContent: {
-    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+    backgroundColor: '#1E293B',
     borderRadius: 20,
     padding: 24,
     width: '100%',
@@ -486,7 +420,7 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: COLORS.mainText,
+    color: '#FFFFFF',
   },
   closeButton: {
     padding: 8,
@@ -497,17 +431,17 @@ const styles = StyleSheet.create({
   inputLabel: {
     fontSize: 14,
     fontWeight: '600',
-    color: COLORS.mainText,
+    color: '#FFFFFF',
     marginBottom: 8,
     marginTop: 16,
   },
   passwordInput: {
-    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
     borderRadius: 12,
     paddingHorizontal: 16,
     paddingVertical: 16,
     fontSize: 16,
-    color: COLORS.mainText,
+    color: '#FFFFFF',
     borderWidth: 1,
     borderColor: 'rgba(255, 255, 255, 0.3)',
   },
@@ -524,7 +458,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   cancelButtonText: {
-    color: COLORS.mainText,
+    color: '#FFFFFF',
     fontSize: 16,
     fontWeight: '600',
   },
