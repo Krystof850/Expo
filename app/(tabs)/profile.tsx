@@ -12,7 +12,7 @@ import { updatePassword, EmailAuthProvider, reauthenticateWithCredential } from 
 import { useAuth } from '../../src/context/AuthContext';
 import { Protected } from '../../src/components/Protected';
 import { TitleText, DescriptionText } from '../../components/Text';
-import { COLORS, SPACING } from '@/constants/theme';
+import { COLORS, SPACING, TYPOGRAPHY } from '@/constants/theme';
 
 export default function Profile() {
   const { user, logout } = useAuth();
@@ -173,7 +173,7 @@ export default function Profile() {
         />
         <ScrollView 
           style={styles.scrollView}
-          contentContainerStyle={[styles.content, { paddingTop: insets.top + SPACING.xl }]}
+          contentContainerStyle={[styles.content, { paddingTop: insets.top + SPACING.xl + 20 }]}
           showsVerticalScrollIndicator={false}
         >
           {/* Header */}
@@ -333,8 +333,7 @@ const styles = StyleSheet.create({
     marginBottom: SPACING.xl,
   },
   title: {
-    fontSize: 28,
-    fontWeight: '700',
+    ...TYPOGRAPHY.title,
     textAlign: 'center',
     color: '#082F49', // Dark blue text to match template
   },
