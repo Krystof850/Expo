@@ -12,7 +12,7 @@ export default function TabLayout() {
           position: 'absolute',
           bottom: 20,
           marginHorizontal: 10,
-          backgroundColor: 'rgba(255, 255, 255, 0.7)',
+          backgroundColor: 'rgb(255, 255, 255)',
           borderRadius: 32,
           height: 60,
           paddingBottom: 4,
