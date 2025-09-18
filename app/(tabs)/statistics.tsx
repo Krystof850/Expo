@@ -249,9 +249,9 @@ export default function Statistics() {
 
           {/* Progress Circle Section */}
           <View style={styles.progressCircleSection}>
-            <TitleText style={styles.progressTitle}>You will be free in: {targetDate}</TitleText>
+            <TitleText>You will be free in: {targetDate}</TitleText>
             <CircularProgress percentage={progressPercentage} />
-            <DescriptionText style={styles.progressSubtitle}>Procrastination-free</DescriptionText>
+            <DescriptionText>Procrastination-free</DescriptionText>
           </View>
 
           {/* Three Stats Grid */}

@@ -333,13 +333,15 @@ const styles = StyleSheet.create({
     marginBottom: SPACING.xl,
   },
   title: {
-    fontFamily: TYPOGRAPHY.title.fontFamily,
-    fontSize: TYPOGRAPHY.title.fontSize,
-    fontWeight: TYPOGRAPHY.title.fontWeight,
-    lineHeight: TYPOGRAPHY.title.lineHeight,
+    fontSize: 58,
+    fontWeight: '800',
+    color: '#082F49',
+    lineHeight: 58,
+    letterSpacing: -1.5,
+    textShadowColor: 'rgba(0, 0, 0, 0.1)',
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 4,
     textAlign: 'center',
-    color: '#082F49', // Dark blue text to match template
-    // Removed text shadow properties
   },
   
   // User Info Card
