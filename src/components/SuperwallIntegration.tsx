@@ -46,6 +46,30 @@ const SuperwallEnabledIntegration: React.FC<{ children: ReactNode }> = ({ childr
       },
       onPresent: (info: any) => {
         console.log('[SuperwallIntegration] Paywall presented:', info);
+        
+        // DETAILNÍ LOGGING PRODUKTŮ
+        console.log('📦 [PRODUCTS] Product IDs:', info?.productIds);
+        console.log('📦 [PRODUCTS] Products count:', info?.products?.length);
+        
+        info?.products?.forEach((product: any, index: number) => {
+          console.log(`📦 [PRODUCT ${index + 1}]`, {
+            id: product.id,
+            name: product.name,
+            price: product.price,
+            priceString: product.priceString,
+            localizedTitle: product.localizedTitle,
+            localizedDescription: product.localizedDescription,
+            entitlements: product.entitlements?.length + ' entitlements',
+            allFields: Object.keys(product)
+          });
+        });
+        
+        // TIMING INFO
+        console.log('⏱️ [TIMING]', {
+          productsLoadDuration: info?.productsLoadDuration + 's',
+          productsLoadSuccess: !info?.productsLoadFailTime,
+          webViewLoadDuration: info?.webViewLoadDuration + 's'
+        });
       },
       onDismiss: (info: any, result: any) => {
         console.log('[SuperwallIntegration] Paywall dismissed:', info, result);
