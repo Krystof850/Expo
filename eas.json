@@ -9,7 +9,6 @@
       "distribution": "internal",
       "autoIncrement": true,
       "ios": {
-        "simulator": true,
         "image": "macos-sequoia-15.5-xcode-26.0",
         "resourceClass": "m1-medium",
         "node": "20.19.4"
