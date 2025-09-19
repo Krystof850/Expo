@@ -1,0 +1,43 @@
+hele stale to nefunguje. udelame to nasledovne, chci at ze signin stranky odstranis email moznost prihlaseni a take google moznost. nechame tam pouze apple. proved nyni tyto upravy.
+
+poté Prosím, implementuj logiku pro přístup do chráněné části aplikace. Kód by měl být napsaný v JavaScriptu/TypeScriptu a používat Expo. Zde je popis logiky:
+
+Stav aplikace: Aplikace by měla mít dva stavy: "Autentizovaný" a "Neautentizovaný". Neautentizovaný stav by měl být rozdělen na "Přihlašovací obrazovka" a "Paywall obrazovka".
+
+Podmínky pro přístup: Uživatel se dostane do chráněné zóny pouze tehdy, když jsou splněny dvě podmínky zároveň:
+
+Je přihlášený přes Apple ID.
+
+Má aktivní předplatné (ověřené přes Superwall).
+
+Tok pro Neautentizovaného uživatele:
+
+Pokud uživatel není přihlášený přes Apple ID (stav "authenticated" je false), přesměruj ho na přihlašovací obrazovku.
+
+Pokud uživatel je přihlášený přes Apple ID, ale nemá aktivní předplatné (stav "subscription" je false), přesměruj ho na Paywall obrazovku.
+
+Kontrola předplatného v chráněné zóně:
+
+Uvnitř chráněné zóny (tj. uživatel má přístup) pravidelně kontroluj stav předplatného.
+
+Pokud předplatné vyprší během používání aplikace, okamžitě přesměruj uživatele zpět na Paywall obrazovku.
+
+Technické detaily a požadavky:
+
+Použij Expo Router pro navigaci. Vytvoř soubory pro následující obrazovky:
+
+app/(auth)/sign-in.js: Přihlašovací obrazovka pro Apple ID.
+
+app/(protected)/index.js: Hlavní obrazovka chráněné zóny.
+
+app/(paywall)/index.js: Paywall obrazovka.
+
+Logiku pro ověřování a správu stavů (isAuthenticated, hasSubscription) centralizuj do React Contextu nebo custom hooku (např. useAuth()).
+
+Pro ověření Apple ID použij expo-apple-authentication a pro ověření předplatného použij Superwall.
+
+Zajisti, aby se logika spustila při načtení aplikace a při jakékoli změně stavu autentizace nebo předplatného.
+
+Poskytni komentáře, které vysvětlují jednotlivé části logiky.
+
+Cílem je vytvořit robustní a snadno spravovatelnou architekturu, která efektivně řídí přístup do aplikace na základě dvou klíčových podmínek.

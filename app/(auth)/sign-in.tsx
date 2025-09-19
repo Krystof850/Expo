@@ -5,7 +5,7 @@ import * as Haptics from 'expo-haptics';
 import { Ionicons } from '@expo/vector-icons';
 import { Platform } from 'react-native';
 
-import { signInWithGoogle, signInWithApple, isAppleSignInAvailable, GoogleSigninButton, isGoogleSignInAvailable } from "../../src/services/auth";
+import { signInWithApple, isAppleSignInAvailable } from "../../src/services/auth";
 import { useAuth } from "../../src/context/AuthContext";
 import { FirebaseConfigBanner } from "../../src/components/FirebaseConfigBanner";
 import { AuthErrorBoundary } from "../../src/components/AuthErrorBoundary";
@@ -18,7 +18,6 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function SignIn() {
   const { user } = useAuth();
-  const [googleLoading, setGoogleLoading] = useState(false);
   const [appleLoading, setAppleLoading] = useState(false);
   const [appleAvailable, setAppleAvailable] = useState(false);
   const insets = useSafeAreaInsets();
@@ -33,17 +32,6 @@ export default function SignIn() {
   }, []);
 
 
-  const handleGoogleSignIn = async () => {
-    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    try {
-      setGoogleLoading(true);
-      await signInWithGoogle();
-    } catch (e: any) {
-      Alert.alert("Error", e.message || "Google Sign In failed.");
-    } finally {
-      setGoogleLoading(false);
-    }
-  };
 
   const handleAppleSignIn = async () => {
     await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -59,10 +47,6 @@ export default function SignIn() {
     }
   };
 
-  const handleEmailSignIn = async () => {
-    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    router.push('/(auth)/email-signin');
-  };
 
   if (user) return <Redirect href="/(tabs)/" />;
 
@@ -74,7 +58,7 @@ export default function SignIn() {
           <View style={[styles.content, { paddingTop: insets.top + SPACING.xl * 2 }]}>
             <View style={[styles.header, { overflow: 'visible' }]}>
               <TitleText animated={false} style={[styles.title, { fontSize: 32, lineHeight: Math.round(32 * 1.25) }]}>Sign In</TitleText>
-              <DescriptionText animated={false} style={styles.subtitle}>Choose your preferred sign-in method</DescriptionText>
+              <DescriptionText animated={false} style={styles.subtitle}>Sign in with your Apple ID to continue</DescriptionText>
             </View>
 
             <View style={styles.buttonContainer}>
@@ -92,28 +76,6 @@ export default function SignIn() {
                 </HapticButton>
               )}
 
-              {/* Google Sign In Button */}
-              {Platform.OS !== 'web' && (
-                <HapticButton 
-                  style={[styles.signInButton, googleLoading && styles.disabledButton]}
-                  onPress={handleGoogleSignIn}
-                  disabled={googleLoading}
-                >
-                  <Ionicons name="logo-google" size={20} color="#4285F4" style={styles.buttonIcon} />
-                  <TitleText animated={false} style={styles.buttonText}>
-                    {googleLoading ? "Signing in..." : "Continue with Google"}
-                  </TitleText>
-                </HapticButton>
-              )}
-
-              {/* Email Sign In Button */}
-              <HapticButton 
-                style={styles.signInButton}
-                onPress={handleEmailSignIn}
-              >
-                <Ionicons name="mail" size={20} color="#000000" style={styles.buttonIcon} />
-                <TitleText animated={false} style={styles.buttonText}>Continue with Email</TitleText>
-              </HapticButton>
             </View>
 
           </View>
