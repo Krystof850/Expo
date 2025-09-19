@@ -10,6 +10,7 @@ import {
 import { Image } from 'expo-image';
 import { router } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useAssets } from 'expo-asset';
 import * as Haptics from 'expo-haptics';
 
 import AppBackground from '../../components/AppBackground';
@@ -23,12 +24,26 @@ const chartImageSource = require('@/attached_assets/ChatGPT Image Sep 20, 2025, 
 
 export default function BenefitsScreen() {
   const insets = useSafeAreaInsets();
-  // No preloading needed for local assets - they load instantly
+  
+  // Use useAssets hook to ensure image is loaded before rendering
+  const [assets] = useAssets([chartImageSource]);
 
   const handleContinue = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     router.push('/(onboarding)/goals');
   };
+
+  // Don't render content until chart image is loaded
+  if (!assets) {
+    // Show loading state with same background
+    return (
+      <AppBackground>
+        <View style={styles.container}>
+          <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
+        </View>
+      </AppBackground>
+    );
+  }
 
   return (
     <AppBackground>
