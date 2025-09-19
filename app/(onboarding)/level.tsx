@@ -19,37 +19,70 @@ import { SPACING } from '@/constants/theme';
 import { Asset } from 'expo-asset';
 import * as Haptics from 'expo-haptics';
 
-// Simple Celebrating Person with Crown Illustration
-const SimpleCelebratingPersonIllustration = () => (
-  <Svg width="200" height="200" viewBox="0 0 200 200">
-    {/* Simple golden crown */}
-    <Path
-      d="M88 75 L92 60 L96 75 L100 60 L104 75 L108 60 L112 75 L115 80 L85 80 Z"
-      fill="rgba(251, 191, 36, 1)"
-      stroke="rgba(245, 158, 11, 1)"
-      strokeWidth="1"
-    />
-    
-    {/* Person's head */}
-    <Circle cx="100" cy="90" r="10" fill="rgba(255, 255, 255, 1)" stroke="rgba(59, 130, 246, 1)" strokeWidth="2" />
-    
-    {/* Person's body */}
-    <Rect x="94" y="98" width="12" height="22" rx="2" fill="rgba(59, 130, 246, 1)" />
-    
-    {/* Arms raised high above head */}
+// Celebrating Person with Realistic Crown Illustration
+const CelebratingPersonWithRealisticCrown = () => (
+  <Svg width="280" height="280" viewBox="0 0 200 200">
+    {/* Realistic golden crown */}
     <G>
-      {/* Left arm raised */}
-      <Path d="M94 102 L82 88 L78 84" stroke="rgba(59, 130, 246, 1)" strokeWidth="3" strokeLinecap="round" />
-      {/* Right arm raised */}
-      <Path d="M106 102 L118 88 L122 84" stroke="rgba(59, 130, 246, 1)" strokeWidth="3" strokeLinecap="round" />
+      {/* Crown base band */}
+      <Rect x="85" y="78" width="30" height="6" rx="3" fill="rgba(251, 191, 36, 1)" stroke="rgba(245, 158, 11, 1)" strokeWidth="1" />
+      
+      {/* Crown spikes with realistic proportions */}
+      {/* Left spike */}
+      <Path
+        d="M87 78 L89 65 L91 78 Z"
+        fill="rgba(251, 191, 36, 1)"
+        stroke="rgba(245, 158, 11, 1)"
+        strokeWidth="1"
+      />
+      
+      {/* Center tall spike */}
+      <Path
+        d="M96 78 L100 58 L104 78 Z"
+        fill="rgba(251, 191, 36, 1)"
+        stroke="rgba(245, 158, 11, 1)"
+        strokeWidth="1"
+      />
+      
+      {/* Right spike */}
+      <Path
+        d="M109 78 L111 65 L113 78 Z"
+        fill="rgba(251, 191, 36, 1)"
+        stroke="rgba(245, 158, 11, 1)"
+        strokeWidth="1"
+      />
+      
+      {/* Crown decorative elements */}
+      <Circle cx="89" cy="70" r="1.5" fill="rgba(220, 38, 38, 1)" />
+      <Circle cx="100" cy="66" r="2" fill="rgba(34, 197, 94, 1)" />
+      <Circle cx="111" cy="70" r="1.5" fill="rgba(34, 211, 238, 1)" />
+      
+      {/* Crown highlights for realism */}
+      <Path d="M100 58 L101 60 L99 60 Z" fill="rgba(254, 240, 138, 1)" />
+      <Line x1="89" y1="65" x2="90" y2="67" stroke="rgba(254, 240, 138, 0.8)" strokeWidth="1" />
+      <Line x1="111" y1="65" x2="110" y2="67" stroke="rgba(254, 240, 138, 0.8)" strokeWidth="1" />
     </G>
     
-    {/* Legs in simple stance */}
+    {/* Person's head - larger */}
+    <Circle cx="100" cy="92" r="14" fill="rgba(255, 255, 255, 1)" stroke="rgba(59, 130, 246, 1)" strokeWidth="2" />
+    
+    {/* Person's body - larger */}
+    <Rect x="90" y="104" width="20" height="30" rx="3" fill="rgba(59, 130, 246, 1)" />
+    
+    {/* Arms raised high above head - larger */}
+    <G>
+      {/* Left arm raised */}
+      <Path d="M90 108 L75 90 L70 85" stroke="rgba(59, 130, 246, 1)" strokeWidth="4" strokeLinecap="round" />
+      {/* Right arm raised */}
+      <Path d="M110 108 L125 90 L130 85" stroke="rgba(59, 130, 246, 1)" strokeWidth="4" strokeLinecap="round" />
+    </G>
+    
+    {/* Legs in simple stance - larger */}
     <G>
       {/* Left leg */}
-      <Path d="M97 120 L92 130 L88 135" stroke="rgba(59, 130, 246, 1)" strokeWidth="3" strokeLinecap="round" />
+      <Path d="M95 134 L88 148 L83 155" stroke="rgba(59, 130, 246, 1)" strokeWidth="4" strokeLinecap="round" />
       {/* Right leg */}
-      <Path d="M103 120 L108 130 L112 135" stroke="rgba(59, 130, 246, 1)" strokeWidth="3" strokeLinecap="round" />
+      <Path d="M105 134 L112 148 L117 155" stroke="rgba(59, 130, 246, 1)" strokeWidth="4" strokeLinecap="round" />
     </G>
   </Svg>
 );
@@ -139,7 +172,7 @@ export default function LevelScreen() {
           {/* Illustration space */}
           <AnimatedContent delay={100}>
             <View style={styles.illustrationContainer}>
-              <SimpleCelebratingPersonIllustration />
+              <CelebratingPersonWithRealisticCrown />
             </View>
           </AnimatedContent>
 
@@ -220,7 +253,7 @@ const styles = StyleSheet.create({
     height: '33%', // Upper third of the screen
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 20,
+    marginTop: 60,
   },
   textContainer: {
     alignItems: 'center',
