@@ -3,6 +3,9 @@
 This is an Expo React Native application with Firebase Authentication integration and OpenAI-powered micro-task generation. The app implements email/password authentication with persistent user sessions using AsyncStorage. It features a clean TypeScript architecture with protected routes, form validation, and automatic sign-in/registration flow. The application uses expo-router for navigation, includes an optional onboarding assessment, and has a complete "I feel tempted" procrastination workflow with AI-generated micro-tasks.
 
 **🚀 LATEST UPDATE (Sep 19, 2025):**
+- ✅ **EXPO ACCOUNT MIGRATION** - Successfully migrated to new Expo account (krystof.kapka3@gmail.com) with working access token
+- ✅ **PAYWALL PRICING SOLUTION** - Implemented production-ready development testing guidance for Superwall pricing validation
+- ✅ **DEVELOPMENT GUIDANCE** - Clear instructions for testing product prices (Annual_16: $16.99/year, Monthly_17: $1.99/month) on physical devices
 - ✅ **REPLIT SETUP COMPLETE** - Project successfully configured for Replit environment
 - ✅ **EXPO WEB SERVER** - Running on port 5000 with tunnel mode for proper Replit access
 - ✅ **FIREBASE INTEGRATION** - Fixed configuration issues, all Firebase services working correctly

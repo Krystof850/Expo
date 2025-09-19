@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useEffect, ReactNode } from 'react';
+import * as React from 'react';
+import { createContext, useContext, useEffect, ReactNode } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { isSuperwallSupported, isDevelopmentEnvironment, getMockProductData, MockProductData } from '../utils/environment';
 
@@ -21,7 +22,7 @@ export function useSuperwall() {
 }
 
 // Komponenta s aktivním Superwall pro native platformy
-const SuperwallEnabledIntegration: React.FC<{ children: ReactNode }> = ({ children }) => {
+const SuperwallEnabledIntegration: React.FC<{ children: ReactNode }> = ({ children }: { children: ReactNode }) => {
   const { user, setHasSubscription } = useAuth() as any;
   
   // ATOMIC paywall presentation lock using useRef (synchronní)
@@ -205,7 +206,7 @@ const SuperwallEnabledIntegration: React.FC<{ children: ReactNode }> = ({ childr
 };
 
 // Komponenta pro prostředí bez Superwall (Expo Go, web)
-const SuperwallDisabledIntegration: React.FC<{ children: ReactNode }> = ({ children }) => {
+const SuperwallDisabledIntegration: React.FC<{ children: ReactNode }> = ({ children }: { children: ReactNode }) => {
   const { setHasSubscription } = useAuth() as any;
 
   useEffect(() => {
@@ -231,7 +232,7 @@ const SuperwallDisabledIntegration: React.FC<{ children: ReactNode }> = ({ child
 };
 
 // Hlavní komponenta
-const SuperwallIntegration: React.FC<{ children: ReactNode }> = ({ children }) => {
+const SuperwallIntegration: React.FC<{ children: ReactNode }> = ({ children }: { children: ReactNode }) => {
   const superwallSupported = isSuperwallSupported();
 
   if (superwallSupported) {

@@ -1,5 +1,8 @@
-import Constants from 'expo-constants';
+import * as Constants from 'expo-constants';
 import { Platform } from 'react-native';
+
+// Global __DEV__ declaration for TypeScript
+declare const __DEV__: boolean;
 
 export interface AppEnvironment {
   isExpoGo: boolean;
@@ -62,5 +65,7 @@ export const getMockProductData = (): MockProductData[] => {
 
 export const isDevelopmentEnvironment = (): boolean => {
   const { isDevelopmentBuild, isExpoGo } = detectAppEnvironment();
-  return isDevelopmentBuild || isExpoGo || __DEV__;
+  // Use process.env.NODE_ENV as fallback if __DEV__ is undefined
+  const isDevMode = typeof __DEV__ !== 'undefined' ? __DEV__ : process.env.NODE_ENV === 'development';
+  return isDevelopmentBuild || isExpoGo || isDevMode;
 };
