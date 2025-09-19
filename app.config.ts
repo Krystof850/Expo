@@ -27,7 +27,6 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   icon: './assets/images/icon.jpg',
   scheme: 'unloop',
   userInterfaceStyle: 'automatic',
-  newArchEnabled: true,
 
   ios: {
     ...(config.ios ?? {}),
@@ -49,7 +48,6 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       foregroundImage: './assets/images/adaptive-icon.png',
       backgroundColor: '#ffffff',
     },
-    edgeToEdgeEnabled: true,
     package: "com.kkdigitalsolutions.procrastination",
   },
 
