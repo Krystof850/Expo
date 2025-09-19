@@ -19,70 +19,84 @@ import { SPACING } from '@/constants/theme';
 import { Asset } from 'expo-asset';
 import * as Haptics from 'expo-haptics';
 
-// Celebrating Person with Realistic Crown Illustration
-const CelebratingPersonWithRealisticCrown = () => (
+// Victory Celebration with Radiating Energy
+const VictoryCelebrationIllustration = () => (
   <Svg width="280" height="280" viewBox="0 0 200 200">
-    {/* Realistic golden crown */}
-    <G>
-      {/* Crown base band */}
-      <Rect x="85" y="78" width="30" height="6" rx="3" fill="rgba(251, 191, 36, 1)" stroke="rgba(245, 158, 11, 1)" strokeWidth="1" />
-      
-      {/* Crown spikes with realistic proportions */}
-      {/* Left spike */}
-      <Path
-        d="M87 78 L89 65 L91 78 Z"
-        fill="rgba(251, 191, 36, 1)"
-        stroke="rgba(245, 158, 11, 1)"
-        strokeWidth="1"
-      />
-      
-      {/* Center tall spike */}
-      <Path
-        d="M96 78 L100 58 L104 78 Z"
-        fill="rgba(251, 191, 36, 1)"
-        stroke="rgba(245, 158, 11, 1)"
-        strokeWidth="1"
-      />
-      
-      {/* Right spike */}
-      <Path
-        d="M109 78 L111 65 L113 78 Z"
-        fill="rgba(251, 191, 36, 1)"
-        stroke="rgba(245, 158, 11, 1)"
-        strokeWidth="1"
-      />
-      
-      {/* Crown decorative elements */}
-      <Circle cx="89" cy="70" r="1.5" fill="rgba(220, 38, 38, 1)" />
-      <Circle cx="100" cy="66" r="2" fill="rgba(34, 197, 94, 1)" />
-      <Circle cx="111" cy="70" r="1.5" fill="rgba(34, 211, 238, 1)" />
-      
-      {/* Crown highlights for realism */}
-      <Path d="M100 58 L101 60 L99 60 Z" fill="rgba(254, 240, 138, 1)" />
-      <Line x1="89" y1="65" x2="90" y2="67" stroke="rgba(254, 240, 138, 0.8)" strokeWidth="1" />
-      <Line x1="111" y1="65" x2="110" y2="67" stroke="rgba(254, 240, 138, 0.8)" strokeWidth="1" />
+    {/* Radiating success rays from center */}
+    <G opacity="0.6">
+      <Line x1="100" y1="20" x2="100" y2="35" stroke="rgba(251, 191, 36, 0.8)" strokeWidth="2" strokeLinecap="round" />
+      <Line x1="135" y1="35" x2="125" y2="45" stroke="rgba(251, 191, 36, 0.8)" strokeWidth="2" strokeLinecap="round" />
+      <Line x1="155" y1="70" x2="140" y2="75" stroke="rgba(251, 191, 36, 0.8)" strokeWidth="2" strokeLinecap="round" />
+      <Line x1="155" y1="130" x2="140" y2="125" stroke="rgba(251, 191, 36, 0.8)" strokeWidth="2" strokeLinecap="round" />
+      <Line x1="135" y1="165" x2="125" y2="155" stroke="rgba(251, 191, 36, 0.8)" strokeWidth="2" strokeLinecap="round" />
+      <Line x1="65" y1="165" x2="75" y2="155" stroke="rgba(251, 191, 36, 0.8)" strokeWidth="2" strokeLinecap="round" />
+      <Line x1="45" y1="130" x2="60" y2="125" stroke="rgba(251, 191, 36, 0.8)" strokeWidth="2" strokeLinecap="round" />
+      <Line x1="45" y1="70" x2="60" y2="75" stroke="rgba(251, 191, 36, 0.8)" strokeWidth="2" strokeLinecap="round" />
+      <Line x1="65" y1="35" x2="75" y2="45" stroke="rgba(251, 191, 36, 0.8)" strokeWidth="2" strokeLinecap="round" />
     </G>
     
-    {/* Person's head - larger */}
-    <Circle cx="100" cy="92" r="14" fill="rgba(255, 255, 255, 1)" stroke="rgba(59, 130, 246, 1)" strokeWidth="2" />
-    
-    {/* Person's body - larger */}
-    <Rect x="90" y="104" width="20" height="30" rx="3" fill="rgba(59, 130, 246, 1)" />
-    
-    {/* Arms raised high above head - larger */}
+    {/* Victory crown - modern design */}
     <G>
-      {/* Left arm raised */}
-      <Path d="M90 108 L75 90 L70 85" stroke="rgba(59, 130, 246, 1)" strokeWidth="4" strokeLinecap="round" />
-      {/* Right arm raised */}
-      <Path d="M110 108 L125 90 L130 85" stroke="rgba(59, 130, 246, 1)" strokeWidth="4" strokeLinecap="round" />
+      {/* Crown base with gradient effect */}
+      <Rect x="82" y="76" width="36" height="8" rx="4" fill="rgba(251, 191, 36, 1)" stroke="rgba(245, 158, 11, 1)" strokeWidth="1" />
+      
+      {/* Modern crown peaks */}
+      <Path d="M84 76 L88 58 L92 76 Z" fill="rgba(251, 191, 36, 1)" stroke="rgba(245, 158, 11, 1)" strokeWidth="1" />
+      <Path d="M96 76 L100 50 L104 76 Z" fill="rgba(251, 191, 36, 1)" stroke="rgba(245, 158, 11, 1)" strokeWidth="1" />
+      <Path d="M108 76 L112 58 L116 76 Z" fill="rgba(251, 191, 36, 1)" stroke="rgba(245, 158, 11, 1)" strokeWidth="1" />
+      
+      {/* Crown gems with glow */}
+      <Circle cx="88" cy="67" r="2" fill="rgba(239, 68, 68, 1)" opacity="0.9" />
+      <Circle cx="100" cy="59" r="2.5" fill="rgba(34, 197, 94, 1)" opacity="0.9" />
+      <Circle cx="112" cy="67" r="2" fill="rgba(59, 130, 246, 1)" opacity="0.9" />
+      
+      {/* Crown shine effects */}
+      <Path d="M100 50 L101 52 L99 52 Z" fill="rgba(254, 240, 138, 1)" />
+      <Line x1="88" y1="58" x2="89" y2="60" stroke="rgba(254, 240, 138, 0.9)" strokeWidth="1.5" />
+      <Line x1="112" y1="58" x2="111" y2="60" stroke="rgba(254, 240, 138, 0.9)" strokeWidth="1.5" />
     </G>
     
-    {/* Legs in simple stance - larger */}
+    {/* Person's head with subtle gradient */}
+    <Circle cx="100" cy="94" r="16" fill="rgba(255, 255, 255, 1)" stroke="rgba(59, 130, 246, 1)" strokeWidth="2" />
+    
+    {/* Cheerful face */}
+    <G>
+      {/* Eyes */}
+      <Circle cx="94" cy="90" r="1.5" fill="rgba(59, 130, 246, 1)" />
+      <Circle cx="106" cy="90" r="1.5" fill="rgba(59, 130, 246, 1)" />
+      {/* Happy smile */}
+      <Path d="M92 98 Q100 104 108 98" stroke="rgba(59, 130, 246, 1)" strokeWidth="2" fill="none" strokeLinecap="round" />
+    </G>
+    
+    {/* Person's body with victory pose */}
+    <Rect x="88" y="108" width="24" height="32" rx="4" fill="rgba(59, 130, 246, 1)" />
+    
+    {/* Dynamic victory arms */}
+    <G>
+      {/* Left arm raised triumphantly */}
+      <Path d="M88 115 L68 95 L60 88" stroke="rgba(59, 130, 246, 1)" strokeWidth="5" strokeLinecap="round" />
+      {/* Right arm raised triumphantly */}
+      <Path d="M112 115 L132 95 L140 88" stroke="rgba(59, 130, 246, 1)" strokeWidth="5" strokeLinecap="round" />
+      
+      {/* Victory fists */}
+      <Circle cx="60" cy="88" r="4" fill="rgba(255, 255, 255, 1)" stroke="rgba(59, 130, 246, 1)" strokeWidth="2" />
+      <Circle cx="140" cy="88" r="4" fill="rgba(255, 255, 255, 1)" stroke="rgba(59, 130, 246, 1)" strokeWidth="2" />
+    </G>
+    
+    {/* Confident stance legs */}
     <G>
       {/* Left leg */}
-      <Path d="M95 134 L88 148 L83 155" stroke="rgba(59, 130, 246, 1)" strokeWidth="4" strokeLinecap="round" />
+      <Path d="M94 140 L85 155 L80 165" stroke="rgba(59, 130, 246, 1)" strokeWidth="5" strokeLinecap="round" />
       {/* Right leg */}
-      <Path d="M105 134 L112 148 L117 155" stroke="rgba(59, 130, 246, 1)" strokeWidth="4" strokeLinecap="round" />
+      <Path d="M106 140 L115 155 L120 165" stroke="rgba(59, 130, 246, 1)" strokeWidth="5" strokeLinecap="round" />
+    </G>
+    
+    {/* Success sparkles around the figure */}
+    <G opacity="0.8">
+      <Circle cx="130" cy="110" r="1.5" fill="rgba(251, 191, 36, 1)" />
+      <Circle cx="70" cy="120" r="1" fill="rgba(251, 191, 36, 1)" />
+      <Circle cx="140" cy="140" r="1" fill="rgba(251, 191, 36, 1)" />
+      <Circle cx="60" cy="140" r="1.5" fill="rgba(251, 191, 36, 1)" />
     </G>
   </Svg>
 );
@@ -172,7 +186,7 @@ export default function LevelScreen() {
           {/* Illustration space */}
           <AnimatedContent delay={100}>
             <View style={styles.illustrationContainer}>
-              <CelebratingPersonWithRealisticCrown />
+              <VictoryCelebrationIllustration />
             </View>
           </AnimatedContent>
 
