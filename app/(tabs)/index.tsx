@@ -500,13 +500,13 @@ export default function Homepage() {
             <View style={styles.progressCard}>
               <View style={styles.progressHeader}>
                 <Text style={styles.progressTitle}>Brain Rewiring</Text>
-                <Text style={styles.progressPercentage}>{Math.round((time.days / goalDays) * 100)}%</Text>
+                <Text style={styles.progressPercentage}>{Math.round(((userProgress?.currentStreak || convertTimeToDays(time)) / goalDays) * 100)}%</Text>
               </View>
               <View style={styles.progressBarContainer}>
                 <View style={styles.progressBarBackground}>
                   <LinearGradient
                     colors={['#34D399', '#10B981']}
-                    style={[styles.progressBarFill, { width: `${Math.min((time.days / goalDays) * 100, 100)}%` }]}
+                    style={[styles.progressBarFill, { width: `${Math.min(((userProgress?.currentStreak || convertTimeToDays(time)) / goalDays) * 100, 100)}%` }]}
                     start={{ x: 0, y: 0 }}
                     end={{ x: 1, y: 0 }}
                   />
