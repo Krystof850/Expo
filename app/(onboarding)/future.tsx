@@ -21,81 +21,104 @@ import * as Haptics from 'expo-haptics';
 // Crossed Trophy Illustration
 const CrossedTrophyIllustration = () => (
   <Svg width="200" height="200" viewBox="0 0 200 200">
-    {/* Trophy base */}
+    {/* Trophy base/pedestal */}
+    <Rect
+      x="70"
+      y="150"
+      width="60"
+      height="15"
+      rx="6"
+      ry="6"
+      fill="rgba(255, 255, 255, 0.9)"
+      stroke="rgba(255, 255, 255, 0.6)"
+      strokeWidth="2"
+    />
+    
+    {/* Trophy middle base */}
     <Rect
       x="80"
       y="140"
       width="40"
-      height="20"
+      height="15"
       rx="4"
       ry="4"
       fill="rgba(255, 255, 255, 0.9)"
       stroke="rgba(255, 255, 255, 0.6)"
-      strokeWidth="3"
+      strokeWidth="2"
     />
     
-    {/* Trophy stem */}
+    {/* Trophy stem/neck */}
     <Rect
-      x="95"
-      y="120"
-      width="10"
-      height="20"
+      x="90"
+      y="110"
+      width="20"
+      height="30"
       fill="rgba(255, 255, 255, 0.9)"
       stroke="rgba(255, 255, 255, 0.6)"
       strokeWidth="2"
     />
     
-    {/* Trophy cup/bowl */}
+    {/* Main trophy cup - realistic bowl shape */}
     <Path
-      d="M75 60 L75 110 C75 115 80 120 85 120 L115 120 C120 120 125 115 125 110 L125 60 C125 50 115 40 100 40 C85 40 75 50 75 60 Z"
+      d="M65 50 C65 45 70 40 75 40 L125 40 C130 40 135 45 135 50 L135 85 C135 95 125 105 115 105 L85 105 C75 105 65 95 65 85 Z"
       fill="rgba(255, 255, 255, 0.9)"
       stroke="rgba(255, 255, 255, 0.6)"
       strokeWidth="3"
     />
     
-    {/* Trophy handles */}
-    <Path
-      d="M75 70 C65 70 55 75 55 85 C55 95 65 100 75 100"
-      fill="none"
-      stroke="rgba(255, 255, 255, 0.8)"
-      strokeWidth="3"
-    />
-    
-    <Path
-      d="M125 70 C135 70 145 75 145 85 C145 95 135 100 125 100"
-      fill="none"
-      stroke="rgba(255, 255, 255, 0.8)"
-      strokeWidth="3"
-    />
-    
-    {/* Trophy top decoration */}
-    <Circle
-      cx="100"
-      cy="50"
-      r="8"
-      fill="rgba(255, 255, 255, 0.9)"
-      stroke="rgba(255, 255, 255, 0.6)"
+    {/* Trophy rim/lip */}
+    <Rect
+      x="65"
+      y="45"
+      width="70"
+      height="8"
+      rx="4"
+      ry="4"
+      fill="rgba(255, 255, 255, 0.95)"
+      stroke="rgba(255, 255, 255, 0.7)"
       strokeWidth="2"
     />
     
-    {/* Trophy inner details */}
-    <Rect
-      x="85"
-      y="70"
-      width="30"
-      height="35"
-      rx="3"
-      ry="3"
+    {/* Left handle */}
+    <Path
+      d="M65 60 C50 60 40 70 40 80 C40 90 50 100 65 100"
+      fill="none"
+      stroke="rgba(255, 255, 255, 0.8)"
+      strokeWidth="4"
+      strokeLinecap="round"
+    />
+    
+    {/* Right handle */}
+    <Path
+      d="M135 60 C150 60 160 70 160 80 C160 90 150 100 135 100"
+      fill="none"
+      stroke="rgba(255, 255, 255, 0.8)"
+      strokeWidth="4"
+      strokeLinecap="round"
+    />
+    
+    {/* Trophy inner shadow/depth */}
+    <Path
+      d="M70 50 C70 47 72 45 75 45 L125 45 C128 45 130 47 130 50 L130 80 C130 88 123 95 115 95 L85 95 C77 95 70 88 70 80 Z"
       fill="rgba(200, 200, 200, 0.3)"
+    />
+    
+    {/* Decorative band around cup */}
+    <Rect
+      x="70"
+      y="70"
+      width="60"
+      height="4"
+      fill="rgba(220, 220, 220, 0.5)"
     />
     
     {/* Red cross/X over trophy */}
     <G>
       {/* First diagonal line */}
       <Line
-        x1="40"
+        x1="30"
         y1="20"
-        x2="160"
+        x2="170"
         y2="180"
         stroke="rgba(239, 68, 68, 0.9)"
         strokeWidth="8"
@@ -104,9 +127,9 @@ const CrossedTrophyIllustration = () => (
       
       {/* Second diagonal line */}
       <Line
-        x1="160"
+        x1="170"
         y1="20"
-        x2="40"
+        x2="30"
         y2="180"
         stroke="rgba(239, 68, 68, 0.9)"
         strokeWidth="8"
@@ -116,10 +139,10 @@ const CrossedTrophyIllustration = () => (
     
     {/* Additional visual elements - small circles around */}
     <G opacity="0.4">
-      <Circle cx="30" cy="60" r="2" fill="rgba(239, 68, 68, 0.6)" />
-      <Circle cx="170" cy="40" r="1.5" fill="rgba(239, 68, 68, 0.6)" />
-      <Circle cx="180" cy="160" r="2" fill="rgba(239, 68, 68, 0.6)" />
-      <Circle cx="20" cy="140" r="1.5" fill="rgba(239, 68, 68, 0.6)" />
+      <Circle cx="25" cy="60" r="2" fill="rgba(239, 68, 68, 0.6)" />
+      <Circle cx="175" cy="40" r="1.5" fill="rgba(239, 68, 68, 0.6)" />
+      <Circle cx="185" cy="160" r="2" fill="rgba(239, 68, 68, 0.6)" />
+      <Circle cx="15" cy="140" r="1.5" fill="rgba(239, 68, 68, 0.6)" />
     </G>
   </Svg>
 );
