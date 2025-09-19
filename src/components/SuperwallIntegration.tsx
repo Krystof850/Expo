@@ -51,8 +51,8 @@ const SuperwallEnabledIntegration: React.FC<{ children: ReactNode }> = ({ childr
       }
     });
     
-    // Hook pro prezentaci paywall - použití SPRÁVNÉHO present method
-    const { present } = usePlacement({
+    // Hook pro prezentaci paywall - SPRÁVNÉ použití registerPlacement
+    const { registerPlacement } = usePlacement({
       onError: (error: any) => {
         console.error('[SuperwallIntegration] Paywall error:', error);
       },
@@ -63,8 +63,8 @@ const SuperwallEnabledIntegration: React.FC<{ children: ReactNode }> = ({ childr
         console.log('[SuperwallIntegration] Paywall dismissed:', info, result);
         
         // Aktualizuj subscription status po nákupu nebo restore
-        if (result?.type === 'purchased' || result?.type === 'restored') {
-          console.log('[SuperwallIntegration] Purchase/restore successful:', result);
+        if (result?.purchased === true) {
+          console.log('[SuperwallIntegration] Purchase successful:', result);
           setHasSubscription(true);
         }
       },
@@ -89,21 +89,25 @@ const SuperwallEnabledIntegration: React.FC<{ children: ReactNode }> = ({ childr
       }
     }, [user, identify]);
 
-    // SPRÁVNÁ funkce pro prezentaci paywall pomocí present()
+    // SPRÁVNÁ funkce pro prezentaci paywall pomocí registerPlacement()
     const presentPaywall = async (placement = 'zario-template-3a85-2025-09-10'): Promise<boolean> => {
       console.log('[SuperwallIntegration] Presenting paywall with placement:', placement);
       
       try {
-        const result = await present({ placement });
-        console.log('[SuperwallIntegration] Present result:', result);
+        await registerPlacement({
+          placement,
+          feature() {
+            // Called if user is subscribed or successfully subscribes
+            console.log('[SuperwallIntegration] Premium feature unlocked!');
+            setHasSubscription(true);
+          }
+        });
         
-        // Zkontroluj, jestli byl nákup úspěšný
-        const success = result?.type === 'purchased' || result?.type === 'restored';
-        if (success) {
-          setHasSubscription(true);
-        }
+        // registerPlacement nevrací výsledek - paywall buď se zobrazí nebo ne
+        // Pokud se nedostane error, znamená to že se placement zaregistroval úspěšně
+        console.log('[SuperwallIntegration] Placement registered successfully');
+        return true;
         
-        return success;
       } catch (error) {
         console.error('[SuperwallIntegration] Error presenting paywall:', error);
         return false;
