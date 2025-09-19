@@ -19,7 +19,7 @@ import { COLORS, SPACING } from '@/constants/theme';
 const { width } = Dimensions.get('window');
 
 // Preload the optimized chart image for instant loading
-const chartImageSource = require('@/attached_assets/ChatGPT Image Sep 13, 2025, 03_26_59 PM_1757748428786.png');
+const chartImageSource = require('@/attached_assets/ChatGPT Image Sep 20, 2025, 04_34_45 AM_1758314092217.png');
 
 export default function BenefitsScreen() {
   const insets = useSafeAreaInsets();
