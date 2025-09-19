@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { router, Redirect } from "expo-router";
-import { View, Text, StyleSheet } from "react-native";
+import { router, Redirect, useRouter } from "expo-router";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import * as Haptics from 'expo-haptics';
 import { Ionicons } from '@expo/vector-icons';
 import { Platform } from 'react-native';
@@ -20,6 +20,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 export default function SignIn() {
   const { user } = useAuth();
   const { showError } = useErrorHandler();
+  const router = useRouter();
   const [appleLoading, setAppleLoading] = useState(false);
   const [appleAvailable, setAppleAvailable] = useState(false);
   const insets = useSafeAreaInsets();
@@ -57,7 +58,14 @@ export default function SignIn() {
       <AppBackground>
         <FirebaseConfigBanner />
         <View style={styles.container}>
-          <View style={[styles.content, { paddingTop: insets.top + SPACING.xl * 2 }]}>
+          {/* Back Button */}
+          <View style={[styles.backButtonContainer, { paddingTop: insets.top + SPACING.md }]}>
+            <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
+              <Ionicons name="arrow-back" size={24} color="#FFFFFF" />
+            </TouchableOpacity>
+          </View>
+          
+          <View style={[styles.content, { paddingTop: SPACING.xl }]}>
             <View style={[styles.header, { overflow: 'visible' }]}>
               <TitleText animated={false} style={[styles.title, { fontSize: 32, lineHeight: Math.round(32 * 1.25) }]}>Sign In</TitleText>
               <DescriptionText animated={false} style={styles.subtitle}>Sign in with your Apple ID to continue</DescriptionText>
@@ -90,6 +98,14 @@ export default function SignIn() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  backButtonContainer: {
+    paddingHorizontal: SPACING.lg,
+    zIndex: 10,
+  },
+  backButton: {
+    padding: 8,
+    alignSelf: 'flex-start',
   },
   content: {
     flex: 1,

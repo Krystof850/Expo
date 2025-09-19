@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, Redirect } from "expo-router";
+import { Link, Redirect, useRouter } from "expo-router";
 import { View, Text, TextInput, Alert, TouchableOpacity, StyleSheet, StatusBar, ScrollView } from "react-native";
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -24,6 +24,7 @@ const schema = Yup.object({
 
 export default function SignUp() {
   const { user } = useAuth();
+  const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
   const [appleLoading, setAppleLoading] = useState(false);
@@ -72,9 +73,16 @@ export default function SignUp() {
     <AuthErrorBoundary>
       <AppBackground>
         <StatusBar barStyle="light-content" />
+        {/* Back Button */}
+        <View style={[styles.backButtonContainer, { paddingTop: insets.top + SPACING.md }]}>
+          <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
+            <Ionicons name="arrow-back" size={24} color="#FFFFFF" />
+          </TouchableOpacity>
+        </View>
+        
         <ScrollView 
           style={styles.container}
-          contentContainerStyle={[styles.scrollContent, { paddingTop: insets.top + SPACING.xl * 2 }]}
+          contentContainerStyle={[styles.scrollContent, { paddingTop: SPACING.xl }]}
           showsVerticalScrollIndicator={false}
         >
           <FirebaseConfigBanner />
@@ -186,6 +194,18 @@ export default function SignUp() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  backButtonContainer: {
+    paddingHorizontal: SPACING.lg,
+    zIndex: 10,
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+  },
+  backButton: {
+    padding: 8,
+    alignSelf: 'flex-start',
   },
   scrollContent: {
     flexGrow: 1,

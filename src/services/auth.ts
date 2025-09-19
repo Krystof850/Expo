@@ -250,7 +250,7 @@ export const isGoogleSignInAvailable = (): boolean => {
 
 /**
  * Delete user account with robust re-authentication flow
- * @param currentPassword - Required for email/password users
+ * @param currentPassword - Optional for email/password users, will prompt if needed
  * @returns Promise<void>
  */
 export async function deleteUserAccount(currentPassword?: string): Promise<void> {
@@ -318,7 +318,8 @@ async function performReAuthentication(user: User, currentPassword?: string): Pr
   if (hasEmailProvider) {
     // Email/password re-authentication
     if (!currentPassword) {
-      throw new Error('Pro smazání účtu je vyžadováno aktuální heslo');
+      // For email users, we need to ask for password
+      throw new Error('Pro smazání účtu je vyžadováno aktuální heslo. Odhlaste se a přihlaste znovu.');
     }
     
     if (!user.email) {

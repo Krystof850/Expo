@@ -25,6 +25,7 @@ export default function Profile() {
   
   // Delete Account Modal State
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
+  const [deleteConfirmation, setDeleteConfirmation] = useState('');
   const [deletePassword, setDeletePassword] = useState('');
   const [isDeletingAccount, setIsDeletingAccount] = useState(false);
 
@@ -206,13 +207,28 @@ export default function Profile() {
   const handleDeleteAccountConfirm = async () => {
     if (isDeletingAccount) return; // Prevent duplicate submissions
     
+    // Validate that user typed "DELETE"
+    if (deleteConfirmation.trim() !== 'DELETE') {
+      Alert.alert('Error', 'Please type DELETE to confirm account deletion.');
+      return;
+    }
+    
+    // For email/password users, validate password is provided
+    const isEmailUser = user?.providerData.some(p => p.providerId === 'password');
+    if (isEmailUser && !deletePassword.trim()) {
+      Alert.alert('Error', 'Please enter your password to confirm account deletion.');
+      return;
+    }
+    
     setIsDeletingAccount(true);
     
     try {
-      await deleteUserAccount(deletePassword);
+      // Pass password for email users, undefined for others
+      await deleteUserAccount(isEmailUser ? deletePassword : undefined);
       
       // Show success message and close modal
       setIsDeleteModalVisible(false);
+      setDeleteConfirmation('');
       setDeletePassword('');
       
       Alert.alert(
@@ -302,10 +318,10 @@ export default function Profile() {
 
             <TouchableOpacity style={styles.menuItem} onPress={handleDeleteAccount}>
               <View style={styles.menuItemLeft}>
-                <Ionicons name="trash" size={24} color="#DC2626" />
-                <Text style={[styles.menuItemText, { color: '#DC2626' }]}>Delete Account</Text>
+                <Ionicons name="trash" size={24} color={COLORS.primaryAction || '#0284C7'} />
+                <Text style={styles.menuItemText}>Delete Account</Text>
               </View>
-              <Ionicons name="chevron-forward" size={20} color="#DC2626" />
+              <Ionicons name="chevron-forward" size={20} color="#94A3B8" />
             </TouchableOpacity>
           </View>
 
@@ -392,7 +408,11 @@ export default function Profile() {
           visible={isDeleteModalVisible}
           transparent={true}
           animationType="fade"
-          onRequestClose={() => setIsDeleteModalVisible(false)}
+          onRequestClose={() => {
+            setIsDeleteModalVisible(false);
+            setDeleteConfirmation('');
+            setDeletePassword('');
+          }}
         >
           <View style={styles.modalOverlay}>
             <View style={styles.modalContent}>
@@ -400,7 +420,11 @@ export default function Profile() {
                 <Text style={styles.modalTitle}>Delete Account</Text>
                 <TouchableOpacity
                   style={styles.closeButton}
-                  onPress={() => setIsDeleteModalVisible(false)}
+                  onPress={() => {
+                    setIsDeleteModalVisible(false);
+                    setDeleteConfirmation('');
+                    setDeletePassword('');
+                  }}
                 >
                   <Ionicons name="close" size={24} color="#64748B" />
                 </TouchableOpacity>
@@ -418,9 +442,10 @@ export default function Profile() {
               </View>
 
               <View style={styles.inputSection}>
+                {/* Password field for email/password users */}
                 {user?.providerData.some(p => p.providerId === 'password') && (
                   <>
-                    <Text style={styles.inputLabel}>Enter your password to confirm</Text>
+                    <Text style={styles.inputLabel}>Enter your password</Text>
                     <TextInput
                       style={styles.passwordInput}
                       value={deletePassword}
@@ -428,23 +453,34 @@ export default function Profile() {
                       secureTextEntry
                       placeholder="Enter your current password"
                       autoCapitalize="none"
+                      autoCorrect={false}
                     />
                   </>
                 )}
                 
-                {!user?.providerData.some(p => p.providerId === 'password') && (
-                  <Text style={styles.deleteInfoText}>
-                    Since you signed in with {user?.providerData[0]?.providerId === 'google.com' ? 'Google' : 
-                    user?.providerData[0]?.providerId === 'apple.com' ? 'Apple' : 'a third-party provider'}, 
-                    no password is required to delete your account.
-                  </Text>
-                )}
+                {/* DELETE confirmation for all users */}
+                <Text style={styles.inputLabel}>Type DELETE to confirm</Text>
+                <Text style={styles.deleteInfoText}>
+                  To confirm account deletion, please type the word DELETE in the field below.
+                </Text>
+                <TextInput
+                  style={styles.passwordInput}
+                  value={deleteConfirmation}
+                  onChangeText={setDeleteConfirmation}
+                  placeholder="Type DELETE to confirm"
+                  autoCapitalize="characters"
+                  autoCorrect={false}
+                />
               </View>
 
               <View style={styles.modalButtons}>
                 <TouchableOpacity 
                   style={styles.cancelButton} 
-                  onPress={() => setIsDeleteModalVisible(false)}
+                  onPress={() => {
+                    setIsDeleteModalVisible(false);
+                    setDeleteConfirmation('');
+                    setDeletePassword('');
+                  }}
                 >
                   <Text style={styles.cancelButtonText}>Cancel</Text>
                 </TouchableOpacity>
@@ -708,7 +744,7 @@ const styles = StyleSheet.create({
   },
   deleteButton: {
     flex: 1,
-    backgroundColor: '#DC2626',
+    backgroundColor: COLORS.primaryAction || '#0284C7',
     paddingVertical: 16,
     borderRadius: 12,
     alignItems: 'center',
