@@ -29,12 +29,17 @@ interface TypingTextProps {
 
 const TypingText: React.FC<TypingTextProps> = ({ text, speed = 50, delay = 500 }) => {
   const [displayText, setDisplayText] = useState('');
+  const [isComplete, setIsComplete] = useState(false);
   const opacity = useSharedValue(0);
   const fadeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const startTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const typeIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
+    // Reset state when text changes
+    setDisplayText('');
+    setIsComplete(false);
+    
     // Start with fade in after delay
     fadeTimeoutRef.current = setTimeout(() => {
       opacity.value = withTiming(1, { duration: 300 });
@@ -48,6 +53,9 @@ const TypingText: React.FC<TypingTextProps> = ({ text, speed = 50, delay = 500 }
           setDisplayText(text.slice(0, index));
           index++;
         } else {
+          // Animation complete - ensure text stays and mark as complete
+          setDisplayText(text);
+          setIsComplete(true);
           if (typeIntervalRef.current) {
             clearInterval(typeIntervalRef.current);
             typeIntervalRef.current = null;
@@ -79,7 +87,7 @@ const TypingText: React.FC<TypingTextProps> = ({ text, speed = 50, delay = 500 }
   return (
     <Animated.Text style={[styles.typingText, animatedStyle]}>
       {displayText}
-      {displayText.length < text.length && (
+      {!isComplete && displayText.length < text.length && (
         <Animated.Text style={styles.cursor}>|</Animated.Text>
       )}
     </Animated.Text>
