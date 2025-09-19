@@ -23,6 +23,10 @@ export function useSuperwall() {
 // Komponenta s aktivním Superwall pro native platformy
 const SuperwallEnabledIntegration: React.FC<{ children: ReactNode }> = ({ children }) => {
   const { user, setHasSubscription } = useAuth() as any;
+  
+  // ATOMIC paywall presentation lock using useRef (synchronní)
+  const presentingRef = React.useRef(false);
+  const pendingPromiseRef = React.useRef<Promise<boolean> | null>(null);
 
   try {
     const { useUser, usePlacement } = require('expo-superwall');
@@ -34,6 +38,10 @@ const SuperwallEnabledIntegration: React.FC<{ children: ReactNode }> = ({ childr
     const { registerPlacement } = usePlacement({
       onError: (error: any) => {
         console.error('[SuperwallIntegration] Paywall error:', error);
+        
+        // ATOMIC: Clear presentation lock on error
+        presentingRef.current = false;
+        pendingPromiseRef.current = null;
       },
       onPresent: (info: any) => {
         console.log('[SuperwallIntegration] Paywall presented:', info);
@@ -41,10 +49,19 @@ const SuperwallEnabledIntegration: React.FC<{ children: ReactNode }> = ({ childr
       onDismiss: (info: any, result: any) => {
         console.log('[SuperwallIntegration] Paywall dismissed:', info, result);
         
-        // Aktualizuj subscription status po nákupu
-        if (result?.purchased === true) {
+        // ATOMIC: Clear presentation lock
+        presentingRef.current = false;
+        pendingPromiseRef.current = null;
+        
+        // Aktualizuj subscription status po nákupu NEBO restore
+        if (result?.purchased === true || result?.type === 'purchased') {
           console.log('[SuperwallIntegration] Purchase successful:', result);
           setHasSubscription(true);
+        } else if (result?.type === 'restored') {
+          console.log('[SuperwallIntegration] Purchase restored:', result);  
+          setHasSubscription(true);
+        } else {
+          console.log('[SuperwallIntegration] Paywall dismissed without purchase:', result);
         }
       },
     });
@@ -62,27 +79,44 @@ const SuperwallEnabledIntegration: React.FC<{ children: ReactNode }> = ({ childr
       }
     }, [user?.uid]);
 
-    // JEDNODUCHÁ funkce pro prezentaci paywall
-    const presentPaywall = async (placement = 'zario-template-3a85-2025-09-10'): Promise<boolean> => {
+    // ROBUST paywall presentation with ATOMIC lock
+    const presentPaywall = React.useCallback(async (placement = 'zario-template-3a85-2025-09-10'): Promise<boolean> => {
+      // ATOMIC check: return existing promise if already presenting
+      if (presentingRef.current) {
+        console.log('[SuperwallIntegration] Paywall already presenting, returning existing promise...');
+        return pendingPromiseRef.current || Promise.resolve(false);
+      }
+      
       console.log('[SuperwallIntegration] Presenting paywall with placement:', placement);
       
-      try {
-        await registerPlacement({
-          placement,
-          feature() {
-            console.log('[SuperwallIntegration] Premium feature unlocked!');
-            setHasSubscription(true);
-          }
-        });
-        
-        console.log('[SuperwallIntegration] Placement registered successfully');
-        return true;
-        
-      } catch (error) {
-        console.error('[SuperwallIntegration] Error presenting paywall:', error);
-        return false;
-      }
-    };
+      // ATOMIC: Set lock immediately (synchronous)
+      presentingRef.current = true;
+      
+      const promise = (async () => {
+        try {
+          await registerPlacement({
+            placement,
+            feature() {
+              console.log('[SuperwallIntegration] Premium feature unlocked!');
+              setHasSubscription(true);
+            }
+          });
+          
+          console.log('[SuperwallIntegration] Placement registered successfully');
+          return true;
+          
+        } catch (error) {
+          console.error('[SuperwallIntegration] Error presenting paywall:', error);
+          // Error callback will clear the lock
+          return false;
+        }
+      })();
+      
+      // Store pending promise for concurrent callers
+      pendingPromiseRef.current = promise;
+      
+      return promise;
+    }, [registerPlacement, setHasSubscription]);
 
     const contextValue: SuperwallContextType = {
       presentPaywall,

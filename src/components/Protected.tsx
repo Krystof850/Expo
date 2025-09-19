@@ -33,7 +33,7 @@ export const Protected: React.FC<React.PropsWithChildren> = ({ children }) => {
     };
 
     showPaywall();
-  }, [isAuthenticated, hasSubscription, subscriptionLoading, presentPaywall, paywallAttempted]);
+  }, [isAuthenticated, hasSubscription, subscriptionLoading, paywallAttempted]); // REMOVED presentPaywall from dependencies!
 
   // Show loading while checking auth or subscription status
   if (loading || subscriptionLoading) {
