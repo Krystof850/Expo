@@ -73,7 +73,14 @@ export default function RootLayout() {
                 gestureDirection: 'horizontal',
               }}
             >
-              <Stack.Screen name="(onboarding)" options={{ headerShown: false }} />
+              <Stack.Screen 
+                name="(onboarding)" 
+                options={{ 
+                  headerShown: false, 
+                  gestureEnabled: false, 
+                  fullScreenGestureEnabled: false 
+                }} 
+              />
               <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
               <Stack.Screen name="(auth)" options={{ headerShown: false }} />
               <Stack.Screen name="(protected)" options={{ headerShown: false }} />
