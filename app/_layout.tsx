@@ -81,9 +81,30 @@ export default function RootLayout() {
                   fullScreenGestureEnabled: false 
                 }} 
               />
-              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-              <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-              <Stack.Screen name="(protected)" options={{ headerShown: false }} />
+              <Stack.Screen 
+                name="(tabs)" 
+                options={{ 
+                  headerShown: false, 
+                  gestureEnabled: false, 
+                  fullScreenGestureEnabled: false 
+                }} 
+              />
+              <Stack.Screen 
+                name="(auth)" 
+                options={{ 
+                  headerShown: false, 
+                  gestureEnabled: false, 
+                  fullScreenGestureEnabled: false 
+                }} 
+              />
+              <Stack.Screen 
+                name="(protected)" 
+                options={{ 
+                  headerShown: false, 
+                  gestureEnabled: false, 
+                  fullScreenGestureEnabled: false 
+                }} 
+              />
               <Stack.Screen name="+not-found" />
             </Stack>
             <StatusBar style="auto" />

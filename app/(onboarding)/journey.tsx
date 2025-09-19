@@ -74,7 +74,7 @@ export default function JourneyScreen() {
     await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     
     // Direct navigation to sign-in (Superwall temporarily disabled)
-    router.push('/(auth)/sign-in');
+    router.replace('/(auth)/sign-in');
   };
 
   if (!isLoaded) {
