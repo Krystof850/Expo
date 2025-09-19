@@ -158,19 +158,91 @@ export default function OnboardingLayout() {
           },
           animation: 'slide_from_right',
           gestureEnabled: false,
+          gestureDirection: 'horizontal',
+          fullScreenGestureEnabled: false,
           detachPreviousScreen: true,
         }}
       >
-        <Stack.Screen name="welcome-new" />
-        <Stack.Screen name="question1" />
-        <Stack.Screen name="question2" />
-        <Stack.Screen name="question3" />
-        <Stack.Screen name="question4" />
-        <Stack.Screen name="question5" />
-        <Stack.Screen name="question6" />
-        <Stack.Screen name="question7" />
-        <Stack.Screen name="question8" />
-        <Stack.Screen name="question9" />
+        <Stack.Screen 
+          name="welcome-new" 
+          options={{
+            gestureEnabled: false,
+            fullScreenGestureEnabled: false,
+            swipeEnabled: false,
+          }}
+        />
+        <Stack.Screen 
+          name="question1" 
+          options={{
+            gestureEnabled: false,
+            fullScreenGestureEnabled: false,
+            swipeEnabled: false,
+          }}
+        />
+        <Stack.Screen 
+          name="question2" 
+          options={{
+            gestureEnabled: false,
+            fullScreenGestureEnabled: false,
+            swipeEnabled: false,
+          }}
+        />
+        <Stack.Screen 
+          name="question3" 
+          options={{
+            gestureEnabled: false,
+            fullScreenGestureEnabled: false,
+            swipeEnabled: false,
+          }}
+        />
+        <Stack.Screen 
+          name="question4" 
+          options={{
+            gestureEnabled: false,
+            fullScreenGestureEnabled: false,
+            swipeEnabled: false,
+          }}
+        />
+        <Stack.Screen 
+          name="question5" 
+          options={{
+            gestureEnabled: false,
+            fullScreenGestureEnabled: false,
+            swipeEnabled: false,
+          }}
+        />
+        <Stack.Screen 
+          name="question6" 
+          options={{
+            gestureEnabled: false,
+            fullScreenGestureEnabled: false,
+            swipeEnabled: false,
+          }}
+        />
+        <Stack.Screen 
+          name="question7" 
+          options={{
+            gestureEnabled: false,
+            fullScreenGestureEnabled: false,
+            swipeEnabled: false,
+          }}
+        />
+        <Stack.Screen 
+          name="question8" 
+          options={{
+            gestureEnabled: false,
+            fullScreenGestureEnabled: false,
+            swipeEnabled: false,
+          }}
+        />
+        <Stack.Screen 
+          name="question9" 
+          options={{
+            gestureEnabled: false,
+            fullScreenGestureEnabled: false,
+            swipeEnabled: false,
+          }}
+        />
       </Stack>
     </View>
   );
