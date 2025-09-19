@@ -11,101 +11,164 @@ import {
 import { router, useFocusEffect } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
-import Svg, { Path, Circle, G, Polygon, Line } from 'react-native-svg';
+import Svg, { Path, Circle, G, Polygon, Line, Rect } from 'react-native-svg';
 import { Ionicons } from '@expo/vector-icons';
 import { AnimatedQuestionPage, AnimatedContent, AnimatedQuestionPageRef } from '../../components/AnimatedQuestionPage';
 import { NextButton } from '../../components/Button';
 import { SPACING } from '@/constants/theme';
 import * as Haptics from 'expo-haptics';
 
-// Broken Dreams and Lost Opportunities Illustration
-const BrokenDreamsIllustration = () => (
+// Broken Trophy/Cup Illustration
+const BrokenTrophyIllustration = () => (
   <Svg width="200" height="200" viewBox="0 0 200 200">
-    {/* Dream cloud (fading away) */}
+    {/* Trophy base */}
+    <Rect
+      x="80"
+      y="140"
+      width="40"
+      height="20"
+      rx="4"
+      ry="4"
+      fill="rgba(255, 255, 255, 0.8)"
+      stroke="rgba(255, 255, 255, 0.6)"
+      strokeWidth="2"
+    />
+    
+    {/* Trophy stem */}
+    <Rect
+      x="95"
+      y="120"
+      width="10"
+      height="20"
+      fill="rgba(255, 255, 255, 0.8)"
+      stroke="rgba(255, 255, 255, 0.6)"
+      strokeWidth="2"
+    />
+    
+    {/* Left side of broken cup (main part) */}
     <Path
-      d="M50 60C45 60 40 65 40 70C35 70 30 75 30 80C30 85 35 90 40 90L140 90C145 90 150 85 150 80C150 75 145 70 140 70C140 65 135 60 130 60C125 60 120 65 120 70C115 65 110 60 105 60C100 60 95 65 95 70C90 65 85 60 80 60C75 60 70 60 65 60C60 60 55 60 50 60Z"
-      fill="rgba(255, 255, 255, 0.4)"
-      stroke="rgba(255, 255, 255, 0.2)"
-      strokeWidth="1"
+      d="M75 60 L75 120 L95 120 L95 60 C95 50 85 40 75 50 Z"
+      fill="rgba(255, 255, 255, 0.9)"
+      stroke="rgba(255, 255, 255, 0.7)"
+      strokeWidth="3"
+    />
+    
+    {/* Right side of broken cup */}
+    <Path
+      d="M105 60 L105 120 L125 120 L125 60 C125 50 115 40 105 50 Z"
+      fill="rgba(255, 255, 255, 0.9)"
+      stroke="rgba(255, 255, 255, 0.7)"
+      strokeWidth="3"
+    />
+    
+    {/* Jagged crack line through the middle */}
+    <Line
+      x1="95"
+      y1="45"
+      x2="105"
+      y2="50"
+      stroke="rgba(239, 68, 68, 0.9)"
+      strokeWidth="4"
+      strokeLinecap="round"
+    />
+    <Line
+      x1="95"
+      y1="60"
+      x2="105"
+      y2="65"
+      stroke="rgba(239, 68, 68, 0.9)"
+      strokeWidth="4"
+      strokeLinecap="round"
+    />
+    <Line
+      x1="95"
+      y1="75"
+      x2="105"
+      y2="80"
+      stroke="rgba(239, 68, 68, 0.9)"
+      strokeWidth="4"
+      strokeLinecap="round"
+    />
+    <Line
+      x1="95"
+      y1="90"
+      x2="105"
+      y2="95"
+      stroke="rgba(239, 68, 68, 0.9)"
+      strokeWidth="4"
+      strokeLinecap="round"
+    />
+    <Line
+      x1="95"
+      y1="105"
+      x2="105"
+      y2="110"
+      stroke="rgba(239, 68, 68, 0.9)"
+      strokeWidth="4"
+      strokeLinecap="round"
+    />
+    <Line
+      x1="95"
+      y1="120"
+      x2="105"
+      y2="120"
+      stroke="rgba(239, 68, 68, 0.9)"
+      strokeWidth="4"
+      strokeLinecap="round"
+    />
+    
+    {/* Trophy handles - left broken */}
+    <Path
+      d="M75 70 C65 70 55 75 55 85 C55 95 65 100 75 100"
+      fill="none"
+      stroke="rgba(255, 255, 255, 0.6)"
+      strokeWidth="3"
       strokeDasharray="4,4"
     />
     
-    {/* Broken ladder to success */}
-    <G>
-      {/* Left side of ladder */}
-      <Line x1="60" y1="160" x2="65" y2="100" stroke="rgba(255, 255, 255, 0.7)" strokeWidth="4" />
-      {/* Right side of ladder */}
-      <Line x1="80" y1="160" x2="85" y2="100" stroke="rgba(255, 255, 255, 0.7)" strokeWidth="4" />
+    {/* Trophy handles - right intact */}
+    <Path
+      d="M125 70 C135 70 145 75 145 85 C145 95 135 100 125 100"
+      fill="none"
+      stroke="rgba(255, 255, 255, 0.8)"
+      strokeWidth="3"
+    />
+    
+    {/* Falling broken pieces */}
+    <G opacity="0.7">
+      {/* Small broken piece */}
+      <Polygon
+        points="85,130 90,125 95,130 90,135"
+        fill="rgba(239, 68, 68, 0.8)"
+      />
       
-      {/* Broken rungs */}
-      <Line x1="62" y1="150" x2="75" y2="149" stroke="rgba(255, 255, 255, 0.7)" strokeWidth="3" />
-      <Line x1="63" y1="135" x2="72" y2="134" stroke="rgba(239, 68, 68, 0.8)" strokeWidth="3" strokeDasharray="2,2" />
-      <Line x1="64" y1="120" x2="70" y2="119" stroke="rgba(239, 68, 68, 0.8)" strokeWidth="3" strokeDasharray="2,2" />
-      <Line x1="65" y1="105" x2="83" y2="104" stroke="rgba(255, 255, 255, 0.7)" strokeWidth="3" />
-    </G>
-    
-    {/* Falling broken pieces (lost opportunities) */}
-    <G opacity="0.6">
+      {/* Medium broken piece */}
       <Polygon
-        points="100,95 110,90 115,100 105,105"
-        fill="rgba(239, 68, 68, 0.7)"
+        points="110,135 118,130 120,140 112,145"
+        fill="rgba(239, 68, 68, 0.8)"
       />
+      
+      {/* Another small piece */}
       <Polygon
-        points="125,110 135,105 140,115 130,120"
-        fill="rgba(239, 68, 68, 0.7)"
-      />
-      <Polygon
-        points="90,125 100,120 105,130 95,135"
-        fill="rgba(239, 68, 68, 0.7)"
-      />
-      <Polygon
-        points="140,140 150,135 155,145 145,150"
-        fill="rgba(239, 68, 68, 0.7)"
+        points="70,145 75,140 80,145 75,150"
+        fill="rgba(239, 68, 68, 0.8)"
       />
     </G>
     
-    {/* Door of opportunity (closing/closed) */}
-    <Path
-      d="M120 100 L160 100 L160 160 L120 160 Z"
-      fill="rgba(255, 255, 255, 0.3)"
-      stroke="rgba(255, 255, 255, 0.5)"
-      strokeWidth="2"
-    />
-    
-    {/* Door handle */}
-    <Circle cx="150" cy="130" r="3" fill="rgba(239, 68, 68, 0.8)" />
-    
-    {/* "CLOSED" sign on door */}
-    <Path
-      d="M125 115 L155 115 L155 125 L125 125 Z"
-      fill="rgba(220, 38, 38, 0.8)"
-    />
-    
-    {/* X mark on closed sign */}
-    <G>
-      <Line x1="130" y1="118" x2="150" y2="122" stroke="rgba(255, 255, 255, 0.9)" strokeWidth="2" />
-      <Line x1="150" y1="118" x2="130" y2="122" stroke="rgba(255, 255, 255, 0.9)" strokeWidth="2" />
+    {/* Crack lines on the pieces for more detail */}
+    <G opacity="0.8">
+      <Line x1="77" y1="65" x2="82" y2="70" stroke="rgba(239, 68, 68, 0.6)" strokeWidth="2" />
+      <Line x1="118" y1="75" x2="123" y2="80" stroke="rgba(239, 68, 68, 0.6)" strokeWidth="2" />
+      <Line x1="79" y1="90" x2="84" y2="95" stroke="rgba(239, 68, 68, 0.6)" strokeWidth="2" />
+      <Line x1="116" y1="100" x2="121" y2="105" stroke="rgba(239, 68, 68, 0.6)" strokeWidth="2" />
     </G>
     
-    {/* Time passing (clock showing late hour) */}
-    <Circle
-      cx="170"
-      cy="50"
-      r="25"
-      fill="rgba(255, 255, 255, 0.2)"
-      stroke="rgba(239, 68, 68, 0.6)"
-      strokeWidth="2"
-    />
-    
-    {/* Clock hands pointing to "too late" */}
-    <Line x1="170" y1="50" x2="170" y2="30" stroke="rgba(239, 68, 68, 0.8)" strokeWidth="2" />
-    <Line x1="170" y1="50" x2="185" y2="50" stroke="rgba(239, 68, 68, 0.8)" strokeWidth="2" />
-    
-    {/* Scattered dreams (stars fading) */}
+    {/* Sad victory sparkles (fading away) */}
     <G opacity="0.3">
-      <Path d="M30 30 L32 35 L37 35 L33 38 L35 43 L30 40 L25 43 L27 38 L23 35 L28 35 Z" fill="rgba(255, 255, 255, 0.4)" />
-      <Path d="M170 20 L172 25 L177 25 L173 28 L175 33 L170 30 L165 33 L167 28 L163 25 L168 25 Z" fill="rgba(255, 255, 255, 0.4)" />
-      <Path d="M20 100 L22 105 L27 105 L23 108 L25 113 L20 110 L15 113 L17 108 L13 105 L18 105 Z" fill="rgba(255, 255, 255, 0.4)" />
+      <Circle cx="60" cy="50" r="2" fill="rgba(255, 255, 255, 0.6)" />
+      <Circle cx="140" cy="40" r="1.5" fill="rgba(255, 255, 255, 0.6)" />
+      <Circle cx="45" cy="85" r="2" fill="rgba(255, 255, 255, 0.6)" />
+      <Circle cx="155" cy="90" r="1.5" fill="rgba(255, 255, 255, 0.6)" />
     </G>
   </Svg>
 );
@@ -186,7 +249,7 @@ export default function FutureScreen() {
           {/* Illustration space */}
           <AnimatedContent delay={100}>
             <View style={styles.illustrationContainer}>
-              <BrokenDreamsIllustration />
+              <BrokenTrophyIllustration />
             </View>
           </AnimatedContent>
 
