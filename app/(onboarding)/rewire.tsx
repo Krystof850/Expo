@@ -18,51 +18,152 @@ import { NextButton } from '../../components/Button';
 import { SPACING } from '@/constants/theme';
 import * as Haptics from 'expo-haptics';
 
-// Classic Brain Icon - Very Simple and Recognizable
-const ClassicBrainIllustration = () => (
+// 3D Brain Illustration - Realistic with depth and shadows
+const Brain3DIllustration = () => (
   <Svg width="200" height="200" viewBox="0 0 200 200">
-    {/* Brain outline - classic brain shape like the reference */}
+    <Defs>
+      {/* 3D Brain gradient - main volume */}
+      <LinearGradient id="brainGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+        <Stop offset="0%" stopColor="rgba(255, 255, 255, 1)" />
+        <Stop offset="30%" stopColor="rgba(240, 248, 255, 0.95)" />
+        <Stop offset="70%" stopColor="rgba(219, 234, 254, 0.8)" />
+        <Stop offset="100%" stopColor="rgba(147, 197, 253, 0.6)" />
+      </LinearGradient>
+      
+      {/* Shadow gradient */}
+      <RadialGradient id="shadowGradient" cx="50%" cy="80%" r="60%">
+        <Stop offset="0%" stopColor="rgba(0, 0, 0, 0.4)" />
+        <Stop offset="100%" stopColor="rgba(0, 0, 0, 0)" />
+      </RadialGradient>
+      
+      {/* Highlight gradient for top lighting */}
+      <LinearGradient id="highlightGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+        <Stop offset="0%" stopColor="rgba(255, 255, 255, 0.9)" />
+        <Stop offset="50%" stopColor="rgba(255, 255, 255, 0.3)" />
+        <Stop offset="100%" stopColor="rgba(255, 255, 255, 0)" />
+      </LinearGradient>
+      
+      {/* Fold shadow gradient */}
+      <LinearGradient id="foldShadow" x1="0%" y1="0%" x2="100%" y2="100%">
+        <Stop offset="0%" stopColor="rgba(59, 130, 246, 0.6)" />
+        <Stop offset="100%" stopColor="rgba(34, 211, 238, 0.4)" />
+      </LinearGradient>
+    </Defs>
+    
+    {/* Drop shadow underneath brain */}
+    <Ellipse cx="105" cy="160" rx="65" ry="15" fill="url(#shadowGradient)" />
+    
+    {/* Main brain shape with 3D gradient */}
     <Path
-      d="M100 40C75 40 55 50 45 70C40 65 30 65 25 75C20 85 25 95 35 100C30 110 35 125 50 135C65 145 85 150 100 150C115 150 135 145 150 135C165 125 170 110 165 100C175 95 180 85 175 75C170 65 160 65 155 70C145 50 125 40 100 40Z"
-      fill="rgba(255, 255, 255, 0.9)"
-      stroke="rgba(255, 255, 255, 1)"
-      strokeWidth="4"
+      d="M100 35C75 35 55 45 45 65C40 60 30 60 25 70C20 80 25 90 35 95C30 105 35 120 50 130C65 140 85 145 100 145C115 145 135 140 150 130C165 120 170 105 165 95C175 90 180 80 175 70C170 60 160 60 155 65C145 45 125 35 100 35Z"
+      fill="url(#brainGradient)"
+      stroke="rgba(255, 255, 255, 0.8)"
+      strokeWidth="2"
     />
     
-    {/* Simple brain fold patterns - characteristic curved lines */}
-    <G opacity="0.7">
-      {/* Top brain folds */}
+    {/* Top highlight for 3D effect */}
+    <Path
+      d="M100 35C85 35 70 40 60 50C65 42 80 38 100 38C120 38 135 42 140 50C130 40 115 35 100 35Z"
+      fill="url(#highlightGradient)"
+      opacity="0.6"
+    />
+    
+    {/* Brain hemispheres - left side darker for depth */}
+    <Path
+      d="M100 35C100 55 100 75 100 95C100 110 100 125 100 145"
+      stroke="rgba(99, 102, 241, 0.4)"
+      strokeWidth="1"
+      strokeDasharray="3,3"
+    />
+    
+    {/* 3D Brain folds with depth shadows */}
+    <G>
+      {/* Upper brain folds - with shadow underneath */}
       <Path
-        d="M70 70C80 65 90 70 100 65C110 70 120 65 130 70"
-        stroke="rgba(59, 130, 246, 0.8)"
-        strokeWidth="3"
+        d="M70 65C80 62 90 67 100 62C110 67 120 62 130 65"
+        stroke="rgba(59, 130, 246, 0.3)"
+        strokeWidth="4"
         fill="none"
       />
-      
-      {/* Middle brain folds */}
       <Path
-        d="M60 90C75 85 90 90 100 85C110 90 125 85 140 90"
-        stroke="rgba(59, 130, 246, 0.8)"
-        strokeWidth="3"
-        fill="none"
-      />
-      
-      {/* Lower brain folds */}
-      <Path
-        d="M65 110C80 105 95 110 100 105C105 110 120 105 135 110"
-        stroke="rgba(59, 130, 246, 0.8)"
-        strokeWidth="3"
-        fill="none"
-      />
-      
-      {/* Additional smaller folds for detail */}
-      <Path
-        d="M75 125C85 120 95 125 105 120C115 125 125 120 125 125"
-        stroke="rgba(34, 211, 238, 0.6)"
+        d="M70 65C80 60 90 65 100 60C110 65 120 60 130 65"
+        stroke="rgba(255, 255, 255, 0.9)"
         strokeWidth="2"
         fill="none"
       />
+      
+      {/* Middle folds with 3D depth */}
+      <Path
+        d="M60 85C75 82 90 87 100 82C110 87 125 82 140 85"
+        stroke="rgba(34, 211, 238, 0.3)"
+        strokeWidth="4"
+        fill="none"
+      />
+      <Path
+        d="M60 85C75 80 90 85 100 80C110 85 125 80 140 85"
+        stroke="rgba(255, 255, 255, 0.8)"
+        strokeWidth="2"
+        fill="none"
+      />
+      
+      {/* Lower folds */}
+      <Path
+        d="M65 105C80 102 95 107 100 102C105 107 120 102 135 105"
+        stroke="rgba(251, 191, 36, 0.3)"
+        strokeWidth="4"
+        fill="none"
+      />
+      <Path
+        d="M65 105C80 100 95 105 100 100C105 105 120 100 135 105"
+        stroke="rgba(255, 255, 255, 0.7)"
+        strokeWidth="2"
+        fill="none"
+      />
+      
+      {/* Bottom detail folds */}
+      <Path
+        d="M75 120C85 117 95 122 105 117C115 122 125 117 125 120"
+        stroke="rgba(147, 197, 253, 0.4)"
+        strokeWidth="3"
+        fill="none"
+      />
+      <Path
+        d="M75 120C85 115 95 120 105 115C115 120 125 115 125 120"
+        stroke="rgba(255, 255, 255, 0.6)"
+        strokeWidth="1"
+        fill="none"
+      />
     </G>
+    
+    {/* 3D Neural activity points with glow */}
+    <G>
+      {/* Glowing base circles */}
+      <Circle cx="75" cy="75" r="6" fill="rgba(251, 191, 36, 0.3)" />
+      <Circle cx="85" cy="95" r="6" fill="rgba(251, 191, 36, 0.3)" />
+      <Circle cx="125" cy="75" r="6" fill="rgba(251, 191, 36, 0.3)" />
+      <Circle cx="115" cy="95" r="6" fill="rgba(251, 191, 36, 0.3)" />
+      
+      {/* 3D highlight neurons */}
+      <Circle cx="75" cy="75" r="3" fill="rgba(255, 215, 0, 0.9)" />
+      <Circle cx="85" cy="95" r="3" fill="rgba(255, 215, 0, 0.9)" />
+      <Circle cx="125" cy="75" r="3" fill="rgba(255, 215, 0, 0.9)" />
+      <Circle cx="115" cy="95" r="3" fill="rgba(255, 215, 0, 0.9)" />
+      
+      {/* Top highlights on neurons */}
+      <Circle cx="74" cy="73" r="1" fill="rgba(255, 255, 255, 0.9)" />
+      <Circle cx="84" cy="93" r="1" fill="rgba(255, 255, 255, 0.9)" />
+      <Circle cx="124" cy="73" r="1" fill="rgba(255, 255, 255, 0.9)" />
+      <Circle cx="114" cy="93" r="1" fill="rgba(255, 255, 255, 0.9)" />
+    </G>
+    
+    {/* Subtle 3D edge highlight */}
+    <Path
+      d="M100 35C125 35 145 45 155 65C160 60 170 60 175 70C180 80 175 90 165 95C170 105 165 120 150 130C135 140 115 145 100 145"
+      fill="none"
+      stroke="rgba(255, 255, 255, 0.4)"
+      strokeWidth="1"
+      opacity="0.6"
+    />
   </Svg>
 );
 
@@ -142,7 +243,7 @@ export default function RewireScreen() {
           {/* Illustration space */}
           <AnimatedContent delay={100}>
             <View style={styles.illustrationContainer}>
-              <ClassicBrainIllustration />
+              <Brain3DIllustration />
             </View>
           </AnimatedContent>
 
