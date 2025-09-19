@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, ScrollView, Text, TouchableOpacity, Dimensions, Image } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
+import { Image as ExpoImage } from 'expo-image';
 import Svg, { Circle, LinearGradient, Stop, Defs } from 'react-native-svg';
 import { LineChart, BarChart } from 'react-native-chart-kit';
 import { LinearGradient as ExpoLinearGradient } from 'expo-linear-gradient';
@@ -239,9 +240,18 @@ export default function Statistics() {
           contentContainerStyle={[styles.content, { paddingBottom: tabBarHeight + 20 }]}
           showsVerticalScrollIndicator={false}
         >
-          {/* Header */}
+          {/* Header with Logo and Settings */}
           <View style={styles.header}>
-            <View style={styles.headerSpacer} />
+            {/* Logo - positioned in top left */}
+            <View style={styles.logoContainer}>
+              <ExpoImage
+                source={require('../../assets/images/unloop-logo.png')}
+                style={styles.logo}
+                contentFit="contain"
+              />
+            </View>
+            
+            {/* Settings button - maintains original position */}
             <TouchableOpacity style={styles.settingsButton}>
               <Ionicons name="settings-outline" size={22} color="#64748B" />
               <View style={styles.badgeContainer}>
@@ -471,9 +481,17 @@ const styles = StyleSheet.create({
     paddingTop: 8,
     paddingBottom: 6,
     marginBottom: 24,
+    position: 'relative',
   },
-  headerSpacer: {
-    flex: 1,
+  logoContainer: {
+    position: 'absolute',
+    left: 16,
+    top: 8,
+    zIndex: 1,
+  },
+  logo: {
+    width: 120,
+    height: 37,
   },
   settingsButton: {
     padding: 6,
