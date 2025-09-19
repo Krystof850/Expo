@@ -62,10 +62,11 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     'expo-dev-client',
     'expo-router',
     'expo-web-browser',
+    'expo-apple-authentication',
     [
       '@react-native-google-signin/google-signin',
       {
-        iosUrlScheme: reversedIosClientId || 'com.googleusercontent.apps.placeholder',
+        iosUrlScheme: reversedIosClientId,
       },
     ],
     [
