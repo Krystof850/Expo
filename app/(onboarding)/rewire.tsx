@@ -18,74 +18,50 @@ import { NextButton } from '../../components/Button';
 import { SPACING } from '@/constants/theme';
 import * as Haptics from 'expo-haptics';
 
-// Simple Brain Illustration Component - Based on reference image
-const SimpleBrainIllustration = () => (
+// Classic Brain Icon - Very Simple and Recognizable
+const ClassicBrainIllustration = () => (
   <Svg width="200" height="200" viewBox="0 0 200 200">
-    {/* Main brain outline - simple and recognizable */}
+    {/* Brain outline - classic brain shape like the reference */}
     <Path
-      d="M100 60C85 60 70 65 60 75C55 70 45 68 40 72C35 65 25 62 20 70C18 75 22 80 25 85C22 90 18 95 22 100C25 105 30 110 40 105C45 115 55 120 70 115C80 125 90 130 100 125C110 130 120 125 130 115C145 120 155 115 160 105C170 110 175 105 178 100C182 95 178 90 175 85C178 80 182 75 180 70C175 62 165 65 160 72C155 68 145 70 140 75C130 65 115 60 100 60Z"
+      d="M100 40C75 40 55 50 45 70C40 65 30 65 25 75C20 85 25 95 35 100C30 110 35 125 50 135C65 145 85 150 100 150C115 150 135 145 150 135C165 125 170 110 165 100C175 95 180 85 175 75C170 65 160 65 155 70C145 50 125 40 100 40Z"
       fill="rgba(255, 255, 255, 0.9)"
       stroke="rgba(255, 255, 255, 1)"
       strokeWidth="4"
     />
     
-    {/* Central division line - clear hemisphere separation */}
-    <Path
-      d="M100 60C100 80 100 100 100 125"
-      stroke="rgba(59, 130, 246, 0.8)"
-      strokeWidth="3"
-    />
-    
-    {/* Left hemisphere brain folds - simple curved lines */}
-    <G>
+    {/* Simple brain fold patterns - characteristic curved lines */}
+    <G opacity="0.7">
+      {/* Top brain folds */}
       <Path
-        d="M60 80C70 75 80 80 85 90"
+        d="M70 70C80 65 90 70 100 65C110 70 120 65 130 70"
         stroke="rgba(59, 130, 246, 0.8)"
         strokeWidth="3"
         fill="none"
       />
+      
+      {/* Middle brain folds */}
       <Path
-        d="M50 95C60 90 70 95 75 105"
+        d="M60 90C75 85 90 90 100 85C110 90 125 85 140 90"
         stroke="rgba(59, 130, 246, 0.8)"
         strokeWidth="3"
         fill="none"
       />
+      
+      {/* Lower brain folds */}
       <Path
-        d="M65 100C75 95 85 100 90 110"
+        d="M65 110C80 105 95 110 100 105C105 110 120 105 135 110"
         stroke="rgba(59, 130, 246, 0.8)"
         strokeWidth="3"
         fill="none"
       />
-    </G>
-    
-    {/* Right hemisphere brain folds - mirror of left */}
-    <G>
+      
+      {/* Additional smaller folds for detail */}
       <Path
-        d="M140 80C130 75 120 80 115 90"
-        stroke="rgba(34, 211, 238, 0.8)"
-        strokeWidth="3"
+        d="M75 125C85 120 95 125 105 120C115 125 125 120 125 125"
+        stroke="rgba(34, 211, 238, 0.6)"
+        strokeWidth="2"
         fill="none"
       />
-      <Path
-        d="M150 95C140 90 130 95 125 105"
-        stroke="rgba(34, 211, 238, 0.8)"
-        strokeWidth="3"
-        fill="none"
-      />
-      <Path
-        d="M135 100C125 95 115 100 110 110"
-        stroke="rgba(34, 211, 238, 0.8)"
-        strokeWidth="3"
-        fill="none"
-      />
-    </G>
-    
-    {/* Simple neural activity indicators */}
-    <G opacity="0.8">
-      <Circle cx="75" cy="85" r="3" fill="rgba(251, 191, 36, 1)" />
-      <Circle cx="85" cy="100" r="3" fill="rgba(251, 191, 36, 1)" />
-      <Circle cx="125" cy="85" r="3" fill="rgba(251, 191, 36, 1)" />
-      <Circle cx="115" cy="100" r="3" fill="rgba(251, 191, 36, 1)" />
     </G>
   </Svg>
 );
@@ -166,7 +142,7 @@ export default function RewireScreen() {
           {/* Illustration space */}
           <AnimatedContent delay={100}>
             <View style={styles.illustrationContainer}>
-              <SimpleBrainIllustration />
+              <ClassicBrainIllustration />
             </View>
           </AnimatedContent>
 
