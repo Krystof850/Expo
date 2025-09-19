@@ -1,9 +1,8 @@
 import React, { createContext, useContext, useState, useCallback } from 'react';
-import { Modal, View, Text, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
+import { Modal, View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { COLORS, SPACING, RADIUS, TYPOGRAPHY } from '../../constants/theme';
+import { COLORS, SPACING, RADIUS } from '../../constants/theme';
 import * as Haptics from 'expo-haptics';
 
 export interface ErrorInfo {
@@ -88,26 +87,21 @@ const ErrorModal: React.FC<{
     >
       <View style={styles.overlay}>
         <View style={[styles.container, { paddingTop: insets.top + SPACING.md }]}>
-          <LinearGradient
-            colors={['rgba(255, 255, 255, 0.98)', 'rgba(255, 255, 255, 0.95)']}
-            style={styles.modal}
-          >
-            {/* Header with Icon */}
-            <View style={styles.header}>
-              <View style={[styles.iconContainer, { backgroundColor: getErrorColor(error.type) }]}>
-                <Ionicons
-                  name={getErrorIcon(error.type)}
-                  size={32}
-                  color="#FFFFFF"
-                />
-              </View>
-              <Text style={styles.title}>{error.title}</Text>
+          <View style={styles.modal}>
+            {/* Icon */}
+            <View style={styles.iconContainer}>
+              <Ionicons
+                name={getErrorIcon(error.type)}
+                size={24}
+                color={getErrorColor(error.type)}
+              />
             </View>
 
+            {/* Title */}
+            <Text style={styles.title}>{error.title}</Text>
+
             {/* Message */}
-            <View style={styles.content}>
-              <Text style={styles.message}>{error.message}</Text>
-            </View>
+            <Text style={styles.message}>{error.message}</Text>
 
             {/* Actions */}
             <View style={styles.actions}>
@@ -129,7 +123,7 @@ const ErrorModal: React.FC<{
                 </TouchableOpacity>
               )}
             </View>
-          </LinearGradient>
+          </View>
         </View>
       </View>
     </Modal>
@@ -208,7 +202,7 @@ export const createGeneralError = (title: string, message: string): ErrorInfo =>
 const styles = StyleSheet.create({
   overlay: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -219,74 +213,62 @@ const styles = StyleSheet.create({
   },
   modal: {
     width: '100%',
-    maxWidth: 340,
-    borderRadius: RADIUS.card,
+    maxWidth: 300,
+    backgroundColor: '#FFFFFF',
+    borderRadius: RADIUS.small,
     padding: SPACING.lg,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 10 },
-    shadowOpacity: 0.25,
-    shadowRadius: 20,
-    elevation: 10,
-  },
-  header: {
     alignItems: 'center',
-    marginBottom: SPACING.md,
   },
   iconContainer: {
-    width: 64,
-    height: 64,
-    borderRadius: 32,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: SPACING.sm,
+    marginBottom: SPACING.md,
   },
   title: {
-    ...TYPOGRAPHY.title,
-    fontSize: 20,
-    fontWeight: '700',
-    color: COLORS.mainText,
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#1F2937',
     textAlign: 'center',
-  },
-  content: {
-    marginBottom: SPACING.lg,
+    marginBottom: SPACING.sm,
   },
   message: {
-    ...TYPOGRAPHY.description,
-    fontSize: 16,
-    lineHeight: 24,
-    color: COLORS.descriptionText,
+    fontSize: 14,
+    lineHeight: 20,
+    color: '#6B7280',
     textAlign: 'center',
+    marginBottom: SPACING.lg,
   },
   actions: {
     flexDirection: 'row',
     gap: SPACING.sm,
+    width: '100%',
   },
   actionButton: {
     flex: 1,
-    paddingVertical: SPACING.md,
-    paddingHorizontal: SPACING.lg,
-    borderRadius: RADIUS.card,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    borderRadius: 6,
     alignItems: 'center',
   },
   actionButtonText: {
     color: '#FFFFFF',
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: '600',
   },
   closeButton: {
     flex: 1,
-    paddingVertical: SPACING.md,
-    paddingHorizontal: SPACING.lg,
-    borderRadius: RADIUS.card,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    borderRadius: 6,
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.1)',
+    backgroundColor: '#F3F4F6',
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
   },
   closeButtonFull: {
     flex: 1,
   },
   closeButtonText: {
-    color: COLORS.mainText,
-    fontSize: 16,
+    color: '#374151',
+    fontSize: 14,
     fontWeight: '600',
   },
 });

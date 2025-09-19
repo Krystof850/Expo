@@ -13,32 +13,8 @@ import Constants from 'expo-constants';
 import { ActivityIndicator, View, Platform, LogBox } from 'react-native';
 import 'react-native-reanimated';
 
-// Suppress yellow boxes and warning messages for production-like experience
-LogBox.ignoreLogs([
-  // Firebase auth warnings
-  'Warning: AsyncStorage',
-  'Setting a timer',
-  // React Navigation warnings  
-  'Non-serializable values',
-  // Expo warnings
-  'Warning: Failed prop type',
-  // Superwall warnings
-  'Possible Unhandled Promise Rejection',
-  // Metro bundler warnings
-  'Module not found',
-  // Native module warnings
-  'Unable to symbolicate',
-  // Style deprecation warnings (React Native Web)
-  '"shadow*" style props are deprecated',
-  '"textShadow*" style props are deprecated',
-  'shadow* style props are deprecated',
-  'textShadow* style props are deprecated',
-]);
-
-// In production builds, ignore all warnings
-if (!__DEV__) {
-  LogBox.ignoreAllLogs();
-}
+// Úplně potlač všechny yellow boxy a warnings
+LogBox.ignoreAllLogs();
 
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { AuthProvider } from '../src/context/AuthContext';
