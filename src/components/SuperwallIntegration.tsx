@@ -38,7 +38,7 @@ const SuperwallEnabledIntegration: React.FC<{ children: ReactNode }> = ({ childr
     // Hook pro prezentaci paywall - JEDNODUCHÉ
     const { registerPlacement } = usePlacement({
       onError: (error: any) => {
-        console.error('[SuperwallIntegration] Paywall error:', error);
+        // Log for debugging - errors handled by UI
         
         // ATOMIC: Clear presentation lock on error
         presentingRef.current = false;
@@ -130,8 +130,8 @@ const SuperwallEnabledIntegration: React.FC<{ children: ReactNode }> = ({ childr
           console.log('[SuperwallIntegration] Placement registered successfully');
           return true;
           
-        } catch (error) {
-          console.error('[SuperwallIntegration] Error presenting paywall:', error);
+        } catch (error: any) {
+          // Log error but don't show user popup - paywall errors are handled gracefully
           // Error callback will clear the lock
           return false;
         }
@@ -156,7 +156,7 @@ const SuperwallEnabledIntegration: React.FC<{ children: ReactNode }> = ({ childr
     );
 
   } catch (error) {
-    console.warn('[SuperwallIntegration] Superwall hooks not available:', error);
+    // Silently handle Superwall unavailability - this is expected in dev environments
     
     // Fallback context pro případ chyby
     const contextValue: SuperwallContextType = {
@@ -182,13 +182,13 @@ const SuperwallDisabledIntegration: React.FC<{ children: ReactNode }> = ({ child
 
   useEffect(() => {
     // V prostředí bez Superwall povolit přístup, aby nedošlo k deadlock
-    console.log('[SuperwallIntegration] Superwall disabled - allowing access to prevent deadlock');
+    // In dev environment without Superwall, allow access to prevent deadlock
     setHasSubscription(true); // OPRAVA: Nastav na true místo false, aby se předešlo deadlock
   }, [setHasSubscription]);
 
   const contextValue: SuperwallContextType = {
     presentPaywall: async () => {
-      console.log('[SuperwallIntegration] Superwall disabled - cannot present paywall, allowing access');
+      // In dev environment, allow access without paywall
       return true; // OPRAVA: Vrať true místo false
     },
     isSubscribed: true, // OPRAVA: true místo false

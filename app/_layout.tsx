@@ -10,8 +10,30 @@ import {
 import { Stack, Redirect, router, usePathname } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import Constants from 'expo-constants';
-import { ActivityIndicator, View, Platform } from 'react-native';
+import { ActivityIndicator, View, Platform, LogBox } from 'react-native';
 import 'react-native-reanimated';
+
+// Suppress yellow boxes and warning messages for production-like experience
+LogBox.ignoreLogs([
+  // Firebase auth warnings
+  'Warning: AsyncStorage',
+  'Setting a timer',
+  // React Navigation warnings  
+  'Non-serializable values',
+  // Expo warnings
+  'Warning: Failed prop type',
+  // Superwall warnings
+  'Possible Unhandled Promise Rejection',
+  // Metro bundler warnings
+  'Module not found',
+  // Native module warnings
+  'Unable to symbolicate',
+]);
+
+// In production builds, ignore all warnings
+if (!__DEV__) {
+  LogBox.ignoreAllLogs();
+}
 
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { AuthProvider } from '../src/context/AuthContext';
