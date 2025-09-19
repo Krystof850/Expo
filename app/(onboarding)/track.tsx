@@ -20,7 +20,7 @@ import * as Haptics from 'expo-haptics';
 
 // Clean Progress Graph with Curve
 const CleanProgressGraph = () => (
-  <Svg width="200" height="200" viewBox="0 0 200 200">
+  <Svg width="280" height="280" viewBox="0 0 200 200">
     {/* Background grid */}
     <G opacity="0.1">
       {/* Horizontal grid lines */}
@@ -255,7 +255,7 @@ const styles = StyleSheet.create({
     height: '33%', // Upper third of the screen
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 20,
+    marginTop: 60,
   },
   textContainer: {
     alignItems: 'center',
