@@ -248,7 +248,7 @@ const styles = StyleSheet.create({
     height: '33%', // Upper third of the screen
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 20,
+    marginTop: 60,
   },
   textContainer: {
     alignItems: 'center',

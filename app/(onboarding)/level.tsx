@@ -19,58 +19,37 @@ import { SPACING } from '@/constants/theme';
 import { Asset } from 'expo-asset';
 import * as Haptics from 'expo-haptics';
 
-// Celebrating Person with Crown Illustration
-const CelebratingPersonIllustration = () => (
+// Simple Celebrating Person with Crown Illustration
+const SimpleCelebratingPersonIllustration = () => (
   <Svg width="200" height="200" viewBox="0 0 200 200">
-    {/* Golden crown */}
-    <G>
-      <Path
-        d="M85 70 L90 55 L95 70 L100 55 L105 70 L110 55 L115 70 L118 75 L82 75 Z"
-        fill="rgba(251, 191, 36, 0.9)"
-        stroke="rgba(245, 158, 11, 1)"
-        strokeWidth="2"
-      />
-      {/* Crown jewels */}
-      <Circle cx="90" cy="65" r="2" fill="rgba(34, 211, 238, 1)" />
-      <Circle cx="100" cy="60" r="2" fill="rgba(220, 38, 38, 1)" />
-      <Circle cx="110" cy="65" r="2" fill="rgba(34, 197, 94, 1)" />
-    </G>
+    {/* Simple golden crown */}
+    <Path
+      d="M88 75 L92 60 L96 75 L100 60 L104 75 L108 60 L112 75 L115 80 L85 80 Z"
+      fill="rgba(251, 191, 36, 1)"
+      stroke="rgba(245, 158, 11, 1)"
+      strokeWidth="1"
+    />
     
     {/* Person's head */}
-    <Circle cx="100" cy="85" r="12" fill="rgba(255, 255, 255, 0.9)" stroke="rgba(59, 130, 246, 0.5)" strokeWidth="1" />
+    <Circle cx="100" cy="90" r="10" fill="rgba(255, 255, 255, 1)" stroke="rgba(59, 130, 246, 1)" strokeWidth="2" />
     
     {/* Person's body */}
-    <Rect x="93" y="95" width="14" height="25" rx="3" fill="rgba(59, 130, 246, 1)" />
+    <Rect x="94" y="98" width="12" height="22" rx="2" fill="rgba(59, 130, 246, 1)" />
     
     {/* Arms raised high above head */}
     <G>
       {/* Left arm raised */}
-      <Path d="M93 100 L80 85 L75 80" stroke="rgba(59, 130, 246, 1)" strokeWidth="4" strokeLinecap="round" />
+      <Path d="M94 102 L82 88 L78 84" stroke="rgba(59, 130, 246, 1)" strokeWidth="3" strokeLinecap="round" />
       {/* Right arm raised */}
-      <Path d="M107 100 L120 85 L125 80" stroke="rgba(59, 130, 246, 1)" strokeWidth="4" strokeLinecap="round" />
+      <Path d="M106 102 L118 88 L122 84" stroke="rgba(59, 130, 246, 1)" strokeWidth="3" strokeLinecap="round" />
     </G>
     
-    {/* Legs in excited stance */}
+    {/* Legs in simple stance */}
     <G>
       {/* Left leg */}
-      <Path d="M96 120 L90 135 L85 140" stroke="rgba(59, 130, 246, 1)" strokeWidth="4" strokeLinecap="round" />
+      <Path d="M97 120 L92 130 L88 135" stroke="rgba(59, 130, 246, 1)" strokeWidth="3" strokeLinecap="round" />
       {/* Right leg */}
-      <Path d="M104 120 L110 135 L115 140" stroke="rgba(59, 130, 246, 1)" strokeWidth="4" strokeLinecap="round" />
-    </G>
-    
-    {/* Celebration sparkles */}
-    <G opacity="0.8">
-      <Path d="M65 60 L70 65 L65 70 L60 65 Z" fill="rgba(251, 191, 36, 1)" />
-      <Path d="M135 55 L140 60 L135 65 L130 60 Z" fill="rgba(251, 191, 36, 1)" />
-      <Path d="M50 90 L55 95 L50 100 L45 95 Z" fill="rgba(34, 211, 238, 1)" />
-      <Path d="M150 85 L155 90 L150 95 L145 90 Z" fill="rgba(34, 211, 238, 1)" />
-      <Path d="M70 120 L75 125 L70 130 L65 125 Z" fill="rgba(34, 197, 94, 1)" />
-      <Path d="M130 115 L135 120 L130 125 L125 120 Z" fill="rgba(34, 197, 94, 1)" />
-    </G>
-    
-    {/* Victory glow around person */}
-    <G opacity="0.4">
-      <Circle cx="100" cy="110" r="35" fill="none" stroke="rgba(251, 191, 36, 0.6)" strokeWidth="2" strokeDasharray="4,4" />
+      <Path d="M103 120 L108 130 L112 135" stroke="rgba(59, 130, 246, 1)" strokeWidth="3" strokeLinecap="round" />
     </G>
   </Svg>
 );
@@ -160,7 +139,7 @@ export default function LevelScreen() {
           {/* Illustration space */}
           <AnimatedContent delay={100}>
             <View style={styles.illustrationContainer}>
-              <CelebratingPersonIllustration />
+              <SimpleCelebratingPersonIllustration />
             </View>
           </AnimatedContent>
 

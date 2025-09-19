@@ -11,7 +11,7 @@ import {
 import { router, useFocusEffect } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
-import Svg, { Path, Circle, G, Polygon, Line, Rect, Text as SvgText } from 'react-native-svg';
+import Svg, { Path, Circle, G, Polygon, Line, Rect, Text as SvgText, Defs, LinearGradient as SvgLinearGradient, Stop } from 'react-native-svg';
 import { Ionicons } from '@expo/vector-icons';
 import { AnimatedQuestionPage, AnimatedContent, AnimatedQuestionPageRef } from '../../components/AnimatedQuestionPage';
 import { NextButton } from '../../components/Button';
@@ -38,12 +38,12 @@ const CleanProgressGraph = () => (
     </G>
     
     {/* Gradient fill under curve */}
-    <defs>
-      <linearGradient id="progressGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-        <stop offset="0%" stopColor="rgba(59, 130, 246, 0.3)" />
-        <stop offset="100%" stopColor="rgba(59, 130, 246, 0.05)" />
-      </linearGradient>
-    </defs>
+    <Defs>
+      <SvgLinearGradient id="progressGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+        <Stop offset="0%" stopColor="rgba(59, 130, 246, 0.3)" />
+        <Stop offset="100%" stopColor="rgba(59, 130, 246, 0.05)" />
+      </SvgLinearGradient>
+    </Defs>
     
     {/* Fill area under curve */}
     <Path 
