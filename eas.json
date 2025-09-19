@@ -34,11 +34,10 @@
       "ios": {
         "image": "macos-sequoia-15.5-xcode-26.0",
         "resourceClass": "m1-medium",
-        "node": "20.19.4",
-        "buildType": "release"
+        "node": "20.19.4"
       },
       "android": {
-        "buildType": "aab",
+        "buildType": "app-bundle",
         "node": "20.19.4"
       },
       "env": {
