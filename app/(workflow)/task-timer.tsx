@@ -4,6 +4,7 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
+import { Image } from 'expo-image';
 import * as Haptics from 'expo-haptics';
 import Animated, {
   useSharedValue,
@@ -171,13 +172,22 @@ export default function TaskTimer() {
     >
       <StatusBar barStyle="dark-content" backgroundColor="transparent" translucent />
       
-      <View style={[styles.content, { paddingTop: insets.top + 20 }]}>
+      <View style={[styles.content, { paddingTop: insets.top }]}>
         
-        {/* Header with back button */}
+        {/* Header with back button and logo */}
         <View style={styles.header}>
           <TouchableOpacity style={styles.backButton} onPress={handleBack}>
             <Ionicons name="chevron-back" size={24} color="#0C4A6E" />
           </TouchableOpacity>
+          
+          {/* Logo - centered in header */}
+          <View style={styles.logoContainer}>
+            <Image
+              source={require('../../assets/images/unloop-logo.png')}
+              style={styles.logo}
+              contentFit="contain"
+            />
+          </View>
         </View>
 
         {/* Main Content */}
@@ -255,11 +265,24 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
   },
   header: {
-    alignItems: 'flex-start',
-    paddingBottom: 20,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingTop: 8,
+    paddingBottom: 6,
+    position: 'relative',
+    justifyContent: 'center',
   },
   backButton: {
+    position: 'absolute',
+    left: 0,
     padding: 8,
+  },
+  logoContainer: {
+    alignItems: 'center',
+  },
+  logo: {
+    width: 80,
+    height: 32,
   },
   mainContent: {
     flex: 1,
