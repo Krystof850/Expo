@@ -25,6 +25,9 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   orientation: 'portrait',
   icon: './assets/images/icon.jpg',
   scheme: 'unloop',
+  privacy: 'public',
+  primaryColor: '#2563eb',
+  platforms: ['ios', 'android', 'web'],
   schemes: [
     'unloop',
     reversedIosClientId || 'com.googleusercontent.apps.576633089196-9ak18h5p9m2k8n2f3o7j8c1k4b0t6e5c'
@@ -34,15 +37,24 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   ios: {
     ...(config.ios ?? {}),
     supportsTablet: true,
+    requireFullScreen: false,
     bundleIdentifier: "com.unloopapp.dev",
     infoPlist: {
       ...(config.ios?.infoPlist ?? {}),
       ITSAppUsesNonExemptEncryption: false,
+      NSUserTrackingUsageDescription: "This app uses data for personalized content and improved user experience.",
+      CFBundleDisplayName: "Unloop",
+      LSApplicationCategoryType: "public.app-category.productivity",
+      UIRequiredDeviceCapabilities: ['arm64'],
+      UISupportedInterfaceOrientations: ['UIInterfaceOrientationPortrait', 'UIInterfaceOrientationPortraitUpsideDown'],
+      UIBackgroundModes: [],
     },
     entitlements: {
       "com.apple.developer.applesignin": ["Default"],
     },
     usesAppleSignIn: true,
+    buildNumber: "1.0.0",
+    appStoreUrl: "https://apps.apple.com/app/unloop/id[TBD]",
   },
 
   android: {
@@ -52,6 +64,17 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       backgroundColor: '#ffffff',
     },
     package: "com.unloopapp.dev",
+    versionCode: 1,
+    permissions: [],
+    blockedPermissions: [
+      "CAMERA",
+      "RECORD_AUDIO", 
+      "ACCESS_FINE_LOCATION",
+      "ACCESS_COARSE_LOCATION",
+      "READ_CONTACTS",
+      "WRITE_CONTACTS"
+    ],
+    playStoreUrl: "https://play.google.com/store/apps/details?id=com.unloopapp.dev",
   },
 
   web: {
@@ -94,6 +117,19 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   experiments: {
     typedRoutes: true,
   },
+  
+  updates: {
+    fallbackToCacheTimeout: 0,
+  },
+  
+  runtimeVersion: {
+    policy: "sdkVersion"
+  },
+  
+  assetBundlePatterns: [
+    "assets/images/*",
+    "assets/fonts/*"  
+  ],
 
   extra: {
     ...(config.extra ?? {}),
