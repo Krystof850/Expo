@@ -1,0 +1,115 @@
+{
+  "identifier": "AB123456789",
+  "nonRenewingSubscriptions": [],
+  "products": [],
+  "settings": {
+    "_applicationInternalID": "123456789",
+    "_developerTeamID": "ABCD123456",
+    "_failTransactionsEnabled": false,
+    "_lastSynchronizedDate": "2025-09-19T09:00:00.000Z",
+    "_locale": "en_US",
+    "_storefront": "USA",
+    "_storeKitErrors": [
+      {
+        "current": null,
+        "enabled": false,
+        "name": "Load Products"
+      },
+      {
+        "current": null,
+        "enabled": false,
+        "name": "Purchase"
+      },
+      {
+        "current": null,
+        "enabled": false,
+        "name": "Verification"
+      },
+      {
+        "current": null,
+        "enabled": false,
+        "name": "App Store Sync"
+      },
+      {
+        "current": null,
+        "enabled": false,
+        "name": "Subscription Status"
+      },
+      {
+        "current": null,
+        "enabled": false,
+        "name": "App Transaction"
+      },
+      {
+        "current": null,
+        "enabled": false,
+        "name": "Manage Subscriptions Sheet"
+      },
+      {
+        "current": null,
+        "enabled": false,
+        "name": "Refund Request Sheet"
+      },
+      {
+        "current": null,
+        "enabled": false,
+        "name": "Offer Code Redeem Sheet"
+      }
+    ]
+  },
+  "subscriptionGroups": [
+    {
+      "id": "21510867",
+      "localizations": [],
+      "name": "Premium Subscriptions",
+      "subscriptions": [
+        {
+          "adHocOffers": [],
+          "codeOffers": [],
+          "displayPrice": "16.99",
+          "familyShareable": false,
+          "groupNumber": 1,
+          "internalID": "6737291891",
+          "introductoryOffer": null,
+          "localizations": [
+            {
+              "description": "Get unlimited access to all premium features with annual subscription",
+              "displayName": "Annual Premium Subscription",
+              "locale": "en_US"
+            }
+          ],
+          "productID": "Annual_16",
+          "recurringSubscriptionPeriod": "P1Y",
+          "referenceName": "Annual Premium",
+          "subscriptionGroupID": "21510867",
+          "type": "RecurringSubscription"
+        },
+        {
+          "adHocOffers": [],
+          "codeOffers": [],
+          "displayPrice": "1.99",
+          "familyShareable": false,
+          "groupNumber": 2,
+          "internalID": "6737291892",
+          "introductoryOffer": null,
+          "localizations": [
+            {
+              "description": "Get unlimited access to all premium features with monthly subscription",
+              "displayName": "Monthly Premium Subscription",
+              "locale": "en_US"
+            }
+          ],
+          "productID": "Monthly_17",
+          "recurringSubscriptionPeriod": "P1M",
+          "referenceName": "Monthly Premium",
+          "subscriptionGroupID": "21510867",
+          "type": "RecurringSubscription"
+        }
+      ]
+    }
+  ],
+  "version": {
+    "major": 3,
+    "minor": 0
+  }
+}
