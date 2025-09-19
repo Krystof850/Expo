@@ -18,141 +18,137 @@ import { NextButton } from '../../components/Button';
 import { SPACING } from '@/constants/theme';
 import * as Haptics from 'expo-haptics';
 
-// Brain Rewiring Circuit Illustration Component
-const BrainRewireIllustration = () => (
+// Modern Brain Illustration Component
+const ModernBrainIllustration = () => (
   <Svg width="200" height="200" viewBox="0 0 200 200">
-    {/* Brain outline */}
+    {/* Main brain shape - more anatomically correct */}
     <Path
-      d="M100 40C115 40 130 45 140 55C145 50 155 48 160 52C165 40 175 35 180 45C185 40 195 45 192 55C195 65 190 75 185 80C190 90 185 100 175 105C170 115 160 120 150 115C140 125 125 130 110 125C95 130 80 125 70 115C60 120 50 115 45 105C35 100 30 90 35 80C30 75 25 65 28 55C25 45 35 40 40 45C45 35 55 40 60 52C65 48 75 50 80 55C90 45 95 40 100 40Z"
-      fill="rgba(59, 130, 246, 0.3)"
-      stroke="rgba(59, 130, 246, 0.8)"
-      strokeWidth="2"
+      d="M100 50C85 50 70 55 60 65C55 60 45 58 40 62C35 55 25 52 20 60C15 65 20 75 25 80C20 85 15 95 25 100C30 110 40 115 50 110C55 120 70 125 85 120C100 130 115 125 130 120C145 125 160 120 165 110C175 115 185 110 190 100C200 95 195 85 190 80C195 75 200 65 195 60C190 52 180 55 175 62C170 58 160 60 155 65C145 55 130 50 115 50C110 50 105 50 100 50Z"
+      fill="rgba(255, 255, 255, 0.1)"
+      stroke="rgba(255, 255, 255, 0.7)"
+      strokeWidth="3"
     />
     
-    {/* Neural pathways - old (red/fading) */}
-    <G opacity="0.4">
-      <Path
-        d="M70 70 Q85 65 90 75 Q95 85 110 80"
-        stroke="rgba(239, 68, 68, 0.6)"
-        strokeWidth="3"
-        fill="none"
-        strokeDasharray="5,5"
-      />
-      <Path
-        d="M80 90 Q95 85 100 95 Q105 105 120 100"
-        stroke="rgba(239, 68, 68, 0.6)"
-        strokeWidth="3"
-        fill="none"
-        strokeDasharray="5,5"
-      />
-    </G>
+    {/* Brain hemispheres division */}
+    <Path
+      d="M100 50 C100 70 100 90 100 120"
+      stroke="rgba(255, 255, 255, 0.3)"
+      strokeWidth="2"
+      strokeDasharray="4,4"
+    />
     
-    {/* Neural pathways - new (bright blue/cyan) */}
-    <G opacity="0.9">
-      <Path
-        d="M75 75 Q90 70 95 80 Q100 90 115 85"
-        stroke="rgba(34, 211, 238, 1)"
-        strokeWidth="4"
-        fill="none"
-      />
-      <Path
-        d="M85 95 Q100 90 105 100 Q110 110 125 105"
-        stroke="rgba(34, 211, 238, 1)"
-        strokeWidth="4"
-        fill="none"
-      />
-      <Path
-        d="M90 65 Q105 60 110 70 Q115 80 130 75"
-        stroke="rgba(34, 211, 238, 1)"
-        strokeWidth="3"
-        fill="none"
-      />
-    </G>
-    
-    {/* Electrical nodes/synapses */}
-    <G>
-      <Circle cx="90" cy="75" r="3" fill="rgba(251, 191, 36, 1)" />
-      <Circle cx="110" cy="85" r="3" fill="rgba(251, 191, 36, 1)" />
-      <Circle cx="100" cy="95" r="3" fill="rgba(251, 191, 36, 1)" />
-      <Circle cx="120" cy="105" r="3" fill="rgba(251, 191, 36, 1)" />
-      <Circle cx="105" cy="65" r="3" fill="rgba(251, 191, 36, 1)" />
-      <Circle cx="125" cy="75" r="3" fill="rgba(251, 191, 36, 1)" />
-    </G>
-    
-    {/* Electrical sparks around nodes */}
-    <G opacity="0.8">
-      <Line x1="87" y1="72" x2="93" y2="78" stroke="rgba(251, 191, 36, 0.8)" strokeWidth="1" />
-      <Line x1="93" y1="72" x2="87" y2="78" stroke="rgba(251, 191, 36, 0.8)" strokeWidth="1" />
-      <Line x1="107" y1="82" x2="113" y2="88" stroke="rgba(251, 191, 36, 0.8)" strokeWidth="1" />
-      <Line x1="113" y1="82" x2="107" y2="88" stroke="rgba(251, 191, 36, 0.8)" strokeWidth="1" />
-      <Line x1="97" y1="92" x2="103" y2="98" stroke="rgba(251, 191, 36, 0.8)" strokeWidth="1" />
-      <Line x1="103" y1="92" x2="97" y2="98" stroke="rgba(251, 191, 36, 0.8)" strokeWidth="1" />
-    </G>
-    
-    {/* Circuit board patterns */}
+    {/* Left hemisphere details */}
     <G opacity="0.6">
-      {/* Horizontal circuit lines */}
-      <Line x1="50" y1="130" x2="80" y2="130" stroke="rgba(34, 211, 238, 0.7)" strokeWidth="2" />
-      <Line x1="120" y1="140" x2="150" y2="140" stroke="rgba(34, 211, 238, 0.7)" strokeWidth="2" />
-      {/* Vertical circuit lines */}
-      <Line x1="60" y1="125" x2="60" y2="145" stroke="rgba(34, 211, 238, 0.7)" strokeWidth="2" />
-      <Line x1="140" y1="135" x2="140" y2="155" stroke="rgba(34, 211, 238, 0.7)" strokeWidth="2" />
-      {/* Circuit junction points */}
-      <Circle cx="60" cy="130" r="2" fill="rgba(34, 211, 238, 1)" />
-      <Circle cx="140" cy="140" r="2" fill="rgba(34, 211, 238, 1)" />
+      <Path
+        d="M60 70 C70 65 80 70 85 80"
+        stroke="rgba(59, 130, 246, 0.8)"
+        strokeWidth="2"
+        fill="none"
+      />
+      <Path
+        d="M50 85 C60 80 70 85 75 95"
+        stroke="rgba(59, 130, 246, 0.8)"
+        strokeWidth="2"
+        fill="none"
+      />
+      <Path
+        d="M40 100 C50 95 60 100 65 110"
+        stroke="rgba(59, 130, 246, 0.8)"
+        strokeWidth="2"
+        fill="none"
+      />
+    </G>
+    
+    {/* Right hemisphere details */}
+    <G opacity="0.6">
+      <Path
+        d="M140 70 C130 65 120 70 115 80"
+        stroke="rgba(34, 211, 238, 0.8)"
+        strokeWidth="2"
+        fill="none"
+      />
+      <Path
+        d="M150 85 C140 80 130 85 125 95"
+        stroke="rgba(34, 211, 238, 0.8)"
+        strokeWidth="2"
+        fill="none"
+      />
+      <Path
+        d="M160 100 C150 95 140 100 135 110"
+        stroke="rgba(34, 211, 238, 0.8)"
+        strokeWidth="2"
+        fill="none"
+      />
+    </G>
+    
+    {/* Neural networks - glowing connections */}
+    <G opacity="0.8">
+      {/* Main neural pathways */}
+      <Path
+        d="M70 75 Q85 70 100 80 Q115 70 130 75"
+        stroke="rgba(251, 191, 36, 0.9)"
+        strokeWidth="3"
+        fill="none"
+      />
+      <Path
+        d="M60 90 Q80 85 100 95 Q120 85 140 90"
+        stroke="rgba(251, 191, 36, 0.9)"
+        strokeWidth="3"
+        fill="none"
+      />
+      <Path
+        d="M55 105 Q75 100 100 110 Q125 100 145 105"
+        stroke="rgba(251, 191, 36, 0.9)"
+        strokeWidth="3"
+        fill="none"
+      />
+    </G>
+    
+    {/* Synaptic nodes */}
+    <G>
+      <Circle cx="70" cy="75" r="4" fill="rgba(251, 191, 36, 1)" opacity="0.9" />
+      <Circle cx="100" cy="80" r="4" fill="rgba(251, 191, 36, 1)" opacity="0.9" />
+      <Circle cx="130" cy="75" r="4" fill="rgba(251, 191, 36, 1)" opacity="0.9" />
+      <Circle cx="60" cy="90" r="4" fill="rgba(251, 191, 36, 1)" opacity="0.9" />
+      <Circle cx="100" cy="95" r="4" fill="rgba(251, 191, 36, 1)" opacity="0.9" />
+      <Circle cx="140" cy="90" r="4" fill="rgba(251, 191, 36, 1)" opacity="0.9" />
+      <Circle cx="55" cy="105" r="4" fill="rgba(251, 191, 36, 1)" opacity="0.9" />
+      <Circle cx="100" cy="110" r="4" fill="rgba(251, 191, 36, 1)" opacity="0.9" />
+      <Circle cx="145" cy="105" r="4" fill="rgba(251, 191, 36, 1)" opacity="0.9" />
+    </G>
+    
+    {/* Electrical impulses - small sparks */}
+    <G opacity="0.7">
+      {/* Sparks around synapses */}
+      <Circle cx="67" cy="72" r="1.5" fill="rgba(255, 255, 255, 0.9)" />
+      <Circle cx="73" cy="78" r="1.5" fill="rgba(255, 255, 255, 0.9)" />
+      <Circle cx="97" cy="77" r="1.5" fill="rgba(255, 255, 255, 0.9)" />
+      <Circle cx="103" cy="83" r="1.5" fill="rgba(255, 255, 255, 0.9)" />
+      <Circle cx="127" cy="72" r="1.5" fill="rgba(255, 255, 255, 0.9)" />
+      <Circle cx="133" cy="78" r="1.5" fill="rgba(255, 255, 255, 0.9)" />
     </G>
     
     {/* Energy waves emanating from brain */}
-    <G opacity="0.5">
-      <Circle cx="100" cy="90" r="60" fill="none" stroke="rgba(34, 211, 238, 0.3)" strokeWidth="1" strokeDasharray="3,6" />
-      <Circle cx="100" cy="90" r="80" fill="none" stroke="rgba(34, 211, 238, 0.2)" strokeWidth="1" strokeDasharray="3,6" />
-      <Circle cx="100" cy="90" r="100" fill="none" stroke="rgba(34, 211, 238, 0.1)" strokeWidth="1" strokeDasharray="3,6" />
+    <G opacity="0.4">
+      <Circle cx="100" cy="85" r="70" fill="none" stroke="rgba(34, 211, 238, 0.4)" strokeWidth="1" strokeDasharray="2,4" />
+      <Circle cx="100" cy="85" r="90" fill="none" stroke="rgba(34, 211, 238, 0.3)" strokeWidth="1" strokeDasharray="2,4" />
+      <Circle cx="100" cy="85" r="110" fill="none" stroke="rgba(34, 211, 238, 0.2)" strokeWidth="1" strokeDasharray="2,4" />
     </G>
     
-    {/* Focus and discipline indicators */}
-    <G opacity="0.7">
-      {/* Focus symbol (eye) */}
-      <Circle cx="50" cy="60" r="12" fill="none" stroke="rgba(251, 191, 36, 0.8)" strokeWidth="2" />
-      <Circle cx="50" cy="60" r="6" fill="rgba(251, 191, 36, 0.8)" />
-      <Circle cx="50" cy="60" r="3" fill="rgba(59, 130, 246, 1)" />
-      
-      {/* Discipline symbol (strong pillar) */}
-      <Path
-        d="M145 50 L155 50 L155 80 L145 80 Z"
-        fill="rgba(251, 191, 36, 0.8)"
-        stroke="rgba(251, 191, 36, 1)"
-        strokeWidth="1"
-      />
-      <Path
-        d="M143 50 L157 50"
-        stroke="rgba(251, 191, 36, 1)"
-        strokeWidth="2"
-      />
-      <Path
-        d="M143 80 L157 80"
-        stroke="rgba(251, 191, 36, 1)"
-        strokeWidth="2"
-      />
-    </G>
-    
-    {/* Transformation arrows */}
+    {/* Thought bubbles - creative ideas */}
     <G opacity="0.6">
-      <Path
-        d="M40 100 L30 95 L40 90"
-        stroke="rgba(34, 211, 238, 0.8)"
-        strokeWidth="2"
-        fill="none"
-      />
-      <Line x1="30" y1="95" x2="15" y2="95" stroke="rgba(34, 211, 238, 0.8)" strokeWidth="2" />
+      <Circle cx="45" cy="45" r="6" fill="rgba(255, 255, 255, 0.3)" stroke="rgba(255, 255, 255, 0.5)" strokeWidth="1" />
+      <Circle cx="50" cy="35" r="4" fill="rgba(255, 255, 255, 0.3)" stroke="rgba(255, 255, 255, 0.5)" strokeWidth="1" />
+      <Circle cx="55" cy="28" r="2" fill="rgba(255, 255, 255, 0.3)" stroke="rgba(255, 255, 255, 0.5)" strokeWidth="1" />
       
-      <Path
-        d="M160 110 L170 105 L160 100"
-        stroke="rgba(34, 211, 238, 0.8)"
-        strokeWidth="2"
-        fill="none"
-      />
-      <Line x1="170" y1="105" x2="185" y2="105" stroke="rgba(34, 211, 238, 0.8)" strokeWidth="2" />
+      <Circle cx="155" cy="45" r="6" fill="rgba(255, 255, 255, 0.3)" stroke="rgba(255, 255, 255, 0.5)" strokeWidth="1" />
+      <Circle cx="150" cy="35" r="4" fill="rgba(255, 255, 255, 0.3)" stroke="rgba(255, 255, 255, 0.5)" strokeWidth="1" />
+      <Circle cx="145" cy="28" r="2" fill="rgba(255, 255, 255, 0.3)" stroke="rgba(255, 255, 255, 0.5)" strokeWidth="1" />
     </G>
+    
+    {/* Central focus point - consciousness */}
+    <Circle cx="100" cy="85" r="8" fill="rgba(251, 191, 36, 0.3)" stroke="rgba(251, 191, 36, 0.8)" strokeWidth="2" />
+    <Circle cx="100" cy="85" r="4" fill="rgba(251, 191, 36, 0.8)" />
   </Svg>
 );
 
@@ -232,7 +228,7 @@ export default function RewireScreen() {
           {/* Illustration space */}
           <AnimatedContent delay={100}>
             <View style={styles.illustrationContainer}>
-              <BrainRewireIllustration />
+              <ModernBrainIllustration />
             </View>
           </AnimatedContent>
 
