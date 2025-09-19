@@ -18,163 +18,162 @@ import { NextButton } from '../../components/Button';
 import { SPACING } from '@/constants/theme';
 import * as Haptics from 'expo-haptics';
 
-// Caring Hands with Heart Illustration
-const CaringHandsIllustration = () => (
+// Dawn of Hope Illustration
+const DawnOfHopeIllustration = () => (
   <Svg width="200" height="200" viewBox="0 0 200 200">
-    {/* Left hand - line art style */}
-    <G>
-      {/* Palm */}
-      <Path
-        d="M50 100 L50 140 C50 145 55 150 60 150 L75 150 C80 150 85 145 85 140 L85 120"
-        fill="none"
-        stroke="rgba(255, 255, 255, 0.9)"
-        strokeWidth="4"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      
-      {/* Thumb */}
-      <Path
-        d="M50 120 C45 120 40 115 40 110 C40 105 45 100 50 100"
-        fill="none"
-        stroke="rgba(255, 255, 255, 0.9)"
-        strokeWidth="4"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      
-      {/* Index finger */}
-      <Path
-        d="M65 120 L65 95 C65 90 70 85 75 85 C80 85 85 90 85 95 L85 120"
-        fill="none"
-        stroke="rgba(255, 255, 255, 0.9)"
-        strokeWidth="4"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      
-      {/* Middle finger */}
-      <Path
-        d="M75 120 L75 90 C75 85 80 80 85 80 C90 80 95 85 95 90 L95 120"
-        fill="none"
-        stroke="rgba(255, 255, 255, 0.9)"
-        strokeWidth="4"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      
-      {/* Ring finger */}
-      <Path
-        d="M85 120 L85 95 C85 90 90 85 95 85 C100 85 105 90 105 95 L105 120"
-        fill="none"
-        stroke="rgba(255, 255, 255, 0.9)"
-        strokeWidth="4"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      
-      {/* Pinky */}
-      <Path
-        d="M95 120 L95 100 C95 95 100 90 105 90 C110 90 115 95 115 100 L115 120"
-        fill="none"
-        stroke="rgba(255, 255, 255, 0.9)"
-        strokeWidth="4"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </G>
-    
-    {/* Right hand - line art style */}
-    <G>
-      {/* Palm */}
-      <Path
-        d="M150 100 L150 140 C150 145 145 150 140 150 L125 150 C120 150 115 145 115 140 L115 120"
-        fill="none"
-        stroke="rgba(255, 255, 255, 0.9)"
-        strokeWidth="4"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      
-      {/* Thumb */}
-      <Path
-        d="M150 120 C155 120 160 115 160 110 C160 105 155 100 150 100"
-        fill="none"
-        stroke="rgba(255, 255, 255, 0.9)"
-        strokeWidth="4"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      
-      {/* Index finger */}
-      <Path
-        d="M135 120 L135 95 C135 90 130 85 125 85 C120 85 115 90 115 95 L115 120"
-        fill="none"
-        stroke="rgba(255, 255, 255, 0.9)"
-        strokeWidth="4"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      
-      {/* Middle finger */}
-      <Path
-        d="M125 120 L125 90 C125 85 120 80 115 80 C110 80 105 85 105 90 L105 120"
-        fill="none"
-        stroke="rgba(255, 255, 255, 0.9)"
-        strokeWidth="4"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      
-      {/* Ring finger */}
-      <Path
-        d="M115 120 L115 95 C115 90 110 85 105 85 C100 85 95 90 95 95 L95 120"
-        fill="none"
-        stroke="rgba(255, 255, 255, 0.9)"
-        strokeWidth="4"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      
-      {/* Pinky */}
-      <Path
-        d="M105 120 L105 100 C105 95 100 90 95 90 C90 90 85 95 85 100 L85 120"
-        fill="none"
-        stroke="rgba(255, 255, 255, 0.9)"
-        strokeWidth="4"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </G>
-    
-    {/* Heart in the center */}
+    {/* Dark horizon/ground */}
     <Path
-      d="M100 65 C95 55 85 50 80 55 C75 60 75 65 80 70 L100 90 L120 70 C125 65 125 60 120 55 C115 50 105 55 100 65 Z"
-      fill="rgba(239, 68, 68, 0.9)"
-      stroke="rgba(220, 38, 38, 0.8)"
+      d="M0 160 L200 160 L200 200 L0 200 Z"
+      fill="rgba(0, 0, 0, 0.3)"
+    />
+    
+    {/* Rolling hills silhouette */}
+    <Path
+      d="M0 160 C50 140 100 150 150 130 C170 125 190 135 200 130 L200 200 L0 200 Z"
+      fill="rgba(0, 0, 0, 0.2)"
+    />
+    
+    {/* Rising sun */}
+    <Circle
+      cx="100"
+      cy="140"
+      r="25"
+      fill="rgba(251, 191, 36, 0.9)"
+      stroke="rgba(245, 158, 11, 0.8)"
       strokeWidth="2"
     />
     
-    {/* Heart shine/highlight */}
-    <Path
-      d="M95 60 C92 58 90 58 88 60 C86 62 86 64 88 66 L95 73 L95 60 Z"
-      fill="rgba(252, 165, 165, 0.7)"
+    {/* Sun's inner glow */}
+    <Circle
+      cx="100"
+      cy="140"
+      r="15"
+      fill="rgba(254, 240, 138, 0.7)"
     />
     
-    {/* Decorative elements around heart - like in reference */}
+    {/* Sun rays */}
+    <G opacity="0.8">
+      {/* Main rays */}
+      <Line x1="100" y1="100" x2="100" y2="80" stroke="rgba(251, 191, 36, 0.9)" strokeWidth="3" strokeLinecap="round" />
+      <Line x1="130" y1="110" x2="145" y2="95" stroke="rgba(251, 191, 36, 0.9)" strokeWidth="3" strokeLinecap="round" />
+      <Line x1="145" y1="140" x2="165" y2="140" stroke="rgba(251, 191, 36, 0.9)" strokeWidth="3" strokeLinecap="round" />
+      <Line x1="130" y1="170" x2="145" y2="185" stroke="rgba(251, 191, 36, 0.9)" strokeWidth="3" strokeLinecap="round" />
+      <Line x1="70" y1="170" x2="55" y2="185" stroke="rgba(251, 191, 36, 0.9)" strokeWidth="3" strokeLinecap="round" />
+      <Line x1="55" y1="140" x2="35" y2="140" stroke="rgba(251, 191, 36, 0.9)" strokeWidth="3" strokeLinecap="round" />
+      <Line x1="70" y1="110" x2="55" y2="95" stroke="rgba(251, 191, 36, 0.9)" strokeWidth="3" strokeLinecap="round" />
+      
+      {/* Secondary rays */}
+      <Line x1="115" y1="105" x2="125" y2="90" stroke="rgba(251, 191, 36, 0.7)" strokeWidth="2" strokeLinecap="round" />
+      <Line x1="85" y1="105" x2="75" y2="90" stroke="rgba(251, 191, 36, 0.7)" strokeWidth="2" strokeLinecap="round" />
+      <Line x1="140" y1="125" x2="155" y2="115" stroke="rgba(251, 191, 36, 0.7)" strokeWidth="2" strokeLinecap="round" />
+      <Line x1="60" y1="125" x2="45" y2="115" stroke="rgba(251, 191, 36, 0.7)" strokeWidth="2" strokeLinecap="round" />
+    </G>
+    
+    {/* Gentle clouds being illuminated */}
+    <G opacity="0.6">
+      {/* Left cloud */}
+      <Path
+        d="M30 100 C20 100 15 90 25 85 C30 80 40 85 45 90 C50 85 60 90 55 100 Z"
+        fill="rgba(255, 255, 255, 0.4)"
+        stroke="rgba(255, 255, 255, 0.3)"
+        strokeWidth="1"
+      />
+      
+      {/* Right cloud */}
+      <Path
+        d="M140 95 C130 95 125 85 135 80 C140 75 150 80 155 85 C160 80 170 85 165 95 Z"
+        fill="rgba(255, 255, 255, 0.4)"
+        stroke="rgba(255, 255, 255, 0.3)"
+        strokeWidth="1"
+      />
+      
+      {/* Higher cloud */}
+      <Path
+        d="M80 70 C70 70 65 60 75 55 C80 50 90 55 95 60 C100 55 110 60 105 70 Z"
+        fill="rgba(255, 255, 255, 0.3)"
+        stroke="rgba(255, 255, 255, 0.2)"
+        strokeWidth="1"
+      />
+    </G>
+    
+    {/* Growing plant/sprout from ground - symbol of hope */}
+    <G>
+      {/* Stem */}
+      <Path
+        d="M85 160 C85 150 90 140 95 130 C100 135 105 145 105 160"
+        fill="none"
+        stroke="rgba(34, 197, 94, 0.8)"
+        strokeWidth="3"
+        strokeLinecap="round"
+      />
+      
+      {/* Left leaf */}
+      <Path
+        d="M90 145 C85 142 80 145 85 150 C88 148 90 147 90 145"
+        fill="rgba(34, 197, 94, 0.7)"
+        stroke="rgba(22, 163, 74, 0.8)"
+        strokeWidth="1"
+      />
+      
+      {/* Right leaf */}
+      <Path
+        d="M100 140 C105 137 110 140 105 145 C102 143 100 142 100 140"
+        fill="rgba(34, 197, 94, 0.7)"
+        stroke="rgba(22, 163, 74, 0.8)"
+        strokeWidth="1"
+      />
+      
+      {/* Small flower bud */}
+      <Circle
+        cx="95"
+        cy="130"
+        r="3"
+        fill="rgba(239, 68, 68, 0.8)"
+        stroke="rgba(220, 38, 38, 0.7)"
+        strokeWidth="1"
+      />
+    </G>
+    
+    {/* Birds flying upward toward the light */}
     <G opacity="0.7">
-      {/* Top sparkles */}
-      <Line x1="100" y1="40" x2="100" y2="50" stroke="rgba(239, 68, 68, 0.8)" strokeWidth="3" strokeLinecap="round" />
-      <Line x1="90" y1="45" x2="90" y2="50" stroke="rgba(239, 68, 68, 0.8)" strokeWidth="2" strokeLinecap="round" />
-      <Line x1="110" y1="45" x2="110" y2="50" stroke="rgba(239, 68, 68, 0.8)" strokeWidth="2" strokeLinecap="round" />
+      {/* First bird */}
+      <Path
+        d="M120 120 C118 118 122 118 120 120 C122 118 118 118 120 120"
+        fill="none"
+        stroke="rgba(255, 255, 255, 0.8)"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
       
-      {/* Side sparkles */}
-      <Line x1="70" y1="60" x2="75" y2="60" stroke="rgba(239, 68, 68, 0.8)" strokeWidth="2" strokeLinecap="round" />
-      <Line x1="130" y1="60" x2="125" y2="60" stroke="rgba(239, 68, 68, 0.8)" strokeWidth="2" strokeLinecap="round" />
+      {/* Second bird */}
+      <Path
+        d="M130 110 C128 108 132 108 130 110 C132 108 128 108 130 110"
+        fill="none"
+        stroke="rgba(255, 255, 255, 0.8)"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
       
-      {/* Bottom sparkles */}
-      <Line x1="95" y1="95" x2="95" y2="100" stroke="rgba(239, 68, 68, 0.8)" strokeWidth="2" strokeLinecap="round" />
-      <Line x1="105" y1="95" x2="105" y2="100" stroke="rgba(239, 68, 68, 0.8)" strokeWidth="2" strokeLinecap="round" />
+      {/* Third bird */}
+      <Path
+        d="M140 100 C138 98 142 98 140 100 C142 98 138 98 140 100"
+        fill="none"
+        stroke="rgba(255, 255, 255, 0.8)"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+    </G>
+    
+    {/* Soft light emanating upward */}
+    <G opacity="0.3">
+      <Path
+        d="M100 140 L90 50 L100 55 L110 50 Z"
+        fill="rgba(251, 191, 36, 0.2)"
+      />
+      <Path
+        d="M100 140 L80 40 L100 50 L120 40 Z"
+        fill="rgba(251, 191, 36, 0.1)"
+      />
     </G>
   </Svg>
 );
@@ -256,7 +255,7 @@ export default function HopeScreen() {
           {/* Illustration space */}
           <AnimatedContent delay={100}>
             <View style={styles.illustrationContainer}>
-              <CaringHandsIllustration />
+              <DawnOfHopeIllustration />
             </View>
           </AnimatedContent>
 
