@@ -21,25 +21,135 @@ import * as Haptics from 'expo-haptics';
 // Caring Hands with Heart Illustration
 const CaringHandsIllustration = () => (
   <Svg width="200" height="200" viewBox="0 0 200 200">
-    {/* Left hand */}
-    <Path
-      d="M50 120 C45 115 45 110 50 105 C55 100 65 95 75 100 C80 95 85 95 90 100 C95 105 95 110 100 115 L100 140 C100 150 95 160 85 165 C75 170 65 165 55 160 C50 155 45 145 45 135 L45 125 C45 122 47 120 50 120 Z"
-      fill="rgba(255, 255, 255, 0.9)"
-      stroke="rgba(255, 255, 255, 0.7)"
-      strokeWidth="3"
-    />
+    {/* Left hand - line art style */}
+    <G>
+      {/* Palm */}
+      <Path
+        d="M50 100 L50 140 C50 145 55 150 60 150 L75 150 C80 150 85 145 85 140 L85 120"
+        fill="none"
+        stroke="rgba(255, 255, 255, 0.9)"
+        strokeWidth="4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      
+      {/* Thumb */}
+      <Path
+        d="M50 120 C45 120 40 115 40 110 C40 105 45 100 50 100"
+        fill="none"
+        stroke="rgba(255, 255, 255, 0.9)"
+        strokeWidth="4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      
+      {/* Index finger */}
+      <Path
+        d="M65 120 L65 95 C65 90 70 85 75 85 C80 85 85 90 85 95 L85 120"
+        fill="none"
+        stroke="rgba(255, 255, 255, 0.9)"
+        strokeWidth="4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      
+      {/* Middle finger */}
+      <Path
+        d="M75 120 L75 90 C75 85 80 80 85 80 C90 80 95 85 95 90 L95 120"
+        fill="none"
+        stroke="rgba(255, 255, 255, 0.9)"
+        strokeWidth="4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      
+      {/* Ring finger */}
+      <Path
+        d="M85 120 L85 95 C85 90 90 85 95 85 C100 85 105 90 105 95 L105 120"
+        fill="none"
+        stroke="rgba(255, 255, 255, 0.9)"
+        strokeWidth="4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      
+      {/* Pinky */}
+      <Path
+        d="M95 120 L95 100 C95 95 100 90 105 90 C110 90 115 95 115 100 L115 120"
+        fill="none"
+        stroke="rgba(255, 255, 255, 0.9)"
+        strokeWidth="4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </G>
     
-    {/* Right hand */}
-    <Path
-      d="M150 120 C155 115 155 110 150 105 C145 100 135 95 125 100 C120 95 115 95 110 100 C105 105 105 110 100 115 L100 140 C100 150 105 160 115 165 C125 170 135 165 145 160 C150 155 155 145 155 135 L155 125 C155 122 153 120 150 120 Z"
-      fill="rgba(255, 255, 255, 0.9)"
-      stroke="rgba(255, 255, 255, 0.7)"
-      strokeWidth="3"
-    />
+    {/* Right hand - line art style */}
+    <G>
+      {/* Palm */}
+      <Path
+        d="M150 100 L150 140 C150 145 145 150 140 150 L125 150 C120 150 115 145 115 140 L115 120"
+        fill="none"
+        stroke="rgba(255, 255, 255, 0.9)"
+        strokeWidth="4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      
+      {/* Thumb */}
+      <Path
+        d="M150 120 C155 120 160 115 160 110 C160 105 155 100 150 100"
+        fill="none"
+        stroke="rgba(255, 255, 255, 0.9)"
+        strokeWidth="4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      
+      {/* Index finger */}
+      <Path
+        d="M135 120 L135 95 C135 90 130 85 125 85 C120 85 115 90 115 95 L115 120"
+        fill="none"
+        stroke="rgba(255, 255, 255, 0.9)"
+        strokeWidth="4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      
+      {/* Middle finger */}
+      <Path
+        d="M125 120 L125 90 C125 85 120 80 115 80 C110 80 105 85 105 90 L105 120"
+        fill="none"
+        stroke="rgba(255, 255, 255, 0.9)"
+        strokeWidth="4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      
+      {/* Ring finger */}
+      <Path
+        d="M115 120 L115 95 C115 90 110 85 105 85 C100 85 95 90 95 95 L95 120"
+        fill="none"
+        stroke="rgba(255, 255, 255, 0.9)"
+        strokeWidth="4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      
+      {/* Pinky */}
+      <Path
+        d="M105 120 L105 100 C105 95 100 90 95 90 C90 90 85 95 85 100 L85 120"
+        fill="none"
+        stroke="rgba(255, 255, 255, 0.9)"
+        strokeWidth="4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </G>
     
     {/* Heart in the center */}
     <Path
-      d="M100 95 C95 85 85 80 80 85 C75 90 75 95 80 100 L100 120 L120 100 C125 95 125 90 120 85 C115 80 105 85 100 95 Z"
+      d="M100 65 C95 55 85 50 80 55 C75 60 75 65 80 70 L100 90 L120 70 C125 65 125 60 120 55 C115 50 105 55 100 65 Z"
       fill="rgba(239, 68, 68, 0.9)"
       stroke="rgba(220, 38, 38, 0.8)"
       strokeWidth="2"
@@ -47,66 +157,24 @@ const CaringHandsIllustration = () => (
     
     {/* Heart shine/highlight */}
     <Path
-      d="M95 90 C92 88 90 88 88 90 C86 92 86 94 88 96 L95 103 L95 90 Z"
+      d="M95 60 C92 58 90 58 88 60 C86 62 86 64 88 66 L95 73 L95 60 Z"
       fill="rgba(252, 165, 165, 0.7)"
     />
     
-    {/* Hand details - left thumb */}
-    <Path
-      d="M50 115 C45 115 40 120 40 125 C40 130 45 135 50 135 C55 135 60 130 60 125 C60 120 55 115 50 115 Z"
-      fill="rgba(240, 240, 240, 0.8)"
-      stroke="rgba(200, 200, 200, 0.6)"
-      strokeWidth="2"
-    />
-    
-    {/* Hand details - right thumb */}
-    <Path
-      d="M150 115 C155 115 160 120 160 125 C160 130 155 135 150 135 C145 135 140 130 140 125 C140 120 145 115 150 115 Z"
-      fill="rgba(240, 240, 240, 0.8)"
-      stroke="rgba(200, 200, 200, 0.6)"
-      strokeWidth="2"
-    />
-    
-    {/* Gentle glow around hands */}
-    <Circle
-      cx="100"
-      cy="130"
-      r="80"
-      fill="rgba(59, 130, 246, 0.1)"
-      opacity="0.6"
-    />
-    
-    {/* Small hearts floating around */}
-    <G opacity="0.5">
-      <Path
-        d="M150 70 C148 65 145 63 142 65 C139 67 139 70 142 73 L150 80 L158 73 C161 70 161 67 158 65 C155 63 152 65 150 70 Z"
-        fill="rgba(239, 68, 68, 0.6)"
-      />
-      
-      <Path
-        d="M60 75 C58 70 55 68 52 70 C49 72 49 75 52 78 L60 85 L68 78 C71 75 71 72 68 70 C65 68 62 70 60 75 Z"
-        fill="rgba(239, 68, 68, 0.6)"
-      />
-      
-      <Path
-        d="M170 140 C168 135 165 133 162 135 C159 137 159 140 162 143 L170 150 L178 143 C181 140 181 137 178 135 C175 133 172 135 170 140 Z"
-        fill="rgba(239, 68, 68, 0.6)"
-      />
-      
-      <Path
-        d="M30 150 C28 145 25 143 22 145 C19 147 19 150 22 153 L30 160 L38 153 C41 150 41 147 38 145 C35 143 32 145 30 150 Z"
-        fill="rgba(239, 68, 68, 0.6)"
-      />
-    </G>
-    
-    {/* Sparkles of hope */}
+    {/* Decorative elements around heart - like in reference */}
     <G opacity="0.7">
-      <Circle cx="70" cy="50" r="2" fill="rgba(255, 255, 255, 0.8)" />
-      <Circle cx="130" cy="45" r="1.5" fill="rgba(255, 255, 255, 0.8)" />
-      <Circle cx="40" cy="80" r="2" fill="rgba(255, 255, 255, 0.8)" />
-      <Circle cx="160" cy="90" r="1.5" fill="rgba(255, 255, 255, 0.8)" />
-      <Circle cx="180" cy="120" r="2" fill="rgba(255, 255, 255, 0.8)" />
-      <Circle cx="20" cy="120" r="1.5" fill="rgba(255, 255, 255, 0.8)" />
+      {/* Top sparkles */}
+      <Line x1="100" y1="40" x2="100" y2="50" stroke="rgba(239, 68, 68, 0.8)" strokeWidth="3" strokeLinecap="round" />
+      <Line x1="90" y1="45" x2="90" y2="50" stroke="rgba(239, 68, 68, 0.8)" strokeWidth="2" strokeLinecap="round" />
+      <Line x1="110" y1="45" x2="110" y2="50" stroke="rgba(239, 68, 68, 0.8)" strokeWidth="2" strokeLinecap="round" />
+      
+      {/* Side sparkles */}
+      <Line x1="70" y1="60" x2="75" y2="60" stroke="rgba(239, 68, 68, 0.8)" strokeWidth="2" strokeLinecap="round" />
+      <Line x1="130" y1="60" x2="125" y2="60" stroke="rgba(239, 68, 68, 0.8)" strokeWidth="2" strokeLinecap="round" />
+      
+      {/* Bottom sparkles */}
+      <Line x1="95" y1="95" x2="95" y2="100" stroke="rgba(239, 68, 68, 0.8)" strokeWidth="2" strokeLinecap="round" />
+      <Line x1="105" y1="95" x2="105" y2="100" stroke="rgba(239, 68, 68, 0.8)" strokeWidth="2" strokeLinecap="round" />
     </G>
   </Svg>
 );
