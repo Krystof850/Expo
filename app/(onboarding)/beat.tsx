@@ -22,7 +22,7 @@ import * as Haptics from 'expo-haptics';
 const SimpleChecklistIllustration = () => (
   <Svg width="200" height="200" viewBox="0 0 200 200">
     {/* Checklist background */}
-    <Rect x="50" y="40" width="100" height="130" rx="8" fill="rgba(255, 255, 255, 0.9)" stroke="rgba(59, 130, 246, 0.3)" strokeWidth="2" />
+    <Rect x="50" y="40" width="100" height="130" rx="8" fill="rgba(255, 255, 255, 0.9)" stroke="rgba(59, 130, 246, 0.4)" strokeWidth="2" />
     
     {/* Checklist title line */}
     <Rect x="60" y="55" width="50" height="4" rx="2" fill="rgba(59, 130, 246, 0.6)" />
@@ -30,35 +30,28 @@ const SimpleChecklistIllustration = () => (
     {/* Checklist items */}
     <G>
       {/* Item 1 - Completed */}
-      <Rect x="60" y="75" width="12" height="12" rx="2" fill="rgba(34, 197, 94, 0.2)" stroke="rgba(34, 197, 94, 1)" strokeWidth="1" />
-      <Path d="M63 81 L66 84 L72 78" stroke="rgba(34, 197, 94, 1)" strokeWidth="2" fill="none" strokeLinecap="round" />
-      <Rect x="80" y="79" width="55" height="3" rx="1" fill="rgba(156, 163, 175, 0.6)" />
+      <Rect x="60" y="75" width="12" height="12" rx="2" fill="rgba(59, 130, 246, 0.2)" stroke="rgba(59, 130, 246, 1)" strokeWidth="1" />
+      <Path d="M63 81 L66 84 L72 78" stroke="rgba(59, 130, 246, 1)" strokeWidth="2" fill="none" strokeLinecap="round" />
+      <Rect x="80" y="79" width="55" height="3" rx="1" fill="rgba(59, 130, 246, 0.4)" />
       
       {/* Item 2 - Completed */}
-      <Rect x="60" y="95" width="12" height="12" rx="2" fill="rgba(34, 197, 94, 0.2)" stroke="rgba(34, 197, 94, 1)" strokeWidth="1" />
-      <Path d="M63 101 L66 104 L72 98" stroke="rgba(34, 197, 94, 1)" strokeWidth="2" fill="none" strokeLinecap="round" />
-      <Rect x="80" y="99" width="45" height="3" rx="1" fill="rgba(156, 163, 175, 0.6)" />
+      <Rect x="60" y="95" width="12" height="12" rx="2" fill="rgba(59, 130, 246, 0.2)" stroke="rgba(59, 130, 246, 1)" strokeWidth="1" />
+      <Path d="M63 101 L66 104 L72 98" stroke="rgba(59, 130, 246, 1)" strokeWidth="2" fill="none" strokeLinecap="round" />
+      <Rect x="80" y="99" width="45" height="3" rx="1" fill="rgba(59, 130, 246, 0.4)" />
       
       {/* Item 3 - Completed */}
-      <Rect x="60" y="115" width="12" height="12" rx="2" fill="rgba(34, 197, 94, 0.2)" stroke="rgba(34, 197, 94, 1)" strokeWidth="1" />
-      <Path d="M63 121 L66 124 L72 118" stroke="rgba(34, 197, 94, 1)" strokeWidth="2" fill="none" strokeLinecap="round" />
-      <Rect x="80" y="119" width="40" height="3" rx="1" fill="rgba(156, 163, 175, 0.6)" />
+      <Rect x="60" y="115" width="12" height="12" rx="2" fill="rgba(59, 130, 246, 0.2)" stroke="rgba(59, 130, 246, 1)" strokeWidth="1" />
+      <Path d="M63 121 L66 124 L72 118" stroke="rgba(59, 130, 246, 1)" strokeWidth="2" fill="none" strokeLinecap="round" />
+      <Rect x="80" y="119" width="40" height="3" rx="1" fill="rgba(59, 130, 246, 0.4)" />
       
       {/* Item 4 - Current */}
-      <Rect x="60" y="135" width="12" height="12" rx="2" fill="rgba(251, 191, 36, 0.2)" stroke="rgba(251, 191, 36, 1)" strokeWidth="2" />
-      <Circle cx="66" cy="141" r="2" fill="rgba(251, 191, 36, 1)" />
-      <Rect x="80" y="139" width="50" height="3" rx="1" fill="rgba(156, 163, 175, 0.6)" />
+      <Rect x="60" y="135" width="12" height="12" rx="2" fill="rgba(147, 197, 253, 0.3)" stroke="rgba(147, 197, 253, 1)" strokeWidth="2" />
+      <Circle cx="66" cy="141" r="2" fill="rgba(147, 197, 253, 1)" />
+      <Rect x="80" y="139" width="50" height="3" rx="1" fill="rgba(147, 197, 253, 0.5)" />
       
       {/* Item 5 - Pending */}
-      <Rect x="60" y="155" width="12" height="12" rx="2" fill="rgba(255, 255, 255, 0.8)" stroke="rgba(156, 163, 175, 0.5)" strokeWidth="1" />
-      <Rect x="80" y="159" width="35" height="3" rx="1" fill="rgba(156, 163, 175, 0.4)" />
-    </G>
-    
-    {/* Progress indicator */}
-    <G opacity="0.8">
-      <Circle cx="100" cy="25" r="15" fill="none" stroke="rgba(34, 197, 94, 0.3)" strokeWidth="3" />
-      <Path d="M85 25 A15 15 0 0 1 115 25" stroke="rgba(34, 197, 94, 1)" strokeWidth="3" fill="none" strokeLinecap="round" />
-      <Text x="100" y="30" fontSize="10" fill="rgba(34, 197, 94, 1)" textAnchor="middle" fontWeight="bold">60%</Text>
+      <Rect x="60" y="155" width="12" height="12" rx="2" fill="rgba(255, 255, 255, 0.8)" stroke="rgba(191, 219, 254, 0.6)" strokeWidth="1" />
+      <Rect x="80" y="159" width="35" height="3" rx="1" fill="rgba(191, 219, 254, 0.4)" />
     </G>
   </Svg>
 );
