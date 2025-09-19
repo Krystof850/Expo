@@ -30,7 +30,26 @@
       "distribution": "internal"
     },
     "production": {
-      "autoIncrement": true
+      "autoIncrement": true,
+      "ios": {
+        "image": "macos-sequoia-15.5-xcode-26.0",
+        "resourceClass": "m1-medium",
+        "node": "20.19.4",
+        "buildType": "release"
+      },
+      "android": {
+        "buildType": "aab",
+        "node": "20.19.4"
+      },
+      "env": {
+        "NODE_ENV": "production",
+        "EXPO_PUBLIC_FIREBASE_API_KEY": "AIzaSyAX2Zd9CiZjecLwYisC6SundzMeLvBsuzA",
+        "EXPO_PUBLIC_GOOGLE_CLIENT_ID": "576633089196-p5up6shcskrpddf1q7g6ivkk7d9ock0v.apps.googleusercontent.com",
+        "EXPO_PUBLIC_IOS_GOOGLE_CLIENT_ID": "576633089196-fgpj65aqjhqio1t7qpui3r4u4q8qf5k6.apps.googleusercontent.com",
+        "EXPO_PUBLIC_REVERSED_IOS_CLIENT_ID": "com.googleusercontent.apps.576633089196-fgpj65aqjhqio1t7qpui3r4u4q8qf5k6",
+        "EXPO_PUBLIC_SUPERWALL_API_KEY": "pk_f9ba235999f864d522d3f012ab9894eaae53a30698086993",
+        "EXPO_PUBLIC_SUPPORT_EMAIL": "unloop.app.tech@gmail.com"
+      }
     }
   },
   "submit": {
