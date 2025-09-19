@@ -21,7 +21,33 @@ import * as Haptics from 'expo-haptics';
 // Simple Checklist Illustration Component
 const SimpleChecklistIllustration = () => (
   <Svg width="200" height="200" viewBox="0 0 200 200">
-    {/* Checklist background */}
+    {/* Abstract background elements */}
+    <G opacity="0.15">
+      {/* Floating geometric shapes */}
+      <Circle cx="25" cy="60" r="8" fill="rgba(59, 130, 246, 0.3)" />
+      <Circle cx="175" cy="80" r="12" fill="rgba(147, 197, 253, 0.4)" />
+      <Circle cx="20" cy="140" r="6" fill="rgba(191, 219, 254, 0.5)" />
+      <Circle cx="185" cy="130" r="10" fill="rgba(59, 130, 246, 0.2)" />
+      
+      {/* Abstract lines */}
+      <Path d="M10 30 Q30 20 50 35" stroke="rgba(59, 130, 246, 0.3)" strokeWidth="2" fill="none" />
+      <Path d="M160 25 Q180 15 190 30" stroke="rgba(147, 197, 253, 0.4)" strokeWidth="2" fill="none" />
+      <Path d="M15 180 Q35 170 45 185" stroke="rgba(191, 219, 254, 0.3)" strokeWidth="2" fill="none" />
+      <Path d="M155 185 Q175 175 185 190" stroke="rgba(59, 130, 246, 0.3)" strokeWidth="2" fill="none" />
+    </G>
+    
+    {/* Subtle pattern dots */}
+    <G opacity="0.1">
+      <Circle cx="35" cy="35" r="1.5" fill="rgba(59, 130, 246, 1)" />
+      <Circle cx="170" cy="45" r="1.5" fill="rgba(147, 197, 253, 1)" />
+      <Circle cx="30" cy="180" r="1.5" fill="rgba(191, 219, 254, 1)" />
+      <Circle cx="175" cy="160" r="1.5" fill="rgba(59, 130, 246, 1)" />
+      <Circle cx="15" cy="100" r="1.5" fill="rgba(147, 197, 253, 1)" />
+      <Circle cx="190" cy="110" r="1.5" fill="rgba(191, 219, 254, 1)" />
+    </G>
+    
+    {/* Checklist background with subtle shadow */}
+    <Rect x="52" y="42" width="100" height="130" rx="8" fill="rgba(59, 130, 246, 0.05)" />
     <Rect x="50" y="40" width="100" height="130" rx="8" fill="rgba(255, 255, 255, 0.9)" stroke="rgba(59, 130, 246, 0.4)" strokeWidth="2" />
     
     {/* Checklist title line */}
@@ -52,6 +78,15 @@ const SimpleChecklistIllustration = () => (
       {/* Item 5 - Pending */}
       <Rect x="60" y="155" width="12" height="12" rx="2" fill="rgba(255, 255, 255, 0.8)" stroke="rgba(191, 219, 254, 0.6)" strokeWidth="1" />
       <Rect x="80" y="159" width="35" height="3" rx="1" fill="rgba(191, 219, 254, 0.4)" />
+    </G>
+    
+    {/* Floating accent elements */}
+    <G opacity="0.2">
+      {/* Small floating squares */}
+      <Rect x="170" y="50" width="4" height="4" rx="1" fill="rgba(59, 130, 246, 0.6)" transform="rotate(15 172 52)" />
+      <Rect x="25" y="85" width="3" height="3" rx="1" fill="rgba(147, 197, 253, 0.7)" transform="rotate(-20 26.5 86.5)" />
+      <Rect x="180" y="140" width="5" height="5" rx="1" fill="rgba(191, 219, 254, 0.6)" transform="rotate(25 182.5 142.5)" />
+      <Rect x="15" y="160" width="3" height="3" rx="1" fill="rgba(59, 130, 246, 0.5)" transform="rotate(-15 16.5 161.5)" />
     </G>
   </Svg>
 );
