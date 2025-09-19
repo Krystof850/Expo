@@ -28,6 +28,11 @@ LogBox.ignoreLogs([
   'Module not found',
   // Native module warnings
   'Unable to symbolicate',
+  // Style deprecation warnings (React Native Web)
+  '"shadow*" style props are deprecated',
+  '"textShadow*" style props are deprecated',
+  'shadow* style props are deprecated',
+  'textShadow* style props are deprecated',
 ]);
 
 // In production builds, ignore all warnings
