@@ -45,7 +45,7 @@ export default function SignIn() {
     try {
       setAppleLoading(true);
       const result = await signInWithApple();
-      console.log('[SignIn] Apple Sign In successful for user:', result.user.uid);
+      console.log('[SignIn] Apple Sign In successful');
     } catch (e: any) {
       console.error('[SignIn] Apple Sign In failed:', e);
       showError(createAuthError(e.message || "Apple Sign In failed. Please try again."));

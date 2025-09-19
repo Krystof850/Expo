@@ -56,7 +56,7 @@ export default function SignUp() {
       await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
       setAppleLoading(true);
       const result = await signInWithApple();
-      console.log('[SignUp] Apple Sign In successful for user:', result.user.uid);
+      console.log('[SignUp] Apple Sign In successful');
     } catch (e: any) {
       console.error('[SignUp] Apple Sign In failed:', e);
       Alert.alert("Error", e.message || "Failed to sign in with Apple.");

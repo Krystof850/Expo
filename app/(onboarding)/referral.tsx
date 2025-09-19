@@ -30,7 +30,7 @@ export default function ReferralScreen() {
       // Save referral code (even if empty)
       if (referralCode.trim()) {
         await AsyncStorage.setItem('referral_code', referralCode.trim());
-        console.log('🔗 Referral code saved:', referralCode.trim());
+        console.log('🔗 Referral code saved');
       } else {
         console.log('🔗 No referral code provided');
       }
