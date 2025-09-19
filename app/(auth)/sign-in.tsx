@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { router, Redirect } from "expo-router";
-import { View, Text, Alert, StyleSheet } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import * as Haptics from 'expo-haptics';
 import { Ionicons } from '@expo/vector-icons';
 import { Platform } from 'react-native';
@@ -9,6 +9,7 @@ import { signInWithApple, isAppleSignInAvailable } from "../../src/services/auth
 import { useAuth } from "../../src/context/AuthContext";
 import { FirebaseConfigBanner } from "../../src/components/FirebaseConfigBanner";
 import { AuthErrorBoundary } from "../../src/components/AuthErrorBoundary";
+import { useErrorHandler, createAuthError } from "../../src/components/UserFriendlyErrorHandler";
 import AppBackground from '../../components/AppBackground';
 import { TitleText, DescriptionText } from '../../components/Text';
 import HapticButton from '../../components/HapticButton';
@@ -18,6 +19,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function SignIn() {
   const { user } = useAuth();
+  const { showError } = useErrorHandler();
   const [appleLoading, setAppleLoading] = useState(false);
   const [appleAvailable, setAppleAvailable] = useState(false);
   const insets = useSafeAreaInsets();
@@ -41,7 +43,7 @@ export default function SignIn() {
       console.log('[SignIn] Apple Sign In successful for user:', result.user.uid);
     } catch (e: any) {
       console.error('[SignIn] Apple Sign In failed:', e);
-      Alert.alert("Error", e.message || "Apple Sign In failed.");
+      showError(createAuthError(e.message || "Apple Sign In failed. Please try again."));
     } finally {
       setAppleLoading(false);
     }

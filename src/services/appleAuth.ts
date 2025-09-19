@@ -25,7 +25,7 @@ export const isAppleSignInAvailable = async (): Promise<boolean> => {
   try {
     return await AppleAuthentication.isAvailableAsync();
   } catch (error) {
-    console.warn('[AppleAuth] Failed to check availability:', error);
+    // Silently fail - this is expected behavior for non-iOS devices
     return false;
   }
 };
@@ -96,6 +96,7 @@ export const signInWithApple = async (): Promise<AppleSignInResult> => {
     return signInResult;
 
   } catch (error: any) {
+    // Log error for debugging but let the UI handle user messaging
     console.error('[AppleAuth] Apple Sign In failed:', error);
     
     // Handle specific Apple Sign In errors using string codes

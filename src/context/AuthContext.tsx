@@ -61,7 +61,7 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
     
     // DEPRECATED: Callers should use useSuperwall().presentPaywall instead
     // For now, log a warning and return false to indicate this path is deprecated
-    console.warn('[AuthContext] presentPaywall is deprecated - use useSuperwall().presentPaywall instead');
+    // Deprecated: Callers should use useSuperwall().presentPaywall instead
     return false;
   }, []);
 
@@ -79,8 +79,9 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
       // Placeholder for restore purchases logic
       // In a real implementation, this would call Superwall's restore method
       return false;
-    } catch (error) {
+    } catch (error: any) {
       console.error('[AuthContext] Error restoring purchases:', error);
+      // Don't show error popup for restore failures as they are common
       return false;
     } finally {
       setSubscriptionLoading(false);

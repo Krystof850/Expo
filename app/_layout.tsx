@@ -19,6 +19,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect } from 'react';
 import ConditionalSuperwallProvider from '../src/components/ConditionalSuperwallProvider';
 import SuperwallIntegration from '../src/components/SuperwallIntegration';
+import { ErrorProvider } from '../src/components/UserFriendlyErrorHandler';
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
@@ -58,7 +59,8 @@ export default function RootLayout() {
     <ConditionalSuperwallProvider>
       <AuthProvider>
         <SuperwallIntegration>
-          <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+          <ErrorProvider>
+            <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
             <Stack
               screenOptions={{
                 headerShown: false,
@@ -76,6 +78,7 @@ export default function RootLayout() {
             </Stack>
             <StatusBar style="auto" />
           </ThemeProvider>
+        </ErrorProvider>
         </SuperwallIntegration>
       </AuthProvider>
     </ConditionalSuperwallProvider>
