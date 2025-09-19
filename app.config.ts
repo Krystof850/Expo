@@ -1,12 +1,12 @@
-import { ConfigContext, ExpoConfig } from "expo/config";
+import { ConfigContext, ExpoConfig } from "@expo/config";
 
-// Load environment variables directly
-const firebaseApiKey = process.env.FIREBASE_API_KEY;
-const superwallApiKey = process.env.SUPERWALL_API_KEY;
-const googleClientId = process.env.GOOGLE_CLIENT_ID;
-const iosGoogleClientId = process.env.IOS_GOOGLE_CLIENT_ID;
-const reversedIosClientId = process.env.REVERSED_IOS_CLIENT_ID;
-const supportEmail = process.env.SUPPORT_EMAIL || 'unloop.app.tech@gmail.com';
+// Load environment variables with EAS Build support
+const firebaseApiKey = process.env.FIREBASE_API_KEY || process.env.EXPO_PUBLIC_FIREBASE_API_KEY;
+const superwallApiKey = process.env.SUPERWALL_API_KEY || process.env.EXPO_PUBLIC_SUPERWALL_API_KEY;
+const googleClientId = process.env.GOOGLE_CLIENT_ID || process.env.EXPO_PUBLIC_GOOGLE_CLIENT_ID;
+const iosGoogleClientId = process.env.IOS_GOOGLE_CLIENT_ID || process.env.EXPO_PUBLIC_IOS_GOOGLE_CLIENT_ID;
+const reversedIosClientId = process.env.REVERSED_IOS_CLIENT_ID || process.env.EXPO_PUBLIC_REVERSED_IOS_CLIENT_ID;
+const supportEmail = process.env.SUPPORT_EMAIL || process.env.EXPO_PUBLIC_SUPPORT_EMAIL || 'unloop.app.tech@gmail.com';
 
 console.log('🔧 Loading environment variables:', {
   firebaseApiKey: firebaseApiKey ? 'loaded' : 'missing',
@@ -64,7 +64,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     [
       '@react-native-google-signin/google-signin',
       {
-        iosUrlScheme: reversedIosClientId,
+        iosUrlScheme: reversedIosClientId || 'com.googleusercontent.apps.576633089196-reversed',
       },
     ],
     [

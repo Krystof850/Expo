@@ -9,13 +9,22 @@
       "distribution": "internal",
       "autoIncrement": true,
       "ios": {
-        "simulator": true
+        "simulator": true,
+        "image": "macos-sequoia-15.5-xcode-26.0",
+        "resourceClass": "m1-medium",
+        "node": "20.19.4"
       },
       "android": {
         "buildType": "apk"
       },
       "env": {
-        "NODE_ENV": "development"
+        "NODE_ENV": "development",
+        "EXPO_PUBLIC_FIREBASE_API_KEY": "AIzaSyAX2Z-MDOEWWcEjDKOlhLOl2ZhQJy7fG6o",
+        "EXPO_PUBLIC_GOOGLE_CLIENT_ID": "576633089196-qhl8d7q8g5gu6bvd4o1k3k8t4c5k9n5g.apps.googleusercontent.com",
+        "EXPO_PUBLIC_IOS_GOOGLE_CLIENT_ID": "576633089196-9ak18h5p9m2k8n2f3o7j8c1k4b0t6e5c.apps.googleusercontent.com",
+        "EXPO_PUBLIC_REVERSED_IOS_CLIENT_ID": "com.googleusercontent.apps.576633089196-9ak18h5p9m2k8n2f3o7j8c1k4b0t6e5c",
+        "EXPO_PUBLIC_SUPERWALL_API_KEY": "pk_b5f0c8c4b8c4b9a9c1a5a5b8b0b3b5c8",
+        "EXPO_PUBLIC_SUPPORT_EMAIL": "unloop.app.tech@gmail.com"
       }
     },
     "preview": {
