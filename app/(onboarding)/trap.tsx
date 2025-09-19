@@ -10,7 +10,7 @@ import {
 import { router, useFocusEffect } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
-import Svg, { Path, Circle, G } from 'react-native-svg';
+import Svg, { Path, Circle, G, Rect, Line } from 'react-native-svg';
 import { Ionicons } from '@expo/vector-icons';
 import { TouchableOpacity } from 'react-native';
 import { AnimatedQuestionPage, AnimatedContent, AnimatedQuestionPageRef } from '../../components/AnimatedQuestionPage';
@@ -18,104 +18,96 @@ import { NextButton } from '../../components/Button';
 import { SPACING } from '@/constants/theme';
 import * as Haptics from 'expo-haptics';
 
-// Simple Brain with Chain Illustration Component
-const BrainChainIllustration = () => (
+// Crossed Phone Illustration Component
+const CrossedPhoneIllustration = () => (
   <Svg width="200" height="200" viewBox="0 0 200 200">
-    {/* Brain outline */}
-    <Path
-      d="M100 40C85 40 70 45 60 55C55 50 45 48 40 52C35 40 25 35 20 45C15 40 5 45 8 55C5 65 10 75 15 80C10 90 15 100 25 105C30 115 40 120 50 115C60 125 75 130 90 125C105 130 120 125 130 115C140 120 150 115 155 105C165 100 170 90 165 80C170 75 175 65 172 55C175 45 165 40 160 45C155 35 145 40 140 52C135 48 125 50 120 55C110 45 105 40 100 40Z"
+    {/* Phone outer body */}
+    <Rect
+      x="70"
+      y="40"
+      width="60"
+      height="120"
+      rx="12"
+      ry="12"
       fill="rgba(255, 255, 255, 0.9)"
       stroke="rgba(255, 255, 255, 0.6)"
-      strokeWidth="2"
+      strokeWidth="3"
     />
     
-    {/* Brain details */}
-    <Path
-      d="M85 70C90 65 95 70 100 65C105 70 110 65 115 70"
-      stroke="rgba(220, 38, 38, 0.6)"
-      strokeWidth="2"
-      fill="none"
-    />
-    <Path
-      d="M75 85C85 80 95 85 105 80C115 85 125 80 135 85"
-      stroke="rgba(220, 38, 38, 0.6)"
-      strokeWidth="2"
-      fill="none"
+    {/* Phone screen */}
+    <Rect
+      x="75"
+      y="50"
+      width="50"
+      height="90"
+      rx="6"
+      ry="6"
+      fill="rgba(30, 30, 30, 0.8)"
     />
     
-    {/* Chain links around brain */}
+    {/* Screen reflection/shine */}
+    <Rect
+      x="77"
+      y="52"
+      width="20"
+      height="30"
+      rx="3"
+      ry="3"
+      fill="rgba(255, 255, 255, 0.3)"
+    />
+    
+    {/* Home button */}
+    <Circle
+      cx="100"
+      cy="150"
+      r="4"
+      fill="rgba(200, 200, 200, 0.8)"
+      stroke="rgba(150, 150, 150, 0.6)"
+      strokeWidth="1"
+    />
+    
+    {/* Speaker */}
+    <Rect
+      x="85"
+      y="45"
+      width="30"
+      height="2"
+      rx="1"
+      ry="1"
+      fill="rgba(150, 150, 150, 0.8)"
+    />
+    
+    {/* Red cross/X over phone */}
     <G>
-      {/* Chain link 1 */}
-      <Circle
-        cx="70"
-        cy="60"
-        r="8"
-        fill="none"
-        stroke="rgba(239, 68, 68, 0.8)"
-        strokeWidth="4"
-      />
-      <Circle
-        cx="85"
-        cy="55"
-        r="8"
-        fill="none"
-        stroke="rgba(239, 68, 68, 0.8)"
-        strokeWidth="4"
+      {/* First diagonal line */}
+      <Line
+        x1="50"
+        y1="20"
+        x2="150"
+        y2="180"
+        stroke="rgba(239, 68, 68, 0.9)"
+        strokeWidth="8"
+        strokeLinecap="round"
       />
       
-      {/* Chain link 2 */}
-      <Circle
-        cx="130"
-        cy="60"
-        r="8"
-        fill="none"
-        stroke="rgba(239, 68, 68, 0.8)"
-        strokeWidth="4"
+      {/* Second diagonal line */}
+      <Line
+        x1="150"
+        y1="20"
+        x2="50"
+        y2="180"
+        stroke="rgba(239, 68, 68, 0.9)"
+        strokeWidth="8"
+        strokeLinecap="round"
       />
-      <Circle
-        cx="115"
-        cy="55"
-        r="8"
-        fill="none"
-        stroke="rgba(239, 68, 68, 0.8)"
-        strokeWidth="4"
-      />
-      
-      {/* Chain link 3 */}
-      <Circle
-        cx="60"
-        cy="100"
-        r="8"
-        fill="none"
-        stroke="rgba(239, 68, 68, 0.8)"
-        strokeWidth="4"
-      />
-      <Circle
-        cx="75"
-        cy="105"
-        r="8"
-        fill="none"
-        stroke="rgba(239, 68, 68, 0.8)"
-        strokeWidth="4"
-      />
-      
-      {/* Chain link 4 */}
-      <Circle
-        cx="125"
-        cy="105"
-        r="8"
-        fill="none"
-        stroke="rgba(239, 68, 68, 0.8)"
-        strokeWidth="4"
-      />
-      <Circle
-        cx="140"
-        cy="100"
-        r="8"
-        fill="none"
-        stroke="rgba(239, 68, 68, 0.8)"
-        strokeWidth="4"
-      />
+    </G>
+    
+    {/* Additional visual elements - small circles around */}
+    <G opacity="0.4">
+      <Circle cx="40" cy="60" r="2" fill="rgba(239, 68, 68, 0.6)" />
+      <Circle cx="160" cy="40" r="1.5" fill="rgba(239, 68, 68, 0.6)" />
+      <Circle cx="170" cy="160" r="2" fill="rgba(239, 68, 68, 0.6)" />
+      <Circle cx="30" cy="140" r="1.5" fill="rgba(239, 68, 68, 0.6)" />
     </G>
   </Svg>
 );
@@ -196,7 +188,7 @@ export default function TrapScreen() {
           {/* Illustration space */}
           <AnimatedContent delay={100}>
             <View style={styles.illustrationContainer}>
-              <BrainChainIllustration />
+              <CrossedPhoneIllustration />
             </View>
           </AnimatedContent>
 
