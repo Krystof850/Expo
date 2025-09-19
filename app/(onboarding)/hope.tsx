@@ -18,50 +18,64 @@ import { NextButton } from '../../components/Button';
 import { SPACING } from '@/constants/theme';
 import * as Haptics from 'expo-haptics';
 
-// Simple Sunrise Illustration
-const SimpleSunriseIllustration = () => (
+// 3D Button Illustration - Inspired by reference image
+const Button3DIllustration = () => (
   <Svg width="200" height="200" viewBox="0 0 200 200">
-    {/* Horizon line */}
-    <Line 
-      x1="0" 
-      y1="150" 
-      x2="200" 
-      y2="150" 
-      stroke="rgba(255, 255, 255, 0.3)" 
-      strokeWidth="1" 
+    {/* Light gray base platform */}
+    <Ellipse
+      cx="100"
+      cy="155"
+      rx="65"
+      ry="15"
+      fill="rgba(200, 200, 200, 0.6)"
     />
     
-    {/* Rising sun */}
-    <Circle
+    {/* Dark gray shadow */}
+    <Ellipse
       cx="100"
       cy="150"
-      r="30"
-      fill="rgba(251, 191, 36, 0.9)"
-      stroke="rgba(245, 158, 11, 0.8)"
-      strokeWidth="2"
+      rx="55"
+      ry="12"
+      fill="rgba(100, 100, 100, 0.5)"
     />
     
-    {/* Sun's inner glow */}
-    <Circle
+    {/* Button 3D bottom/side (darker) */}
+    <Ellipse
       cx="100"
-      cy="150"
-      r="20"
-      fill="rgba(254, 240, 138, 0.7)"
+      cy="140"
+      rx="50"
+      ry="20"
+      fill="rgba(185, 28, 28, 0.9)"
     />
     
-    {/* Simple sun rays */}
-    <G opacity="0.8">
-      {/* Vertical ray */}
-      <Line x1="100" y1="100" x2="100" y2="80" stroke="rgba(251, 191, 36, 0.9)" strokeWidth="3" strokeLinecap="round" />
-      
-      {/* Diagonal rays */}
-      <Line x1="135" y1="115" x2="150" y2="100" stroke="rgba(251, 191, 36, 0.9)" strokeWidth="3" strokeLinecap="round" />
-      <Line x1="65" y1="115" x2="50" y2="100" stroke="rgba(251, 191, 36, 0.9)" strokeWidth="3" strokeLinecap="round" />
-      
-      {/* Horizontal rays */}
-      <Line x1="150" y1="150" x2="170" y2="150" stroke="rgba(251, 191, 36, 0.9)" strokeWidth="3" strokeLinecap="round" />
-      <Line x1="50" y1="150" x2="30" y2="150" stroke="rgba(251, 191, 36, 0.9)" strokeWidth="3" strokeLinecap="round" />
-    </G>
+    {/* Button 3D top surface (main color) */}
+    <Ellipse
+      cx="100"
+      cy="125"
+      rx="50"
+      ry="20"
+      fill="rgba(239, 68, 68, 1)"
+      stroke="rgba(220, 38, 38, 0.8)"
+      strokeWidth="1"
+    />
+    
+    {/* Button highlight for 3D effect */}
+    <Ellipse
+      cx="100"
+      cy="120"
+      rx="35"
+      ry="10"
+      fill="rgba(248, 113, 113, 0.7)"
+    />
+    
+    {/* Small top highlight */}
+    <Ellipse
+      cx="100"
+      cy="118"
+      rx="20"
+      ry="5"
+      fill="rgba(254, 202, 202, 0.8)"
+    />
   </Svg>
 );
 
@@ -142,7 +156,7 @@ export default function HopeScreen() {
           {/* Illustration space */}
           <AnimatedContent delay={100}>
             <View style={styles.illustrationContainer}>
-              <SimpleSunriseIllustration />
+              <Button3DIllustration />
             </View>
           </AnimatedContent>
 
