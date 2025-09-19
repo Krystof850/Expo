@@ -30,6 +30,23 @@ export default function WelcomeScreen() {
   // Use useAssets hook to ensure image is loaded before rendering
   const [assets] = useAssets([logoImage]);
 
+  // Block hardware back button on Android only - MUST be before any conditional returns
+  useFocusEffect(
+    React.useCallback(() => {
+      if (Platform.OS !== 'android') {
+        return; // BackHandler only works on Android
+      }
+      
+      const onBackPress = () => {
+        return true; // Block hardware back
+      };
+
+      const subscription = BackHandler.addEventListener('hardwareBackPress', onBackPress);
+
+      return () => subscription?.remove();
+    }, [])
+  );
+
   // Don't render content until logo is loaded
   if (!assets) {
     // Show loading state with same background gradient
@@ -60,23 +77,6 @@ export default function WelcomeScreen() {
       </View>
     );
   }
-
-  // Block hardware back button on Android only
-  useFocusEffect(
-    React.useCallback(() => {
-      if (Platform.OS !== 'android') {
-        return; // BackHandler only works on Android
-      }
-      
-      const onBackPress = () => {
-        return true; // Block hardware back
-      };
-
-      const subscription = BackHandler.addEventListener('hardwareBackPress', onBackPress);
-
-      return () => subscription?.remove();
-    }, [])
-  );
 
   const handleBack = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
