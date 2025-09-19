@@ -197,7 +197,7 @@ const styles = StyleSheet.create({
   },
   titleContainer: {
     alignItems: 'center',
-    marginBottom: 28, // Same spacing as other question pages
+    marginBottom: 58, // Same spacing as other question pages
     paddingHorizontal: SPACING.page, // Same as other pages
     marginTop: 40, // Consistent with other pages
   },
