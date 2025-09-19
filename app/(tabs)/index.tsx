@@ -469,6 +469,7 @@ const styles = StyleSheet.create({
   },
   settingsButton: {
     padding: 6,
+    marginRight: 10,
   },
   main: {
     flex: 1,
