@@ -13,12 +13,20 @@ export interface AppEnvironment {
 
 export const detectAppEnvironment = (): AppEnvironment => {
   const env = Constants.executionEnvironment;
+  const ownership = Constants.appOwnership;
+  
+  // Debug log for troubleshooting
+  console.log('[Environment] Detection:', { 
+    executionEnvironment: env, 
+    appOwnership: ownership, 
+    platform: Platform.OS 
+  });
   
   return {
-    isExpoGo: env === 'storeClient',
-    isDevelopmentBuild: env === 'bare',
-    isProduction: env === 'standalone',
-    environment: env || 'unknown'
+    isExpoGo: ownership === 'expo',
+    isDevelopmentBuild: ownership === 'guest' || env === 'bare',
+    isProduction: ownership === 'standalone' || env === 'standalone',
+    environment: ownership || env || 'unknown'
   };
 };
 
@@ -28,8 +36,17 @@ export const isSuperwallSupported = (): boolean => {
     return false;
   }
   
-  const { isExpoGo } = detectAppEnvironment();
-  return !isExpoGo; // Superwall funguje jen na native platformách mimo Expo Go
+  const ownership = Constants.appOwnership;
+  // Use appOwnership directly for more reliable detection
+  const supported = ownership !== 'expo';
+  
+  console.log('[Superwall] Support check:', { 
+    platform: Platform.OS, 
+    appOwnership: ownership, 
+    supported 
+  });
+  
+  return supported;
 };
 
 // Mock product data pro development testování (před App Store Connect)
