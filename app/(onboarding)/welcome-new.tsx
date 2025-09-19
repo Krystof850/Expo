@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useRef } from 'react';
 import {
   View,
   StyleSheet,
@@ -14,85 +14,7 @@ import { TitleText } from '../../components/Text';
 import AppBackground from '../../components/AppBackground';
 import { SPACING } from '../../constants/theme';
 import * as Haptics from 'expo-haptics';
-import Animated, { 
-  useSharedValue, 
-  useAnimatedStyle, 
-  withTiming 
-} from 'react-native-reanimated';
-
-// Typing Animation Text Component
-interface TypingTextProps {
-  text: string;
-  speed?: number;
-  delay?: number;
-}
-
-const TypingText: React.FC<TypingTextProps> = ({ text, speed = 50, delay = 500 }) => {
-  const [displayText, setDisplayText] = useState('');
-  const [isComplete, setIsComplete] = useState(false);
-  const opacity = useSharedValue(0);
-  const fadeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const startTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const typeIntervalRef = useRef<NodeJS.Timeout | null>(null);
-
-  useEffect(() => {
-    // Reset state when text changes
-    setDisplayText('');
-    setIsComplete(false);
-    
-    // Start with fade in after delay
-    fadeTimeoutRef.current = setTimeout(() => {
-      opacity.value = withTiming(1, { duration: 300 });
-    }, delay);
-
-    // Start typing animation after fade in
-    startTimeoutRef.current = setTimeout(() => {
-      let index = 0;
-      typeIntervalRef.current = setInterval(() => {
-        if (index <= text.length) {
-          setDisplayText(text.slice(0, index));
-          index++;
-        } else {
-          // Animation complete - ensure text stays and mark as complete
-          setDisplayText(text);
-          setIsComplete(true);
-          if (typeIntervalRef.current) {
-            clearInterval(typeIntervalRef.current);
-            typeIntervalRef.current = null;
-          }
-        }
-      }, speed);
-    }, delay + 400);
-
-    return () => {
-      if (fadeTimeoutRef.current) {
-        clearTimeout(fadeTimeoutRef.current);
-        fadeTimeoutRef.current = null;
-      }
-      if (startTimeoutRef.current) {
-        clearTimeout(startTimeoutRef.current);
-        startTimeoutRef.current = null;
-      }
-      if (typeIntervalRef.current) {
-        clearInterval(typeIntervalRef.current);
-        typeIntervalRef.current = null;
-      }
-    };
-  }, [text, speed, delay]);
-
-  const animatedStyle = useAnimatedStyle(() => ({
-    opacity: opacity.value,
-  }));
-
-  return (
-    <Animated.Text style={[styles.typingText, animatedStyle]}>
-      {displayText}
-      {!isComplete && displayText.length < text.length && (
-        <Animated.Text style={styles.cursor}>|</Animated.Text>
-      )}
-    </Animated.Text>
-  );
-};
+import TypeWriterEffect from 'react-native-typewriter-effect';
 
 export default function WelcomeNewScreen() {
   const insets = useSafeAreaInsets();
@@ -138,10 +60,12 @@ export default function WelcomeNewScreen() {
             </AnimatedContent>
             
             <View style={styles.textSection}>
-              <TypingText 
-                text="Let's start by finding out if you have a problem with procrastination."
-                speed={30}
-                delay={500}
+              <TypeWriterEffect
+                content="Let's start by finding out if you have a problem with procrastination."
+                maxDelay={50}
+                minDelay={30}
+                style={styles.typingText}
+                onEnd={() => console.log('Typing animation completed')}
               />
             </View>
           </View>
@@ -194,9 +118,6 @@ const styles = StyleSheet.create({
     textShadowColor: 'rgba(0, 0, 0, 0.4)',
     textShadowOffset: { width: 0, height: 2 },
     textShadowRadius: 6,
-  },
-  cursor: {
-    opacity: 1,
   },
   nextContainer: {
     paddingHorizontal: SPACING.page,
