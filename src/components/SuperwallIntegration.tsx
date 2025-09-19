@@ -45,6 +45,23 @@ const SuperwallEnabledIntegration: React.FC<{ children: ReactNode }> = ({ childr
       },
       onPresent: (info: any) => {
         console.log('[SuperwallIntegration] Paywall presented:', info);
+        
+        // DEBUG: Log detailed product information
+        console.log('[SuperwallIntegration] PRODUCT DEBUG:');
+        console.log('  - Product IDs:', info?.productIds);
+        console.log('  - Products:', info?.products?.map((p: any) => ({
+          id: p.id,
+          name: p.name,
+          price: p.price,
+          priceString: p.priceString
+        })));
+        console.log('  - Products load time:', info?.productsLoadCompleteTime);
+        console.log('  - Products load duration:', info?.productsLoadDuration);
+        console.log('  - URL:', info?.url);
+        
+        if (info?.productsLoadFailTime) {
+          console.error('[SuperwallIntegration] Products failed to load at:', info.productsLoadFailTime);
+        }
       },
       onDismiss: (info: any, result: any) => {
         console.log('[SuperwallIntegration] Paywall dismissed:', info, result);
