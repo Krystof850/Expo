@@ -9,12 +9,10 @@
       "distribution": "internal",
       "autoIncrement": true,
       "ios": {
-        "simulator": true,
-        "buildConfiguration": "Debug"
+        "simulator": true
       },
       "android": {
-        "buildType": "apk",
-        "buildConfiguration": "Debug"
+        "buildType": "apk"
       },
       "env": {
         "NODE_ENV": "development"
