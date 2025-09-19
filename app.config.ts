@@ -26,12 +26,16 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   orientation: 'portrait',
   icon: './assets/images/icon.jpg',
   scheme: 'unloop',
+  schemes: [
+    'unloop',
+    reversedIosClientId || 'com.googleusercontent.apps.576633089196-9ak18h5p9m2k8n2f3o7j8c1k4b0t6e5c'
+  ],
   userInterfaceStyle: 'automatic',
 
   ios: {
     ...(config.ios ?? {}),
     supportsTablet: true,
-    bundleIdentifier: "com.kkdigitalsolutions.procrastination",
+    bundleIdentifier: "com.unloopapp",
     infoPlist: {
       ...(config.ios?.infoPlist ?? {}),
       ITSAppUsesNonExemptEncryption: false,
@@ -48,7 +52,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       foregroundImage: './assets/images/adaptive-icon.png',
       backgroundColor: '#ffffff',
     },
-    package: "com.kkdigitalsolutions.procrastination",
+    package: "com.unloopapp",
   },
 
   web: {
