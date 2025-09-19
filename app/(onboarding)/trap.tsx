@@ -25,7 +25,6 @@ const CrossedPhoneIllustration = () => (
     style={{
       width: 200,
       height: 200,
-      borderRadius: 20,
     }}
     contentFit="contain"
   />
