@@ -1,9 +1,27 @@
 import { Tabs } from 'expo-router';
 import React from 'react';
-import { Platform, Dimensions } from 'react-native';
+import { Platform, Dimensions, BackHandler } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useFocusEffect } from '@react-navigation/native';
 
 export default function TabLayout() {
+  // Block hardware back button on Android - only logout can exit protected zone
+  useFocusEffect(
+    React.useCallback(() => {
+      if (Platform.OS !== 'android') {
+        return; // BackHandler only works on Android
+      }
+      
+      const onBackPress = () => {
+        return true; // Block hardware back - only logout can exit protected zone
+      };
+
+      const subscription = BackHandler.addEventListener('hardwareBackPress', onBackPress);
+
+      return () => subscription?.remove();
+    }, [])
+  );
+
   return (
     <Tabs
       screenOptions={{
