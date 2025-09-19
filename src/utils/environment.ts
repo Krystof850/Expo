@@ -28,3 +28,39 @@ export const isSuperwallSupported = (): boolean => {
   const { isExpoGo } = detectAppEnvironment();
   return !isExpoGo; // Superwall funguje jen na native platformách mimo Expo Go
 };
+
+// Mock product data pro development testování (před App Store Connect)
+export interface MockProductData {
+  id: string;
+  name: string;
+  price: number;
+  priceString: string;
+  currency: string;
+  period: string;
+}
+
+export const getMockProductData = (): MockProductData[] => {
+  return [
+    {
+      id: 'Annual_16',
+      name: 'Annual Premium Subscription',
+      price: 16.99,
+      priceString: '$16.99',
+      currency: 'USD',
+      period: 'year'
+    },
+    {
+      id: 'Monthly_17', 
+      name: 'Monthly Premium Subscription',
+      price: 1.99,
+      priceString: '$1.99',
+      currency: 'USD',
+      period: 'month'
+    }
+  ];
+};
+
+export const isDevelopmentEnvironment = (): boolean => {
+  const { isDevelopmentBuild, isExpoGo } = detectAppEnvironment();
+  return isDevelopmentBuild || isExpoGo || __DEV__;
+};

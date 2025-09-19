@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, ReactNode } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { isSuperwallSupported } from '../utils/environment';
+import { isSuperwallSupported, isDevelopmentEnvironment, getMockProductData, MockProductData } from '../utils/environment';
 
 // Typ pro Superwall subscription context
 interface SuperwallContextType {
@@ -46,14 +46,37 @@ const SuperwallEnabledIntegration: React.FC<{ children: ReactNode }> = ({ childr
       onPresent: (info: any) => {
         console.log('[SuperwallIntegration] Paywall presented:', info);
         
+        const isDev = isDevelopmentEnvironment();
+        const mockProducts = getMockProductData();
+        
+        // Zkontroluj jestli produkty mají ceny
+        const hasValidPrices = info?.products?.some((p: any) => p.price !== undefined && p.priceString !== undefined);
+        
+        if (isDev && !hasValidPrices) {
+          console.warn('🔧 [DEVELOPMENT] Products missing prices - Testing requires physical device with Apple Sandbox');
+          console.warn('📱 TESTING GUIDE:');
+          console.warn('  1. Build app for physical iOS device (not simulator)');
+          console.warn('  2. Set up Apple Sandbox test account in Settings > App Store > Sandbox Account');
+          console.warn('  3. Products must be "Ready to Submit" in App Store Connect');
+          console.warn('  4. Expected prices will be:');
+          mockProducts.forEach((mock: MockProductData) => {
+            console.warn(`     ${mock.id}: ${mock.priceString}/${mock.period} (${mock.name})`);
+          });
+          console.warn('  5. Use TestFlight for production-like testing');
+        } else {
+          console.log('✅ [PRODUCTION] Using real product prices from App Store/Sandbox');
+        }
+        
         // DEBUG: Log detailed product information
         console.log('[SuperwallIntegration] PRODUCT DEBUG:');
+        console.log('  - Environment:', isDev ? 'DEVELOPMENT' : 'PRODUCTION');
+        console.log('  - Has valid prices:', hasValidPrices);
         console.log('  - Product IDs:', info?.productIds);
         console.log('  - Products:', info?.products?.map((p: any) => ({
           id: p.id,
           name: p.name,
-          price: p.price,
-          priceString: p.priceString
+          price: p.price || 'undefined',
+          priceString: p.priceString || 'undefined'
         })));
         console.log('  - Products load time:', info?.productsLoadCompleteTime);
         console.log('  - Products load duration:', info?.productsLoadDuration);
@@ -61,6 +84,19 @@ const SuperwallEnabledIntegration: React.FC<{ children: ReactNode }> = ({ childr
         
         if (info?.productsLoadFailTime) {
           console.error('[SuperwallIntegration] Products failed to load at:', info.productsLoadFailTime);
+        }
+        
+        // DEVELOPMENT GUIDE: Proper testing approach
+        if (isDev) {
+          console.log('');
+          console.log('🚨 IMPORTANT - PRICING TESTING IN DEVELOPMENT:');
+          console.log('   Expo development builds cannot display StoreKit prices locally.');
+          console.log('   For proper pricing validation:');
+          console.log('   • Test on physical device with Apple Sandbox account');
+          console.log('   • Ensure products are configured in App Store Connect');
+          console.log('   • Use TestFlight for production-ready testing');
+          console.log('   • Products must be "Ready to Submit" status');
+          console.log('');
         }
       },
       onDismiss: (info: any, result: any) => {
