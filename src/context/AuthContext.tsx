@@ -14,6 +14,7 @@ type AuthState = {
   checkSubscriptionStatus: () => Promise<void>;
   presentPaywall: (placement?: string) => Promise<boolean>;
   restorePurchases: () => Promise<boolean>;
+  setHasSubscription: (hasSubscription: boolean) => void;
 };
 
 const AuthCtx = createContext<AuthState>({
@@ -27,6 +28,7 @@ const AuthCtx = createContext<AuthState>({
   checkSubscriptionStatus: async () => {},
   presentPaywall: async () => false,
   restorePurchases: async () => false,
+  setHasSubscription: () => {},
 });
 
 export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
@@ -40,7 +42,7 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
   const isAuthenticated = user !== null;
   const canAccessProtected = isAuthenticated && hasSubscription;
 
-  // Check subscription status using Superwall
+  // Check subscription status using Superwall - this will be handled by useSuperwallUser hook
   const checkSubscriptionStatus = useCallback(async () => {
     if (!superwallSupported) {
       // In Expo Go, default to false
@@ -48,48 +50,20 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
       return;
     }
 
-    try {
-      setSubscriptionLoading(true);
-      const { useUser } = require('expo-superwall');
-      
-      // In a real implementation, we'd use Superwall's subscription checking
-      // For now, we'll use a placeholder that can be updated when the hooks are available
-      // This is a limitation of the current React hook rules
-      console.log('[AuthContext] Checking subscription status...');
-      
-      // Placeholder - in a real app, this would check Superwall's subscription status
-      // You might need to restructure this to use hooks properly
-      setHasSubscription(false);
-    } catch (error) {
-      console.error('[AuthContext] Error checking subscription:', error);
-      setHasSubscription(false);
-    } finally {
-      setSubscriptionLoading(false);
-    }
+    console.log('[AuthContext] Checking subscription status...');
+    // The actual subscription checking is now handled by useSuperwallUser hook
+    // This function remains for API compatibility but the real logic is in SuperwallIntegration
   }, [superwallSupported]);
 
-  // Present paywall using Superwall
+  // Present paywall using Superwall - delegated to SuperwallIntegration
   const presentPaywall = useCallback(async (placement = 'zario-template-3a85-2025-09-10'): Promise<boolean> => {
-    if (!superwallSupported) {
-      console.log('[AuthContext] Superwall not supported - cannot present paywall');
-      return false;
-    }
-
-    try {
-      console.log('[AuthContext] Presenting paywall with placement:', placement);
-      
-      // This is a placeholder - in a real implementation, you'd need to restructure
-      // to properly use Superwall hooks. The current React hook rules prevent
-      // us from conditionally calling hooks inside this callback.
-      
-      // For now, we'll return false and let individual components handle paywall presentation
-      // using the pattern shown in PremiumButton.tsx
-      return false;
-    } catch (error) {
-      console.error('[AuthContext] Error presenting paywall:', error);
-      return false;
-    }
-  }, [superwallSupported]);
+    console.log('[AuthContext] Paywall presentation should be handled via useSuperwall hook directly');
+    
+    // DEPRECATED: Callers should use useSuperwall().presentPaywall instead
+    // For now, log a warning and return false to indicate this path is deprecated
+    console.warn('[AuthContext] presentPaywall is deprecated - use useSuperwall().presentPaywall instead');
+    return false;
+  }, []);
 
   // Restore purchases
   const restorePurchases = useCallback(async (): Promise<boolean> => {
@@ -152,6 +126,7 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
     checkSubscriptionStatus,
     presentPaywall,
     restorePurchases,
+    setHasSubscription,
   };
 
   return (

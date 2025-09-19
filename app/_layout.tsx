@@ -18,6 +18,7 @@ import { AuthProvider } from '../src/context/AuthContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect } from 'react';
 import ConditionalSuperwallProvider from '../src/components/ConditionalSuperwallProvider';
+import SuperwallIntegration from '../src/components/SuperwallIntegration';
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
@@ -56,24 +57,26 @@ export default function RootLayout() {
   return (
     <ConditionalSuperwallProvider>
       <AuthProvider>
-        <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-          <Stack
-            screenOptions={{
-              headerShown: false,
-              animation: 'slide_from_right',
-              animationDuration: 300,
-              fullScreenGestureEnabled: true,
-              gestureDirection: 'horizontal',
-            }}
-          >
-            <Stack.Screen name="(onboarding)" options={{ headerShown: false }} />
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-            <Stack.Screen name="(protected)" options={{ headerShown: false }} />
-            <Stack.Screen name="+not-found" />
-          </Stack>
-          <StatusBar style="auto" />
-        </ThemeProvider>
+        <SuperwallIntegration>
+          <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+            <Stack
+              screenOptions={{
+                headerShown: false,
+                animation: 'slide_from_right',
+                animationDuration: 300,
+                fullScreenGestureEnabled: true,
+                gestureDirection: 'horizontal',
+              }}
+            >
+              <Stack.Screen name="(onboarding)" options={{ headerShown: false }} />
+              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+              <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+              <Stack.Screen name="(protected)" options={{ headerShown: false }} />
+              <Stack.Screen name="+not-found" />
+            </Stack>
+            <StatusBar style="auto" />
+          </ThemeProvider>
+        </SuperwallIntegration>
       </AuthProvider>
     </ConditionalSuperwallProvider>
   );
