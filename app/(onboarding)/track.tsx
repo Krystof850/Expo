@@ -18,35 +18,82 @@ import { NextButton } from '../../components/Button';
 import { SPACING } from '@/constants/theme';
 import * as Haptics from 'expo-haptics';
 
-// Simple Minimalistic Progress Graph
-const SimpleProgressGraph = () => (
+// Clean Progress Graph with Curve
+const CleanProgressGraph = () => (
   <Svg width="200" height="200" viewBox="0 0 200 200">
-    {/* Clean progress line */}
+    {/* Background grid */}
+    <G opacity="0.1">
+      {/* Horizontal grid lines */}
+      <Line x1="30" y1="50" x2="180" y2="50" stroke="rgba(255, 255, 255, 0.3)" strokeWidth="1" />
+      <Line x1="30" y1="80" x2="180" y2="80" stroke="rgba(255, 255, 255, 0.3)" strokeWidth="1" />
+      <Line x1="30" y1="110" x2="180" y2="110" stroke="rgba(255, 255, 255, 0.3)" strokeWidth="1" />
+      <Line x1="30" y1="140" x2="180" y2="140" stroke="rgba(255, 255, 255, 0.3)" strokeWidth="1" />
+      
+      {/* Vertical grid lines */}
+      <Line x1="50" y1="40" x2="50" y2="150" stroke="rgba(255, 255, 255, 0.3)" strokeWidth="1" />
+      <Line x1="80" y1="40" x2="80" y2="150" stroke="rgba(255, 255, 255, 0.3)" strokeWidth="1" />
+      <Line x1="110" y1="40" x2="110" y2="150" stroke="rgba(255, 255, 255, 0.3)" strokeWidth="1" />
+      <Line x1="140" y1="40" x2="140" y2="150" stroke="rgba(255, 255, 255, 0.3)" strokeWidth="1" />
+      <Line x1="170" y1="40" x2="170" y2="150" stroke="rgba(255, 255, 255, 0.3)" strokeWidth="1" />
+    </G>
+    
+    {/* Gradient fill under curve */}
+    <defs>
+      <linearGradient id="progressGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stopColor="rgba(59, 130, 246, 0.3)" />
+        <stop offset="100%" stopColor="rgba(59, 130, 246, 0.05)" />
+      </linearGradient>
+    </defs>
+    
+    {/* Fill area under curve */}
     <Path 
-      d="M40 160 L70 130 L100 100 L130 70 L160 40" 
-      stroke="rgba(34, 211, 238, 1)" 
-      strokeWidth="4" 
+      d="M50 140 Q65 130 80 120 Q95 100 110 85 Q125 70 140 60 Q155 55 170 50 L170 150 L50 150 Z" 
+      fill="url(#progressGradient)"
+    />
+    
+    {/* Main progress curve */}
+    <Path 
+      d="M50 140 Q65 130 80 120 Q95 100 110 85 Q125 70 140 60 Q155 55 170 50" 
+      stroke="rgba(59, 130, 246, 1)" 
+      strokeWidth="3" 
       fill="none" 
       strokeLinecap="round"
     />
     
-    {/* Simple data points */}
+    {/* Data points */}
     <G>
-      <Circle cx="40" cy="160" r="6" fill="rgba(59, 130, 246, 1)" />
-      <Circle cx="70" cy="130" r="6" fill="rgba(34, 197, 94, 1)" />
-      <Circle cx="100" cy="100" r="6" fill="rgba(34, 197, 94, 1)" />
-      <Circle cx="130" cy="70" r="6" fill="rgba(34, 197, 94, 1)" />
-      <Circle cx="160" cy="40" r="6" fill="rgba(251, 191, 36, 1)" />
+      <Circle cx="50" cy="140" r="4" fill="rgba(255, 255, 255, 1)" stroke="rgba(59, 130, 246, 1)" strokeWidth="2" />
+      <Circle cx="80" cy="120" r="4" fill="rgba(255, 255, 255, 1)" stroke="rgba(59, 130, 246, 1)" strokeWidth="2" />
+      <Circle cx="110" cy="85" r="4" fill="rgba(255, 255, 255, 1)" stroke="rgba(59, 130, 246, 1)" strokeWidth="2" />
+      <Circle cx="140" cy="60" r="4" fill="rgba(255, 255, 255, 1)" stroke="rgba(59, 130, 246, 1)" strokeWidth="2" />
+      <Circle cx="170" cy="50" r="4" fill="rgba(255, 255, 255, 1)" stroke="rgba(147, 197, 253, 1)" strokeWidth="2" />
     </G>
     
-    {/* Simple upward arrow */}
-    <G opacity="0.8">
-      <Path d="M155 45 L160 35 L165 45" stroke="rgba(251, 191, 36, 1)" strokeWidth="3" fill="none" strokeLinecap="round" />
-    </G>
-    
-    {/* Minimal progress text */}
+    {/* Axis labels */}
     <G opacity="0.6">
-      <SvgText x="100" y="185" fontSize="12" fill="rgba(255, 255, 255, 0.8)" textAnchor="middle">Progress</SvgText>
+      <SvgText x="50" y="165" fontSize="8" fill="rgba(255, 255, 255, 0.7)" textAnchor="middle">W1</SvgText>
+      <SvgText x="80" y="165" fontSize="8" fill="rgba(255, 255, 255, 0.7)" textAnchor="middle">W2</SvgText>
+      <SvgText x="110" y="165" fontSize="8" fill="rgba(255, 255, 255, 0.7)" textAnchor="middle">W3</SvgText>
+      <SvgText x="140" y="165" fontSize="8" fill="rgba(255, 255, 255, 0.7)" textAnchor="middle">W4</SvgText>
+      <SvgText x="170" y="165" fontSize="8" fill="rgba(255, 255, 255, 0.7)" textAnchor="middle">W5</SvgText>
+    </G>
+    
+    {/* Y-axis values */}
+    <G opacity="0.5">
+      <SvgText x="25" y="145" fontSize="7" fill="rgba(255, 255, 255, 0.6)" textAnchor="middle">0</SvgText>
+      <SvgText x="25" y="115" fontSize="7" fill="rgba(255, 255, 255, 0.6)" textAnchor="middle">25</SvgText>
+      <SvgText x="25" y="85" fontSize="7" fill="rgba(255, 255, 255, 0.6)" textAnchor="middle">50</SvgText>
+      <SvgText x="25" y="55" fontSize="7" fill="rgba(255, 255, 255, 0.6)" textAnchor="middle">75</SvgText>
+    </G>
+    
+    {/* Progress indicator */}
+    <G opacity="0.8">
+      <SvgText x="100" y="25" fontSize="10" fill="rgba(147, 197, 253, 1)" textAnchor="middle" fontWeight="bold">Progress Trend</SvgText>
+    </G>
+    
+    {/* Trend arrow */}
+    <G opacity="0.7">
+      <Path d="M165 55 L170 45 L175 55" stroke="rgba(147, 197, 253, 1)" strokeWidth="2" fill="none" strokeLinecap="round" />
     </G>
   </Svg>
 );
@@ -127,7 +174,7 @@ export default function TrackScreen() {
           {/* Illustration space */}
           <AnimatedContent delay={100}>
             <View style={styles.illustrationContainer}>
-              <SimpleProgressGraph />
+              <CleanProgressGraph />
             </View>
           </AnimatedContent>
 
