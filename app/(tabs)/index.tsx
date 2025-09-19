@@ -450,7 +450,7 @@ const styles = StyleSheet.create({
   },
   header: {
     flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: 'flex-end',
     alignItems: 'center',
     paddingHorizontal: 16,
     paddingTop: 8,
@@ -469,10 +469,6 @@ const styles = StyleSheet.create({
   },
   settingsButton: {
     padding: 6,
-    position: 'absolute',
-    right: 16,
-    top: 8,
-    zIndex: 1,
   },
   main: {
     flex: 1,
