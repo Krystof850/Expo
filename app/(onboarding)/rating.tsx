@@ -137,15 +137,9 @@ export default function RatingScreen() {
     <AppBackground>
       <SafeAreaView style={styles.container}>
         <StatusBar barStyle="light-content" backgroundColor={COLORS.gradientStart} />
-        {/* Header */}
-        <View style={[styles.header, { paddingTop: insets.top }]}>
-          <TouchableOpacity onPress={() => { Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light); router.back(); }} style={styles.backButton}>
-            <Ionicons name="arrow-back" size={24} color={COLORS.mainText} />
-          </TouchableOpacity>
-        </View>
 
         <ScrollView 
-          style={styles.scrollContainer}
+          style={[styles.scrollContainer, { paddingTop: insets.top + 16 }]}
           contentContainerStyle={styles.scrollContent}
           showsVerticalScrollIndicator={false}
         >
@@ -244,15 +238,6 @@ export default function RatingScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  header: {
-    paddingHorizontal: SPACING.page,
-    paddingBottom: SPACING.small,
-    zIndex: 10,
-  },
-  backButton: {
-    padding: 8,
-    alignSelf: 'flex-start',
   },
   scrollContainer: {
     flex: 1,

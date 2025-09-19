@@ -65,15 +65,9 @@ export default function ReferralScreen() {
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
           style={styles.keyboardAvoidingView}
         >
-          {/* Header */}
-          <View style={[styles.header, { paddingTop: insets.top }]}>
-            <TouchableOpacity onPress={() => { Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light); router.back(); }} style={styles.backButton}>
-              <Ionicons name="arrow-back" size={24} color={COLORS.mainText} />
-            </TouchableOpacity>
-          </View>
 
           {/* Content */}
-          <View style={styles.content}>
+          <View style={[styles.content, { paddingTop: insets.top + 40 }]}>
             <View style={styles.textSection}>
               <TitleText animated={false} style={styles.titleText}>
                 Do you have a referral code?
@@ -117,15 +111,6 @@ const styles = StyleSheet.create({
   },
   keyboardAvoidingView: {
     flex: 1,
-  },
-  header: {
-    paddingHorizontal: SPACING.page,
-    paddingBottom: SPACING.small,
-    zIndex: 10,
-  },
-  backButton: {
-    padding: 8,
-    alignSelf: 'flex-start',
   },
   content: {
     flex: 1,
