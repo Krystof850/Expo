@@ -18,72 +18,71 @@ import { NextButton } from '../../components/Button';
 import { SPACING } from '@/constants/theme';
 import * as Haptics from 'expo-haptics';
 
-// Human Head Profile with Brain Outline
-const HeadProfileIllustration = () => (
-  <Svg width="200" height="200" viewBox="0 0 200 200">
-    {/* Head outline - side profile */}
-    <Path
-      d="M50 170C50 170 45 160 45 140C45 120 50 100 60 85C70 70 85 55 105 50C125 45 145 50 160 65C170 75 175 90 175 105C175 115 170 125 165 135C160 145 155 155 150 165C145 170 140 172 135 173C130 174 125 174 120 173C115 172 110 170 105 168C100 166 95 164 90 162C85 160 80 158 75 156C70 154 65 152 60 150C55 148 50 146 50 144V170Z"
-      fill="rgba(255, 255, 255, 0.9)"
-      stroke="rgba(255, 255, 255, 1)"
-      strokeWidth="3"
-    />
+// Circular Arrow Flow - Rewiring Process
+const CircularArrowFlowIllustration = () => (
+  <Svg width="280" height="280" viewBox="0 0 200 200">
+    {/* Outer circular path */}
+    <Circle cx="100" cy="100" r="60" fill="none" stroke="rgba(255, 255, 255, 0.2)" strokeWidth="2" strokeDasharray="5,5" />
     
-    {/* Eye */}
-    <Circle cx="130" cy="90" r="3" fill="rgba(59, 130, 246, 0.8)" />
-    
-    {/* Nose line */}
-    <Path
-      d="M150 100C155 105 155 110 150 115"
-      stroke="rgba(219, 234, 254, 0.6)"
-      strokeWidth="2"
-      fill="none"
-    />
-    
-    {/* Mouth line */}
-    <Path
-      d="M140 130C145 132 150 130 155 128"
-      stroke="rgba(219, 234, 254, 0.6)"
-      strokeWidth="2"
-      fill="none"
-    />
-    
-    {/* Simple brain outline inside head */}
-    <Path
-      d="M70 80C70 80 65 75 65 70C65 65 70 60 80 58C90 56 100 58 110 60C120 62 130 65 140 70C150 75 155 85 155 95C155 105 150 115 140 120C130 125 120 127 110 125C100 123 90 120 80 115C70 110 65 100 65 90C65 85 68 82 70 80Z"
-      fill="none"
-      stroke="rgba(59, 130, 246, 0.8)"
-      strokeWidth="2"
-    />
-    
-    {/* Brain fold lines - simple curved lines inside */}
-    <G opacity="0.6">
+    {/* Main circular arrows flowing around */}
+    <G>
+      {/* First arrow - top to right */}
       <Path
-        d="M80 75C90 73 100 75 110 73C120 75 130 73 135 75"
-        stroke="rgba(59, 130, 246, 0.6)"
-        strokeWidth="1.5"
+        d="M100 40 A60 60 0 0 1 160 100"
         fill="none"
+        stroke="rgba(59, 130, 246, 1)"
+        strokeWidth="8"
+        strokeLinecap="round"
       />
+      {/* Arrow head for first arrow */}
       <Path
-        d="M75 90C85 88 95 90 105 88C115 90 125 88 135 90"
-        stroke="rgba(34, 211, 238, 0.6)"
-        strokeWidth="1.5"
-        fill="none"
+        d="M155 95 L165 100 L155 105 L160 100 Z"
+        fill="rgba(59, 130, 246, 1)"
       />
+      
+      {/* Second arrow - bottom to left */}
       <Path
-        d="M80 105C90 103 100 105 110 103C120 105 125 103 130 105"
-        stroke="rgba(251, 191, 36, 0.6)"
-        strokeWidth="1.5"
+        d="M100 160 A60 60 0 0 1 40 100"
         fill="none"
+        stroke="rgba(255, 255, 255, 1)"
+        strokeWidth="8"
+        strokeLinecap="round"
+      />
+      {/* Arrow head for second arrow */}
+      <Path
+        d="M45 105 L35 100 L45 95 L40 100 Z"
+        fill="rgba(255, 255, 255, 1)"
       />
     </G>
     
-    {/* Small neural activity dots */}
+    {/* Center core - represents the mind */}
+    <Circle cx="100" cy="100" r="25" fill="rgba(59, 130, 246, 0.3)" stroke="rgba(59, 130, 246, 1)" strokeWidth="3" />
+    
+    {/* Inner energy dots */}
     <G opacity="0.8">
-      <Circle cx="90" cy="85" r="1.5" fill="rgba(251, 191, 36, 1)" />
-      <Circle cx="110" cy="95" r="1.5" fill="rgba(251, 191, 36, 1)" />
-      <Circle cx="125" cy="85" r="1.5" fill="rgba(251, 191, 36, 1)" />
+      <Circle cx="100" cy="85" r="2" fill="rgba(251, 191, 36, 1)" />
+      <Circle cx="115" cy="100" r="1.5" fill="rgba(251, 191, 36, 1)" />
+      <Circle cx="100" cy="115" r="2" fill="rgba(251, 191, 36, 1)" />
+      <Circle cx="85" cy="100" r="1.5" fill="rgba(251, 191, 36, 1)" />
     </G>
+    
+    {/* Flowing energy particles around the arrows */}
+    <G opacity="0.6">
+      {/* Small energy dots following the flow */}
+      <Circle cx="130" cy="60" r="1.5" fill="rgba(34, 211, 238, 1)" />
+      <Circle cx="150" cy="80" r="1" fill="rgba(34, 211, 238, 1)" />
+      <Circle cx="70" cy="140" r="1.5" fill="rgba(34, 211, 238, 1)" />
+      <Circle cx="50" cy="120" r="1" fill="rgba(34, 211, 238, 1)" />
+      
+      {/* More energy particles */}
+      <Circle cx="120" cy="50" r="1" fill="rgba(251, 191, 36, 0.8)" />
+      <Circle cx="80" cy="150" r="1" fill="rgba(251, 191, 36, 0.8)" />
+      <Circle cx="170" cy="110" r="1" fill="rgba(251, 191, 36, 0.8)" />
+      <Circle cx="30" cy="90" r="1" fill="rgba(251, 191, 36, 0.8)" />
+    </G>
+    
+    {/* Subtle glow effect around center */}
+    <Circle cx="100" cy="100" r="35" fill="none" stroke="rgba(59, 130, 246, 0.1)" strokeWidth="10" />
   </Svg>
 );
 
@@ -163,7 +162,7 @@ export default function RewireScreen() {
           {/* Illustration space */}
           <AnimatedContent delay={100}>
             <View style={styles.illustrationContainer}>
-              <HeadProfileIllustration />
+              <CircularArrowFlowIllustration />
             </View>
           </AnimatedContent>
 
