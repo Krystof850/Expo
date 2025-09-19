@@ -19,7 +19,7 @@ import { SPACING } from '@/constants/theme';
 import * as Haptics from 'expo-haptics';
 
 
-// Preload the logo image
+// Preload the logo image - moved to constant for early loading
 const logoImage = require('../../attached_assets/ChatGPT Image Sep 20, 2025, 03_21_09 AM_1758309701383.png');
 
 export default function WelcomeScreen() {
@@ -27,9 +27,25 @@ export default function WelcomeScreen() {
   const animationRef = useRef<AnimatedQuestionPageRef>(null);
 
   // Preload logo image for faster loading
-  useEffect(() => {
-    Image.prefetch(Image.resolveAssetSource(logoImage).uri);
-  }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      const preloadImage = async () => {
+        try {
+          // Only preload on native platforms where Image.resolveAssetSource exists
+          if (Platform.OS !== 'web' && Image.resolveAssetSource) {
+            await Image.prefetch(Image.resolveAssetSource(logoImage).uri);
+          } else if (Platform.OS === 'web') {
+            // For web, create a new Image to cache it
+            const img = new window.Image();
+            img.src = logoImage;
+          }
+        } catch (error) {
+          console.log('Image preload failed:', error);
+        }
+      };
+      preloadImage();
+    }, [])
+  );
 
   // Block hardware back button on Android only
   useFocusEffect(
