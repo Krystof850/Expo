@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import {
   View,
   Text,
@@ -19,9 +19,17 @@ import { SPACING } from '@/constants/theme';
 import * as Haptics from 'expo-haptics';
 
 
+// Preload the logo image
+const logoImage = require('../../attached_assets/ChatGPT Image Sep 20, 2025, 03_21_09 AM_1758309701383.png');
+
 export default function WelcomeScreen() {
   const insets = useSafeAreaInsets();
   const animationRef = useRef<AnimatedQuestionPageRef>(null);
+
+  // Preload logo image for faster loading
+  useEffect(() => {
+    Image.prefetch(Image.resolveAssetSource(logoImage).uri);
+  }, []);
 
   // Block hardware back button on Android only
   useFocusEffect(
@@ -95,11 +103,13 @@ export default function WelcomeScreen() {
           {/* Illustration space */}
           <AnimatedContent delay={100}>
             <View style={styles.illustrationContainer}>
-              <Image 
-                source={require('../../attached_assets/ChatGPT Image Sep 20, 2025, 03_21_09 AM_1758309701383.png')}
-                style={styles.logoImage}
-                resizeMode="contain"
-              />
+              <View style={styles.logoCircle}>
+                <Image 
+                  source={logoImage}
+                  style={styles.logoImage}
+                  resizeMode="contain"
+                />
+              </View>
             </View>
           </AnimatedContent>
 
@@ -182,9 +192,24 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginTop: 20,
   },
+  logoCircle: {
+    width: 140,
+    height: 140,
+    borderRadius: 70,
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    borderWidth: 2,
+    borderColor: 'rgba(255, 255, 255, 0.3)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: 'rgba(255, 255, 255, 0.3)',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 8,
+  },
   logoImage: {
-    width: 250,
-    height: 80,
+    width: 100,
+    height: 32,
   },
   textContainer: {
     alignItems: 'center',
