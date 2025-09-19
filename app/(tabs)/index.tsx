@@ -13,6 +13,7 @@ import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { LinearGradient } from 'expo-linear-gradient';
+import { Image } from 'expo-image';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -310,8 +311,18 @@ export default function Homepage() {
           style={styles.background}
         />
 
-        {/* Header with Settings */}
+        {/* Header with Logo and Settings */}
         <View style={styles.header}>
+          {/* Logo - positioned absolutely in top left */}
+          <View style={styles.logoContainer}>
+            <Image
+              source={require('../../assets/images/unloop-logo.png')}
+              style={styles.logo}
+              contentFit="contain"
+            />
+          </View>
+          
+          {/* Settings button - maintains original position */}
           <TouchableOpacity style={styles.settingsButton}>
             <Ionicons name="settings-outline" size={22} color="#64748B" />
             <View style={styles.badgeContainer}>
@@ -444,6 +455,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingTop: 8,
     paddingBottom: 6,
+    position: 'relative',
+  },
+  logoContainer: {
+    position: 'absolute',
+    left: 16,
+    top: 8,
+    zIndex: 1,
+  },
+  logo: {
+    width: 80,
+    height: 32,
   },
   settingsButton: {
     padding: 6,
