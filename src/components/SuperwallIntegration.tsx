@@ -25,41 +25,12 @@ const SuperwallEnabledIntegration: React.FC<{ children: ReactNode }> = ({ childr
   const { user, setHasSubscription } = useAuth() as any;
 
   try {
-    const { useUser, usePlacement, useSuperwallEvents } = require('expo-superwall');
+    const { useUser, usePlacement } = require('expo-superwall');
     
-    // Hook pro správu uživatele a subscription status
-    const { subscriptionStatus, identify, update } = useUser();
+    // Hook pro správu uživatele a subscription status (MINIMÁLNÍ)
+    const { subscriptionStatus, identify } = useUser();
     
-    // Hook pro sledování událostí
-    useSuperwallEvents({
-      onSubscriptionStatusChange: (newStatus: any) => {
-        console.log('[SuperwallIntegration] Subscription status changed:', newStatus.status);
-        const isActive = newStatus.status === 'ACTIVE';
-        setHasSubscription(isActive);
-      },
-      onPaywallDismiss: (info: any, result: any) => {
-        console.log('[SuperwallIntegration] Paywall dismissed:', info, result);
-        // Po zavření paywall zkontroluj subscription status
-        setTimeout(() => {
-          const isActive = subscriptionStatus?.status === 'ACTIVE';
-          console.log('[SuperwallIntegration] Post-dismissal subscription check:', {
-            status: subscriptionStatus?.status,
-            isActive
-          });
-          setHasSubscription(isActive);
-        }, 1000);
-      },
-      onSuperwallEvent: (eventInfo: any) => {
-        console.log('[SuperwallIntegration] Superwall event:', eventInfo.event?.type, eventInfo);
-        
-        // Log product loading events
-        if (eventInfo.event?.type === 'paywallProductsLoad') {
-          console.log('[SuperwallIntegration] Products loading event:', eventInfo.event);
-        }
-      }
-    });
-    
-    // Hook pro prezentaci paywall - SPRÁVNÉ použití registerPlacement
+    // Hook pro prezentaci paywall - JEDNODUCHÉ
     const { registerPlacement } = usePlacement({
       onError: (error: any) => {
         console.error('[SuperwallIntegration] Paywall error:', error);
@@ -70,7 +41,7 @@ const SuperwallEnabledIntegration: React.FC<{ children: ReactNode }> = ({ childr
       onDismiss: (info: any, result: any) => {
         console.log('[SuperwallIntegration] Paywall dismissed:', info, result);
         
-        // Aktualizuj subscription status po nákupu nebo restore
+        // Aktualizuj subscription status po nákupu
         if (result?.purchased === true) {
           console.log('[SuperwallIntegration] Purchase successful:', result);
           setHasSubscription(true);
@@ -78,71 +49,27 @@ const SuperwallEnabledIntegration: React.FC<{ children: ReactNode }> = ({ childr
       },
     });
 
-    // Aktualizuj subscription status při změnách
+    // Aktualizuj subscription status při změnách (JEDNODUŠE)
     useEffect(() => {
       const isActive = subscriptionStatus?.status === 'ACTIVE';
-      console.log('[SuperwallIntegration] Subscription status update:', {
-        status: subscriptionStatus?.status,
-        isActive
-      });
-      
       setHasSubscription(isActive);
-    }, [subscriptionStatus, setHasSubscription]);
+    }, [subscriptionStatus?.status, setHasSubscription]);
 
-    // Automaticky identifikuj uživatele při přihlášení a nastav user attributes
+    // Identifikuj uživatele JEDNOU
     useEffect(() => {
-      const setupUser = async () => {
-        if (user && user.uid) {
-          console.log('[SuperwallIntegration] Identifying user in Superwall:', user.uid);
-          
-          // Identifikuj uživatele
-          await identify(user.uid);
-          
-          // Nastav user attributes pro lepší product loading
-          const userAttributes = {
-            platform: 'ios', // Pro development build
-            timestamp: new Date().toISOString(),
-            user_id: user.uid,
-            email: user.email || '',
-            app_version: '1.0.0',
-            // Přidej attributes, které můžou ovlivnit zobrazení produktů
-            country_code: 'US', // Můžeš nastavit podle lokalizace
-            currency: 'USD'
-          };
-          
-          console.log('[SuperwallIntegration] Setting user attributes:', userAttributes);
-          
-          try {
-            await update(userAttributes);
-            console.log('[SuperwallIntegration] User attributes set successfully');
-          } catch (error) {
-            console.error('[SuperwallIntegration] Error setting user attributes:', error);
-          }
-        }
-      };
+      if (user?.uid) {
+        identify(user.uid);
+      }
+    }, [user?.uid]);
 
-      setupUser();
-    }, [user, identify, update]);
-
-    // SPRÁVNÁ funkce pro prezentaci paywall pomocí registerPlacement()
+    // JEDNODUCHÁ funkce pro prezentaci paywall
     const presentPaywall = async (placement = 'zario-template-3a85-2025-09-10'): Promise<boolean> => {
       console.log('[SuperwallIntegration] Presenting paywall with placement:', placement);
       
       try {
-        // Přidej parametry, které můžou pomoci s product loading
-        const params = {
-          source: 'protected_area',
-          timestamp: new Date().toISOString(),
-          user_tier: 'free'
-        };
-        
-        console.log('[SuperwallIntegration] Registering placement with params:', params);
-        
         await registerPlacement({
           placement,
-          params, // Přidej parametry
           feature() {
-            // Called if user is subscribed or successfully subscribes
             console.log('[SuperwallIntegration] Premium feature unlocked!');
             setHasSubscription(true);
           }
