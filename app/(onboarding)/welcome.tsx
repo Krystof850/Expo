@@ -206,6 +206,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 8,
     elevation: 8,
+    marginTop: 40,
   },
   logoImage: {
     width: 150,
