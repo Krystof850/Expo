@@ -9,10 +9,6 @@ localPort = 5000
 externalPort = 80
 
 [[ports]]
-localPort = 33445
-externalPort = 3001
-
-[[ports]]
 localPort = 33891
 externalPort = 8000
 
@@ -31,10 +27,6 @@ externalPort = 5000
 [[ports]]
 localPort = 42231
 externalPort = 3003
-
-[[ports]]
-localPort = 42469
-externalPort = 3000
 
 [[ports]]
 localPort = 42563
@@ -86,15 +78,15 @@ author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "workflow.run"
-args = "Expo Go Server"
+args = "Dev Server"
 
 [[workflows.workflow]]
-name = "Expo Go Server"
+name = "Dev Server"
 author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "npx expo start --port 5000 --tunnel"
+args = "npx expo start --dev-client --port 5000 --clear"
 waitForPort = 5000
 
 [workflows.workflow.metadata]

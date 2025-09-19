@@ -8,6 +8,14 @@
       "developmentClient": true,
       "distribution": "internal",
       "autoIncrement": true,
+      "ios": {
+        "simulator": true,
+        "buildConfiguration": "Debug"
+      },
+      "android": {
+        "buildType": "apk",
+        "buildConfiguration": "Debug"
+      },
       "env": {
         "NODE_ENV": "development"
       }

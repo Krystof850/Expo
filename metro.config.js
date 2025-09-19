@@ -2,8 +2,8 @@ const { getDefaultConfig } = require('@expo/metro-config');
 
 const config = getDefaultConfig(__dirname);
 
-// Fix for Metro Package Exports issue with Node.js 20.19.4+
-config.resolver.unstable_enablePackageExports = true;
+// Optimized Metro config for Expo SDK 54
+config.resolver.unstable_enablePackageExports = false;
 
 // SVG transformer support
 config.transformer.babelTransformerPath = require.resolve('react-native-svg-transformer');
