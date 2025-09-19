@@ -18,8 +18,8 @@ import { NextButton } from '../../components/Button';
 import { SPACING } from '@/constants/theme';
 import * as Haptics from 'expo-haptics';
 
-// Broken Trophy/Cup Illustration
-const BrokenTrophyIllustration = () => (
+// Crossed Trophy Illustration
+const CrossedTrophyIllustration = () => (
   <Svg width="200" height="200" viewBox="0 0 200 200">
     {/* Trophy base */}
     <Rect
@@ -29,9 +29,9 @@ const BrokenTrophyIllustration = () => (
       height="20"
       rx="4"
       ry="4"
-      fill="rgba(255, 255, 255, 0.8)"
+      fill="rgba(255, 255, 255, 0.9)"
       stroke="rgba(255, 255, 255, 0.6)"
-      strokeWidth="2"
+      strokeWidth="3"
     />
     
     {/* Trophy stem */}
@@ -40,93 +40,27 @@ const BrokenTrophyIllustration = () => (
       y="120"
       width="10"
       height="20"
-      fill="rgba(255, 255, 255, 0.8)"
+      fill="rgba(255, 255, 255, 0.9)"
       stroke="rgba(255, 255, 255, 0.6)"
       strokeWidth="2"
     />
     
-    {/* Left side of broken cup (main part) */}
+    {/* Trophy cup/bowl */}
     <Path
-      d="M75 60 L75 120 L95 120 L95 60 C95 50 85 40 75 50 Z"
+      d="M75 60 L75 110 C75 115 80 120 85 120 L115 120 C120 120 125 115 125 110 L125 60 C125 50 115 40 100 40 C85 40 75 50 75 60 Z"
       fill="rgba(255, 255, 255, 0.9)"
-      stroke="rgba(255, 255, 255, 0.7)"
+      stroke="rgba(255, 255, 255, 0.6)"
       strokeWidth="3"
     />
     
-    {/* Right side of broken cup */}
-    <Path
-      d="M105 60 L105 120 L125 120 L125 60 C125 50 115 40 105 50 Z"
-      fill="rgba(255, 255, 255, 0.9)"
-      stroke="rgba(255, 255, 255, 0.7)"
-      strokeWidth="3"
-    />
-    
-    {/* Jagged crack line through the middle */}
-    <Line
-      x1="95"
-      y1="45"
-      x2="105"
-      y2="50"
-      stroke="rgba(239, 68, 68, 0.9)"
-      strokeWidth="4"
-      strokeLinecap="round"
-    />
-    <Line
-      x1="95"
-      y1="60"
-      x2="105"
-      y2="65"
-      stroke="rgba(239, 68, 68, 0.9)"
-      strokeWidth="4"
-      strokeLinecap="round"
-    />
-    <Line
-      x1="95"
-      y1="75"
-      x2="105"
-      y2="80"
-      stroke="rgba(239, 68, 68, 0.9)"
-      strokeWidth="4"
-      strokeLinecap="round"
-    />
-    <Line
-      x1="95"
-      y1="90"
-      x2="105"
-      y2="95"
-      stroke="rgba(239, 68, 68, 0.9)"
-      strokeWidth="4"
-      strokeLinecap="round"
-    />
-    <Line
-      x1="95"
-      y1="105"
-      x2="105"
-      y2="110"
-      stroke="rgba(239, 68, 68, 0.9)"
-      strokeWidth="4"
-      strokeLinecap="round"
-    />
-    <Line
-      x1="95"
-      y1="120"
-      x2="105"
-      y2="120"
-      stroke="rgba(239, 68, 68, 0.9)"
-      strokeWidth="4"
-      strokeLinecap="round"
-    />
-    
-    {/* Trophy handles - left broken */}
+    {/* Trophy handles */}
     <Path
       d="M75 70 C65 70 55 75 55 85 C55 95 65 100 75 100"
       fill="none"
-      stroke="rgba(255, 255, 255, 0.6)"
+      stroke="rgba(255, 255, 255, 0.8)"
       strokeWidth="3"
-      strokeDasharray="4,4"
     />
     
-    {/* Trophy handles - right intact */}
     <Path
       d="M125 70 C135 70 145 75 145 85 C145 95 135 100 125 100"
       fill="none"
@@ -134,41 +68,58 @@ const BrokenTrophyIllustration = () => (
       strokeWidth="3"
     />
     
-    {/* Falling broken pieces */}
-    <G opacity="0.7">
-      {/* Small broken piece */}
-      <Polygon
-        points="85,130 90,125 95,130 90,135"
-        fill="rgba(239, 68, 68, 0.8)"
+    {/* Trophy top decoration */}
+    <Circle
+      cx="100"
+      cy="50"
+      r="8"
+      fill="rgba(255, 255, 255, 0.9)"
+      stroke="rgba(255, 255, 255, 0.6)"
+      strokeWidth="2"
+    />
+    
+    {/* Trophy inner details */}
+    <Rect
+      x="85"
+      y="70"
+      width="30"
+      height="35"
+      rx="3"
+      ry="3"
+      fill="rgba(200, 200, 200, 0.3)"
+    />
+    
+    {/* Red cross/X over trophy */}
+    <G>
+      {/* First diagonal line */}
+      <Line
+        x1="40"
+        y1="20"
+        x2="160"
+        y2="180"
+        stroke="rgba(239, 68, 68, 0.9)"
+        strokeWidth="8"
+        strokeLinecap="round"
       />
       
-      {/* Medium broken piece */}
-      <Polygon
-        points="110,135 118,130 120,140 112,145"
-        fill="rgba(239, 68, 68, 0.8)"
-      />
-      
-      {/* Another small piece */}
-      <Polygon
-        points="70,145 75,140 80,145 75,150"
-        fill="rgba(239, 68, 68, 0.8)"
+      {/* Second diagonal line */}
+      <Line
+        x1="160"
+        y1="20"
+        x2="40"
+        y2="180"
+        stroke="rgba(239, 68, 68, 0.9)"
+        strokeWidth="8"
+        strokeLinecap="round"
       />
     </G>
     
-    {/* Crack lines on the pieces for more detail */}
-    <G opacity="0.8">
-      <Line x1="77" y1="65" x2="82" y2="70" stroke="rgba(239, 68, 68, 0.6)" strokeWidth="2" />
-      <Line x1="118" y1="75" x2="123" y2="80" stroke="rgba(239, 68, 68, 0.6)" strokeWidth="2" />
-      <Line x1="79" y1="90" x2="84" y2="95" stroke="rgba(239, 68, 68, 0.6)" strokeWidth="2" />
-      <Line x1="116" y1="100" x2="121" y2="105" stroke="rgba(239, 68, 68, 0.6)" strokeWidth="2" />
-    </G>
-    
-    {/* Sad victory sparkles (fading away) */}
-    <G opacity="0.3">
-      <Circle cx="60" cy="50" r="2" fill="rgba(255, 255, 255, 0.6)" />
-      <Circle cx="140" cy="40" r="1.5" fill="rgba(255, 255, 255, 0.6)" />
-      <Circle cx="45" cy="85" r="2" fill="rgba(255, 255, 255, 0.6)" />
-      <Circle cx="155" cy="90" r="1.5" fill="rgba(255, 255, 255, 0.6)" />
+    {/* Additional visual elements - small circles around */}
+    <G opacity="0.4">
+      <Circle cx="30" cy="60" r="2" fill="rgba(239, 68, 68, 0.6)" />
+      <Circle cx="170" cy="40" r="1.5" fill="rgba(239, 68, 68, 0.6)" />
+      <Circle cx="180" cy="160" r="2" fill="rgba(239, 68, 68, 0.6)" />
+      <Circle cx="20" cy="140" r="1.5" fill="rgba(239, 68, 68, 0.6)" />
     </G>
   </Svg>
 );
@@ -249,7 +200,7 @@ export default function FutureScreen() {
           {/* Illustration space */}
           <AnimatedContent delay={100}>
             <View style={styles.illustrationContainer}>
-              <BrokenTrophyIllustration />
+              <CrossedTrophyIllustration />
             </View>
           </AnimatedContent>
 
