@@ -326,7 +326,7 @@ export default function Homepage() {
           <TouchableOpacity style={styles.settingsButton}>
             <Ionicons name="flame" size={22} color="#EF4444" />
             <View style={styles.badgeContainer}>
-              <Text style={styles.badgeText}>{streak}</Text>
+              <Text style={styles.badgeText}>{time.days}</Text>
             </View>
           </TouchableOpacity>
         </View>
