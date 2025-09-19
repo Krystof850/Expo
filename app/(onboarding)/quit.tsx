@@ -11,140 +11,101 @@ import {
 import { router, useFocusEffect } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
-import Svg, { Path, Circle, G, Polygon, Line, Rect } from 'react-native-svg';
+import Svg, { Path, Circle, G, Polygon, Line, Rect, Ellipse } from 'react-native-svg';
 import { Ionicons } from '@expo/vector-icons';
 import { AnimatedQuestionPage, AnimatedContent, AnimatedQuestionPageRef } from '../../components/AnimatedQuestionPage';
 import { NextButton } from '../../components/Button';
 import { SPACING } from '@/constants/theme';
 import * as Haptics from 'expo-haptics';
 
-// One Button Click Solution Illustration Component
-const OneClickIllustration = () => (
+// 3D Button Illustration - Inspired by reference image  
+const Button3DIllustration = () => (
   <Svg width="200" height="200" viewBox="0 0 200 200">
-    {/* Central button */}
-    <Circle
+    {/* Light gray base platform */}
+    <Ellipse
       cx="100"
-      cy="100"
-      r="35"
-      fill="rgba(34, 211, 238, 0.8)"
-      stroke="rgba(6, 182, 212, 1)"
-      strokeWidth="3"
+      cy="155"
+      rx="65"
+      ry="15"
+      fill="rgba(200, 200, 200, 0.6)"
     />
     
-    {/* Button shine effect */}
-    <Circle
+    {/* Dark gray shadow */}
+    <Ellipse
       cx="100"
-      cy="100"
-      r="25"
-      fill="rgba(255, 255, 255, 0.3)"
+      cy="150"
+      rx="55"
+      ry="12"
+      fill="rgba(100, 100, 100, 0.5)"
     />
     
-    {/* Click indicator */}
-    <Circle
+    {/* Button 3D bottom/side (darker) */}
+    <Ellipse
       cx="100"
-      cy="100"
-      r="15"
-      fill="rgba(59, 130, 246, 1)"
+      cy="140"
+      rx="50"
+      ry="20"
+      fill="rgba(185, 28, 28, 0.9)"
+    />
+    
+    {/* Button 3D top surface (main color) */}
+    <Ellipse
+      cx="100"
+      cy="125"
+      rx="50"
+      ry="20"
+      fill="rgba(239, 68, 68, 1)"
+      stroke="rgba(220, 38, 38, 0.8)"
+      strokeWidth="1"
+    />
+    
+    {/* Button highlight for 3D effect */}
+    <Ellipse
+      cx="100"
+      cy="120"
+      rx="35"
+      ry="10"
+      fill="rgba(248, 113, 113, 0.7)"
+    />
+    
+    {/* Small top highlight */}
+    <Ellipse
+      cx="100"
+      cy="118"
+      rx="20"
+      ry="5"
+      fill="rgba(254, 202, 202, 0.8)"
     />
     
     {/* Finger/cursor icon on button */}
     <Path
-      d="M95 95 L95 85 C95 83 97 81 99 81 C101 81 103 83 103 85 L103 90 L105 90 C107 90 109 92 109 94 L109 105 C109 107 107 109 105 109 L95 109 Z"
+      d="M95 120 L95 110 C95 108 97 106 99 106 C101 106 103 108 103 110 L103 115 L105 115 C107 115 109 117 109 119 L109 130 C109 132 107 134 105 134 L95 134 Z"
       fill="rgba(255, 255, 255, 0.9)"
     />
     
-    {/* Temptations/distractions around the button (fading away) */}
-    <G opacity="0.6">
-      {/* Social media icon (fading) */}
-      <Rect x="40" y="40" width="20" height="20" rx="3" fill="rgba(239, 68, 68, 0.4)" stroke="rgba(220, 38, 38, 0.6)" strokeWidth="1" strokeDasharray="2,2" />
-      <Circle cx="50" cy="50" r="3" fill="rgba(220, 38, 38, 0.4)" />
-      
-      {/* Gaming controller (fading) */}
-      <Rect x="140" y="45" width="25" height="15" rx="7" fill="rgba(239, 68, 68, 0.4)" stroke="rgba(220, 38, 38, 0.6)" strokeWidth="1" strokeDasharray="2,2" />
-      <Circle cx="150" cy="50" r="2" fill="rgba(220, 38, 38, 0.4)" />
-      <Circle cx="155" cy="55" r="2" fill="rgba(220, 38, 38, 0.4)" />
-      
-      {/* Video/entertainment (fading) */}
-      <Rect x="45" y="140" width="22" height="16" rx="2" fill="rgba(239, 68, 68, 0.4)" stroke="rgba(220, 38, 38, 0.6)" strokeWidth="1" strokeDasharray="2,2" />
-      <Polygon points="52,145 52,151 58,148" fill="rgba(220, 38, 38, 0.4)" />
-      
-      {/* Shopping (fading) */}
-      <Path
-        d="M140 140 L145 140 L147 150 L138 150 Z"
-        fill="rgba(239, 68, 68, 0.4)"
-        stroke="rgba(220, 38, 38, 0.6)"
-        strokeWidth="1"
-        strokeDasharray="2,2"
-      />
-      <Path
-        d="M140 140 L140 135 L145 135 L145 140"
-        stroke="rgba(220, 38, 38, 0.6)"
-        strokeWidth="1"
-        fill="none"
-      />
-    </G>
-    
-    {/* Energy waves emanating from button click */}
+    {/* Energy waves emanating from button */}
     <G opacity="0.7">
-      <Circle cx="100" cy="100" r="50" fill="none" stroke="rgba(34, 211, 238, 0.6)" strokeWidth="2" strokeDasharray="4,4" />
-      <Circle cx="100" cy="100" r="70" fill="none" stroke="rgba(34, 211, 238, 0.4)" strokeWidth="1" strokeDasharray="4,4" />
-      <Circle cx="100" cy="100" r="90" fill="none" stroke="rgba(34, 211, 238, 0.2)" strokeWidth="1" strokeDasharray="4,4" />
+      <Circle cx="100" cy="125" r="70" fill="none" stroke="rgba(34, 211, 238, 0.6)" strokeWidth="2" strokeDasharray="4,4" />
+      <Circle cx="100" cy="125" r="90" fill="none" stroke="rgba(34, 211, 238, 0.4)" strokeWidth="1" strokeDasharray="4,4" />
     </G>
     
-    {/* "Poof" effects around disappearing temptations */}
-    <G opacity="0.5">
-      {/* Poof cloud 1 */}
-      <Circle cx="35" cy="35" r="8" fill="rgba(156, 163, 175, 0.4)" />
-      <Circle cx="40" cy="32" r="6" fill="rgba(156, 163, 175, 0.4)" />
-      <Circle cx="42" cy="38" r="5" fill="rgba(156, 163, 175, 0.4)" />
-      
-      {/* Poof cloud 2 */}
-      <Circle cx="170" cy="40" r="7" fill="rgba(156, 163, 175, 0.4)" />
-      <Circle cx="175" cy="37" r="5" fill="rgba(156, 163, 175, 0.4)" />
-      <Circle cx="172" cy="43" r="4" fill="rgba(156, 163, 175, 0.4)" />
-      
-      {/* Poof cloud 3 */}
-      <Circle cx="40" cy="165" r="6" fill="rgba(156, 163, 175, 0.4)" />
-      <Circle cx="45" cy="162" r="4" fill="rgba(156, 163, 175, 0.4)" />
-      <Circle cx="43" cy="168" r="3" fill="rgba(156, 163, 175, 0.4)" />
-      
-      {/* Poof cloud 4 */}
-      <Circle cx="165" cy="160" r="7" fill="rgba(156, 163, 175, 0.4)" />
-      <Circle cx="170" cy="157" r="5" fill="rgba(156, 163, 175, 0.4)" />
-      <Circle cx="168" cy="163" r="4" fill="rgba(156, 163, 175, 0.4)" />
-    </G>
-    
-    {/* Success indicators */}
+    {/* Success indicators around */}
     <G opacity="0.8">
-      {/* Checkmarks appearing */}
+      {/* Checkmarks */}
       <Path
-        d="M20 100 L25 105 L35 95"
+        d="M20 125 L25 130 L35 120"
         stroke="rgba(34, 197, 94, 0.8)"
         strokeWidth="3"
         fill="none"
         strokeLinecap="round"
       />
       <Path
-        d="M165 100 L170 105 L180 95"
+        d="M165 125 L170 130 L180 120"
         stroke="rgba(34, 197, 94, 0.8)"
         strokeWidth="3"
         fill="none"
         strokeLinecap="round"
       />
-    </G>
-    
-    {/* Instant effect text */}
-    <G opacity="0.6">
-      <Circle cx="100" cy="160" r="25" fill="rgba(251, 191, 36, 0.2)" />
-      <Text x="100" y="165" fontSize="10" fill="rgba(251, 191, 36, 1)" textAnchor="middle" fontWeight="bold">INSTANT</Text>
-    </G>
-    
-    {/* Click motion lines */}
-    <G opacity="0.5">
-      <Line x1="85" y1="85" x2="80" y2="80" stroke="rgba(255, 255, 255, 0.6)" strokeWidth="2" strokeLinecap="round" />
-      <Line x1="115" y1="85" x2="120" y2="80" stroke="rgba(255, 255, 255, 0.6)" strokeWidth="2" strokeLinecap="round" />
-      <Line x1="85" y1="115" x2="80" y2="120" stroke="rgba(255, 255, 255, 0.6)" strokeWidth="2" strokeLinecap="round" />
-      <Line x1="115" y1="115" x2="120" y2="120" stroke="rgba(255, 255, 255, 0.6)" strokeWidth="2" strokeLinecap="round" />
     </G>
   </Svg>
 );
@@ -225,7 +186,7 @@ export default function QuitScreen() {
           {/* Illustration space */}
           <AnimatedContent delay={100}>
             <View style={styles.illustrationContainer}>
-              <OneClickIllustration />
+              <Button3DIllustration />
             </View>
           </AnimatedContent>
 
