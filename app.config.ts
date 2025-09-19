@@ -34,7 +34,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   ios: {
     ...(config.ios ?? {}),
     supportsTablet: true,
-    bundleIdentifier: "com.unloopapp.dev",
+    bundleIdentifier: "com.kkdigitalsolutions.procrastination",
     infoPlist: {
       ...(config.ios?.infoPlist ?? {}),
       ITSAppUsesNonExemptEncryption: false,
@@ -51,7 +51,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       foregroundImage: './assets/images/adaptive-icon.png',
       backgroundColor: '#ffffff',
     },
-    package: "com.unloopapp.dev",
+    package: "com.kkdigitalsolutions.procrastination",
   },
 
   web: {
