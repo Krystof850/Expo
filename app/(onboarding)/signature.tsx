@@ -79,9 +79,6 @@ export default function CommitmentSignatureScreen() {
         <StatusBar barStyle="light-content" backgroundColor={COLORS.gradientStart} />
         {/* Header */}
         <View style={[styles.header, { paddingTop: insets.top + 8 }]}>
-          <TouchableOpacity onPress={() => { Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light); router.back(); }} style={styles.backButton}>
-            <Ionicons name="arrow-back" size={24} color={COLORS.mainText} />
-          </TouchableOpacity>
         </View>
 
         {/* Content */}
@@ -123,12 +120,6 @@ export default function CommitmentSignatureScreen() {
             </TouchableOpacity>
           </View>
 
-          {/* Instructions */}
-          <View style={styles.instructionsSection}>
-            <DescriptionText animated={false} style={styles.instructionsText}>
-              Draw on the open space above
-            </DescriptionText>
-          </View>
         </View>
 
         {/* Finish Button */}
@@ -155,10 +146,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: SPACING.page,
     paddingBottom: SPACING.small,
     zIndex: 10,
-  },
-  backButton: {
-    padding: 8,
-    alignSelf: 'flex-start',
   },
   content: {
     flex: 1,
@@ -218,17 +205,6 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: 'rgba(186, 230, 253, 0.9)', // Match other pages styling
     textAlign: 'center',
-  },
-  instructionsSection: {
-    alignItems: 'center',
-    marginBottom: 40,
-  },
-  instructionsText: {
-    fontSize: 16,
-    fontWeight: '500',
-    color: 'rgba(186, 230, 253, 0.8)', // Match other pages styling
-    textAlign: 'center',
-    opacity: 0.8,
   },
   buttonContainer: {
     paddingHorizontal: SPACING.page,

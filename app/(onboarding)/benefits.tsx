@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 24,
     paddingHorizontal: SPACING.page,
-    marginTop: 40, // Consistent with other pages
+    marginTop: 60, // Consistent with other pages
   },
   titleText: {
     fontSize: 20,

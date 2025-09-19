@@ -197,9 +197,9 @@ const styles = StyleSheet.create({
   },
   titleContainer: {
     alignItems: 'center',
-    marginBottom: 58, // Same spacing as other question pages
+    marginBottom: 15, // Same spacing as other question pages
     paddingHorizontal: SPACING.page, // Same as other pages
-    marginTop: 40, // Consistent with other pages
+    marginTop: 50, // Consistent with other pages
   },
   titleText: {
     fontSize: 20,
@@ -312,7 +312,7 @@ const styles = StyleSheet.create({
   },
   disclaimerSection: {
     alignItems: 'center',
-    marginTop: 20,
+    marginTop: 10,
     paddingHorizontal: 16,
   },
   disclaimerText: {
