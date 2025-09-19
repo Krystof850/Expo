@@ -6,9 +6,13 @@ import {
   signInWithCredential,
   GoogleAuthProvider,
   User,
+  deleteUser,
+  reauthenticateWithCredential,
+  EmailAuthProvider,
 } from "firebase/auth";
 import Constants from 'expo-constants';
 import { Platform } from 'react-native';
+import { ProgressService } from './progressService';
 
 // Google Sign-In imports - lazy loading with error handling
 let GoogleSignin: any = null;
@@ -243,3 +247,138 @@ export const isGoogleSignInAvailable = (): boolean => {
   const isLoaded = loadGoogleSignIn();
   return isLoaded && GoogleSignin !== null;
 };
+
+/**
+ * Delete user account with robust re-authentication flow
+ * @param currentPassword - Required for email/password users
+ * @returns Promise<void>
+ */
+export async function deleteUserAccount(currentPassword?: string): Promise<void> {
+  const user = auth.currentUser;
+  
+  if (!user) {
+    throw new Error('Žádný uživatel není přihlášen');
+  }
+
+  try {
+    console.log('[Auth] Starting account deletion for user:', user.email);
+    
+    // Always attempt deletion first - let Firebase determine if re-auth is needed
+    await attemptAccountDeletion(user);
+    
+  } catch (error: any) {
+    if (error.code === 'auth/requires-recent-login') {
+      console.log('[Auth] Re-authentication required, performing provider-specific reauth');
+      
+      // Perform re-authentication based on provider
+      await performReAuthentication(user, currentPassword);
+      
+      // Retry deletion after re-authentication
+      await attemptAccountDeletion(user);
+    } else {
+      throw error; // Re-throw other errors
+    }
+  }
+}
+
+/**
+ * Attempt to delete user account and data
+ */
+async function attemptAccountDeletion(user: User): Promise<void> {
+  // Delete user data from Firestore before deleting auth account
+  console.log('[Auth] Deleting user data from Firestore...');
+  try {
+    await ProgressService.deleteUserData(user.uid);
+    console.log('[Auth] User data deleted from Firestore successfully');
+  } catch (firestoreError: any) {
+    console.error('[Auth] Failed to delete Firestore data:', firestoreError);
+    // Don't continue with auth deletion if data deletion fails
+    // This ensures user data isn't left orphaned
+    throw new Error('Failed to delete user data. Please try again or contact support.');
+  }
+  
+  // Delete the Firebase Auth account
+  console.log('[Auth] Deleting Firebase Auth account...');
+  await deleteUser(user);
+  
+  console.log('[Auth] Account deletion successful');
+}
+
+/**
+ * Perform re-authentication based on user's auth provider
+ */
+async function performReAuthentication(user: User, currentPassword?: string): Promise<void> {
+  const providerData = user.providerData;
+  
+  // Find the auth provider
+  const hasEmailProvider = providerData.some(p => p.providerId === 'password');
+  const hasGoogleProvider = providerData.some(p => p.providerId === 'google.com');
+  const hasAppleProvider = providerData.some(p => p.providerId === 'apple.com');
+  
+  if (hasEmailProvider) {
+    // Email/password re-authentication
+    if (!currentPassword) {
+      throw new Error('Pro smazání účtu je vyžadováno aktuální heslo');
+    }
+    
+    if (!user.email) {
+      throw new Error('Email uživatele není dostupný pro re-authentication');
+    }
+    
+    console.log('[Auth] Re-authenticating with email/password');
+    const credential = EmailAuthProvider.credential(user.email, currentPassword);
+    await reauthenticateWithCredential(user, credential);
+    
+  } else if (hasGoogleProvider) {
+    // Google re-authentication
+    console.log('[Auth] Re-authenticating with Google');
+    
+    if (Platform.OS === 'web') {
+      throw new Error('Google re-authentication není podporována na webu. Kontaktujte podporu.');
+    }
+    
+    const isConfigured = configureGoogleSignIn();
+    if (!isConfigured || !GoogleSignin) {
+      throw new Error('Google Sign-In není dostupný pro re-authentication');
+    }
+    
+    // Get fresh Google token
+    const response = await GoogleSignin.signIn();
+    if (!isSuccessResponse(response)) {
+      throw new Error('Google re-authentication selhala');
+    }
+    
+    const { data: userInfo } = response;
+    if (!userInfo.idToken) {
+      throw new Error('Google neposkytl ID token pro re-authentication');
+    }
+    
+    const credential = GoogleAuthProvider.credential(userInfo.idToken, null);
+    await reauthenticateWithCredential(user, credential);
+    
+  } else if (hasAppleProvider) {
+    // Apple re-authentication using expo-apple-authentication
+    console.log('[Auth] Re-authenticating with Apple');
+    
+    try {
+      // Import Apple auth dynamically since it may not be available
+      const { signInWithApple } = await import('./appleAuth');
+      
+      // Get fresh Apple credential - this will show Apple Sign In prompt
+      const appleCredential = await signInWithApple();
+      
+      // The signInWithApple function returns the signed-in user, but we need to re-auth the existing user
+      // We need to get the credential from the Apple Sign In flow
+      throw new Error('Apple re-authentication vyžaduje speciální tok. Odhlaste se a přihlaste znovu přes Apple.');
+      
+    } catch (appleError: any) {
+      console.error('[Auth] Apple re-authentication failed:', appleError);
+      throw new Error('Apple re-authentication selhala. Odhlaste se a přihlaste znovu.');
+    }
+    
+  } else {
+    throw new Error('Neznámý poskytovatel přihlášení - nelze provést re-authentication');
+  }
+  
+  console.log('[Auth] Re-authentication completed successfully');
+}

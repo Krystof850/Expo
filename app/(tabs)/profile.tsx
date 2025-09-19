@@ -10,6 +10,7 @@ import Constants from 'expo-constants';
 import { updatePassword, EmailAuthProvider, reauthenticateWithCredential } from 'firebase/auth';
 
 import { useAuth } from '../../src/context/AuthContext';
+import { deleteUserAccount } from '../../src/services/auth';
 import { Protected } from '../../src/components/Protected';
 import { COLORS } from '@/constants/theme';
 
@@ -21,6 +22,11 @@ export default function Profile() {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isUpdatingPassword, setIsUpdatingPassword] = useState(false);
+  
+  // Delete Account Modal State
+  const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
+  const [deletePassword, setDeletePassword] = useState('');
+  const [isDeletingAccount, setIsDeletingAccount] = useState(false);
 
   // Tab bar height calculation - modern tab bar is about 80px + safe area bottom  
   const tabBarHeight = 80 + insets.bottom;
@@ -174,6 +180,65 @@ export default function Profile() {
     }
   };
 
+  const handleDeleteAccount = async () => {
+    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    
+    // Show confirmation alert first
+    Alert.alert(
+      'Delete Account',
+      'This action cannot be undone. All your data will be permanently deleted. Are you sure you want to delete your account?',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'Delete Account',
+          style: 'destructive',
+          onPress: () => {
+            setIsDeleteModalVisible(true);
+          },
+        },
+      ]
+    );
+  };
+
+  const handleDeleteAccountConfirm = async () => {
+    if (isDeletingAccount) return; // Prevent duplicate submissions
+    
+    setIsDeletingAccount(true);
+    
+    try {
+      await deleteUserAccount(deletePassword);
+      
+      // Show success message and close modal
+      setIsDeleteModalVisible(false);
+      setDeletePassword('');
+      
+      Alert.alert(
+        'Account Deleted',
+        'Your account has been successfully deleted.',
+        [
+          {
+            text: 'OK',
+            onPress: () => {
+              // User will be automatically logged out by Firebase Auth state change
+            },
+          },
+        ]
+      );
+      
+      await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+    } catch (error: any) {
+      console.error('Delete account error:', error);
+      
+      Alert.alert('Error', error.message || 'Failed to delete account. Please try again.');
+      await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
+    } finally {
+      setIsDeletingAccount(false);
+    }
+  };
+
   return (
     <Protected>
       <View style={[styles.container, { paddingTop: insets.top }]}>
@@ -231,6 +296,16 @@ export default function Profile() {
                 <Text style={styles.menuItemText}>Rate App</Text>
               </View>
               <Ionicons name="chevron-forward" size={20} color="#94A3B8" />
+            </TouchableOpacity>
+
+            <View style={styles.menuSeparator} />
+
+            <TouchableOpacity style={styles.menuItem} onPress={handleDeleteAccount}>
+              <View style={styles.menuItemLeft}>
+                <Ionicons name="trash" size={24} color="#DC2626" />
+                <Text style={[styles.menuItemText, { color: '#DC2626' }]}>Delete Account</Text>
+              </View>
+              <Ionicons name="chevron-forward" size={20} color="#DC2626" />
             </TouchableOpacity>
           </View>
 
@@ -305,6 +380,81 @@ export default function Profile() {
                 >
                   <Text style={styles.updateButtonText}>
                     {isUpdatingPassword ? 'Updating...' : 'Update Password'}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </Modal>
+
+        {/* Delete Account Modal */}
+        <Modal
+          visible={isDeleteModalVisible}
+          transparent={true}
+          animationType="fade"
+          onRequestClose={() => setIsDeleteModalVisible(false)}
+        >
+          <View style={styles.modalOverlay}>
+            <View style={styles.modalContent}>
+              <View style={styles.modalHeader}>
+                <Text style={styles.modalTitle}>Delete Account</Text>
+                <TouchableOpacity
+                  style={styles.closeButton}
+                  onPress={() => setIsDeleteModalVisible(false)}
+                >
+                  <Ionicons name="close" size={24} color="#64748B" />
+                </TouchableOpacity>
+              </View>
+
+              <View style={styles.deleteWarningSection}>
+                <View style={styles.warningIcon}>
+                  <Ionicons name="warning" size={32} color="#DC2626" />
+                </View>
+                <Text style={styles.deleteWarningTitle}>This action cannot be undone</Text>
+                <Text style={styles.deleteWarningText}>
+                  Deleting your account will permanently remove all your data, settings, and progress. 
+                  This action is irreversible.
+                </Text>
+              </View>
+
+              <View style={styles.inputSection}>
+                {user?.providerData.some(p => p.providerId === 'password') && (
+                  <>
+                    <Text style={styles.inputLabel}>Enter your password to confirm</Text>
+                    <TextInput
+                      style={styles.passwordInput}
+                      value={deletePassword}
+                      onChangeText={setDeletePassword}
+                      secureTextEntry
+                      placeholder="Enter your current password"
+                      autoCapitalize="none"
+                    />
+                  </>
+                )}
+                
+                {!user?.providerData.some(p => p.providerId === 'password') && (
+                  <Text style={styles.deleteInfoText}>
+                    Since you signed in with {user?.providerData[0]?.providerId === 'google.com' ? 'Google' : 
+                    user?.providerData[0]?.providerId === 'apple.com' ? 'Apple' : 'a third-party provider'}, 
+                    no password is required to delete your account.
+                  </Text>
+                )}
+              </View>
+
+              <View style={styles.modalButtons}>
+                <TouchableOpacity 
+                  style={styles.cancelButton} 
+                  onPress={() => setIsDeleteModalVisible(false)}
+                >
+                  <Text style={styles.cancelButtonText}>Cancel</Text>
+                </TouchableOpacity>
+                <TouchableOpacity 
+                  style={[styles.deleteButton, isDeletingAccount && { opacity: 0.6 }]} 
+                  onPress={handleDeleteAccountConfirm}
+                  disabled={isDeletingAccount}
+                >
+                  <Text style={styles.deleteButtonText}>
+                    {isDeletingAccount ? 'Deleting...' : 'Delete Account'}
                   </Text>
                 </TouchableOpacity>
               </View>
@@ -513,6 +663,57 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   updateButtonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+
+  // Delete Account Modal Styles
+  deleteWarningSection: {
+    alignItems: 'center',
+    marginBottom: 24,
+  },
+  warningIcon: {
+    backgroundColor: 'rgba(239, 68, 68, 0.1)',
+    borderRadius: 40,
+    width: 80,
+    height: 80,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 16,
+  },
+  deleteWarningTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: '#DC2626',
+    textAlign: 'center',
+    marginBottom: 12,
+  },
+  deleteWarningText: {
+    fontSize: 14,
+    color: '#64748B',
+    textAlign: 'center',
+    lineHeight: 20,
+  },
+  deleteInfoText: {
+    fontSize: 14,
+    color: '#64748B',
+    textAlign: 'center',
+    lineHeight: 20,
+    backgroundColor: 'rgba(147, 197, 253, 0.1)',
+    padding: 16,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: 'rgba(147, 197, 253, 0.2)',
+  },
+  deleteButton: {
+    flex: 1,
+    backgroundColor: '#DC2626',
+    paddingVertical: 16,
+    borderRadius: 12,
+    alignItems: 'center',
+  },
+  deleteButtonText: {
     color: '#FFFFFF',
     fontSize: 16,
     fontWeight: '600',

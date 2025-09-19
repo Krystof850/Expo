@@ -3,6 +3,7 @@ import {
   getDoc, 
   setDoc, 
   updateDoc, 
+  deleteDoc,
   serverTimestamp,
   Timestamp,
   onSnapshot 
@@ -313,6 +314,25 @@ export class ProgressService {
       console.log('🎉 Temptation overcome tracked successfully');
     } catch (error) {
       console.error('❌ Error tracking temptation overcome:', error);
+    }
+  }
+
+  /**
+   * Delete all user data from Firestore
+   * This should be called when user deletes their account
+   */
+  static async deleteUserData(userId: string): Promise<void> {
+    try {
+      console.log('[ProgressService] Deleting all data for user:', userId);
+
+      // Delete user progress document
+      const docRef = doc(db, this.COLLECTION_NAME, userId);
+      await deleteDoc(docRef);
+
+      console.log('[ProgressService] User data deleted successfully from Firestore');
+    } catch (error) {
+      console.error('[ProgressService] Error deleting user data:', error);
+      throw error; // Re-throw to be handled by delete account process
     }
   }
 }
