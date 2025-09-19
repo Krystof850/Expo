@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef } from 'react';
 import {
   View,
   Text,
@@ -16,6 +16,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { AnimatedQuestionPage, AnimatedContent, AnimatedQuestionPageRef } from '../../components/AnimatedQuestionPage';
 import { NextButton } from '../../components/Button';
 import { SPACING } from '@/constants/theme';
+import { useAssets } from 'expo-asset';
 import * as Haptics from 'expo-haptics';
 
 
@@ -26,26 +27,39 @@ export default function WelcomeScreen() {
   const insets = useSafeAreaInsets();
   const animationRef = useRef<AnimatedQuestionPageRef>(null);
 
-  // Preload logo image for faster loading
-  useFocusEffect(
-    React.useCallback(() => {
-      const preloadImage = async () => {
-        try {
-          // Only preload on native platforms where Image.resolveAssetSource exists
-          if (Platform.OS !== 'web' && Image.resolveAssetSource) {
-            await Image.prefetch(Image.resolveAssetSource(logoImage).uri);
-          } else if (Platform.OS === 'web') {
-            // For web, create a new Image to cache it
-            const img = new window.Image();
-            img.src = logoImage;
-          }
-        } catch (error) {
-          console.log('Image preload failed:', error);
-        }
-      };
-      preloadImage();
-    }, [])
-  );
+  // Use useAssets hook to ensure image is loaded before rendering
+  const [assets] = useAssets([logoImage]);
+
+  // Don't render content until logo is loaded
+  if (!assets) {
+    // Show loading state with same background gradient
+    return (
+      <View style={styles.container}>
+        <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
+        
+        {/* Blue gradient background with blur effects */}
+        <LinearGradient
+          colors={['#1D4ED8', '#1E40AF', '#000000']} // blue-700 → blue-800 → black
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }} // diagonal gradient from top-left to bottom-right
+          style={styles.backgroundContainer}
+        >
+          <View style={styles.blurOverlay}>
+            {/* First blur orb with gradient */}
+            <LinearGradient
+              colors={['rgba(59, 130, 246, 0.5)', 'transparent']}
+              style={styles.blurCircle1}
+            />
+            {/* Second blur orb with gradient */}
+            <LinearGradient
+              colors={['rgba(34, 211, 238, 0.4)', 'transparent']}
+              style={styles.blurCircle2}
+            />
+          </View>
+        </LinearGradient>
+      </View>
+    );
+  }
 
   // Block hardware back button on Android only
   useFocusEffect(
