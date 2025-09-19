@@ -98,5 +98,5 @@ integrations = ["javascript_openai:1.0.0"]
 
 [deployment]
 deploymentTarget = "autoscale"
-run = ["npx", "expo", "export", "-p", "web"]
-build = ["npm", "install"]
+run = ["npx", "serve", "-s", "dist"]
+build = ["npx", "expo", "export", "--platform", "web"]
