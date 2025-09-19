@@ -13,7 +13,7 @@
       "bundleIdentifier": "com.unloopapp.dev",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
-      },
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -43,7 +43,22 @@
       "typedRoutes": true
     },
     "extra": {
-      "SUPERWALL_API_KEY": "pk_f9ba235999f864d522d3f012ab9894eaae53a30698086993"
-    }
+      "SUPERWALL_API_KEY": "pk_f9ba235999f864d522d3f012ab9894eaae53a30698086993",
+      "FIREBASE_API_KEY": "AIzaSyAX2Zd9CiZjecLwYisC6SundzMeLvBsuzA",
+      "FIREBASE_AUTH_DOMAIN": "procrastination-app-ddf27.firebaseapp.com",
+      "FIREBASE_PROJECT_ID": "procrastination-app-ddf27",
+      "FIREBASE_STORAGE_BUCKET": "procrastination-app-ddf27.firebasestorage.app",
+      "FIREBASE_MESSAGING_SENDER_ID": "576633089196",
+      "FIREBASE_APP_ID": "1:576633089196:web:cab74d64e4665a735fc309",
+      "GOOGLE_CLIENT_ID": "576633089196-p5up6shcskrpddf1q7g6ivkk7d9ock0v.apps.googleusercontent.com",
+      "IOS_GOOGLE_CLIENT_ID": "576633089196-fgpj65aqjhqio1t7qpui3r4u4q8qf5k6.apps.googleusercontent.com",
+      "REVERSED_IOS_CLIENT_ID": "com.googleusercontent.apps.576633089196-fgpj65aqjhqio1t7qpui3r4u4q8qf5k6",
+      "SUPPORT_EMAIL": "unloop.app.tech@gmail.com",
+      "router": {},
+      "eas": {
+        "projectId": "42f1d8d1-7801-47ab-98f7-d9f1e0d1a0ed"
+      }
+    },
+    "owner": "krystofkapka3"
   }
 }
