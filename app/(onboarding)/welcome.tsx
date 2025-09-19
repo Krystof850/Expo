@@ -8,6 +8,7 @@ import {
   Platform,
   TouchableOpacity,
   Image,
+  ActivityIndicator,
 } from 'react-native';
 import { router, useFocusEffect } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -49,7 +50,7 @@ export default function WelcomeScreen() {
 
   // Don't render content until logo is loaded
   if (!assets) {
-    // Show loading state with same background gradient
+    // Show loading state with same background gradient and loading indicator
     return (
       <View style={styles.container}>
         <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
@@ -74,6 +75,12 @@ export default function WelcomeScreen() {
             />
           </View>
         </LinearGradient>
+        
+        {/* Loading indicator */}
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#FFFFFF" />
+          <Text style={styles.loadingText}>Loading...</Text>
+        </View>
       </View>
     );
   }
@@ -288,5 +295,23 @@ const styles = StyleSheet.create({
   },
   backButton: {
     padding: 8,
+  },
+  loadingContainer: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 10,
+  },
+  loadingText: {
+    marginTop: 16,
+    fontSize: 16,
+    fontWeight: '500',
+    color: '#FFFFFF',
+    textAlign: 'center',
+    textShadow: '0 2px 4px rgba(0, 0, 0, 0.3)',
   },
 });

@@ -6,6 +6,7 @@ import {
   StatusBar,
   StyleSheet,
   Dimensions,
+  ActivityIndicator,
 } from 'react-native';
 import { Image } from 'expo-image';
 import { router } from 'expo-router';
@@ -35,11 +36,17 @@ export default function BenefitsScreen() {
 
   // Don't render content until chart image is loaded
   if (!assets) {
-    // Show loading state with same background
+    // Show loading state with same background and loading indicator
     return (
       <AppBackground>
         <View style={styles.container}>
           <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
+          
+          {/* Loading indicator */}
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color="#FFFFFF" />
+            <Text style={styles.loadingText}>Loading...</Text>
+          </View>
         </View>
       </AppBackground>
     );
@@ -149,6 +156,24 @@ const styles = StyleSheet.create({
   buttonContainer: {
     paddingHorizontal: SPACING.page,
     zIndex: 10, // Match other onboarding pages
+  },
+  loadingContainer: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 10,
+  },
+  loadingText: {
+    marginTop: 16,
+    fontSize: 16,
+    fontWeight: '500',
+    color: '#FFFFFF',
+    textAlign: 'center',
+    textShadow: '0 2px 4px rgba(0, 0, 0, 0.3)',
   },
   // NextButton handles all styling
 });
