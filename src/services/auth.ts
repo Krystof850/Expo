@@ -45,9 +45,9 @@ export { signInWithApple, isAppleSignInAvailable, isAppleUser } from './appleAut
 
 export async function signUpWithEmail(email: string, password: string): Promise<User> {
   try {
-    console.log('[Auth] Attempting sign up for:', email);
+    console.log('[Auth] Attempting sign up');
     const cred = await createUserWithEmailAndPassword(auth, email, password);
-    console.log('[Auth] Sign up successful for:', email);
+    console.log('[Auth] Sign up successful');
     return cred.user;
   } catch (e: any) {
     console.error('[Auth] Sign up failed:', e);
@@ -58,9 +58,9 @@ export async function signUpWithEmail(email: string, password: string): Promise<
 
 export async function signInWithEmail(email: string, password: string): Promise<User> {
   try {
-    console.log('[Auth] Attempting sign in for:', email);
+    console.log('[Auth] Attempting sign in');
     const cred = await signInWithEmailAndPassword(auth, email, password);
-    console.log('[Auth] Sign in successful for:', email);
+    console.log('[Auth] Sign in successful');
     return cred.user;
   } catch (e: any) {
     console.error('[Auth] Sign in failed:', e);
@@ -71,7 +71,7 @@ export async function signInWithEmail(email: string, password: string): Promise<
 
 export async function sendResetEmail(email: string): Promise<void> {
   try {
-    console.log('[Auth] Sending password reset email to:', email);
+    console.log('[Auth] Sending password reset email');
     await sendPasswordResetEmail(auth, email);
     console.log('[Auth] Password reset email sent successfully');
   } catch (e: any) {
@@ -170,7 +170,7 @@ export async function signInWithGoogle(): Promise<User> {
     }
     
     const { data: userInfo } = response;
-    console.log('[Auth] Google Sign In successful for:', userInfo.user.email);
+    console.log('[Auth] Google Sign In successful');
     console.log('[Auth] Has ID token:', !!userInfo.idToken);
     
     if (!userInfo.idToken) {
@@ -190,7 +190,7 @@ export async function signInWithGoogle(): Promise<User> {
     
     // Sign in to Firebase
     const firebaseResult = await signInWithCredential(auth, credential);
-    console.log('[Auth] Firebase Sign In successful for:', firebaseResult.user.email);
+    console.log('[Auth] Firebase Sign In successful');
     
     return firebaseResult.user;
     
@@ -261,7 +261,7 @@ export async function deleteUserAccount(currentPassword?: string): Promise<void>
   }
 
   try {
-    console.log('[Auth] Starting account deletion for user:', user.email);
+    console.log('[Auth] Starting account deletion');
     
     // Always attempt deletion first - let Firebase determine if re-auth is needed
     await attemptAccountDeletion(user);
