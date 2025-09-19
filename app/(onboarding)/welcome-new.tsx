@@ -137,15 +137,13 @@ export default function WelcomeNewScreen() {
               </View>
             </AnimatedContent>
             
-            <AnimatedContent delay={300}>
-              <View style={styles.textSection}>
-                <TypingText 
-                  text="Let's start by finding out if you have a problem with procrastination."
-                  speed={30}
-                  delay={200}
-                />
-              </View>
-            </AnimatedContent>
+            <View style={styles.textSection}>
+              <TypingText 
+                text="Let's start by finding out if you have a problem with procrastination."
+                speed={30}
+                delay={500}
+              />
+            </View>
           </View>
         </AnimatedQuestionPage>
         
