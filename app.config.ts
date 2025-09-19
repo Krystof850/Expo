@@ -21,7 +21,6 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
   name: config.name ?? "Unloop Dev",
   slug: config.slug ?? "unloop-dev",
-  owner: 'krystofkapka1',
   version: '1.0.0',
   orientation: 'portrait',
   icon: './assets/images/icon.jpg',
@@ -35,7 +34,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   ios: {
     ...(config.ios ?? {}),
     supportsTablet: true,
-    bundleIdentifier: "com.unloopapp",
+    bundleIdentifier: "com.unloopapp.dev",
     infoPlist: {
       ...(config.ios?.infoPlist ?? {}),
       ITSAppUsesNonExemptEncryption: false,
@@ -52,7 +51,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       foregroundImage: './assets/images/adaptive-icon.png',
       backgroundColor: '#ffffff',
     },
-    package: "com.unloopapp",
+    package: "com.unloopapp.dev",
   },
 
   web: {
