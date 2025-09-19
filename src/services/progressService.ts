@@ -33,6 +33,7 @@ export class ProgressService {
           currentOrbLevel: data.currentOrbLevel || 1,
           totalResets: data.totalResets || 0,
           lastUpdated: (data.lastUpdated instanceof Timestamp) ? data.lastUpdated.toMillis() : (typeof data.lastUpdated === 'number' ? data.lastUpdated : Date.now()),
+          goalDays: data.goalDays || 30, // Default 30 days goal
           // Temptation tracking fields
           temptationsOvercome: data.temptationsOvercome || 0,
           temptationsByTimeOfDay: data.temptationsByTimeOfDay || {
@@ -65,6 +66,7 @@ export class ProgressService {
       currentOrbLevel: 1,
       totalResets: 0,
       lastUpdated: now,
+      goalDays: 30, // Default 30 days goal
       // Initialize temptation tracking
       temptationsOvercome: 0,
       temptationsByTimeOfDay: {
@@ -226,6 +228,7 @@ export class ProgressService {
             currentOrbLevel: data.currentOrbLevel || 1,
             totalResets: data.totalResets || 0,
             lastUpdated: (data.lastUpdated instanceof Timestamp) ? data.lastUpdated.toMillis() : (typeof data.lastUpdated === 'number' ? data.lastUpdated : Date.now()),
+            goalDays: data.goalDays || 30, // Default 30 days goal
             // Temptation tracking fields for real-time sync
             temptationsOvercome: data.temptationsOvercome || 0,
             temptationsByTimeOfDay: data.temptationsByTimeOfDay || {
@@ -314,6 +317,24 @@ export class ProgressService {
       console.log('🎉 Temptation overcome tracked successfully');
     } catch (error) {
       console.error('❌ Error tracking temptation overcome:', error);
+    }
+  }
+
+  /**
+   * Update user's goal (target days)
+   */
+  static async updateUserGoal(userId: string, goalDays: number): Promise<void> {
+    try {
+      const docRef = doc(db, this.COLLECTION_NAME, userId);
+      await setDoc(docRef, {
+        goalDays: goalDays,
+        lastUpdated: serverTimestamp(),
+      }, { merge: true });
+      
+      console.log(`Goal updated to ${goalDays} days for user ${userId}`);
+    } catch (error) {
+      console.error('Error updating user goal:', error);
+      throw error;
     }
   }
 

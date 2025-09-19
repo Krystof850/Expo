@@ -15,6 +15,7 @@ export interface UserProgress {
   currentOrbLevel: number;
   totalResets: number;
   lastUpdated: number;
+  goalDays?: number; // User's goal in days (default: 30)
   // Temptation tracking fields
   temptationsOvercome?: number;
   temptationsByTimeOfDay?: {

@@ -7,6 +7,8 @@ import {
   Text,
   Dimensions,
   TouchableOpacity,
+  Modal,
+  TextInput,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -49,6 +51,9 @@ export default function Homepage() {
   const [streak, setStreak] = useState(0);
   const [currentOrbType, setCurrentOrbType] = useState<'basic' | 'aura' | 'galaxy' | 'heartbeat' | 'lightning' | 'fire' | 'wave' | 'nature'>('basic');
   const [userProgress, setUserProgress] = useState<UserProgress | null>(null);
+  const [goalDays, setGoalDays] = useState<number>(30); // Default 30 days goal
+  const [isGoalModalVisible, setIsGoalModalVisible] = useState(false);
+  const [goalInput, setGoalInput] = useState<string>('30');
 
   // Orb animation values
   const orbScale = useSharedValue(1);
@@ -77,6 +82,7 @@ export default function Homepage() {
   // Load saved timer data and user progress
   useEffect(() => {
     loadTimerData();
+    loadGoalData();
   }, []);
 
   // Setup real-time Firebase listener for bidirectional sync
@@ -107,6 +113,18 @@ export default function Homepage() {
             return newStreak;
           }
           return currentStreak;
+        });
+        
+        // Sync goalDays from Firebase real-time updates
+        setGoalDays(currentGoal => {
+          const firebaseGoal = progress.goalDays ?? 30;
+          if (firebaseGoal !== currentGoal) {
+            setGoalInput(firebaseGoal.toString());
+            AsyncStorage.setItem('procrastination_goal_days', firebaseGoal.toString());
+            console.log('🔄 Goal updated from real-time sync:', firebaseGoal);
+            return firebaseGoal;
+          }
+          return currentGoal;
         });
       }
     });
@@ -161,13 +179,20 @@ export default function Homepage() {
           setStreak(Math.floor(progress.currentStreak));
           calculateTime(progress.startTime);
           
+          // Sync goal from Firebase to UI state
+          const firebaseGoal = progress.goalDays ?? 30;
+          setGoalDays(firebaseGoal);
+          setGoalInput(firebaseGoal.toString());
+          
           // Also update local storage as backup
           await AsyncStorage.setItem('procrastination_start_time', progress.startTime.toString());
           await AsyncStorage.setItem('procrastination_streak', progress.currentStreak.toString());
+          await AsyncStorage.setItem('procrastination_goal_days', firebaseGoal.toString());
           
           console.log('✅ Timer loaded from Firebase:', {
             startTime: new Date(progress.startTime).toISOString(),
-            currentStreak: progress.currentStreak
+            currentStreak: progress.currentStreak,
+            goalDays: firebaseGoal
           });
         }
       } catch (firebaseError) {
@@ -177,6 +202,39 @@ export default function Homepage() {
     } catch (error) {
       console.log('Error loading timer data:', error);
       await loadTimerDataFallback();
+    }
+  };
+
+  const loadGoalData = async () => {
+    try {
+      const savedGoal = await AsyncStorage.getItem('procrastination_goal_days');
+      if (savedGoal) {
+        const goalDaysNumber = parseInt(savedGoal);
+        setGoalDays(goalDaysNumber);
+        setGoalInput(savedGoal);
+      }
+    } catch (error) {
+      console.log('Error loading goal data:', error);
+    }
+  };
+
+  const saveGoalData = async (days: number) => {
+    try {
+      await AsyncStorage.setItem('procrastination_goal_days', days.toString());
+      
+      // Also save to Firebase if user is authenticated
+      if (user?.uid) {
+        try {
+          // Ensure user progress exists then update goal
+          await ProgressService.getOrCreateUserProgress(user.uid);
+          await ProgressService.updateUserGoal(user.uid, days);
+          console.log('✅ Goal saved to Firebase:', days);
+        } catch (firebaseError) {
+          console.log('⚠️ Failed to save goal to Firebase:', firebaseError);
+        }
+      }
+    } catch (error) {
+      console.log('Error saving goal data:', error);
     }
   };
 
@@ -294,6 +352,31 @@ export default function Homepage() {
     router.push('/(protected)/achievements');
   };
 
+  const handleGoalEdit = async () => {
+    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    setGoalInput(goalDays.toString());
+    setIsGoalModalVisible(true);
+  };
+
+  const handleGoalSave = async () => {
+    const newGoal = parseInt(goalInput);
+    if (isNaN(newGoal) || newGoal <= 0) {
+      Alert.alert('Invalid Goal', 'Please enter a valid number of days (greater than 0).');
+      return;
+    }
+    
+    setGoalDays(newGoal);
+    await saveGoalData(newGoal);
+    setIsGoalModalVisible(false);
+    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+  };
+
+  const handleGoalCancel = async () => {
+    setGoalInput(goalDays.toString()); // Reset to current goal
+    setIsGoalModalVisible(false);
+    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+  };
+
   const formatNumber = (num: number): string => {
     return num.toString().padStart(2, '0');
   };
@@ -404,6 +487,7 @@ export default function Homepage() {
               </TouchableOpacity>
               <TouchableOpacity 
                 style={styles.actionButton}
+                onPress={handleGoalEdit}
                 activeOpacity={0.8}
               >
                 <Ionicons name="create-outline" size={28} color="#30475e" />
@@ -416,13 +500,13 @@ export default function Homepage() {
             <View style={styles.progressCard}>
               <View style={styles.progressHeader}>
                 <Text style={styles.progressTitle}>Brain Rewiring</Text>
-                <Text style={styles.progressPercentage}>70%</Text>
+                <Text style={styles.progressPercentage}>{Math.round((time.days / goalDays) * 100)}%</Text>
               </View>
               <View style={styles.progressBarContainer}>
                 <View style={styles.progressBarBackground}>
                   <LinearGradient
                     colors={['#34D399', '#10B981']}
-                    style={styles.progressBarFill}
+                    style={[styles.progressBarFill, { width: `${Math.min((time.days / goalDays) * 100, 100)}%` }]}
                     start={{ x: 0, y: 0 }}
                     end={{ x: 1, y: 0 }}
                   />
@@ -432,6 +516,60 @@ export default function Homepage() {
           </View>
         </View>
       </View>
+      
+      {/* Goal Setting Modal */}
+      <Modal
+        visible={isGoalModalVisible}
+        animationType="slide"
+        transparent={true}
+        onRequestClose={handleGoalCancel}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Set Your Goal</Text>
+            <Text style={styles.modalSubtitle}>How many days do you want to stay procrastination-free?</Text>
+            
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={styles.goalInput}
+                value={goalInput}
+                onChangeText={setGoalInput}
+                keyboardType="numeric"
+                placeholder="Enter days"
+                placeholderTextColor="#9CA3AF"
+                autoFocus={true}
+                selectTextOnFocus={true}
+              />
+              <Text style={styles.inputLabel}>days</Text>
+            </View>
+            
+            <View style={styles.modalButtons}>
+              <TouchableOpacity 
+                style={styles.modalCancelButton}
+                onPress={handleGoalCancel}
+                activeOpacity={0.8}
+              >
+                <Text style={styles.modalCancelText}>Cancel</Text>
+              </TouchableOpacity>
+              
+              <TouchableOpacity 
+                style={styles.modalSaveButton}
+                onPress={handleGoalSave}
+                activeOpacity={0.8}
+              >
+                <LinearGradient
+                  colors={['#0EA5E9', '#0284C7']}
+                  style={styles.modalSaveGradient}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 1 }}
+                >
+                  <Text style={styles.modalSaveText}>Save Goal</Text>
+                </LinearGradient>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </Protected>
   );
 }
@@ -667,9 +805,97 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   progressBarFill: {
-    width: '70%',
     height: '100%',
     borderRadius: 4,
+  },
+  
+  // Modal Styles
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+  },
+  modalContent: {
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 24,
+    width: '100%',
+    maxWidth: 300,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.25,
+    shadowRadius: 20,
+    elevation: 10,
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: '#082F49',
+    textAlign: 'center',
+    marginBottom: 8,
+  },
+  modalSubtitle: {
+    fontSize: 14,
+    fontWeight: '400',
+    color: '#64748B',
+    textAlign: 'center',
+    marginBottom: 24,
+    lineHeight: 20,
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 24,
+  },
+  goalInput: {
+    fontSize: 24,
+    fontWeight: '700',
+    color: '#082F49',
+    borderBottomWidth: 2,
+    borderBottomColor: '#0EA5E9',
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    textAlign: 'center',
+    minWidth: 80,
+  },
+  inputLabel: {
+    fontSize: 16,
+    fontWeight: '500',
+    color: '#64748B',
+    marginLeft: 8,
+  },
+  modalButtons: {
+    flexDirection: 'row',
+    gap: 12,
+  },
+  modalCancelButton: {
+    flex: 1,
+    paddingVertical: 12,
+    borderRadius: 12,
+    backgroundColor: '#F1F5F9',
+    alignItems: 'center',
+  },
+  modalCancelText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#64748B',
+  },
+  modalSaveButton: {
+    flex: 1,
+    borderRadius: 12,
+    overflow: 'hidden',
+  },
+  modalSaveGradient: {
+    paddingVertical: 12,
+    alignItems: 'center',
+  },
+  modalSaveText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: 'white',
   },
   badgeContainer: {
     position: 'absolute',
