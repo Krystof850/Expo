@@ -240,7 +240,7 @@ export default function Statistics() {
           contentContainerStyle={[styles.content, { paddingBottom: tabBarHeight + 20 }]}
           showsVerticalScrollIndicator={false}
         >
-          {/* Header with Logo and Settings */}
+          {/* Header with Logo */}
           <View style={styles.header}>
             {/* Logo - positioned in top left */}
             <View style={styles.logoContainer}>
@@ -250,14 +250,6 @@ export default function Statistics() {
                 contentFit="contain"
               />
             </View>
-            
-            {/* Settings button - maintains original position */}
-            <TouchableOpacity style={styles.settingsButton}>
-              <Ionicons name="settings-outline" size={22} color="#64748B" />
-              <View style={styles.badgeContainer}>
-                <Text style={styles.badgeText}>1</Text>
-              </View>
-            </TouchableOpacity>
           </View>
 
           {/* Progress Circle Section */}
@@ -485,8 +477,8 @@ const styles = StyleSheet.create({
   },
   logoContainer: {
     position: 'absolute',
-    left: 16,
-    top: 8,
+    left: -8,
+    top: -22,
     zIndex: 1,
   },
   logo: {

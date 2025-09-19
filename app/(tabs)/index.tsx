@@ -322,11 +322,11 @@ export default function Homepage() {
             />
           </View>
           
-          {/* Settings button - maintains original position */}
+          {/* Streak button - maintains original position */}
           <TouchableOpacity style={styles.settingsButton}>
-            <Ionicons name="settings-outline" size={22} color="#64748B" />
+            <Ionicons name="flame" size={22} color="#EF4444" />
             <View style={styles.badgeContainer}>
-              <Text style={styles.badgeText}>1</Text>
+              <Text style={styles.badgeText}>{streak}</Text>
             </View>
           </TouchableOpacity>
         </View>
