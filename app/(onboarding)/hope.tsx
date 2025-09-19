@@ -18,221 +18,99 @@ import { NextButton } from '../../components/Button';
 import { SPACING } from '@/constants/theme';
 import * as Haptics from 'expo-haptics';
 
-// Success and Victory Illustration Component
-const SuccessVictoryIllustration = () => (
+// Caring Hands with Heart Illustration
+const CaringHandsIllustration = () => (
   <Svg width="200" height="200" viewBox="0 0 200 200">
-    {/* Mountain peaks (representing achievement) */}
+    {/* Left hand */}
     <Path
-      d="M20 150 L60 80 L100 100 L140 60 L180 150 Z"
-      fill="rgba(255, 255, 255, 0.7)"
-      stroke="rgba(255, 255, 255, 0.9)"
+      d="M50 120 C45 115 45 110 50 105 C55 100 65 95 75 100 C80 95 85 95 90 100 C95 105 95 110 100 115 L100 140 C100 150 95 160 85 165 C75 170 65 165 55 160 C50 155 45 145 45 135 L45 125 C45 122 47 120 50 120 Z"
+      fill="rgba(255, 255, 255, 0.9)"
+      stroke="rgba(255, 255, 255, 0.7)"
+      strokeWidth="3"
+    />
+    
+    {/* Right hand */}
+    <Path
+      d="M150 120 C155 115 155 110 150 105 C145 100 135 95 125 100 C120 95 115 95 110 100 C105 105 105 110 100 115 L100 140 C100 150 105 160 115 165 C125 170 135 165 145 160 C150 155 155 145 155 135 L155 125 C155 122 153 120 150 120 Z"
+      fill="rgba(255, 255, 255, 0.9)"
+      stroke="rgba(255, 255, 255, 0.7)"
+      strokeWidth="3"
+    />
+    
+    {/* Heart in the center */}
+    <Path
+      d="M100 95 C95 85 85 80 80 85 C75 90 75 95 80 100 L100 120 L120 100 C125 95 125 90 120 85 C115 80 105 85 100 95 Z"
+      fill="rgba(239, 68, 68, 0.9)"
+      stroke="rgba(220, 38, 38, 0.8)"
       strokeWidth="2"
     />
     
-    {/* Person at the top of mountain with arms raised */}
-    <G>
-      {/* Head */}
-      <Circle
-        cx="140"
-        cy="65"
-        r="6"
-        fill="rgba(59, 130, 246, 1)"
-      />
-      
-      {/* Body */}
-      <Path
-        d="M136 71 L144 71 L144 85 L136 85 Z"
-        fill="rgba(59, 130, 246, 1)"
-      />
-      
-      {/* Arms raised in victory */}
-      <Path
-        d="M136 75 L125 65"
-        stroke="rgba(59, 130, 246, 1)"
-        strokeWidth="3"
-        strokeLinecap="round"
-      />
-      <Path
-        d="M144 75 L155 65"
-        stroke="rgba(59, 130, 246, 1)"
-        strokeWidth="3"
-        strokeLinecap="round"
-      />
-      
-      {/* Legs */}
-      <Path
-        d="M138 85 L135 95"
-        stroke="rgba(59, 130, 246, 1)"
-        strokeWidth="3"
-        strokeLinecap="round"
-      />
-      <Path
-        d="M142 85 L145 95"
-        stroke="rgba(59, 130, 246, 1)"
-        strokeWidth="3"
-        strokeLinecap="round"
-      />
-    </G>
-    
-    {/* Trophy on peak */}
-    <G>
-      {/* Trophy base */}
-      <Path
-        d="M130 95 L150 95 L148 105 L132 105 Z"
-        fill="rgba(251, 191, 36, 0.9)"
-        stroke="rgba(245, 158, 11, 1)"
-        strokeWidth="1"
-      />
-      
-      {/* Trophy cup */}
-      <Path
-        d="M132 85 L148 85 L148 95 L132 95 Z"
-        fill="rgba(251, 191, 36, 0.9)"
-        stroke="rgba(245, 158, 11, 1)"
-        strokeWidth="1"
-      />
-      
-      {/* Trophy handles */}
-      <Path
-        d="M148 87 C152 87 152 93 148 93"
-        stroke="rgba(245, 158, 11, 1)"
-        strokeWidth="2"
-        fill="none"
-      />
-      <Path
-        d="M132 87 C128 87 128 93 132 93"
-        stroke="rgba(245, 158, 11, 1)"
-        strokeWidth="2"
-        fill="none"
-      />
-    </G>
-    
-    {/* Victory stars around the scene */}
-    <G opacity="0.8">
-      <VictoryStar
-        cx={100}
-        cy={30}
-        r1={4}
-        r2={8}
-        fill="rgba(34, 211, 238, 0.8)"
-      />
-      <VictoryStar
-        cx={160}
-        cy={40}
-        r1={3}
-        r2={6}
-        fill="rgba(34, 211, 238, 0.7)"
-      />
-      <VictoryStar
-        cx={50}
-        cy={50}
-        r1={3}
-        r2={6}
-        fill="rgba(34, 211, 238, 0.7)"
-      />
-      <VictoryStar
-        cx={170}
-        cy={80}
-        r1={2}
-        r2={4}
-        fill="rgba(34, 211, 238, 0.6)"
-      />
-      <VictoryStar
-        cx={30}
-        cy={90}
-        r1={2}
-        r2={4}
-        fill="rgba(34, 211, 238, 0.6)"
-      />
-    </G>
-    
-    {/* Broken chains at the bottom (freedom from procrastination) */}
-    <G opacity="0.6">
-      {/* Left broken chain */}
-      <Circle
-        cx="70"
-        cy="170"
-        r="6"
-        fill="none"
-        stroke="rgba(156, 163, 175, 0.8)"
-        strokeWidth="3"
-        strokeDasharray="6,6"
-      />
-      <Circle
-        cx="85"
-        cy="175"
-        r="6"
-        fill="none"
-        stroke="rgba(156, 163, 175, 0.8)"
-        strokeWidth="3"
-        strokeDasharray="6,6"
-      />
-      
-      {/* Right broken chain */}
-      <Circle
-        cx="115"
-        cy="175"
-        r="6"
-        fill="none"
-        stroke="rgba(156, 163, 175, 0.8)"
-        strokeWidth="3"
-        strokeDasharray="6,6"
-      />
-      <Circle
-        cx="130"
-        cy="170"
-        r="6"
-        fill="none"
-        stroke="rgba(156, 163, 175, 0.8)"
-        strokeWidth="3"
-        strokeDasharray="6,6"
-      />
-    </G>
-    
-    {/* Rising sun/light behind mountains */}
-    <Circle
-      cx="100"
-      cy="120"
-      r="30"
-      fill="rgba(251, 191, 36, 0.3)"
-      opacity="0.7"
+    {/* Heart shine/highlight */}
+    <Path
+      d="M95 90 C92 88 90 88 88 90 C86 92 86 94 88 96 L95 103 L95 90 Z"
+      fill="rgba(252, 165, 165, 0.7)"
     />
     
-    {/* Light rays */}
-    <G opacity="0.4">
-      <Line x1="100" y1="90" x2="100" y2="70" stroke="rgba(251, 191, 36, 0.8)" strokeWidth="2" />
-      <Line x1="120" y1="100" x2="135" y2="85" stroke="rgba(251, 191, 36, 0.8)" strokeWidth="2" />
-      <Line x1="130" y1="120" x2="150" y2="120" stroke="rgba(251, 191, 36, 0.8)" strokeWidth="2" />
-      <Line x1="80" y1="100" x2="65" y2="85" stroke="rgba(251, 191, 36, 0.8)" strokeWidth="2" />
-      <Line x1="70" y1="120" x2="50" y2="120" stroke="rgba(251, 191, 36, 0.8)" strokeWidth="2" />
+    {/* Hand details - left thumb */}
+    <Path
+      d="M50 115 C45 115 40 120 40 125 C40 130 45 135 50 135 C55 135 60 130 60 125 C60 120 55 115 50 115 Z"
+      fill="rgba(240, 240, 240, 0.8)"
+      stroke="rgba(200, 200, 200, 0.6)"
+      strokeWidth="2"
+    />
+    
+    {/* Hand details - right thumb */}
+    <Path
+      d="M150 115 C155 115 160 120 160 125 C160 130 155 135 150 135 C145 135 140 130 140 125 C140 120 145 115 150 115 Z"
+      fill="rgba(240, 240, 240, 0.8)"
+      stroke="rgba(200, 200, 200, 0.6)"
+      strokeWidth="2"
+    />
+    
+    {/* Gentle glow around hands */}
+    <Circle
+      cx="100"
+      cy="130"
+      r="80"
+      fill="rgba(59, 130, 246, 0.1)"
+      opacity="0.6"
+    />
+    
+    {/* Small hearts floating around */}
+    <G opacity="0.5">
+      <Path
+        d="M150 70 C148 65 145 63 142 65 C139 67 139 70 142 73 L150 80 L158 73 C161 70 161 67 158 65 C155 63 152 65 150 70 Z"
+        fill="rgba(239, 68, 68, 0.6)"
+      />
+      
+      <Path
+        d="M60 75 C58 70 55 68 52 70 C49 72 49 75 52 78 L60 85 L68 78 C71 75 71 72 68 70 C65 68 62 70 60 75 Z"
+        fill="rgba(239, 68, 68, 0.6)"
+      />
+      
+      <Path
+        d="M170 140 C168 135 165 133 162 135 C159 137 159 140 162 143 L170 150 L178 143 C181 140 181 137 178 135 C175 133 172 135 170 140 Z"
+        fill="rgba(239, 68, 68, 0.6)"
+      />
+      
+      <Path
+        d="M30 150 C28 145 25 143 22 145 C19 147 19 150 22 153 L30 160 L38 153 C41 150 41 147 38 145 C35 143 32 145 30 150 Z"
+        fill="rgba(239, 68, 68, 0.6)"
+      />
     </G>
     
-    {/* Flag of victory */}
-    <G>
-      {/* Flag pole */}
-      <Line x1="165" y1="45" x2="165" y2="75" stroke="rgba(59, 130, 246, 1)" strokeWidth="2" />
-      {/* Flag */}
-      <Polygon
-        points="165,45 180,50 180,60 165,55"
-        fill="rgba(34, 211, 238, 0.8)"
-        stroke="rgba(6, 182, 212, 1)"
-        strokeWidth="1"
-      />
+    {/* Sparkles of hope */}
+    <G opacity="0.7">
+      <Circle cx="70" cy="50" r="2" fill="rgba(255, 255, 255, 0.8)" />
+      <Circle cx="130" cy="45" r="1.5" fill="rgba(255, 255, 255, 0.8)" />
+      <Circle cx="40" cy="80" r="2" fill="rgba(255, 255, 255, 0.8)" />
+      <Circle cx="160" cy="90" r="1.5" fill="rgba(255, 255, 255, 0.8)" />
+      <Circle cx="180" cy="120" r="2" fill="rgba(255, 255, 255, 0.8)" />
+      <Circle cx="20" cy="120" r="1.5" fill="rgba(255, 255, 255, 0.8)" />
     </G>
   </Svg>
 );
 
-const VictoryStar = ({ cx, cy, r1, r2, fill }: { cx: number; cy: number; r1: number; r2: number; fill: string }) => {
-  const points = [];
-  for (let i = 0; i < 10; i++) {
-    const angle = (i * Math.PI) / 5;
-    const radius = i % 2 === 0 ? r2 : r1;
-    const x = cx + radius * Math.cos(angle - Math.PI / 2);
-    const y = cy + radius * Math.sin(angle - Math.PI / 2);
-    points.push(`${x},${y}`);
-  }
-  return <Polygon points={points.join(' ')} fill={fill} />;
-};
 
 export default function HopeScreen() {
   const insets = useSafeAreaInsets();
@@ -310,7 +188,7 @@ export default function HopeScreen() {
           {/* Illustration space */}
           <AnimatedContent delay={100}>
             <View style={styles.illustrationContainer}>
-              <SuccessVictoryIllustration />
+              <CaringHandsIllustration />
             </View>
           </AnimatedContent>
 
