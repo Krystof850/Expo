@@ -193,9 +193,9 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   logoCircle: {
-    width: 140,
-    height: 140,
-    borderRadius: 70,
+    width: 350,
+    height: 350,
+    borderRadius: 175,
     backgroundColor: 'rgba(255, 255, 255, 0.1)',
     borderWidth: 2,
     borderColor: 'rgba(255, 255, 255, 0.3)',
@@ -208,8 +208,8 @@ const styles = StyleSheet.create({
     elevation: 8,
   },
   logoImage: {
-    width: 100,
-    height: 32,
+    width: 250,
+    height: 80,
   },
   textContainer: {
     alignItems: 'center',
