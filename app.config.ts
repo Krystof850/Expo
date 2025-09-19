@@ -68,7 +68,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     [
       '@react-native-google-signin/google-signin',
       {
-        iosUrlScheme: reversedIosClientId || 'com.googleusercontent.apps.576633089196-reversed',
+        iosUrlScheme: reversedIosClientId || 'com.googleusercontent.apps.576633089196-9ak18h5p9m2k8n2f3o7j8c1k4b0t6e5c',
       },
     ],
     [
