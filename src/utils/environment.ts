@@ -1,4 +1,4 @@
-import Constants, { ExecutionEnvironment } from 'expo-constants';
+import Constants from 'expo-constants';
 import { Platform } from 'react-native';
 
 export interface AppEnvironment {
@@ -12,10 +12,10 @@ export const detectAppEnvironment = (): AppEnvironment => {
   const env = Constants.executionEnvironment;
   
   return {
-    isExpoGo: env === ExecutionEnvironment.StoreClient,
-    isDevelopmentBuild: env === ExecutionEnvironment.Bare,
-    isProduction: env === ExecutionEnvironment.Standalone,
-    environment: env
+    isExpoGo: env === 'storeClient',
+    isDevelopmentBuild: env === 'bare',
+    isProduction: env === 'standalone',
+    environment: env || 'unknown'
   };
 };
 
