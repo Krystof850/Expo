@@ -18,90 +18,47 @@ import { NextButton } from '../../components/Button';
 import { SPACING } from '@/constants/theme';
 import * as Haptics from 'expo-haptics';
 
-// Task Breakdown Illustration Component
-const TaskBreakdownIllustration = () => (
+// Simple Checklist Illustration Component
+const SimpleChecklistIllustration = () => (
   <Svg width="200" height="200" viewBox="0 0 200 200">
-    {/* Large overwhelming task (breaking apart) */}
-    <G opacity="0.5">
-      <Rect x="60" y="30" width="80" height="50" rx="5" fill="rgba(239, 68, 68, 0.4)" stroke="rgba(220, 38, 38, 0.6)" strokeWidth="2" strokeDasharray="4,4" />
+    {/* Checklist background */}
+    <Rect x="50" y="40" width="100" height="130" rx="8" fill="rgba(255, 255, 255, 0.9)" stroke="rgba(59, 130, 246, 0.3)" strokeWidth="2" />
+    
+    {/* Checklist title line */}
+    <Rect x="60" y="55" width="50" height="4" rx="2" fill="rgba(59, 130, 246, 0.6)" />
+    
+    {/* Checklist items */}
+    <G>
+      {/* Item 1 - Completed */}
+      <Rect x="60" y="75" width="12" height="12" rx="2" fill="rgba(34, 197, 94, 0.2)" stroke="rgba(34, 197, 94, 1)" strokeWidth="1" />
+      <Path d="M63 81 L66 84 L72 78" stroke="rgba(34, 197, 94, 1)" strokeWidth="2" fill="none" strokeLinecap="round" />
+      <Rect x="80" y="79" width="55" height="3" rx="1" fill="rgba(156, 163, 175, 0.6)" />
+      
+      {/* Item 2 - Completed */}
+      <Rect x="60" y="95" width="12" height="12" rx="2" fill="rgba(34, 197, 94, 0.2)" stroke="rgba(34, 197, 94, 1)" strokeWidth="1" />
+      <Path d="M63 101 L66 104 L72 98" stroke="rgba(34, 197, 94, 1)" strokeWidth="2" fill="none" strokeLinecap="round" />
+      <Rect x="80" y="99" width="45" height="3" rx="1" fill="rgba(156, 163, 175, 0.6)" />
+      
+      {/* Item 3 - Completed */}
+      <Rect x="60" y="115" width="12" height="12" rx="2" fill="rgba(34, 197, 94, 0.2)" stroke="rgba(34, 197, 94, 1)" strokeWidth="1" />
+      <Path d="M63 121 L66 124 L72 118" stroke="rgba(34, 197, 94, 1)" strokeWidth="2" fill="none" strokeLinecap="round" />
+      <Rect x="80" y="119" width="40" height="3" rx="1" fill="rgba(156, 163, 175, 0.6)" />
+      
+      {/* Item 4 - Current */}
+      <Rect x="60" y="135" width="12" height="12" rx="2" fill="rgba(251, 191, 36, 0.2)" stroke="rgba(251, 191, 36, 1)" strokeWidth="2" />
+      <Circle cx="66" cy="141" r="2" fill="rgba(251, 191, 36, 1)" />
+      <Rect x="80" y="139" width="50" height="3" rx="1" fill="rgba(156, 163, 175, 0.6)" />
+      
+      {/* Item 5 - Pending */}
+      <Rect x="60" y="155" width="12" height="12" rx="2" fill="rgba(255, 255, 255, 0.8)" stroke="rgba(156, 163, 175, 0.5)" strokeWidth="1" />
+      <Rect x="80" y="159" width="35" height="3" rx="1" fill="rgba(156, 163, 175, 0.4)" />
     </G>
     
-    {/* Breakdown arrow */}
+    {/* Progress indicator */}
     <G opacity="0.8">
-      <Line x1="100" y1="85" x2="100" y2="110" stroke="rgba(34, 211, 238, 1)" strokeWidth="3" />
-      <Path d="M95 105 L100 110 L105 105" stroke="rgba(34, 211, 238, 1)" strokeWidth="3" fill="none" strokeLinecap="round" />
-    </G>
-    
-    {/* Small manageable steps */}
-    <G opacity="0.9">
-      {/* Step 1 */}
-      <Rect x="30" y="120" width="35" height="20" rx="3" fill="rgba(34, 197, 94, 0.8)" stroke="rgba(22, 163, 74, 1)" strokeWidth="1" />
-      
-      {/* Step 2 */}
-      <Rect x="82" y="120" width="35" height="20" rx="3" fill="rgba(34, 197, 94, 0.8)" stroke="rgba(22, 163, 74, 1)" strokeWidth="1" />
-      
-      {/* Step 3 */}
-      <Rect x="135" y="120" width="35" height="20" rx="3" fill="rgba(34, 197, 94, 0.8)" stroke="rgba(22, 163, 74, 1)" strokeWidth="1" />
-    </G>
-    
-    {/* Progress indicators */}
-    <G opacity="0.8">
-      {/* Checkmarks for completed steps */}
-      <Path d="M35 155 L40 160 L50 150" stroke="rgba(34, 197, 94, 1)" strokeWidth="2" fill="none" strokeLinecap="round" />
-      <Path d="M87 155 L92 160 L102 150" stroke="rgba(34, 197, 94, 1)" strokeWidth="2" fill="none" strokeLinecap="round" />
-      
-      {/* Current step indicator */}
-      <Circle cx="152" cy="155" r="4" fill="rgba(251, 191, 36, 1)" />
-      <Circle cx="152" cy="155" r="6" fill="none" stroke="rgba(251, 191, 36, 0.6)" strokeWidth="2" />
-    </G>
-    
-    {/* Time saved visualization */}
-    <G opacity="0.7">
-      {/* Clock showing less time */}
-      <Circle cx="50" cy="180" r="12" fill="none" stroke="rgba(34, 211, 238, 0.8)" strokeWidth="2" />
-      <Line x1="50" y1="180" x2="50" y2="172" stroke="rgba(34, 211, 238, 1)" strokeWidth="2" />
-      <Line x1="50" y1="180" x2="56" y2="180" stroke="rgba(34, 211, 238, 1)" strokeWidth="1" />
-      
-      {/* Progress meter */}
-      <Rect x="120" y="170" width="60" height="8" rx="4" fill="rgba(59, 130, 246, 0.3)" stroke="rgba(59, 130, 246, 0.6)" strokeWidth="1" />
-      <Rect x="120" y="170" width="40" height="8" rx="4" fill="rgba(34, 197, 94, 0.8)" />
-    </G>
-    
-    {/* Distraction barriers */}
-    <G opacity="0.6">
-      {/* Shield protecting the process */}
-      <Path
-        d="M20 100 Q20 90 30 90 L40 90 Q50 90 50 100 L50 115 Q50 125 40 125 L30 125 Q20 125 20 115 Z"
-        fill="rgba(59, 130, 246, 0.2)"
-        stroke="rgba(59, 130, 246, 0.6)"
-        strokeWidth="2"
-      />
-      <Path
-        d="M170 100 Q170 90 180 90 L190 90 Q200 90 200 100 L200 115 Q200 125 190 125 L180 125 Q170 125 170 115 Z"
-        fill="rgba(59, 130, 246, 0.2)"
-        stroke="rgba(59, 130, 246, 0.6)"
-        strokeWidth="2"
-      />
-    </G>
-    
-    {/* Connection lines between steps */}
-    <G opacity="0.5">
-      <Line x1="65" y1="130" x2="82" y2="130" stroke="rgba(34, 211, 238, 0.6)" strokeWidth="1" strokeDasharray="2,2" />
-      <Line x1="117" y1="130" x2="135" y2="130" stroke="rgba(34, 211, 238, 0.6)" strokeWidth="1" strokeDasharray="2,2" />
-    </G>
-    
-    {/* Focus beam */}
-    <G opacity="0.4">
-      <Path
-        d="M100 85 L95 120 L105 120 Z"
-        fill="rgba(251, 191, 36, 0.3)"
-      />
-    </G>
-    
-    {/* Productivity arrows */}
-    <G opacity="0.6">
-      <Path d="M25 110 L15 105 L25 100" stroke="rgba(34, 197, 94, 0.8)" strokeWidth="2" fill="none" />
-      <Path d="M175 110 L185 105 L175 100" stroke="rgba(34, 197, 94, 0.8)" strokeWidth="2" fill="none" />
+      <Circle cx="100" cy="25" r="15" fill="none" stroke="rgba(34, 197, 94, 0.3)" strokeWidth="3" />
+      <Path d="M85 25 A15 15 0 0 1 115 25" stroke="rgba(34, 197, 94, 1)" strokeWidth="3" fill="none" strokeLinecap="round" />
+      <Text x="100" y="30" fontSize="10" fill="rgba(34, 197, 94, 1)" textAnchor="middle" fontWeight="bold">60%</Text>
     </G>
   </Svg>
 );
@@ -182,7 +139,7 @@ export default function BeatScreen() {
           {/* Illustration space */}
           <AnimatedContent delay={100}>
             <View style={styles.illustrationContainer}>
-              <TaskBreakdownIllustration />
+              <SimpleChecklistIllustration />
             </View>
           </AnimatedContent>
 

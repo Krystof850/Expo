@@ -19,136 +19,58 @@ import { SPACING } from '@/constants/theme';
 import { Asset } from 'expo-asset';
 import * as Haptics from 'expo-haptics';
 
-// Life Transformation Illustration Component
-const LifeTransformationIllustration = () => (
+// Celebrating Person with Crown Illustration
+const CelebratingPersonIllustration = () => (
   <Svg width="200" height="200" viewBox="0 0 200 200">
-    {/* Transformation steps/levels */}
-    <G opacity="0.9">
-      {/* Level 1 - Starting point */}
-      <Rect x="20" y="160" width="30" height="20" fill="rgba(239, 68, 68, 0.3)" stroke="rgba(220, 38, 38, 0.6)" strokeWidth="1" />
-      <Text x="35" y="172" fontSize="8" fill="rgba(220, 38, 38, 0.8)" textAnchor="middle" fontWeight="bold">Level 1</Text>
-      
-      {/* Level 2 - Improvement */}
-      <Rect x="60" y="140" width="30" height="40" fill="rgba(251, 191, 36, 0.6)" stroke="rgba(245, 158, 11, 0.8)" strokeWidth="1" />
-      <Text x="75" y="162" fontSize="8" fill="rgba(245, 158, 11, 1)" textAnchor="middle" fontWeight="bold">Level 2</Text>
-      
-      {/* Level 3 - Success */}
-      <Rect x="100" y="120" width="30" height="60" fill="rgba(34, 197, 94, 0.7)" stroke="rgba(22, 163, 74, 1)" strokeWidth="1" />
-      <Text x="115" y="152" fontSize="8" fill="rgba(22, 163, 74, 1)" textAnchor="middle" fontWeight="bold">Level 3</Text>
-      
-      {/* Level 4 - Mastery */}
-      <Rect x="140" y="100" width="30" height="80" fill="rgba(34, 211, 238, 0.8)" stroke="rgba(6, 182, 212, 1)" strokeWidth="2" />
-      <Text x="155" y="142" fontSize="8" fill="rgba(6, 182, 212, 1)" textAnchor="middle" fontWeight="bold">Level 4</Text>
-    </G>
-    
-    {/* Person ascending the levels */}
+    {/* Golden crown */}
     <G>
-      {/* Person at current level */}
-      <Circle cx="155" cy="95" r="4" fill="rgba(59, 130, 246, 1)" />
-      <Path d="M152 99 L158 99 L158 110 L152 110 Z" fill="rgba(59, 130, 246, 1)" />
-      {/* Arms raised in victory */}
-      <Path d="M152 102 L147 97" stroke="rgba(59, 130, 246, 1)" strokeWidth="2" strokeLinecap="round" />
-      <Path d="M158 102 L163 97" stroke="rgba(59, 130, 246, 1)" strokeWidth="2" strokeLinecap="round" />
-      {/* Legs */}
-      <Path d="M154 110 L152 118" stroke="rgba(59, 130, 246, 1)" strokeWidth="2" strokeLinecap="round" />
-      <Path d="M156 110 L158 118" stroke="rgba(59, 130, 246, 1)" strokeWidth="2" strokeLinecap="round" />
-    </G>
-    
-    {/* Energy aura around the person */}
-    <G opacity="0.6">
-      <Circle cx="155" cy="100" r="12" fill="none" stroke="rgba(251, 191, 36, 0.6)" strokeWidth="1" strokeDasharray="2,2" />
-      <Circle cx="155" cy="100" r="18" fill="none" stroke="rgba(251, 191, 36, 0.4)" strokeWidth="1" strokeDasharray="2,2" />
-    </G>
-    
-    {/* Mind transformation */}
-    <G opacity="0.8">
-      {/* Brain icon showing transformation */}
       <Path
-        d="M140 60C145 60 150 55 155 55C160 55 165 60 170 60C170 65 165 70 160 70L140 70C135 70 130 65 130 60C130 55 135 50 140 50C140 55 140 60 140 60Z"
-        fill="rgba(34, 211, 238, 0.3)"
-        stroke="rgba(34, 211, 238, 0.8)"
-        strokeWidth="2"
-      />
-      
-      {/* Neural connections */}
-      <Circle cx="145" cy="60" r="2" fill="rgba(251, 191, 36, 1)" />
-      <Circle cx="155" cy="62" r="2" fill="rgba(251, 191, 36, 1)" />
-      <Circle cx="165" cy="58" r="2" fill="rgba(251, 191, 36, 1)" />
-      
-      <Text x="155" y="80" fontSize="8" fill="rgba(34, 211, 238, 1)" textAnchor="middle" fontWeight="bold">Unstoppable Mind</Text>
-    </G>
-    
-    {/* Achievement crown */}
-    <G opacity="0.9">
-      <Path
-        d="M148 85 L152 75 L155 85 L158 75 L162 85 L160 88 L150 88 Z"
-        fill="rgba(251, 191, 36, 0.8)"
+        d="M85 70 L90 55 L95 70 L100 55 L105 70 L110 55 L115 70 L118 75 L82 75 Z"
+        fill="rgba(251, 191, 36, 0.9)"
         stroke="rgba(245, 158, 11, 1)"
-        strokeWidth="1"
-      />
-      <Circle cx="155" cy="82" r="2" fill="rgba(245, 158, 11, 1)" />
-    </G>
-    
-    {/* Transformation effects */}
-    <G opacity="0.5">
-      {/* Sparkles of transformation */}
-      <Path d="M30 80 L32 85 L37 85 L33 88 L35 93 L30 90 L25 93 L27 88 L23 85 L28 85 Z" fill="rgba(251, 191, 36, 0.6)" />
-      <Path d="M180 70 L182 75 L187 75 L183 78 L185 83 L180 80 L175 83 L177 78 L173 75 L178 75 Z" fill="rgba(34, 211, 238, 0.6)" />
-      <Path d="M40 50 L42 55 L47 55 L43 58 L45 63 L40 60 L35 63 L37 58 L33 55 L38 55 Z" fill="rgba(34, 197, 94, 0.6)" />
-    </G>
-    
-    {/* Progress arrows */}
-    <G opacity="0.7">
-      <Path d="M50 150 L60 145 L50 140" stroke="rgba(34, 211, 238, 0.8)" strokeWidth="2" fill="none" />
-      <Path d="M90 130 L100 125 L90 120" stroke="rgba(34, 211, 238, 0.8)" strokeWidth="2" fill="none" />
-      <Path d="M130 110 L140 105 L130 100" stroke="rgba(34, 211, 238, 0.8)" strokeWidth="2" fill="none" />
-    </G>
-    
-    {/* Life areas improving */}
-    <G opacity="0.7">
-      {/* Career */}
-      <Rect x="180" y="120" width="15" height="20" fill="rgba(34, 197, 94, 0.6)" />
-      <Text x="187" y="130" fontSize="6" fill="rgba(22, 163, 74, 1)" textAnchor="middle" fontWeight="bold">Career</Text>
-      <Text x="187" y="138" fontSize="5" fill="rgba(22, 163, 74, 0.8)" textAnchor="middle">↗</Text>
-      
-      {/* Health */}
-      <Rect x="180" y="95" width="15" height="20" fill="rgba(34, 197, 94, 0.6)" />
-      <Text x="187" y="105" fontSize="6" fill="rgba(22, 163, 74, 1)" textAnchor="middle" fontWeight="bold">Health</Text>
-      <Text x="187" y="113" fontSize="5" fill="rgba(22, 163, 74, 0.8)" textAnchor="middle">↗</Text>
-      
-      {/* Relationships */}
-      <Rect x="180" y="70" width="15" height="20" fill="rgba(34, 197, 94, 0.6)" />
-      <Text x="187" y="78" fontSize="5" fill="rgba(22, 163, 74, 1)" textAnchor="middle" fontWeight="bold">Relations</Text>
-      <Text x="187" y="88" fontSize="5" fill="rgba(22, 163, 74, 0.8)" textAnchor="middle">↗</Text>
-    </G>
-    
-    {/* Motivation waves */}
-    <G opacity="0.4">
-      <Path
-        d="M20 100 Q50 90 80 100 Q110 110 140 100 Q170 90 200 100"
-        stroke="rgba(34, 211, 238, 0.6)"
         strokeWidth="2"
-        fill="none"
       />
-      <Path
-        d="M20 110 Q50 100 80 110 Q110 120 140 110 Q170 100 200 110"
-        stroke="rgba(34, 211, 238, 0.4)"
-        strokeWidth="1"
-        fill="none"
-      />
+      {/* Crown jewels */}
+      <Circle cx="90" cy="65" r="2" fill="rgba(34, 211, 238, 1)" />
+      <Circle cx="100" cy="60" r="2" fill="rgba(220, 38, 38, 1)" />
+      <Circle cx="110" cy="65" r="2" fill="rgba(34, 197, 94, 1)" />
     </G>
     
-    {/* Success metrics */}
-    <G opacity="0.6">
-      {/* Confidence meter */}
-      <Rect x="10" y="30" width="40" height="8" rx="4" fill="rgba(59, 130, 246, 0.2)" stroke="rgba(59, 130, 246, 0.5)" strokeWidth="1" />
-      <Rect x="10" y="30" width="35" height="8" rx="4" fill="rgba(34, 197, 94, 0.8)" />
-      <Text x="30" y="25" fontSize="8" fill="rgba(34, 197, 94, 1)" textAnchor="middle">Confidence</Text>
-      
-      {/* Productivity meter */}
-      <Rect x="10" y="50" width="40" height="8" rx="4" fill="rgba(59, 130, 246, 0.2)" stroke="rgba(59, 130, 246, 0.5)" strokeWidth="1" />
-      <Rect x="10" y="50" width="38" height="8" rx="4" fill="rgba(34, 211, 238, 0.8)" />
-      <Text x="30" y="45" fontSize="8" fill="rgba(34, 211, 238, 1)" textAnchor="middle">Productivity</Text>
+    {/* Person's head */}
+    <Circle cx="100" cy="85" r="12" fill="rgba(255, 255, 255, 0.9)" stroke="rgba(59, 130, 246, 0.5)" strokeWidth="1" />
+    
+    {/* Person's body */}
+    <Rect x="93" y="95" width="14" height="25" rx="3" fill="rgba(59, 130, 246, 1)" />
+    
+    {/* Arms raised high above head */}
+    <G>
+      {/* Left arm raised */}
+      <Path d="M93 100 L80 85 L75 80" stroke="rgba(59, 130, 246, 1)" strokeWidth="4" strokeLinecap="round" />
+      {/* Right arm raised */}
+      <Path d="M107 100 L120 85 L125 80" stroke="rgba(59, 130, 246, 1)" strokeWidth="4" strokeLinecap="round" />
+    </G>
+    
+    {/* Legs in excited stance */}
+    <G>
+      {/* Left leg */}
+      <Path d="M96 120 L90 135 L85 140" stroke="rgba(59, 130, 246, 1)" strokeWidth="4" strokeLinecap="round" />
+      {/* Right leg */}
+      <Path d="M104 120 L110 135 L115 140" stroke="rgba(59, 130, 246, 1)" strokeWidth="4" strokeLinecap="round" />
+    </G>
+    
+    {/* Celebration sparkles */}
+    <G opacity="0.8">
+      <Path d="M65 60 L70 65 L65 70 L60 65 Z" fill="rgba(251, 191, 36, 1)" />
+      <Path d="M135 55 L140 60 L135 65 L130 60 Z" fill="rgba(251, 191, 36, 1)" />
+      <Path d="M50 90 L55 95 L50 100 L45 95 Z" fill="rgba(34, 211, 238, 1)" />
+      <Path d="M150 85 L155 90 L150 95 L145 90 Z" fill="rgba(34, 211, 238, 1)" />
+      <Path d="M70 120 L75 125 L70 130 L65 125 Z" fill="rgba(34, 197, 94, 1)" />
+      <Path d="M130 115 L135 120 L130 125 L125 120 Z" fill="rgba(34, 197, 94, 1)" />
+    </G>
+    
+    {/* Victory glow around person */}
+    <G opacity="0.4">
+      <Circle cx="100" cy="110" r="35" fill="none" stroke="rgba(251, 191, 36, 0.6)" strokeWidth="2" strokeDasharray="4,4" />
     </G>
   </Svg>
 );
@@ -238,7 +160,7 @@ export default function LevelScreen() {
           {/* Illustration space */}
           <AnimatedContent delay={100}>
             <View style={styles.illustrationContainer}>
-              <LifeTransformationIllustration />
+              <CelebratingPersonIllustration />
             </View>
           </AnimatedContent>
 

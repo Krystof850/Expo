@@ -18,132 +18,35 @@ import { NextButton } from '../../components/Button';
 import { SPACING } from '@/constants/theme';
 import * as Haptics from 'expo-haptics';
 
-// Progress Tracking Illustration Component
-const ProgressTrackingIllustration = () => (
+// Simple Minimalistic Progress Graph
+const SimpleProgressGraph = () => (
   <Svg width="200" height="200" viewBox="0 0 200 200">
-    {/* Progress chart background */}
-    <Rect x="30" y="40" width="140" height="100" rx="5" fill="rgba(59, 130, 246, 0.1)" stroke="rgba(59, 130, 246, 0.3)" strokeWidth="1" />
+    {/* Clean progress line */}
+    <Path 
+      d="M40 160 L70 130 L100 100 L130 70 L160 40" 
+      stroke="rgba(34, 211, 238, 1)" 
+      strokeWidth="4" 
+      fill="none" 
+      strokeLinecap="round"
+    />
     
-    {/* Chart grid lines */}
-    <G opacity="0.3">
-      <Line x1="30" y1="60" x2="170" y2="60" stroke="rgba(59, 130, 246, 0.5)" strokeWidth="0.5" />
-      <Line x1="30" y1="80" x2="170" y2="80" stroke="rgba(59, 130, 246, 0.5)" strokeWidth="0.5" />
-      <Line x1="30" y1="100" x2="170" y2="100" stroke="rgba(59, 130, 246, 0.5)" strokeWidth="0.5" />
-      <Line x1="30" y1="120" x2="170" y2="120" stroke="rgba(59, 130, 246, 0.5)" strokeWidth="0.5" />
-      
-      <Line x1="50" y1="40" x2="50" y2="140" stroke="rgba(59, 130, 246, 0.5)" strokeWidth="0.5" />
-      <Line x1="90" y1="40" x2="90" y2="140" stroke="rgba(59, 130, 246, 0.5)" strokeWidth="0.5" />
-      <Line x1="130" y1="40" x2="130" y2="140" stroke="rgba(59, 130, 246, 0.5)" strokeWidth="0.5" />
+    {/* Simple data points */}
+    <G>
+      <Circle cx="40" cy="160" r="6" fill="rgba(59, 130, 246, 1)" />
+      <Circle cx="70" cy="130" r="6" fill="rgba(34, 197, 94, 1)" />
+      <Circle cx="100" cy="100" r="6" fill="rgba(34, 197, 94, 1)" />
+      <Circle cx="130" cy="70" r="6" fill="rgba(34, 197, 94, 1)" />
+      <Circle cx="160" cy="40" r="6" fill="rgba(251, 191, 36, 1)" />
     </G>
     
-    {/* Progress bars showing growth */}
-    <G opacity="0.9">
-      {/* Week 1 */}
-      <Rect x="45" y="120" width="10" height="20" fill="rgba(34, 197, 94, 0.8)" />
-      <SvgText x="50" y="155" fontSize="8" fill="rgba(59, 130, 246, 0.8)" textAnchor="middle">W1</SvgText>
-      
-      {/* Week 2 */}
-      <Rect x="85" y="100" width="10" height="40" fill="rgba(34, 197, 94, 0.8)" />
-      <SvgText x="90" y="155" fontSize="8" fill="rgba(59, 130, 246, 0.8)" textAnchor="middle">W2</SvgText>
-      
-      {/* Week 3 */}
-      <Rect x="125" y="80" width="10" height="60" fill="rgba(34, 197, 94, 0.8)" />
-      <SvgText x="130" y="155" fontSize="8" fill="rgba(59, 130, 246, 0.8)" textAnchor="middle">W3</SvgText>
-      
-      {/* Week 4 */}
-      <Rect x="155" y="60" width="10" height="80" fill="rgba(34, 211, 238, 1)" />
-      <SvgText x="160" y="155" fontSize="8" fill="rgba(59, 130, 246, 0.8)" textAnchor="middle">W4</SvgText>
-    </G>
-    
-    {/* Streak counter */}
-    <G opacity="0.9">
-      <Rect x="20" y="20" width="60" height="15" rx="7" fill="rgba(251, 191, 36, 0.2)" stroke="rgba(251, 191, 36, 0.8)" strokeWidth="1" />
-      <SvgText x="50" y="30" fontSize="10" fill="rgba(251, 191, 36, 1)" textAnchor="middle" fontWeight="bold">🔥 28 Days</SvgText>
-    </G>
-    
-    {/* Completed tasks visualization */}
+    {/* Simple upward arrow */}
     <G opacity="0.8">
-      {/* Task checkmarks */}
-      <Circle cx="190" cy="50" r="8" fill="rgba(34, 197, 94, 0.2)" stroke="rgba(34, 197, 94, 1)" strokeWidth="2" />
-      <Path d="M186 50 L189 53 L194 47" stroke="rgba(34, 197, 94, 1)" strokeWidth="2" fill="none" strokeLinecap="round" />
-      
-      <Circle cx="190" cy="70" r="8" fill="rgba(34, 197, 94, 0.2)" stroke="rgba(34, 197, 94, 1)" strokeWidth="2" />
-      <Path d="M186 70 L189 73 L194 67" stroke="rgba(34, 197, 94, 1)" strokeWidth="2" fill="none" strokeLinecap="round" />
-      
-      <Circle cx="190" cy="90" r="8" fill="rgba(34, 197, 94, 0.2)" stroke="rgba(34, 197, 94, 1)" strokeWidth="2" />
-      <Path d="M186 90 L189 93 L194 87" stroke="rgba(34, 197, 94, 1)" strokeWidth="2" fill="none" strokeLinecap="round" />
-      
-      {/* Current task */}
-      <Circle cx="190" cy="110" r="8" fill="rgba(251, 191, 36, 0.2)" stroke="rgba(251, 191, 36, 1)" strokeWidth="2" />
-      <Circle cx="190" cy="110" r="3" fill="rgba(251, 191, 36, 1)" />
+      <Path d="M155 45 L160 35 L165 45" stroke="rgba(251, 191, 36, 1)" strokeWidth="3" fill="none" strokeLinecap="round" />
     </G>
     
-    {/* Habit formation visualization */}
-    <G opacity="0.7">
-      {/* Chain links representing habit */}
-      <Circle cx="30" cy="170" r="6" fill="none" stroke="rgba(34, 211, 238, 0.8)" strokeWidth="3" />
-      <Circle cx="45" cy="170" r="6" fill="none" stroke="rgba(34, 211, 238, 0.8)" strokeWidth="3" />
-      <Circle cx="60" cy="170" r="6" fill="none" stroke="rgba(34, 211, 238, 0.8)" strokeWidth="3" />
-      <Circle cx="75" cy="170" r="6" fill="none" stroke="rgba(34, 211, 238, 0.8)" strokeWidth="3" />
-      <Circle cx="90" cy="170" r="6" fill="none" stroke="rgba(34, 211, 238, 0.8)" strokeWidth="3" />
-      
-      <SvgText x="60" y="190" fontSize="8" fill="rgba(34, 211, 238, 1)" textAnchor="middle">Lifelong Habits</SvgText>
-    </G>
-    
-    {/* Achievement badges */}
-    <G opacity="0.8">
-      {/* First badge - 7 days */}
-      <Polygon
-        points="15,60 20,55 25,60 25,70 20,75 15,70"
-        fill="rgba(34, 197, 94, 0.8)"
-        stroke="rgba(22, 163, 74, 1)"
-        strokeWidth="1"
-      />
-      <SvgText x="20" y="65" fontSize="6" fill="rgba(255, 255, 255, 1)" textAnchor="middle" fontWeight="bold">7</SvgText>
-      
-      {/* Second badge - 14 days */}
-      <Polygon
-        points="15,85 20,80 25,85 25,95 20,100 15,95"
-        fill="rgba(251, 191, 36, 0.8)"
-        stroke="rgba(245, 158, 11, 1)"
-        strokeWidth="1"
-      />
-      <SvgText x="20" y="90" fontSize="6" fill="rgba(255, 255, 255, 1)" textAnchor="middle" fontWeight="bold">14</SvgText>
-      
-      {/* Third badge - 21 days */}
-      <Polygon
-        points="15,110 20,105 25,110 25,120 20,125 15,120"
-        fill="rgba(168, 85, 247, 0.8)"
-        stroke="rgba(147, 51, 234, 1)"
-        strokeWidth="1"
-      />
-      <SvgText x="20" y="115" fontSize="6" fill="rgba(255, 255, 255, 1)" textAnchor="middle" fontWeight="bold">21</SvgText>
-    </G>
-    
-    {/* Progress trend line */}
-    <G opacity="0.8">
-      <Path
-        d="M50 125 Q70 115 90 105 Q110 85 130 75 Q140 65 160 65"
-        stroke="rgba(34, 211, 238, 1)"
-        strokeWidth="3"
-        fill="none"
-        strokeLinecap="round"
-      />
-      
-      {/* Data points */}
-      <Circle cx="50" cy="125" r="2" fill="rgba(34, 211, 238, 1)" />
-      <Circle cx="90" cy="105" r="2" fill="rgba(34, 211, 238, 1)" />
-      <Circle cx="130" cy="75" r="2" fill="rgba(34, 211, 238, 1)" />
-      <Circle cx="160" cy="65" r="2" fill="rgba(34, 211, 238, 1)" />
-    </G>
-    
-    {/* Victory celebration elements */}
+    {/* Minimal progress text */}
     <G opacity="0.6">
-      {/* Confetti */}
-      <Rect x="100" y="25" width="3" height="3" fill="rgba(251, 191, 36, 0.8)" transform="rotate(45 101.5 26.5)" />
-      <Rect x="120" y="30" width="3" height="3" fill="rgba(34, 197, 94, 0.8)" transform="rotate(45 121.5 31.5)" />
-      <Rect x="140" y="28" width="3" height="3" fill="rgba(239, 68, 68, 0.8)" transform="rotate(45 141.5 29.5)" />
-      <Rect x="110" y="35" width="3" height="3" fill="rgba(34, 211, 238, 0.8)" transform="rotate(45 111.5 36.5)" />
+      <SvgText x="100" y="185" fontSize="12" fill="rgba(255, 255, 255, 0.8)" textAnchor="middle">Progress</SvgText>
     </G>
   </Svg>
 );
@@ -224,7 +127,7 @@ export default function TrackScreen() {
           {/* Illustration space */}
           <AnimatedContent delay={100}>
             <View style={styles.illustrationContainer}>
-              <ProgressTrackingIllustration />
+              <SimpleProgressGraph />
             </View>
           </AnimatedContent>
 
