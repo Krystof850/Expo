@@ -23,7 +23,7 @@ export default function Index() {
 
   const handleStartQuiz = async () => {
     await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    router.push('/(onboarding)/question1');
+    router.push('/(onboarding)/welcome-new');
   };
 
   const handleSkipToLogin = async () => {

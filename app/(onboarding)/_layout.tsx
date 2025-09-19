@@ -161,6 +161,7 @@ export default function OnboardingLayout() {
           detachPreviousScreen: true,
         }}
       >
+        <Stack.Screen name="welcome-new" />
         <Stack.Screen name="question1" />
         <Stack.Screen name="question2" />
         <Stack.Screen name="question3" />
