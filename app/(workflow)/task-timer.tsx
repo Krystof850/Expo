@@ -26,9 +26,11 @@ export default function TaskTimer() {
   
   // Timer state (3 minutes = 180 seconds)
   const [timeLeft, setTimeLeft] = useState(180);
-  const [isTimerRunning, setIsTimerRunning] = useState(true);
+  const [isTimerRunning, setIsTimerRunning] = useState(false); // Start timer only after task is shown
   const [microTask, setMicroTask] = useState('');
   const [isGeneratingTask, setIsGeneratingTask] = useState(true);
+  const [isTyping, setIsTyping] = useState(false);
+  const [displayedText, setDisplayedText] = useState('');
 
   // Animation values
   const timerProgress = useSharedValue(1);
@@ -65,22 +67,62 @@ export default function TaskTimer() {
     try {
       setIsGeneratingTask(true);
       const aiTask = await generateMicroTask(procrastination);
-      setMicroTask(aiTask);
+      
+      // Guard against empty or whitespace-only tasks
+      const finalTask = aiTask && aiTask.trim() 
+        ? aiTask 
+        : "Take 3 deep breaths and prepare your workspace";
+      
+      setMicroTask(finalTask);
       
       // Track temptation generation for time of day statistics
       if (user?.uid) {
         await ProgressService.trackTemptationGenerated(user.uid);
       }
+      
+      // Start typing animation
+      setIsGeneratingTask(false);
+      setIsTyping(true);
     } catch (error) {
       console.error('Failed to generate AI task:', error);
-      // Fallback is handled in the generateMicroTask function
-    } finally {
+      // Set fallback task before starting typing
+      const fallbackTask = "Take 3 deep breaths and prepare your workspace";
+      setMicroTask(fallbackTask);
       setIsGeneratingTask(false);
+      setIsTyping(true);
     }
   };
 
+  // Custom typewriter effect
+  useEffect(() => {
+    if (!isTyping || !microTask) return;
+
+    setDisplayedText('');
+    let index = 0;
+    
+    const typeInterval = setInterval(() => {
+      if (index < microTask.length) {
+        setDisplayedText(microTask.slice(0, index + 1));
+        index++;
+      } else {
+        // Typing completed - start the timer
+        setIsTyping(false);
+        setIsTimerRunning(true);
+        clearInterval(typeInterval);
+      }
+    }, 50); // 50ms per character for smooth typing
+
+    return () => clearInterval(typeInterval);
+  }, [isTyping, microTask]);
+
   const handleBack = async () => {
     await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    
+    if (isGeneratingTask || isTyping) {
+      // Allow immediate back during generation/typing
+      router.back();
+      return;
+    }
     
     Alert.alert(
       'Stop Timer?',
@@ -195,6 +237,13 @@ export default function TaskTimer() {
           {isGeneratingTask ? (
             <View style={styles.generatingContainer}>
               <Text style={styles.generatingText}>Generating your micro-task...</Text>
+            </View>
+          ) : isTyping ? (
+            <View style={styles.taskContainer}>
+              <Text style={styles.taskTitle}>
+                {displayedText}
+                <Text style={styles.cursor}>|</Text>
+              </Text>
             </View>
           ) : (
             <Text style={styles.taskTitle}>{microTask}</Text>
@@ -320,6 +369,17 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: '#0C4A6E',
     textAlign: 'center',
+  },
+  taskContainer: {
+    minHeight: 60, // Ensure consistent height during typing
+    justifyContent: 'center',
+    alignItems: 'center',
+    maxWidth: 320,
+  },
+  cursor: {
+    opacity: 1,
+    color: '#082F49',
+    fontWeight: '700',
   },
   timerContent: {
     alignItems: 'center',
