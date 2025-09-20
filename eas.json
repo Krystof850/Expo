@@ -9,7 +9,7 @@
       "distribution": "internal",
       "autoIncrement": true,
       "ios": {
-        "image": "macos-sequoia-15.5-xcode-26.0",
+        "image": "latest",
         "resourceClass": "m1-medium",
         "node": "20.19.4"
       },
@@ -32,7 +32,7 @@
     "production": {
       "autoIncrement": true,
       "ios": {
-        "image": "macos-sequoia-15.5-xcode-26.0",
+        "image": "latest",
         "resourceClass": "m1-medium",
         "node": "20.19.4"
       },

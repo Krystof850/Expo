@@ -1,0 +1,52 @@
+Waiting for submission to complete. You can press Ctrl+C to exit.
+✖ Something went wrong when submitting your app to Apple App Store Connect.
+
+Fastlane pilot failed
+We couldn't figure out what went wrong. See logs to learn more.
+
+[logs] Start phase: SPIN_UP_SUBMISSION_WORKER
+[logs] Creating new worker instance
+[logs] End phase: SPIN_UP_SUBMISSION_WORKER
+
+[logs] Start phase: SUBMIT_TO_APP_STORE
+[logs] Starting the submit process
+[logs] Downloading archive
+[logs] Preparing artifact
+[logs] Verifying archive
+[logs] Creating ascApiJsonKey.json file with ASC credentials
+[logs] Submitting iOS app to TestFlight...
+[logs] Submitting the app with fastlane pilot
+[logs] -------------------
+[logs] --- Step: pilot ---
+[logs] -------------------
+[logs] Creating authorization token for App Store Connect API
+[logs] Ready to upload new build to TestFlight (App: 6752318036)...
+[logs] Going to upload updated app to App Store Connect
+[logs] This might take a few minutes. Please don't interrupt the script.
+[logs] [altool] 2025-09-20 06:07:59.798 *** Error: Validation failed Unsupported SDK or Xcode version. Your app was built with an SDK or version of Xcode that isn’t supported. Although you can use beta versions of SDKs and Xcode to build and upload apps to App Store Connect, you need to use the latest Release Candidates (RC) for SDKs and Xcode to submit the app. For details on currently supported SDKs and versions of Xcode, visit: https://developer.apple.com/news/releases. (ID: 2efa8fa2-2966-4e66-a2fc-87f23a2411d4) (409)
+[logs] [altool]  {
+[logs] 
+[logs] [altool]     NSLocalizedDescription = "Validation failed";
+[logs] 
+[logs] [altool]     NSLocalizedFailureReason = "Unsupported SDK or Xcode version. Your app was built with an SDK or version of Xcode that isn\U2019t supported. Although you can use beta versions of SDKs and Xcode to build and upload apps to App Store Connect, you need to use the latest Release Candidates (RC) for SDKs and Xcode to submit the app. For details on currently supported SDKs and versions of Xcode, visit: https://developer.apple.com/news/releases. (ID: 2efa8fa2-2966-4e66-a2fc-87f23a2411d4)";
+[logs] 
+[logs] [altool]     NSUnderlyingError = "Error Domain=IrisAPI Code=-19241 \"Validation failed\" UserInfo={status=409, detail=Unsupported SDK or Xcode version. Your app was built with an SDK or version of Xcode that isn\U2019t supported. Although you can use beta versions of SDKs and Xcode to build and upload apps to App Store Connect, you need to use the latest Release Candidates (RC) for SDKs and Xcode to submit the app. For details on currently supported SDKs and versions of Xcode, visit: https://developer.apple.com/news/releases., id=2efa8fa2-2966-4e66-a2fc-87f23a2411d4, code=STATE_ERROR.VALIDATION_ERROR, title=Validation failed, NSLocalizedFailureReason=Unsupported SDK or Xcode version. Your app was built with an SDK or version of Xcode that isn\U2019t supported. Although you can use beta versions of SDKs and Xcode to build and upload apps to App Store Connect, you need to use the latest Release Candidates (RC) for SDKs and Xcode to submit the app. For details on currently supported SDKs and versions of Xcode, visit: https://developer.apple.com/news/releases., NSLocalizedDescription=Validation failed}";
+[logs] 
+[logs] [altool]     "iris-code" = "STATE_ERROR.VALIDATION_ERROR";
+[logs] 
+[logs] [altool] }
+[logs] 
+[logs] Application Loader output above ^
+[logs] [ContentDelivery.Uploader.600001A90140] Validation failed (409) Unsupported SDK or Xcode version. Your app was built with an SDK or version of Xcode that isn’t supported. Although you can use beta versions of SDKs and Xcode to build and upload apps to App Store Connect, you need to use the latest Release Candidates (RC) for SDKs and Xcode to submit the app. For details on currently supported SDKs and versions of Xcode, visit: https://developer.apple.com/news/releases. (ID: 2efa8fa2-2966-4e66-a2fc-87f23a2411d4)
+[logs] Error uploading '/var/folders/m1/8_w9962s3b79dqm00nnlm85m0000gn/T/9dac00b3-6bb5-4552-9b6d-f64e1ff94a27.ipa'.
+[logs] Validation failed Unsupported SDK or Xcode version. Your app was built with an SDK or version of Xcode that isn’t supported. Although you can use beta versions of SDKs and Xcode to build and upload apps to App Store Connect, you need to use the latest Release Candidates (RC) for SDKs and Xcode to submit the app. For details on currently supported SDKs and versions of Xcode, visit: https://developer.apple.com/news/releases. (ID: 2efa8fa2-2966-4e66-a2fc-87f23a2411d4) (409)
+[logs] The call to the altool completed with a non-zero exit status: 1. This indicates a failure.
+[logs] Could not download/upload from App Store Connect!
+[logs] [!] Error uploading ipa file: 
+[logs]  [Application Loader Error Output]: [ContentDelivery.Uploader.600001A90140] Validation failed (409) Unsupported SDK or Xcode version. Your app was built with an SDK or version of Xcode that isn’t supported. Although you can use beta versions of SDKs and Xcode to build and upload apps to App Store Connect, you need to use the latest Release Candidates (RC) for SDKs and Xcode to submit the app. For details on currently supported SDKs and versions of Xcode, visit: https://developer.apple.com/news/releases. (ID: 2efa8fa2-2966-4e66-a2fc-87f23a2411d4)
+[logs] [Application Loader Error Output]: Error uploading '/var/folders/m1/8_w9962s3b79dqm00nnlm85m0000gn/T/9dac00b3-6bb5-4552-9b6d-f64e1ff94a27.ipa'.
+[logs] [Application Loader Error Output]: Validation failed Unsupported SDK or Xcode version. Your app was built with an SDK or version of Xcode that isn’t supported. Although you can use beta versions of SDKs and Xcode to build and upload apps to App Store Connect, you need to use the latest Release Candidates (RC) for SDKs and Xcode to submit the app. For details on currently supported SDKs and versions of Xcode, visit: https://developer.apple.com/news/releases. (ID: 2efa8fa2-2966-4e66-a2fc-87f23a2411d4) (409)
+[logs] [Application Loader Error Output]: The call to the altool completed with a non-zero exit status: 1. This indicates a failure.
+[logs] Fastlane pilot failed
+[logs] Failed to submit the app to the store
+[logs] End phase: SUBMIT_TO_APP_STORE
