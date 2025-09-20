@@ -47,6 +47,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       "com.apple.developer.applesignin": ["Default"],
     },
     usesAppleSignIn: true,
+    jsEngine: "hermes",
   },
 
   android: {
@@ -66,6 +67,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       "READ_CONTACTS",
       "WRITE_CONTACTS"
     ],
+    jsEngine: "hermes",
   },
 
   web: {

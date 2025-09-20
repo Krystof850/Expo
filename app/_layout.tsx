@@ -27,7 +27,7 @@ import { ErrorProvider } from '../src/components/UserFriendlyErrorHandler';
 export default function RootLayout() {
   const colorScheme = useColorScheme();
   const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
+    SpaceMono: require('../assets/fonts/SpaceMono-Regular-subset.ttf'),
     // Poppins font family pro nový design
     Poppins_400Regular,
     Poppins_500Medium,
