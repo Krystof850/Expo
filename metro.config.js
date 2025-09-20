@@ -1,19 +1,14 @@
-const { getDefaultConfig } = require('@expo/metro-config');
+const { getDefaultConfig } = require('expo/metro-config');
 
-const config = getDefaultConfig(__dirname);
-
-// Optimized Metro config for Expo SDK 54
-config.resolver.unstable_enablePackageExports = false;
+/** @type {import('expo/metro-config').MetroConfig} */
+const config = getDefaultConfig(__dirname, {
+  // Disable CSS support entirely to avoid lightningcss issues
+  isCSSEnabled: false,
+});
 
 // SVG transformer support
 config.transformer.babelTransformerPath = require.resolve('react-native-svg-transformer');
 config.resolver.assetExts = config.resolver.assetExts.filter((ext) => ext !== 'svg');
 config.resolver.sourceExts = [...config.resolver.sourceExts, 'svg'];
-
-// Fix lightningcss build issues for production
-config.transformer.cssAutoPrefix = false;
-
-// Replit environment configuration for web
-// Note: Metro server configuration is handled by Expo CLI directly
 
 module.exports = config;

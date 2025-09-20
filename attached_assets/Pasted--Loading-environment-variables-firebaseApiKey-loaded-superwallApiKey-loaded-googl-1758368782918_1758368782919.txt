@@ -1,0 +1,91 @@
+🔧 Loading environment variables: {
+  firebaseApiKey: 'loaded',
+  superwallApiKey: 'loaded',
+  googleClientId: 'loaded',
+  iosGoogleClientId: 'loaded',
+  reversedIosClientId: 'loaded',
+  supportEmail: 'loaded'
+}
+🔧 Loading environment variables: {
+  firebaseApiKey: 'loaded',
+  superwallApiKey: 'loaded',
+  googleClientId: 'loaded',
+  iosGoogleClientId: 'loaded',
+  reversedIosClientId: 'loaded',
+  supportEmail: 'loaded'
+}
+Starting Metro Bundler
+🔧 Loading environment variables: {
+  firebaseApiKey: 'loaded',
+  superwallApiKey: 'loaded',
+  googleClientId: 'loaded',
+  iosGoogleClientId: 'loaded',
+  reversedIosClientId: 'loaded',
+  supportEmail: 'loaded'
+}
+iOS node_modules/expo-router/entry.js ▓▓▓▓▓▓▓▓░░░░░░░░ 56.1% (510/681)
+iOS node_modules/expo-router/entry.js ▓▓▓▓▓▓▓▓▓▓▓▓░░░░ 75.2% (1291/1489)
+iOS Bundled 8177ms node_modules/expo-router/entry.js (1813 modules)
+Exporting server
+🔧 Loading environment variables: {
+  firebaseApiKey: 'loaded',
+  superwallApiKey: 'loaded',
+  googleClientId: 'loaded',
+  iosGoogleClientId: 'loaded',
+  reversedIosClientId: 'loaded',
+  supportEmail: 'loaded'
+}
+λ node_modules/expo-router/build/static/getServerManifest.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+WARN  Attempted to import the module "/Users/expo/workingdir/build/node_modules/expo-superwall" which is listed in the "exports" of "/Users/expo/workingdir/build/node_modules/expo-superwall", however no match was resolved for this request (platform = web). Falling back to file-based resolution. Consider updating the call site or asking the package maintainer(s) to expose this API.
+| 🔧 Loading environment variables: {
+|   firebaseApiKey: [32m'loaded'[39m,
+|   superwallApiKey: [32m'loaded'[39m,
+|   googleClientId: [32m'loaded'[39m,
+|   iosGoogleClientId: [32m'loaded'[39m,
+|   reversedIosClientId: [32m'loaded'[39m,
+|   supportEmail: [32m'loaded'[39m
+| }
+λ node_modules/expo-router/build/static/getServerManifest.js ▓▓▓▓▓▓▓▓▓▓▓▓░░░░ 77.4% (1062/1226)
+λ Bundling failed 4291ms node_modules/expo-router/build/static/getServerManifest.js (1624 modules)
+node_modules/expo-router/assets/modal.module.css: Cannot find module '../lightningcss.darwin-arm64.node'
+Require stack:
+- /Users/expo/workingdir/build/node_modules/lightningcss/node/index.js
+- /Users/expo/workingdir/build/node_modules/@expo/metro-config/build/transform-worker/css-modules.js
+- /Users/expo/workingdir/build/node_modules/@expo/metro-config/build/transform-worker/transform-worker.js
+- /Users/expo/workingdir/build/node_modules/@expo/metro-config/build/transform-worker/supervising-transform-worker.js
+- /Users/expo/workingdir/build/node_modules/metro/src/DeltaBundler/Worker.flow.js
+- /Users/expo/workingdir/build/node_modules/metro/src/DeltaBundler/Worker.js
+- /Users/expo/workingdir/build/node_modules/jest-worker/build/workers/processChild.js
+SyntaxError: node_modules/expo-router/assets/modal.module.css: Cannot find module '../lightningcss.darwin-arm64.node'
+Require stack:
+- /Users/expo/workingdir/build/node_modules/lightningcss/node/index.js
+- /Users/expo/workingdir/build/node_modules/@expo/metro-config/build/transform-worker/css-modules.js
+- /Users/expo/workingdir/build/node_modules/@expo/metro-config/build/transform-worker/transform-worker.js
+- /Users/expo/workingdir/build/node_modules/@expo/metro-config/build/transform-worker/supervising-transform-worker.js
+- /Users/expo/workingdir/build/node_modules/metro/src/DeltaBundler/Worker.flow.js
+- /Users/expo/workingdir/build/node_modules/metro/src/DeltaBundler/Worker.js
+- /Users/expo/workingdir/build/node_modules/jest-worker/build/workers/processChild.js
+Error: Cannot find module '../lightningcss.darwin-arm64.node'
+Require stack:
+- /Users/expo/workingdir/build/node_modules/lightningcss/node/index.js
+- /Users/expo/workingdir/build/node_modules/@expo/metro-config/build/transform-worker/css-modules.js
+- /Users/expo/workingdir/build/node_modules/@expo/metro-config/build/transform-worker/transform-worker.js
+- /Users/expo/workingdir/build/node_modules/@expo/metro-config/build/transform-worker/supervising-transform-worker.js
+- /Users/expo/workingdir/build/node_modules/metro/src/DeltaBundler/Worker.flow.js
+- /Users/expo/workingdir/build/node_modules/metro/src/DeltaBundler/Worker.js
+- /Users/expo/workingdir/build/node_modules/jest-worker/build/workers/processChild.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1212:15)
+    at Module._resolveFilename (/Users/expo/workingdir/build/node_modules/@expo/metro-config/build/transform-worker/utils/moduleMapper.js:128:40)
+    at Module._load (node:internal/modules/cjs/loader:1043:27)
+    at Module.require (node:internal/modules/cjs/loader:1298:19)
+    at require (node:internal/modules/helpers:182:18)
+    at Object.<anonymous> (/Users/expo/workingdir/build/node_modules/lightningcss/node/index.js:22:22)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Module._load (node:internal/modules/cjs/loader:1096:12)
+    at Module.require (node:internal/modules/cjs/loader:1298:19)
+    at require (node:internal/modules/helpers:182:18)
+    at transformCssModuleWeb (/Users/expo/workingdir/build/node_modules/@expo/metro-config/build/transform-worker/css-modules.js:16:27)
+    at transformCss (/Users/expo/workingdir/build/node_modules/@expo/metro-config/build/transform-worker/transform-worker.js:208:71)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
