@@ -1,0 +1,25 @@
+As an expert in React Native, Expo, and application optimization, your task is to analyze and improve the performance and size of the current Expo project. Your goal is to apply best practices for optimization without compromising the application's functionality, visual quality, or professional design. The user wants the app to be faster and have a smaller footprint, but without visible degradation of assets (images, fonts) or breaking any existing features.
+
+**You will perform the following steps:**
+
+1.  **Dependency and File Cleanup:**
+    * Carefully analyze the `package.json` file. Identify and safely remove any unused or redundant npm packages.
+    * Scan the entire project for unused static assets (images, videos, fonts, etc.). Delete all files that are not referenced anywhere in the code.
+
+2.  **Asset Optimization:**
+    * For all images used in the project, apply a lossless or high-quality lossy compression. Prioritize image formats like WebP where possible, but only if they don't introduce visual artifacts. The goal is to reduce file size without any noticeable drop in quality.
+    * Analyze the fonts used. If possible, create a font subset that includes only the necessary characters to reduce the font file size.
+
+3.  **Code and Build Optimization:**
+    * Ensure the `Hermes Engine` is enabled in `app.json` to improve startup time and overall performance.
+    * Implement **lazy loading** for screens and major components. Analyze the project structure and apply dynamic imports (`import()`) for routes in a way that doesn't disrupt the user flow.
+    * Apply **memoization** using `React.memo`, `useCallback`, and `useMemo` to prevent unnecessary re-renders of performance-critical components. Do this carefully, only on components where it will have a clear performance benefit.
+
+**Constraints:**
+* **Do not break any existing functionality.** Test each change to ensure all features work as expected.
+* **Do not visibly degrade asset quality.** The visual appearance of the application must remain professional and smooth.
+* **The final code must be clean and well-commented**, explaining the reason for each optimization applied.
+* **Provide a detailed summary** of all changes made and the resulting improvements in a new file named `optimization_report.md`. This report should include before-and-after metrics (e.g., app size, a rough estimate of performance improvement).
+* **The application must not become sluggish or unresponsive.** The performance gains should be tangible for the end-user.
+
+Proceed with the optimization now.
