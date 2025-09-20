@@ -132,22 +132,13 @@ export default function Homepage() {
     return () => unsubscribe && unsubscribe();
   }, [user?.uid]);
 
-  // Update orb when time changes or Firebase data updates
+  // Update orb when time changes - always use timer-based calculation for consistency
   useEffect(() => {
-    // If we have Firebase progress data, use currentOrbLevel from there (for manual testing)
-    if (user?.uid && userProgress?.currentOrbLevel) {
-      const orbLevelData = getOrbLevelById(userProgress.currentOrbLevel);
-      if (orbLevelData) {
-        setCurrentOrbType(orbLevelData.orbType);
-        return;
-      }
-    }
-    
-    // Otherwise, calculate orb level from current time (normal operation)
+    // Always calculate orb level from current time for real-time progression
     const totalDays = convertTimeToDays(time);
     const orbLevel = getCurrentOrbLevel(totalDays);
     setCurrentOrbType(orbLevel.orbType);
-  }, [time, userProgress?.currentOrbLevel, user?.uid]);
+  }, [time]);
 
   // Update timer every second
   useEffect(() => {
