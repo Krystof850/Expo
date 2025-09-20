@@ -19,7 +19,7 @@ console.log('🔧 Loading environment variables:', {
 
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
-  name: config.name ?? "Unloop Dev",
+  name: config.name ?? "unloop Dev",
   slug: config.slug ?? "unloop-dev",
   version: '1.0.0',
   orientation: 'portrait',
@@ -37,7 +37,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       ...(config.ios?.infoPlist ?? {}),
       ITSAppUsesNonExemptEncryption: false,
       NSUserTrackingUsageDescription: "This app uses data for personalized content and improved user experience.",
-      CFBundleDisplayName: "Unloop",
+      CFBundleDisplayName: "unloop",
       LSApplicationCategoryType: "public.app-category.productivity",
       UIRequiredDeviceCapabilities: ['arm64'],
       UISupportedInterfaceOrientations: ['UIInterfaceOrientationPortrait', 'UIInterfaceOrientationPortraitUpsideDown'],
