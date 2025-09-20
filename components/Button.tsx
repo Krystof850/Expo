@@ -61,7 +61,8 @@ const Button: React.FC<ButtonProps> = React.memo(({
     };
   });
 
-  const getButtonStyle = (): ViewStyle => {
+  // Memoize expensive style calculations
+  const buttonStyle = useMemo((): ViewStyle => {
     const baseStyle = {
       paddingVertical: SPACING.button,
       paddingHorizontal: SPACING.button * 2, // px-8 equivalent
@@ -88,9 +89,9 @@ const Button: React.FC<ButtonProps> = React.memo(({
       backgroundColor: COLORS.nextButton.background,
       ...SHADOWS.button, // Large white shadow
     };
-  };
+  }, [variant, selected]);
 
-  const getTextStyle = (): TextStyle => {
+  const textStyle = useMemo((): TextStyle => {
     if (variant === 'select') {
       return {
         ...TYPOGRAPHY.buttonSelect,
@@ -100,12 +101,12 @@ const Button: React.FC<ButtonProps> = React.memo(({
     return {
       ...TYPOGRAPHY.buttonNext,
     };
-  };
+  }, [variant]);
 
   return (
     <AnimatedTouchable
       style={[
-        getButtonStyle(),
+        buttonStyle,
         disabled && styles.disabled,
         animatedStyle,
         style,
@@ -116,12 +117,13 @@ const Button: React.FC<ButtonProps> = React.memo(({
       disabled={disabled}
       activeOpacity={1} // We handle opacity with animations
     >
-      <Text style={getTextStyle()}>{title}</Text>
+      <Text style={textStyle}>{title}</Text>
     </AnimatedTouchable>
   );
 });
 
 export { Button };
+export default Button;
 
 // Pre-configured button variants for easier usage
 export const SelectButton: React.FC<Omit<ButtonProps, 'variant'>> = (props) => (
