@@ -6,6 +6,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import * as Haptics from 'expo-haptics';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Animated, {
   useSharedValue,
   useAnimatedProps,
@@ -159,14 +160,56 @@ export default function TaskTimer() {
     await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
     setIsTimerRunning(false);
     
-    router.replace({
-      pathname: '/(workflow)/task-complete',
-      params: { 
-        success: 'false',
-        task: microTask,
-        timeSpent: (180 - timeLeft).toString()
+    // Show warning popup with vibration
+    Alert.alert(
+      '⚠️ Reset Timer?',
+      'Are you sure you want to give up? This will completely reset your procrastination-free timer progress and you\'ll lose all your current streak. Your orb will return to Starting Journey.',
+      [
+        {
+          text: 'Continue Task',
+          style: 'cancel',
+          onPress: () => {
+            // Resume timer if user cancels
+            setIsTimerRunning(true);
+          }
+        },
+        {
+          text: 'Reset Timer',
+          style: 'destructive',
+          onPress: async () => {
+            // Strong vibration for destructive action
+            await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+            
+            // Reset timer progress
+            await resetTimerProgress();
+            
+            // Navigate back to homepage with timer reset
+            router.replace('/(tabs)/');
+          },
+        },
+      ]
+    );
+  };
+
+  const resetTimerProgress = async () => {
+    try {
+      // Reset local storage
+      const now = Date.now();
+      await AsyncStorage.setItem('procrastination_start_time', now.toString());
+      await AsyncStorage.setItem('procrastination_streak', '0');
+      
+      // Reset Firebase if user is authenticated
+      if (user?.uid) {
+        try {
+          await ProgressService.resetUserTimer(user.uid);
+          console.log('✅ Timer reset synced to Firebase');
+        } catch (error) {
+          console.log('⚠️ Firebase reset failed (local reset done):', error);
+        }
       }
-    });
+    } catch (error) {
+      console.log('Error resetting timer progress:', error);
+    }
   };
 
   const handleTimeUp = () => {
