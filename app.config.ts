@@ -23,7 +23,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   slug: config.slug ?? "unloop-dev",
   version: '1.0.0',
   orientation: 'portrait',
-  icon: './assets/images/icon.jpg',
+  icon: './assets/images/app-icon.png',
   scheme: 'unloop',
   primaryColor: '#2563eb',
   userInterfaceStyle: 'automatic',
@@ -52,7 +52,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   android: {
     ...(config.android ?? {}),
     adaptiveIcon: {
-      foregroundImage: './assets/images/adaptive-icon.png',
+      foregroundImage: './assets/images/app-icon.png',
       backgroundColor: '#ffffff',
     },
     package: "com.unloopapp.dev",
@@ -71,7 +71,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   web: {
     bundler: 'metro',
     output: 'server',
-    favicon: './assets/images/favicon.png',
+    favicon: './assets/images/app-icon.png',
   },
   plugins: [
     'expo-dev-client',
@@ -87,7 +87,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     [
       'expo-splash-screen',
       {
-        image: './assets/images/splash-icon.png',
+        image: './assets/images/app-icon.png',
         imageWidth: 200,
         resizeMode: 'contain',
         backgroundColor: '#ffffff',
