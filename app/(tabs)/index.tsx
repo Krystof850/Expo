@@ -435,17 +435,17 @@ export default function Homepage() {
               {/* Main Timer */}
               <View style={styles.timerRow}>
                 <View style={styles.timeUnit}>
-                  <Text style={styles.timeNumber}>21</Text>
+                  <Text style={styles.timeNumber}>{formatNumber(time.days)}</Text>
                   <Text style={styles.timeLabel}>days</Text>
                 </View>
                 <Text style={styles.separator}>:</Text>
                 <View style={styles.timeUnit}>
-                  <Text style={styles.timeNumber}>03</Text>
+                  <Text style={styles.timeNumber}>{formatNumber(time.hours)}</Text>
                   <Text style={styles.timeLabel}>hours</Text>
                 </View>
                 <Text style={styles.separator}>:</Text>
                 <View style={styles.timeUnit}>
-                  <Text style={styles.timeNumber}>37</Text>
+                  <Text style={styles.timeNumber}>{formatNumber(time.minutes)}</Text>
                   <Text style={styles.timeLabel}>mins</Text>
                 </View>
               </View>
@@ -453,7 +453,7 @@ export default function Homepage() {
               {/* Seconds Box */}
               <View style={styles.secondsContainer}>
                 <View style={styles.secondsBox}>
-                  <Text style={styles.secondsText}>22s</Text>
+                  <Text style={styles.secondsText}>{time.seconds}s</Text>
                 </View>
               </View>
             </View>
