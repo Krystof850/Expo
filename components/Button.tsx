@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { TouchableOpacity, Text, StyleSheet, ViewStyle, TextStyle } from 'react-native';
 import Animated, { 
   useSharedValue, 
@@ -20,7 +20,7 @@ interface ButtonProps {
   style?: ViewStyle;
 }
 
-export const Button: React.FC<ButtonProps> = ({ 
+const Button: React.FC<ButtonProps> = React.memo(({ 
   title, 
   onPress, 
   disabled = false, 
@@ -31,7 +31,8 @@ export const Button: React.FC<ButtonProps> = ({
   const scale = useSharedValue(1);
   const opacity = useSharedValue(1);
 
-  const handlePressIn = () => {
+  // Memoize event handlers to prevent unnecessary re-renders
+  const handlePressIn = useCallback(() => {
     scale.value = withSpring(variant === 'next' ? 1.05 : 0.95, {
       damping: 12,
       stiffness: 100,
@@ -40,9 +41,9 @@ export const Button: React.FC<ButtonProps> = ({
     if (variant === 'select') {
       opacity.value = withTiming(0.8, { duration: 150 });
     }
-  };
+  }, [variant, scale, opacity]);
 
-  const handlePressOut = () => {
+  const handlePressOut = useCallback(() => {
     scale.value = withSpring(1, {
       damping: 12,
       stiffness: 100,
@@ -51,7 +52,7 @@ export const Button: React.FC<ButtonProps> = ({
     if (variant === 'select') {
       opacity.value = withTiming(1, { duration: 150 });
     }
-  };
+  }, [variant, scale, opacity]);
 
   const animatedStyle = useAnimatedStyle(() => {
     return {
@@ -118,7 +119,9 @@ export const Button: React.FC<ButtonProps> = ({
       <Text style={getTextStyle()}>{title}</Text>
     </AnimatedTouchable>
   );
-};
+});
+
+export { Button };
 
 // Pre-configured button variants for easier usage
 export const SelectButton: React.FC<Omit<ButtonProps, 'variant'>> = (props) => (

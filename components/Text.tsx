@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Text as RNText, StyleSheet, TextStyle } from 'react-native';
 import Animated, { 
   FadeIn, 
@@ -20,14 +20,15 @@ interface TextProps {
   delay?: number;
 }
 
-export const Text: React.FC<TextProps> = ({ 
+export const Text: React.FC<TextProps> = React.memo(({ 
   children, 
   variant, 
   style, 
   animated = true,
   delay = 0 
 }) => {
-  const getTextStyle = (): TextStyle => {
+  // Memoize text style calculation to prevent unnecessary recalculations
+  const textStyle = useMemo((): TextStyle => {
     switch (variant) {
       case 'title':
         return {
@@ -44,10 +45,10 @@ export const Text: React.FC<TextProps> = ({
       default:
         return {};
     }
-  };
+  }, [variant]);
 
-  // Animation entrance based on variant
-  const getAnimation = () => {
+  // Memoize animation configuration to prevent recalculation
+  const animationConfig = useMemo(() => {
     switch (variant) {
       case 'title':
         return FadeIn.delay(delay).duration(500).springify();
@@ -58,13 +59,13 @@ export const Text: React.FC<TextProps> = ({
       default:
         return FadeIn.delay(delay).duration(300);
     }
-  };
+  }, [variant, delay]);
 
   if (animated) {
     return (
       <AnimatedText
-        entering={getAnimation()}
-        style={[getTextStyle(), style]}
+        entering={animationConfig}
+        style={[textStyle, style]}
       >
         {children}
       </AnimatedText>
@@ -72,11 +73,11 @@ export const Text: React.FC<TextProps> = ({
   }
 
   return (
-    <RNText style={[getTextStyle(), style]}>
+    <RNText style={[textStyle, style]}>
       {children}
     </RNText>
   );
-};
+});
 
 // Pre-configured text variants for easier usage
 export const TitleText: React.FC<Omit<TextProps, 'variant'>> = (props) => (
