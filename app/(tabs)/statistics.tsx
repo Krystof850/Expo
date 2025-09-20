@@ -4,7 +4,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { Image as ExpoImage } from 'expo-image';
 import Svg, { Circle, LinearGradient, Stop, Defs } from 'react-native-svg';
-import { LineChart, BarChart } from 'react-native-chart-kit';
+import { LazyLineChart as LineChart, LazyBarChart as BarChart } from '../../components/LazyChartComponents';
 import { LinearGradient as ExpoLinearGradient } from 'expo-linear-gradient';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
