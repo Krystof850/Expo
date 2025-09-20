@@ -30,13 +30,12 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
 
   ios: {
     ...(config.ios ?? {}),
-    supportsTablet: true,
+    supportsTablet: false,
     requireFullScreen: false,
     bundleIdentifier: "com.unloopapp.dev",
     infoPlist: {
       ...(config.ios?.infoPlist ?? {}),
       ITSAppUsesNonExemptEncryption: false,
-      NSUserTrackingUsageDescription: "This app uses data for personalized content and improved user experience.",
       CFBundleDisplayName: "unloop",
       LSApplicationCategoryType: "public.app-category.productivity",
       UIRequiredDeviceCapabilities: ['arm64'],
