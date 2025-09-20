@@ -1,0 +1,116 @@
+🔧 Loading environment variables: {
+  firebaseApiKey: 'loaded',
+  superwallApiKey: 'loaded',
+  googleClientId: 'loaded',
+  iosGoogleClientId: 'loaded',
+  reversedIosClientId: 'loaded',
+  supportEmail: 'loaded'
+}
+🔧 Loading environment variables: {
+  firebaseApiKey: 'loaded',
+  superwallApiKey: 'loaded',
+  googleClientId: 'loaded',
+  iosGoogleClientId: 'loaded',
+  reversedIosClientId: 'loaded',
+  supportEmail: 'loaded'
+}
+Starting Metro Bundler
+🔧 Loading environment variables: {
+  firebaseApiKey: 'loaded',
+  superwallApiKey: 'loaded',
+  googleClientId: 'loaded',
+  iosGoogleClientId: 'loaded',
+  reversedIosClientId: 'loaded',
+  supportEmail: 'loaded'
+}
+iOS node_modules/expo-router/entry.js ▓▓▓▓▓▓▓▓▓▓░░░░░░ 62.8% (685/892)
+WARN  Attempted to import the module "/Users/expo/workingdir/build/node_modules/expo-superwall" which is listed in the "exports" of "/Users/expo/workingdir/build/node_modules/expo-superwall", however no match was resolved for this request (platform = ios). Falling back to file-based resolution. Consider updating the call site or asking the package maintainer(s) to expose this API.
+iOS node_modules/expo-router/entry.js ▓▓▓▓▓▓▓▓▓▓▓▓▓▓░░ 89.2% (1598/1695)
+iOS Bundled 7057ms node_modules/expo-router/entry.js (1816 modules)
+Exporting server
+🔧 Loading environment variables: {
+  firebaseApiKey: 'loaded',
+  superwallApiKey: 'loaded',
+  googleClientId: 'loaded',
+  iosGoogleClientId: 'loaded',
+  reversedIosClientId: 'loaded',
+  supportEmail: 'loaded'
+}
+λ node_modules/expo-router/build/static/getServerManifest.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+WARN  Attempted to import the module "/Users/expo/workingdir/build/node_modules/expo-superwall" which is listed in the "exports" of "/Users/expo/workingdir/build/node_modules/expo-superwall", however no match was resolved for this request (platform = web). Falling back to file-based resolution. Consider updating the call site or asking the package maintainer(s) to expose this API.
+| 🔧 Loading environment variables: {
+|   firebaseApiKey: [32m'loaded'[39m,
+|   superwallApiKey: [32m'loaded'[39m,
+|   googleClientId: [32m'loaded'[39m,
+|   iosGoogleClientId: [32m'loaded'[39m,
+|   reversedIosClientId: [32m'loaded'[39m,
+|   supportEmail: [32m'loaded'[39m
+| }
+λ node_modules/expo-router/build/static/getServerManifest.js ▓▓▓▓▓▓▓▓▓▓░░░░░░ 68.7% ( 885/1068)
+λ Bundling failed 5183ms node_modules/expo-router/build/static/getServerManifest.js (1634 modules)
+Unable to resolve module ../../../assets/modal.module.css from /Users/expo/workingdir/build/node_modules/expo-router/build/modal/web/modalStyles.js: 
+
+None of these files exist:
+  * node_modules/expo-router/assets/modal.module.css(.web.ts|.ts|.web.tsx|.tsx|.web.js|.js|.web.jsx|.jsx|.web.json|.json|.web.cjs|.cjs|.web.mjs|.mjs|.web.svg|.svg)
+  * node_modules/expo-router/assets/modal.module.css
+[0m [90m 4 |[39m }[33m;[39m
+ [90m 5 |[39m [33mObject[39m[33m.[39mdefineProperty(exports[33m,[39m [32m"__esModule"[39m[33m,[39m { value[33m:[39m [36mtrue[39m })[33m;[39m
+[31m[1m>[22m[39m[90m 6 |[39m [36mconst[39m modal_module_css_1 [33m=[39m __importDefault(require([32m"../../../assets/modal.module.css"[39m))[33m;[39m
+ [90m   |[39m                                                     [31m[1m^[22m[39m
+ [90m 7 |[39m exports[33m.[39m[36mdefault[39m [33m=[39m modal_module_css_1[33m.[39m[36mdefault[39m[33m;[39m
+ [90m 8 |[39m [90m//# sourceMappingURL=modalStyles.js.map[39m[0m
+
+Import stack:
+
+ node_modules/expo-router/build/modal/web/modalStyles.js
+ | import "../../../assets/modal.module.css"
+
+ node_modules/expo-router/build/modal/web/ModalStackRouteDrawer.js
+ | import "./modalStyles"
+
+ node_modules/expo-router/build/modal/web/ModalStack.js
+ | import "./ModalStackRouteDrawer"
+
+ node_modules/expo-router/build/layouts/Stack.web.js
+ | import "../modal/web/ModalStack"
+
+ node_modules/expo-router/build/index.js
+ | import "./layouts/Stack"
+
+ app/(onboarding)/benefits.tsx
+ | import "expo-router"
+
+ app (require.context)
+Error: Unable to resolve module ../../../assets/modal.module.css from /Users/expo/workingdir/build/node_modules/expo-router/build/modal/web/modalStyles.js: 
+
+None of these files exist:
+  * node_modules/expo-router/assets/modal.module.css(.web.ts|.ts|.web.tsx|.tsx|.web.js|.js|.web.jsx|.jsx|.web.json|.json|.web.cjs|.cjs|.web.mjs|.mjs|.web.svg|.svg)
+  * node_modules/expo-router/assets/modal.module.css
+[0m [90m 4 |[39m }[33m;[39m
+ [90m 5 |[39m [33mObject[39m[33m.[39mdefineProperty(exports[33m,[39m [32m"__esModule"[39m[33m,[39m { value[33m:[39m [36mtrue[39m })[33m;[39m
+[31m[1m>[22m[39m[90m 6 |[39m [36mconst[39m modal_module_css_1 [33m=[39m __importDefault(require([32m"../../../assets/modal.module.css"[39m))[33m;[39m
+ [90m   |[39m                                                     [31m[1m^[22m[39m
+ [90m 7 |[39m exports[33m.[39m[36mdefault[39m [33m=[39m modal_module_css_1[33m.[39m[36mdefault[39m[33m;[39m
+ [90m 8 |[39m [90m//# sourceMappingURL=modalStyles.js.map[39m[0m
+
+Import stack:
+
+ node_modules/expo-router/build/modal/web/modalStyles.js
+ | import "../../../assets/modal.module.css"
+
+ node_modules/expo-router/build/modal/web/ModalStackRouteDrawer.js
+ | import "./modalStyles"
+
+ node_modules/expo-router/build/modal/web/ModalStack.js
+ | import "./ModalStackRouteDrawer"
+
+ node_modules/expo-router/build/layouts/Stack.web.js
+ | import "../modal/web/ModalStack"
+
+ node_modules/expo-router/build/index.js
+ | import "./layouts/Stack"
+
+ app/(onboarding)/benefits.tsx
+ | import "expo-router"
+
+ app (require.context)

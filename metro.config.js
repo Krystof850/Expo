@@ -1,9 +1,11 @@
 const { getDefaultConfig } = require('expo/metro-config');
 
+// Enable CSS only for web platform to avoid native build issues
+const isWeb = process.env.EXPO_OS === 'web' || process.env.EAS_BUILD_PLATFORM === 'web' || process.env.WEB === 'true';
+
 /** @type {import('expo/metro-config').MetroConfig} */
 const config = getDefaultConfig(__dirname, {
-  // Disable CSS support entirely to avoid lightningcss issues
-  isCSSEnabled: false,
+  isCSSEnabled: isWeb,
 });
 
 // SVG transformer support
