@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React from 'react';
 import { TouchableOpacity, Text, StyleSheet, ViewStyle, TextStyle } from 'react-native';
 import Animated, { 
   useSharedValue, 
@@ -20,7 +20,7 @@ interface ButtonProps {
   style?: ViewStyle;
 }
 
-const Button: React.FC<ButtonProps> = React.memo(({ 
+export const Button: React.FC<ButtonProps> = ({ 
   title, 
   onPress, 
   disabled = false, 
@@ -31,8 +31,7 @@ const Button: React.FC<ButtonProps> = React.memo(({
   const scale = useSharedValue(1);
   const opacity = useSharedValue(1);
 
-  // Memoize event handlers to prevent unnecessary re-renders
-  const handlePressIn = useCallback(() => {
+  const handlePressIn = () => {
     scale.value = withSpring(variant === 'next' ? 1.05 : 0.95, {
       damping: 12,
       stiffness: 100,
@@ -41,9 +40,9 @@ const Button: React.FC<ButtonProps> = React.memo(({
     if (variant === 'select') {
       opacity.value = withTiming(0.8, { duration: 150 });
     }
-  }, [variant, scale, opacity]);
+  };
 
-  const handlePressOut = useCallback(() => {
+  const handlePressOut = () => {
     scale.value = withSpring(1, {
       damping: 12,
       stiffness: 100,
@@ -52,7 +51,7 @@ const Button: React.FC<ButtonProps> = React.memo(({
     if (variant === 'select') {
       opacity.value = withTiming(1, { duration: 150 });
     }
-  }, [variant, scale, opacity]);
+  };
 
   const animatedStyle = useAnimatedStyle(() => {
     return {
@@ -61,8 +60,7 @@ const Button: React.FC<ButtonProps> = React.memo(({
     };
   });
 
-  // Memoize expensive style calculations
-  const buttonStyle = useMemo((): ViewStyle => {
+  const getButtonStyle = (): ViewStyle => {
     const baseStyle = {
       paddingVertical: SPACING.button,
       paddingHorizontal: SPACING.button * 2, // px-8 equivalent
@@ -89,9 +87,9 @@ const Button: React.FC<ButtonProps> = React.memo(({
       backgroundColor: COLORS.nextButton.background,
       ...SHADOWS.button, // Large white shadow
     };
-  }, [variant, selected]);
+  };
 
-  const textStyle = useMemo((): TextStyle => {
+  const getTextStyle = (): TextStyle => {
     if (variant === 'select') {
       return {
         ...TYPOGRAPHY.buttonSelect,
@@ -101,12 +99,12 @@ const Button: React.FC<ButtonProps> = React.memo(({
     return {
       ...TYPOGRAPHY.buttonNext,
     };
-  }, [variant]);
+  };
 
   return (
     <AnimatedTouchable
       style={[
-        buttonStyle,
+        getButtonStyle(),
         disabled && styles.disabled,
         animatedStyle,
         style,
@@ -117,13 +115,10 @@ const Button: React.FC<ButtonProps> = React.memo(({
       disabled={disabled}
       activeOpacity={1} // We handle opacity with animations
     >
-      <Text style={textStyle}>{title}</Text>
+      <Text style={getTextStyle()}>{title}</Text>
     </AnimatedTouchable>
   );
-});
-
-export { Button };
-export default Button;
+};
 
 // Pre-configured button variants for easier usage
 export const SelectButton: React.FC<Omit<ButtonProps, 'variant'>> = (props) => (
