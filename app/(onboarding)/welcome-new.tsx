@@ -10,6 +10,7 @@ import {
 import { router, Redirect } from 'expo-router';
 import { useFocusEffect } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Image } from 'expo-image';
 import { AnimatedQuestionPage, AnimatedContent, AnimatedQuestionPageRef } from '../../components/AnimatedQuestionPage';
 import { NextButton } from '../../components/Button';
 import { TitleText } from '../../components/Text';
@@ -72,6 +73,12 @@ export default function WelcomeNewScreen() {
           <View style={styles.content}>
             <AnimatedContent delay={100}>
               <View style={styles.welcomeSection}>
+                {/* Unloop Logo */}
+                <Image
+                  source={require('../../assets/images/unloop-logo-black.png')}
+                  style={styles.logo}
+                  contentFit="contain"
+                />
                 <TitleText animated={false} style={styles.title}>
                   Welcome!
                 </TitleText>
@@ -127,6 +134,14 @@ const styles = StyleSheet.create({
   },
   title: {
     textAlign: 'center',
+    fontSize: 48, // Větší nadpis
+    fontWeight: '800',
+    marginTop: 24,
+  },
+  logo: {
+    width: 80,
+    height: 80,
+    alignSelf: 'center',
   },
   textSection: {
     width: '100%',
