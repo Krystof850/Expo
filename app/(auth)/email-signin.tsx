@@ -27,6 +27,7 @@ export default function EmailSignIn() {
   const [submitting, setSubmitting] = useState(false);
   const insets = useSafeAreaInsets();
 
+  // Conditional return after all hooks
   if (user) return <Redirect href="/(tabs)/" />;
 
   return (

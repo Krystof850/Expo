@@ -38,8 +38,6 @@ export default function SignIn() {
     checkAppleAvailability();
   }, []);
 
-
-
   const handleAppleSignIn = async () => {
     await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     try {
@@ -64,6 +62,7 @@ export default function SignIn() {
     setIsTermsModalVisible(true);
   };
 
+  // Conditional return after all hooks
   if (user) return <Redirect href="/(tabs)/" />;
 
   return (

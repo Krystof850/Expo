@@ -29,6 +29,7 @@ export default function SignUp() {
   const [googleLoading, setGoogleLoading] = useState(false);
   const [appleLoading, setAppleLoading] = useState(false);
   const [appleAvailable, setAppleAvailable] = useState(false);
+  const insets = useSafeAreaInsets();
 
   // Check Apple Sign In availability on component mount
   React.useEffect(() => {
@@ -65,9 +66,8 @@ export default function SignUp() {
     }
   };
 
+  // Conditional return after all hooks
   if (user) return <Redirect href="/(protected)/" />;
-
-  const insets = useSafeAreaInsets();
 
   return (
     <AuthErrorBoundary>

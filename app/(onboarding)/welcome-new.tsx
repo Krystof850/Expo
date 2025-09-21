@@ -25,16 +25,7 @@ export default function WelcomeNewScreen() {
   const insets = useSafeAreaInsets();
   const animationRef = useRef<AnimatedQuestionPageRef>(null);
 
-  // If user is already authenticated, go to homepage
-  if (user) {
-    return <Redirect href="/(tabs)" />;
-  }
-
-  if (loading) {
-    return null; // Show nothing while loading
-  }
-
-  // Block hardware back button on Android only
+  // Block hardware back button on Android only - MUST be called before conditional returns
   useFocusEffect(
     React.useCallback(() => {
       if (Platform.OS !== 'android') {
@@ -50,6 +41,15 @@ export default function WelcomeNewScreen() {
       return () => subscription?.remove();
     }, [])
   );
+
+  // Conditional renders AFTER all hooks are called
+  if (user) {
+    return <Redirect href="/(tabs)" />;
+  }
+
+  if (loading) {
+    return null; // Show nothing while loading
+  }
 
   const handleStartQuiz = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
