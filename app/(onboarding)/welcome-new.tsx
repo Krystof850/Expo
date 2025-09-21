@@ -4,8 +4,10 @@ import {
   StyleSheet,
   BackHandler,
   Platform,
+  TouchableOpacity,
+  Text,
 } from 'react-native';
-import { router } from 'expo-router';
+import { router, Redirect } from 'expo-router';
 import { useFocusEffect } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { AnimatedQuestionPage, AnimatedContent, AnimatedQuestionPageRef } from '../../components/AnimatedQuestionPage';
@@ -15,10 +17,22 @@ import AppBackground from '../../components/AppBackground';
 import { SPACING } from '../../constants/theme';
 import * as Haptics from 'expo-haptics';
 import TypeWriterEffect from 'react-native-typewriter-effect';
+import { useAuth } from '../../src/context/AuthContext';
+import { Ionicons } from '@expo/vector-icons';
 
 export default function WelcomeNewScreen() {
+  const { user, loading } = useAuth();
   const insets = useSafeAreaInsets();
   const animationRef = useRef<AnimatedQuestionPageRef>(null);
+
+  // If user is already authenticated, go to homepage
+  if (user) {
+    return <Redirect href="/(tabs)" />;
+  }
+
+  if (loading) {
+    return null; // Show nothing while loading
+  }
 
   // Block hardware back button on Android only
   useFocusEffect(
@@ -43,6 +57,11 @@ export default function WelcomeNewScreen() {
     animationRef.current?.runExitAnimation(() => {
       router.push('/(onboarding)/question1');
     });
+  };
+
+  const handleSignIn = async () => {
+    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    router.push('/(auth)/sign-in');
   };
 
   return (
@@ -71,12 +90,18 @@ export default function WelcomeNewScreen() {
           </View>
         </AnimatedQuestionPage>
         
-        {/* Start Quiz button - OUTSIDE of animation wrapper */}
-        <View style={[styles.nextContainer, { paddingBottom: insets.bottom + SPACING.page }]}>
+        {/* Buttons - OUTSIDE of animation wrapper */}
+        <View style={[styles.buttonContainer, { paddingBottom: insets.bottom + SPACING.page }]}>
           <NextButton
             title="Start Quiz >"
             onPress={handleStartQuiz}
           />
+          
+          {/* Secondary button for existing users */}
+          <TouchableOpacity style={styles.secondaryButton} onPress={handleSignIn}>
+            <Ionicons name="log-in-outline" size={18} color="#DBEAFE" style={styles.buttonIcon} />
+            <Text style={styles.secondaryButtonText}>Already have an account? Sign in</Text>
+          </TouchableOpacity>
         </View>
       </View>
     </AppBackground>
@@ -119,8 +144,33 @@ const styles = StyleSheet.create({
     textShadowOffset: { width: 0, height: 2 },
     textShadowRadius: 6,
   },
-  nextContainer: {
+  buttonContainer: {
     paddingHorizontal: SPACING.page,
     zIndex: 10,
+    gap: 12,
+  },
+  secondaryButton: {
+    backgroundColor: 'rgba(219, 234, 254, 0.1)',
+    borderWidth: 1,
+    borderColor: 'rgba(219, 234, 254, 0.3)',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 14,
+    borderRadius: 25,
+    shadowColor: 'rgba(0, 0, 0, 0.1)',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 1,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  buttonIcon: {
+    marginRight: 6,
+  },
+  secondaryButtonText: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: '#DBEAFE',
+    opacity: 0.9,
   },
 });
