@@ -70,12 +70,12 @@ export default function WelcomeNewScreen() {
       <View style={styles.container}>
         {/* Animated content wrapper for smooth transitions */}
         <AnimatedQuestionPage ref={animationRef}>
-          <View style={styles.content}>
+          <View style={[styles.content, { paddingTop: insets.top + 60 }]}>
             <AnimatedContent delay={100}>
               <View style={styles.welcomeSection}>
                 {/* Unloop Logo */}
                 <Image
-                  source={require('../../assets/images/unloop-logo-black.png')}
+                  source={require('../../assets/images/unloop-logo-new.png')}
                   style={styles.logo}
                   contentFit="contain"
                 />
@@ -124,7 +124,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     paddingHorizontal: SPACING.page,
-    paddingTop: 8,
     paddingBottom: 120, // Space for Next button to prevent overlap
   },
   welcomeSection: {
@@ -136,12 +135,13 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 48, // Větší nadpis
     fontWeight: '800',
-    marginTop: 24,
+    marginTop: 0, // Odstranit margin kvůli lepšímu umístění
   },
   logo: {
-    width: 80,
-    height: 80,
+    width: 200,
+    height: 120,
     alignSelf: 'center',
+    marginBottom: 40,
   },
   textSection: {
     width: '100%',
