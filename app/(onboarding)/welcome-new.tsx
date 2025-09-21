@@ -70,15 +70,18 @@ export default function WelcomeNewScreen() {
       <View style={styles.container}>
         {/* Animated content wrapper for smooth transitions */}
         <AnimatedQuestionPage ref={animationRef}>
-          <View style={[styles.content, { paddingTop: insets.top + 60 }]}>
+          <View style={styles.content}>
+            {/* Logo section - fixed at top with safe area */}
+            <View style={[styles.logoSection, { paddingTop: insets.top + 20 }]}>
+              <Image
+                source={require('../../assets/images/unloop-logo-new.png')}
+                style={styles.logo}
+                contentFit="contain"
+              />
+            </View>
+            
             <AnimatedContent delay={100}>
               <View style={styles.welcomeSection}>
-                {/* Unloop Logo */}
-                <Image
-                  source={require('../../assets/images/unloop-logo-new.png')}
-                  style={styles.logo}
-                  contentFit="contain"
-                />
                 <TitleText animated={false} style={styles.title}>
                   Welcome!
                 </TitleText>
@@ -122,26 +125,29 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    justifyContent: 'center',
     paddingHorizontal: SPACING.page,
     paddingBottom: 120, // Space for Next button to prevent overlap
+  },
+  logoSection: {
+    alignItems: 'center',
+    paddingBottom: 20,
   },
   welcomeSection: {
     width: '100%',
     alignItems: 'center',
     marginBottom: 48, // Increased spacing for better visual balance
+    paddingTop: 80, // Extra space to avoid status bar overlap
   },
   title: {
     textAlign: 'center',
     fontSize: 48, // Větší nadpis
     fontWeight: '800',
-    marginTop: 0, // Odstranit margin kvůli lepšímu umístění
+    marginTop: 0,
   },
   logo: {
     width: 200,
     height: 120,
     alignSelf: 'center',
-    marginBottom: 40,
   },
   textSection: {
     width: '100%',
