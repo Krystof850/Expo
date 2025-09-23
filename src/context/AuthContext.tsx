@@ -2,6 +2,7 @@ import React, { createContext, useContext, useEffect, useState, useCallback } fr
 import { onAuthStateChanged, User, signOut } from "firebase/auth";
 import { auth } from "../lib/firebase";
 import { isSuperwallSupported } from "../utils/environment";
+import { Alert, Platform } from 'react-native';
 
 type AuthState = {
   user: User | null;
@@ -65,28 +66,76 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
     return false;
   }, []);
 
-  // Restore purchases
+  // Restore purchases using Superwall native functionality (production-ready)
   const restorePurchases = useCallback(async (): Promise<boolean> => {
+    // Only run on iOS/Android native platforms with Superwall support
+    if (Platform.OS === 'web') {
+      console.log('[AuthContext] Restore purchases not supported on web platform');
+      Alert.alert('Not Supported', 'Restore purchases is only available on mobile devices.');
+      return false;
+    }
+
     if (!superwallSupported) {
-      console.log('[AuthContext] Superwall not supported - cannot restore purchases');
+      console.log('[AuthContext] Superwall not supported - restore not available');
+      Alert.alert('Not Available', 'Restore purchases is not available in this environment.');
       return false;
     }
 
     try {
       setSubscriptionLoading(true);
-      console.log('[AuthContext] Restoring purchases...');
+      console.log('[AuthContext] Restoring purchases via Superwall...');
       
-      // Placeholder for restore purchases logic
-      // In a real implementation, this would call Superwall's restore method
-      return false;
+      // Use Superwall's native restore functionality
+      const superwallModule = require('expo-superwall');
+      
+      if (superwallModule && superwallModule.restorePurchases) {
+        const restoreResult = await superwallModule.restorePurchases();
+        console.log('[AuthContext] Superwall restore result:', restoreResult);
+        
+        // Note: Superwall handles subscription validation and entitlement checking internally
+        // The subscription status will be updated automatically by SuperwallIntegration
+        // via the onDismiss callback when result.type === 'restored'
+        
+        Alert.alert(
+          'Restore Complete', 
+          'If you had any previous purchases, they have been restored to your account. Your subscription status will be updated shortly.',
+          [{ text: 'OK' }]
+        );
+        
+        return true;
+      } else {
+        throw new Error('Superwall restore method not available');
+      }
     } catch (error: any) {
-      console.error('[AuthContext] Error restoring purchases:', error);
-      // Don't show error popup for restore failures as they are common
+      console.error('[AuthContext] Error restoring purchases via Superwall:', error);
+      
+      // Handle specific error cases
+      let errorMessage = 'An error occurred while restoring purchases. Please try again.';
+      
+      if (error.code === 'user_cancelled' || error.message?.includes('cancelled')) {
+        console.log('[AuthContext] User cancelled restore operation');
+        return false; // Don't show error for user cancellation
+      } else if (error.code === 'store_unavailable' || error.message?.includes('store')) {
+        errorMessage = 'App Store is currently unavailable. Please try again later.';
+      } else if (error.code === 'network_error' || error.message?.includes('network')) {
+        errorMessage = 'Please check your internet connection and try again.';
+      } else if (error.message?.includes('not available')) {
+        // Fallback for environments where Superwall restore is not available
+        console.log('[AuthContext] Superwall restore not available, showing generic message');
+        Alert.alert(
+          'Restore Purchases', 
+          'Restore purchases functionality will be available in the production version of the app.',
+          [{ text: 'OK' }]
+        );
+        return false;
+      }
+      
+      Alert.alert('Restore Error', errorMessage, [{ text: 'OK' }]);
       return false;
     } finally {
       setSubscriptionLoading(false);
     }
-  }, [superwallSupported]);
+  }, [superwallSupported, setHasSubscription]);
 
   // Firebase auth state listener
   useEffect(() => {
