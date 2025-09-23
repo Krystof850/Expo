@@ -12,6 +12,9 @@ interface ConditionalSuperwallProviderProps {
 const ConditionalSuperwallProvider: React.FC<ConditionalSuperwallProviderProps> = ({ children }) => {
   const superwallSupported = isSuperwallSupported();
   
+  // Hook must be at top level (React Hooks rules)
+  const { checkSubscriptionStatus } = useAuth();
+  
   if (!superwallSupported) {
     // V Expo Go - bez Superwall
     console.log('🚀 Running in Expo Go - Superwall disabled');
@@ -24,9 +27,6 @@ const ConditionalSuperwallProvider: React.FC<ConditionalSuperwallProviderProps> 
   try {
     const { SuperwallProvider, CustomPurchaseControllerProvider, Superwall } = require('expo-superwall');
     const superwallApiKey = Constants.expoConfig?.extra?.SUPERWALL_API_KEY;
-
-    // Hook pro refresh entitlementů přes stávající mechanismus
-    const { checkSubscriptionStatus } = useAuth();
 
     const handlePurchaseRestore = async () => {
       console.log('[RESTORE] Starting restore purchases...');
