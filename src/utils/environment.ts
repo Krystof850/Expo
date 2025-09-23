@@ -33,17 +33,24 @@ export const detectAppEnvironment = (): AppEnvironment => {
 export const isSuperwallSupported = (): boolean => {
   // Superwall nefunguje na webu ani v Expo Go
   if (Platform.OS === 'web') {
+    console.log('[Superwall] Support check: WEB platform - NOT SUPPORTED');
     return false;
   }
   
   const ownership = Constants.appOwnership;
-  // Use appOwnership directly for more reliable detection
-  const supported = ownership !== 'expo';
+  const executionEnv = Constants.executionEnvironment;
+  
+  // OPRAVA: Superwall funguje jen v standalone/production builds
+  // TestFlight a App Store mají ownership = 'standalone'
+  // Development builds mají ownership = 'guest'
+  const supported = ownership === 'standalone' || executionEnv === 'standalone';
   
   console.log('[Superwall] Support check:', { 
     platform: Platform.OS, 
-    appOwnership: ownership, 
-    supported 
+    appOwnership: ownership,
+    executionEnvironment: executionEnv,
+    supported,
+    reason: supported ? 'STANDALONE BUILD' : `NOT STANDALONE (ownership: ${ownership}, env: ${executionEnv})`
   });
   
   return supported;
