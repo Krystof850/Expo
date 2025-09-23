@@ -7,6 +7,7 @@ const googleClientId = process.env.GOOGLE_CLIENT_ID || process.env.EXPO_PUBLIC_G
 const iosGoogleClientId = process.env.IOS_GOOGLE_CLIENT_ID || process.env.EXPO_PUBLIC_IOS_GOOGLE_CLIENT_ID;
 const reversedIosClientId = process.env.REVERSED_IOS_CLIENT_ID || process.env.EXPO_PUBLIC_REVERSED_IOS_CLIENT_ID;
 const supportEmail = process.env.SUPPORT_EMAIL || process.env.EXPO_PUBLIC_SUPPORT_EMAIL || 'unloop.app.tech@gmail.com';
+const easProjectId = process.env.EAS_PROJECT_ID;
 
 console.log('🔧 Loading environment variables:', {
   firebaseApiKey: firebaseApiKey ? 'loaded' : 'missing',
@@ -14,7 +15,8 @@ console.log('🔧 Loading environment variables:', {
   googleClientId: googleClientId ? 'loaded' : 'missing',
   iosGoogleClientId: iosGoogleClientId ? 'loaded' : 'missing',
   reversedIosClientId: reversedIosClientId ? 'loaded' : 'missing',
-  supportEmail: supportEmail ? 'loaded' : 'missing'
+  supportEmail: supportEmail ? 'loaded' : 'missing',
+  easProjectId: easProjectId ? 'loaded' : 'missing'
 });
 
 export default ({ config }: ConfigContext): ExpoConfig => ({
@@ -123,6 +125,9 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
 
   extra: {
     ...(config.extra ?? {}),
+    eas: {
+      projectId: easProjectId
+    },
     FIREBASE_API_KEY: firebaseApiKey,
     FIREBASE_AUTH_DOMAIN: "procrastination-app-ddf27.firebaseapp.com",
     FIREBASE_PROJECT_ID: "procrastination-app-ddf27",
