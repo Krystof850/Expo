@@ -1,0 +1,101 @@
+Cíl
+
+Zajistit, aby šel spustit iOS development build přes EAS.
+
+Správně propojit projekt s EAS (owner/slug/projectId).
+
+Nezasahovat do logiky aplikace, bundleId ani UI.
+
+Postup (co má agent vyřešit)
+
+Ověřit přihlášení a vlastnictví projektu
+
+Zjistit, pod jakým účtem/organizací je agent aktuálně přihlášen.
+
+Porovnat to s ownerem projektu, kde repo skutečně žije (na expo.dev).
+
+Pokud je nesoulad, připravit kroky k přihlášení pod správný účet (bez provádění – popsat mi je v závěru).
+
+Zkontrolovat propojení projektu s EAS
+
+Zjistit, zda je projekt lokálně „linknutý“ k existujícímu EAS projektu (kontrola lokálních EAS metadat).
+
+Pokud je propojení rozbité/na jiného ownera, navrhnout čisté znovu-napojení (re-init v rámci správného ownera a slugu).
+
+Zrevidovat app.config.ts
+
+Najít sekci extra.eas.projectId.
+
+Ujistit se, že není undefined a že odpovídá platnému projectId z EAS (UUID).
+
+Pokud chybí: navrhnout bezpečný způsob, jak ho plnit (např. z env proměnné), a zapsat krátkou runtime validaci v CI (jen popsat – nepsat konkrétní kód).
+
+Zkontrolovat eas.json
+
+Ověřit existenci profilu development pro iOS development client / internal distribution.
+
+Pokud chybí, navrhnout přidání minimální konfigurace (bez mazání existujících profilů).
+
+Zkontrolovat identifikátory
+
+iOS bundleIdentifier musí být com.unoop.app.
+
+Android package musí být com.unoop.app.
+
+Nesmí se měnit.
+
+Environment a dokumentace
+
+Připravit vzor pro chybějící proměnnou projektu (EAS_PROJECT_ID) v .env.example.
+
+Přidat stručný README k EAS linku:
+
+jak se přihlásit/ověřit účet,
+
+jak znovu napojit projekt na správného ownera/slug,
+
+kde vzít projectId na expo.dev
+
+jak spustit dev build.
+
+Git hygiene
+
+Ujistit se, že změny jsou minimální, izolované a snadno revertovatelné (commit message, žádné nechtěné refaktory).
+
+Akceptační kritéria
+
+Projekt je navázaný na správného ownera/slug (shoda s expo.dev).
+
+projectId je platné UUID a není undefined.
+
+eas.json obsahuje profil development pro iOS.
+
+bundleIdentifier a android.package beze změny.
+
+README obsahuje kroky, jak provést přihlášení, re-init a build.
+
+Po provedení kroků lze spustit development build pro iOS bez chyby „Entity not authorized“.
+
+Omezení / „Do & Don’t“
+
+NEměň logiku appky, Superwall, navigaci ani UI.
+
+NEměň bundleIdentifier ani android.package.
+
+NEpřidávej nové dependency bez důvodu.
+
+ANO: minimalizuj zásah jen na EAS link, projectId, build profil a dokumentaci.
+
+Výstup od agenta
+
+Stručný report:
+
+Jaký účet/owner je přihlášen vs. jaký je potřeba.
+
+Jaký je aktuální projectId (nebo že chybí) a návrh doplnění.
+
+Stav eas.json a případné navržené doplnění profilu development.
+
+Seznam souborů, kterých se dotkl (bez diffů kódu).
+
+Krátký „co dál“: přesné kroky, které mám já jako uživatel vykonat v terminálu (jen popis, ne konkrétní příkazy).
