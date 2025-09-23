@@ -1,0 +1,53 @@
+Cíl (STRICT): Zapoj tlačítko Restore z mé Superwall šablony tak, aby v produkčním módu spouštělo nativní StoreKit restore. Nesmíš měnit ani obcházet stávající logiku přístupu/premium/entitlementů, routování ani auth. Žádné refaktory, žádné přesuny kódu, žádné „zjednodušování“ logiky.
+
+Stack: Expo React Native + Superwall. Nepoužívám RevenueCat.
+
+Postup (NEJDŘÍV PLÁN → PAK MINIMÁLNÍ ÚPRAVA)
+
+Najdi existující místo, kde obsluhuji Superwall (Provider). Pokud už mám vlastní restorePurchases() nebo ekvivalent → použij ho beze změn.
+
+Obal pouze inicializaci Superwallu do CustomPurchaseControllerProvider a přidej JEN callback:
+
+onPurchaseRestore = async () => { await Superwall.restorePurchases(); /* případně jen vyvolej můj existující refresh entitlementů, ale NEŠAHEJ na gating */ }
+
+Neprováděj žádné změny v:
+
+komponentách/guardech, které rozhodují o přístupu do „chráněné zóny“,
+
+stavu isPro/entitlements, auth/session, navigaci, deeplinkách,
+
+show/hide paywall podmínkách.
+
+Nevkládej žádné auto-restore na launch ani časovače. Restore se spouští výhradně po kliku na tlačítko Restore v paywallu.
+
+UI notifikace: pouze nenáročné toast/alert; žádné změny layoutu paywallu, žádné nové obrazovky.
+
+Soubory, které smíš upravit
+
+Jen konfigurační soubor s Providerem (např. ConditionalSuperwallProvider.tsx / App.tsx).
+
+Žádné jiné soubory (router, guards, screens, store, auth).
+
+Akceptační kritéria (musíš doložit)
+
+Diff max. ~20 řádků.
+
+onPurchaseRestore volá pouze Superwall.restorePurchases() a (pokud existuje) moji funkci na refresh entitlementů.
+
+Žádná změna logiky, která rozhoduje, jestli uživatel vidí chráněný obsah.
+
+Žádné spouštění restore mimo klik na tlačítko Restore.
+
+Dva rychlé testy (popiš kroky, kód nesahej):
+
+Sandbox účet bez nákupu → klik Restore → bezpečná hláška „No purchases found“, žádné odemčení.
+
+Sandbox účet s nákupem → klik Restore → entitlement se aktualizuje (přes stávající mechanismus), paywall se zavře jen pokud to už dnes appka dělá.
+
+Doručení
+
+Nejprve napiš stručný plán (co přesně upravíš).
+
+Pak udělej změnu, pošli diff a krátký komentář, že gating/guards se nezměnily.
+
+Pokud narazíš na místo, kde by změna zasáhla mou logiku, zastav se a zeptej se – nic nepřepisuj.
