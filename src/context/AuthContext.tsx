@@ -66,7 +66,7 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
     return false;
   }, []);
 
-  // Restore purchases using Superwall native functionality (production-ready)
+  // Manual restore purchases using Superwall native functionality (for profile button)
   const restorePurchases = useCallback(async (): Promise<boolean> => {
     // Only run on iOS/Android native platforms with Superwall support
     if (Platform.OS === 'web') {
@@ -83,37 +83,47 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
 
     try {
       setSubscriptionLoading(true);
-      console.log('[AuthContext] Restoring purchases via Superwall...');
+      console.log('[AuthContext] Manual restore purchases via Superwall...');
       
-      // Use Superwall's native restore functionality
-      const superwallModule = require('expo-superwall');
+      // Use Superwall's native restore functionality directly
+      // Note: This is the same method called by CustomPurchaseControllerProvider.onPurchaseRestore
+      const { Superwall } = require('expo-superwall');
       
-      if (superwallModule && superwallModule.restorePurchases) {
-        const restoreResult = await superwallModule.restorePurchases();
-        console.log('[AuthContext] Superwall restore result:', restoreResult);
+      if (Superwall && Superwall.restorePurchases) {
+        const restoreResult = await Superwall.restorePurchases();
+        console.log('[AuthContext] Manual Superwall restore result:', restoreResult);
         
-        // Note: Superwall handles subscription validation and entitlement checking internally
-        // The subscription status will be updated automatically by SuperwallIntegration
-        // via the onDismiss callback when result.type === 'restored'
-        
-        Alert.alert(
-          'Restore Complete', 
-          'If you had any previous purchases, they have been restored to your account. Your subscription status will be updated shortly.',
-          [{ text: 'OK' }]
-        );
-        
-        return true;
+        // Handle the result similar to CustomPurchaseControllerProvider
+        if (restoreResult?.success !== false) {
+          console.log('[AuthContext] Manual restore successful');
+          Alert.alert(
+            'Purchases Restored',
+            'Your previous purchases have been successfully restored.',
+            [{ text: 'OK' }]
+          );
+          return true;
+        } else if (restoreResult?.error?.code === 'no_purchases_found') {
+          console.log('[AuthContext] No previous purchases found');
+          Alert.alert(
+            'No Previous Purchases',
+            'No previous purchases found for this Apple ID.',
+            [{ text: 'OK' }]
+          );
+          return false;
+        } else {
+          throw new Error(restoreResult?.error?.message || 'Unknown restore error');
+        }
       } else {
         throw new Error('Superwall restore method not available');
       }
     } catch (error: any) {
-      console.error('[AuthContext] Error restoring purchases via Superwall:', error);
+      console.error('[AuthContext] Error during manual restore:', error);
       
       // Handle specific error cases
       let errorMessage = 'An error occurred while restoring purchases. Please try again.';
       
       if (error.code === 'user_cancelled' || error.message?.includes('cancelled')) {
-        console.log('[AuthContext] User cancelled restore operation');
+        console.log('[AuthContext] User cancelled manual restore operation');
         return false; // Don't show error for user cancellation
       } else if (error.code === 'store_unavailable' || error.message?.includes('store')) {
         errorMessage = 'App Store is currently unavailable. Please try again later.';
@@ -135,7 +145,7 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
     } finally {
       setSubscriptionLoading(false);
     }
-  }, [superwallSupported, setHasSubscription]);
+  }, [superwallSupported]);
 
   // Firebase auth state listener
   useEffect(() => {
