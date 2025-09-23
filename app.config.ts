@@ -19,12 +19,12 @@ console.log('🔧 Loading environment variables:', {
 
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
-  name: config.name ?? "unloop Dev",
-  slug: config.slug ?? "unloop-dev",
+  name: config.name ?? "Unoop",
+  slug: config.slug ?? "unoop",
   version: '1.0.0',
   orientation: 'portrait',
   icon: './assets/images/app-icon.png',
-  scheme: 'unloop',
+  scheme: 'unoop',
   primaryColor: '#2563eb',
   userInterfaceStyle: 'automatic',
 
@@ -32,11 +32,11 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     ...(config.ios ?? {}),
     supportsTablet: false,
     requireFullScreen: false,
-    bundleIdentifier: "com.unloopapp.dev",
+    bundleIdentifier: "com.unoop.app",
     infoPlist: {
       ...(config.ios?.infoPlist ?? {}),
       ITSAppUsesNonExemptEncryption: false,
-      CFBundleDisplayName: "unloop",
+      CFBundleDisplayName: "Unoop",
       LSApplicationCategoryType: "public.app-category.productivity",
       UIRequiredDeviceCapabilities: ['arm64'],
       UISupportedInterfaceOrientations: ['UIInterfaceOrientationPortrait', 'UIInterfaceOrientationPortraitUpsideDown'],
@@ -54,7 +54,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       foregroundImage: './assets/images/app-icon.png',
       backgroundColor: '#ffffff',
     },
-    package: "com.unloopapp.dev",
+    package: "com.unoop.app",
     versionCode: 1,
     permissions: [],
     blockedPermissions: [
