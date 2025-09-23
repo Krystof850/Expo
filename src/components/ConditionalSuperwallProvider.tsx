@@ -35,6 +35,11 @@ const ConditionalSuperwallProvider: React.FC<ConditionalSuperwallProviderProps> 
         await Superwall.restorePurchases();
         console.log('[RESTORE] Superwall.restorePurchases() completed');
         
+        if (Superwall.syncPurchases) {
+          await Superwall.syncPurchases();
+          console.log('[RESTORE] syncPurchases done');
+        }
+        
         // Refresh entitlementů přes stávající mechanismus
         await checkSubscriptionStatus();
         console.log('[RESTORE] Entitlements refreshed');
