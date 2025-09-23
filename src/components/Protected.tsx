@@ -58,19 +58,22 @@ export const Protected: React.FC<React.PropsWithChildren> = ({ children }) => {
     );
   }
 
+  // Redirect to main app if user is authenticated but doesn't have subscription AND paywall was attempted
+  // (this prevents deadlock if user declined paywall - but only after some delay to avoid infinite loops)
+  if (isAuthenticated && !hasSubscription && !subscriptionLoading && paywallAttempted && !paywallInFlight) {
+    console.log('[Protected] User authenticated but no subscription and paywall attempted - allowing access');
+    // Místo redirect, prostě povolit přístup - uživatel si může koupit subscription později
+    // return <Redirect href="/(tabs)" />;
+  }
+
   // Only render children if user has full access (authenticated + subscription)
   if (canAccessProtected) {
     return <>{children}</>;
   }
 
-  // If user is authenticated but doesn't have subscription - block access and keep presenting paywall
-  if (isAuthenticated && !hasSubscription) {
-    console.log('[Protected] User authenticated but no subscription - blocking access');
-    return (
-      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-        <ActivityIndicator size="large" />
-      </View>
-    );
+  // Pokud je uživatel authenticated a paywall byl attempted, povolit přístup
+  if (isAuthenticated && paywallAttempted) {
+    return <>{children}</>;
   }
 
   // Fallback - should not reach here

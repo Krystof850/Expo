@@ -1,4 +1,4 @@
-import Constants, { ExecutionEnvironment } from 'expo-constants';
+import * as Constants from 'expo-constants';
 import { Platform } from 'react-native';
 
 // Global __DEV__ declaration for TypeScript
@@ -13,42 +13,37 @@ export interface AppEnvironment {
 
 export const detectAppEnvironment = (): AppEnvironment => {
   const env = Constants.executionEnvironment;
+  const ownership = Constants.appOwnership;
   
-  // OPRAVA: appOwnership je deprecated a vrací null v EAS Build!
-  // Používej pouze executionEnvironment
+  // Debug log for troubleshooting
   console.log('[Environment] Detection:', { 
-    executionEnvironment: env,
+    executionEnvironment: env, 
+    appOwnership: ownership, 
     platform: Platform.OS 
   });
   
   return {
-    isExpoGo: env === ExecutionEnvironment.StoreClient,
-    isDevelopmentBuild: env === ExecutionEnvironment.Bare,
-    isProduction: env === ExecutionEnvironment.Standalone,
-    environment: env || 'unknown'
+    isExpoGo: ownership === 'expo',
+    isDevelopmentBuild: ownership === 'guest' || env === 'bare',
+    isProduction: ownership === 'standalone' || env === 'standalone',
+    environment: ownership || env || 'unknown'
   };
 };
 
 export const isSuperwallSupported = (): boolean => {
   // Superwall nefunguje na webu ani v Expo Go
   if (Platform.OS === 'web') {
-    console.log('[Superwall] Support check: WEB platform - NOT SUPPORTED');
     return false;
   }
   
-  const executionEnv = Constants.executionEnvironment;
-  
-  // OPRAVA: Používej pouze executionEnvironment (appOwnership je deprecated!)
-  // TestFlight a App Store = ExecutionEnvironment.Standalone
-  // Expo Go = ExecutionEnvironment.StoreClient  
-  // Bare dev = ExecutionEnvironment.Bare
-  const supported = executionEnv === ExecutionEnvironment.Standalone;
+  const ownership = Constants.appOwnership;
+  // Use appOwnership directly for more reliable detection
+  const supported = ownership !== 'expo';
   
   console.log('[Superwall] Support check:', { 
-    platform: Platform.OS,
-    executionEnvironment: executionEnv,
-    supported,
-    reason: supported ? 'STANDALONE BUILD (TestFlight/App Store)' : `NOT STANDALONE (${executionEnv})`
+    platform: Platform.OS, 
+    appOwnership: ownership, 
+    supported 
   });
   
   return supported;

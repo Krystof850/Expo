@@ -140,7 +140,7 @@ const styles = StyleSheet.create({
   },
   title: {
     textAlign: 'center',
-    fontSize: 25, // Větší nadpis
+    fontSize: 48, // Větší nadpis
     fontWeight: '800',
     marginTop: 0,
   },

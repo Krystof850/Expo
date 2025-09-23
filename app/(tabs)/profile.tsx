@@ -9,14 +9,13 @@ import * as StoreReview from 'expo-store-review';
 import Constants from 'expo-constants';
 import { updatePassword, EmailAuthProvider, reauthenticateWithCredential } from 'firebase/auth';
 
-import { useAuth, useSubscription } from '../../src/context/AuthContext';
+import { useAuth } from '../../src/context/AuthContext';
 import { deleteUserAccount } from '../../src/services/auth';
 import { Protected } from '../../src/components/Protected';
 import { COLORS } from '@/constants/theme';
 
 export default function Profile() {
   const { user, logout } = useAuth();
-  const { restorePurchases, subscriptionLoading } = useSubscription();
   const insets = useSafeAreaInsets();
   const [isPasswordModalVisible, setIsPasswordModalVisible] = useState(false);
   const [currentPassword, setCurrentPassword] = useState('');
@@ -270,15 +269,6 @@ export default function Profile() {
     setIsTermsModalVisible(true);
   };
 
-  const handleRestorePurchases = async () => {
-    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    
-    if (subscriptionLoading) return; // Prevent multiple calls
-    
-    console.log('[Profile] Initiating restore purchases...');
-    await restorePurchases();
-  };
-
   return (
     <Protected>
       <View style={[styles.container, { paddingTop: insets.top }]}>
@@ -334,22 +324,6 @@ export default function Profile() {
               <View style={styles.menuItemLeft}>
                 <Ionicons name="star" size={24} color={COLORS.primaryAction || '#0284C7'} />
                 <Text style={styles.menuItemText}>Rate App</Text>
-              </View>
-              <Ionicons name="chevron-forward" size={20} color="#94A3B8" />
-            </TouchableOpacity>
-
-            <View style={styles.menuSeparator} />
-
-            <TouchableOpacity 
-              style={[styles.menuItem, subscriptionLoading && { opacity: 0.6 }]} 
-              onPress={handleRestorePurchases}
-              disabled={subscriptionLoading}
-            >
-              <View style={styles.menuItemLeft}>
-                <Ionicons name="refresh" size={24} color={COLORS.primaryAction || '#0284C7'} />
-                <Text style={styles.menuItemText}>
-                  {subscriptionLoading ? 'Restoring...' : 'Restore Purchases'}
-                </Text>
               </View>
               <Ionicons name="chevron-forward" size={20} color="#94A3B8" />
             </TouchableOpacity>

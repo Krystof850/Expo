@@ -157,12 +157,6 @@ const SuperwallEnabledIntegration: React.FC<{ children: ReactNode }> = ({ childr
 
   } catch (error) {
     // Silently handle Superwall unavailability - this is expected in dev environments
-    console.log('[SuperwallIntegration] Superwall module not available, ensuring subscription is blocked');
-    
-    // OPRAVA: Explicitně nastav hasSubscription na false pro případ stale hodnoty
-    React.useEffect(() => {
-      setHasSubscription(false);
-    }, [setHasSubscription]);
     
     // Fallback context pro případ chyby
     const contextValue: SuperwallContextType = {
@@ -187,36 +181,18 @@ const SuperwallDisabledIntegration: React.FC<{ children: ReactNode }> = ({ child
   const { setHasSubscription } = useAuth() as any;
 
   useEffect(() => {
-    // OPRAVA: V produkčních buildech BEZ Superwall NEPOVOLOVAT automaticky přístup
-    // Pouze ve webovém prostředí (pro development) povolit přístup
-    const { Platform } = require('react-native');
-    
-    if (Platform.OS === 'web') {
-      // Web development - povolit přístup
-      console.log('[SuperwallDisabledIntegration] Web environment - allowing access for development');
-      setHasSubscription(true);
-    } else {
-      // Mobile bez Superwall - BLOKOVAT přístup (subscription = false)
-      console.log('[SuperwallDisabledIntegration] Mobile without Superwall - blocking access (no subscription)');
-      setHasSubscription(false);
-    }
+    // V prostředí bez Superwall povolit přístup, aby nedošlo k deadlock
+    // In dev environment without Superwall, allow access to prevent deadlock
+    setHasSubscription(true); // OPRAVA: Nastav na true místo false, aby se předešlo deadlock
   }, [setHasSubscription]);
-
-  const { Platform } = require('react-native');
-  const isWebDevelopment = Platform.OS === 'web';
 
   const contextValue: SuperwallContextType = {
     presentPaywall: async () => {
-      if (isWebDevelopment) {
-        console.log('[SuperwallDisabledIntegration] Web: Paywall not available - allowing access for development');
-        return true;
-      } else {
-        console.log('[SuperwallDisabledIntegration] Mobile: Superwall not available - cannot present paywall');
-        return false;
-      }
+      // In dev environment, allow access without paywall
+      return true; // OPRAVA: Vrať true místo false
     },
-    isSubscribed: isWebDevelopment, // true jen na webu, false na mobilu
-    subscriptionStatus: isWebDevelopment ? 'DISABLED_WEB_ALLOWED' : 'DISABLED_MOBILE_BLOCKED'
+    isSubscribed: true, // OPRAVA: true místo false
+    subscriptionStatus: 'DISABLED_ALLOWED'
   };
 
   return (
