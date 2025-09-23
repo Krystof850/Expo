@@ -1,0 +1,102 @@
+Cíl: Přidej do Expo/React Native projektu neinvazivní debug nástroj pro ověření skutečného stavu předplatného. Nesmíš změnit žádné stávající flow, navigaci ani chování appky pro běžné uživatele.
+
+Požadavky
+
+Nový soubor: src/debug/SubscriptionDebug.tsx
+
+Exportuj defaultní React komponentu SubscriptionDebug.
+
+Komponenta zobrazí:
+
+tlačítka: Restore & Sync (Superwall), Check Superwall Status, Check StoreKit (optional)
+
+textové výstupy (scrollovatelný log) – posledních ~200 řádků.
+
+Implementuj helpery:
+
+import { Superwall } from 'react-native-superwall'
+export async function swRestoreAndSync() {
+  try {
+    await Superwall.restorePurchases?.()
+    await Superwall.syncPurchases?.()
+    return '[SW] restore+sync OK'
+  } catch (e) { return `[SW] restore+sync ERR: ${String(e)}` }
+}
+export async function swGetStatus() {
+  try {
+    const status = await Superwall.getSubscriptionStatus?.()
+    const attrs  = await Superwall.getUserAttributes?.()
+    return `[SW] status=${status} attrs=${JSON.stringify(attrs)}`
+  } catch (e) { return `[SW] getStatus ERR: ${String(e)}` }
+}
+
+
+Volitelný StoreKit check (jen pokud je knihovna přítomna):
+
+Udělej dynamický import react-native-iap v try/catch. Pokud import selže, vrať log “RNIap not installed – skipped”.
+
+Kód (pseudo):
+
+export async function iapCheckOptional() {
+  try {
+    const RNIap = await import('react-native-iap')
+    await RNIap.initConnection()
+    const purchases = await RNIap.getAvailablePurchases()
+    const receipt = await RNIap.getReceiptIOS?.()
+    await RNIap.endConnection()
+    return `[IAP] purchases=${JSON.stringify(purchases.map(p => ({pid:p.productId,tid:p.transactionId})))} receiptLen=${receipt?.length||0}`
+  } catch (e) {
+    return `[IAP] skipped or error: ${String(e)}`
+  }
+}
+
+
+Skryté zpřístupnění (dev-only):
+
+Nepřidávej nové položky do viditelné navigace.
+
+V app přidej jen v dev režimu (__DEV__) tajný gesture: dlouhý stisk na logo / root view po dobu 3s otevře SubscriptionDebug.
+
+Implementace: vytvoř src/debug/registerDebugEntry.ts s funkcí registerSubscriptionDebug(navigationOrRoot); tato funkce v devu přidá TouchableWithoutFeedback wrapper s onLongPress → navigace na screen SubscriptionDebug. V produkci nedělá nic.
+
+Pokud projekt používá React Navigation:
+
+Vlož SubscriptionDebug jako skrytý screen do existujícího navigátoru (např. do RootStacku) s options: { headerShown: true, title: 'Subscription Debug' }.
+
+Neodkazuj na něj ze žádného viditelného menu.
+
+Žádné side-effects:
+
+Nezasahuj do business logiky, paywall triggerů ani do gatingu.
+
+Žádné změny v existujících souborech kromě minimálního hooku pro tajný gesture a registrace skrytého screenu.
+
+Žádné nové závislosti do package.json. react-native-iap používej pouze, pokud už je v projektu.
+
+Akceptační testy (v dev buildu):
+
+Dlouhý stisk na hlavní obrazovce po 3s otevře Subscription Debug.
+
+Tlačítko Restore & Sync (Superwall) zaloguje „[SW] restore+sync OK/ERR“.
+
+Tlačítko Check Superwall Status zaloguje status=active|inactive|unknown + krátké attrs.
+
+Tlačítko Check StoreKit (optional):
+
+pokud RN IAP není nainstalované → log „RNIap not installed – skipped“.
+
+pokud je → zaloguje seznam productId/transactionId a délku receiptu.
+
+V produkčním buildu gesto nic nedělá.
+
+Kódový styl:
+
+TypeScript, funkční komponenty, žádné eslint varování.
+
+Bez UI knihoven navíc; použij RN primitivy.
+
+Výstupy pro logy (Console):
+
+Prefixuj všechny řádky [SUBDBG] a současně zobrazuj ve ScrollView uvnitř obrazovky.
+
+NIC JINÉHO NEMĚŇ. Pokud musíš upravit jakýkoli existující soubor, napiš přesně jakou řádku a proč – minimal changes.

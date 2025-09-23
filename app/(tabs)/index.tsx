@@ -29,6 +29,7 @@ import Animated, {
 import { useAuth } from '../../src/context/AuthContext';
 import { Protected } from '../../src/components/Protected';
 import { router } from 'expo-router';
+import { withDebugEntry } from '../../src/debug/registerDebugEntry';
 import DynamicOrb from '../../src/components/DynamicOrb';
 import { ProgressService } from '../../src/services/progressService';
 import { getCurrentOrbLevel, convertTimeToDays, getOrbLevelById } from '../../src/utils/orbLogic';
@@ -43,7 +44,7 @@ interface TimeState {
   seconds: number;
 }
 
-export default function Homepage() {
+function Homepage() {
   const { user } = useAuth();
   const insets = useSafeAreaInsets();
   const [time, setTime] = useState<TimeState>({ days: 0, hours: 0, minutes: 0, seconds: 0 });
@@ -906,3 +907,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
+
+// Export s debug wrapper - v dev módu přidá tajný long-press gesture
+export default withDebugEntry(Homepage);

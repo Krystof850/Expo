@@ -105,6 +105,16 @@ export default function RootLayout() {
                   fullScreenGestureEnabled: false 
                 }} 
               />
+              {/* Hidden debug screen - pouze v dev módu */}
+              {__DEV__ && (
+                <Stack.Screen 
+                  name="subscription-debug" 
+                  options={{ 
+                    headerShown: true, 
+                    title: 'Subscription Debug'
+                  }} 
+                />
+              )}
               <Stack.Screen name="+not-found" />
             </Stack>
             <StatusBar style="auto" />
