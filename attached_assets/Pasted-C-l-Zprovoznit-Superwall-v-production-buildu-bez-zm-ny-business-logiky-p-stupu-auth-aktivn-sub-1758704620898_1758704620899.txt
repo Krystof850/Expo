@@ -1,0 +1,145 @@
+Cíl: Zprovoznit Superwall v production buildu bez změny business logiky přístupu (auth + aktivní subscription).
+Zachovat: Flow: nepřihlášený → login; přihlášený + NEaktivní sub → paywall; přihlášený + aktivní sub → app. V appce průběžná kontrola sub; při ztrátě sub okamžitě na paywall.
+
+1) Inicializace Superwallu (Provider)
+
+V kořeni appky zaveď SuperwallProvider z expo-superwall.
+
+API klíč načti z Constants.expoConfig?.extra?.SUPERWALL_API_KEY (už je předáván přes eas.json → app.config.ts → extra.SUPERWALL_API_KEY).
+
+Obal celou appku (Auth provider, router, atd.) do <SuperwallProvider apiKey={...}>.
+
+Úprava (vytvoř/aktualizuj App.tsx nebo úplný root _layout.tsx podle struktury projektu):
+
+import React from 'react';
+import Constants from 'expo-constants';
+import { SuperwallProvider } from 'expo-superwall';
+import Root from './src/Root'; // pokud existuje, jinak vlož aktuální root
+
+export default function App() {
+  const swKey = Constants.expoConfig?.extra?.SUPERWALL_API_KEY;
+  if (!swKey) console.warn('[Superwall] Missing SUPERWALL_API_KEY in extra');
+
+  return (
+    <SuperwallProvider apiKey={swKey}>
+      <Root /> {/* zde renderuj celý dosavadní strom appky */}
+    </SuperwallProvider>
+  );
+}
+
+
+Nesahat do existující business logiky rozhodování (auth + subscription).
+
+2) Oprava „dev fallbacku“, aby nemaskoval chyby
+
+V SuperwallIntegration.tsx v části SuperwallDisabledIntegration uprav fallback tak, aby neodemýkal přístup bez sub (Expo Go / web).
+
+Změň:
+
+setHasSubscription(true) → setHasSubscription(false)
+
+presentPaywall: async () => true → () => false
+
+isSubscribed: true → false
+
+subscriptionStatus: 'DISABLED_ALLOWED' → 'DISABLED'
+
+Tím zůstává logika stejná: bez aktivní sub se do chráněných částí nedostaneš. Jen přestaneme mít falešný “OK” v dev nástrojích.
+
+3) Zachovat a zpřesnit mapování statusu → přístup
+
+V SuperwallEnabledIntegration ponech status mapping, ale zajisti, že pouze platné stavy dávají přístup.
+
+Ponech “aktivní” jako: ACTIVE a TRIAL.
+
+GRACE_PERIOD/ON_HOLD nech jako NEaktivní (uživatel má problémy s platbou → chceme ho na paywall).
+
+Uprav výpočet:
+
+const statusValue = subscriptionStatus?.status;
+const hasActiveSubscription =
+  statusValue === 'ACTIVE' || statusValue === 'TRIAL';
+
+setHasSubscription(!!hasActiveSubscription);
+
+4) Nepřetržité hlídání sub vevnitř appky (bez změny UX)
+
+V useEffect už posloucháš subscriptionStatus. Ponech to, jen přidej guard pro případ, že status spadne z aktivního na neaktivní: zavolej presentPaywall() (s atomic lockem zachovej).
+
+Implementuj to bezpečně: když hasActiveSubscription přejde z true → false, spusť presentPaywall().
+
+Doplň:
+
+const prevStatusRef = React.useRef<string | undefined>(subscriptionStatus?.status);
+
+useEffect(() => {
+  const prev = prevStatusRef.current;
+  const curr = subscriptionStatus?.status;
+
+  const wasActive = prev === 'ACTIVE' || prev === 'TRIAL';
+  const isActive  = curr === 'ACTIVE' || curr === 'TRIAL';
+
+  if (wasActive && !isActive) {
+    // user ztratil entitlement → vyvolej paywall
+    presentPaywall().catch(() => {});
+  }
+  prevStatusRef.current = curr;
+}, [subscriptionStatus?.status, presentPaywall]);
+
+
+Tím držíme požadavek: uvnitř appky se stav hlídá a při ztrátě sub okamžitě zpět na paywall.
+
+5) Přihlašování a identifikace
+
+V SuperwallEnabledIntegration ponech identify(user.uid) při změně user?.uid.
+
+Nic dalšího v auth flow neměň (nezasahovat do redirectů/routeru – už máš index.tsx → onboarding welcome).
+
+6) Spolehlivý restore/sync (bez změny UI)
+
+Nech existující restore logiku. Doplň pouze safe volání po dismiss paywallu, ať se stav jistě srovná:
+
+import { Superwall } from 'expo-superwall';
+
+// po onDismiss (po purchase/restore)
+await Superwall.syncPurchases?.().catch(()=>{});
+
+7) Kontrola env a bundlu (jen ověření, nic refaktorovat)
+
+Nech eas.json tak, jak je – klíč EXPO_PUBLIC_SUPERWALL_API_KEY zůstává.
+
+V app.config.ts neměnit strukturu extra.
+
+Přidej jen jeden log při bootu, ať v release vidíme prefix klíče:
+
+console.log('[Superwall] Key prefix:', (swKey ?? '').slice(0,8));
+
+
+V release se logy omezí, ale tohle pomůže při interním testu.
+
+8) Build a rychlý test
+
+Spustit iOS prod build:
+
+eas build --profile production --platform ios
+
+
+Nainstalovat přes TestFlight.
+
+V Superwall dashboardu dočasně nastav placement použitý v kódu (zario-template-3a85-2025-09-10) na Always Show (bez audience) – ověř, že se paywall prezentuje. Pak vrať původní audience.
+
+Akceptační kritéria
+
+Bez přihlášení → osoba musí na login (beze změny).
+
+Přihlášený uživatel bez aktivní sub → okamžitě paywall.
+
+Po nákupu/restore → vstup do appky.
+
+Uvnitř appky při ztrátě entitlementu → okamžitý návrat na paywall.
+
+Expo Go/web: bez Superwallu se nic “neodemkne” (žádné falešné „true“).
+
+Production build (TestFlight) prezentuje paywall a čte klíč z extra.SUPERWALL_API_KEY.
+
+NIC dalšího v obchodní logice nemente. Žádné nové obrazovky, žádné změny routeru, žádné úpravy pravidel v auth contextu mimo výše uvedené.
