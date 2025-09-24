@@ -9,10 +9,6 @@ localPort = 5000
 externalPort = 80
 
 [[ports]]
-localPort = 5001
-externalPort = 3000
-
-[[ports]]
 localPort = 8081
 externalPort = 8081
 
@@ -88,6 +84,10 @@ author = "agent"
 task = "workflow.run"
 args = "Dev Server"
 
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Expo Web Server"
+
 [[workflows.workflow]]
 name = "Dev Server"
 author = "agent"
@@ -99,6 +99,18 @@ outputType = "webview"
 task = "shell.exec"
 args = "npm run dev:start"
 waitForPort = 5000
+
+[[workflows.workflow]]
+name = "Expo Web Server"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npx expo start --web --port 5000"
+waitForPort = 5000
+
+[workflows.workflow.metadata]
+outputType = "webview"
 
 [agent]
 expertMode = true
