@@ -42,8 +42,10 @@ const SuperwallEnabledIntegration: React.FC<{ children: ReactNode }> = ({ childr
       // Mapuj Superwall subscription status na boolean hodnotu pro AuthContext
       // subscriptionStatus je objekt s vlastností status: {"status": "ACTIVE", "entitlements": [...]}
       const statusValue = subscriptionStatus?.status;
-      // Pouze ACTIVE a TRIAL jako aktivní - GRACE_PERIOD/ON_HOLD jsou neaktivní
-      const hasActiveSubscription = statusValue === 'ACTIVE' || statusValue === 'TRIAL';
+      const hasActiveSubscription = statusValue === 'ACTIVE' || 
+                                   statusValue === 'TRIAL' ||
+                                   statusValue === 'GRACE_PERIOD' ||
+                                   statusValue === 'ON_HOLD';
       
       console.log('[SuperwallIntegration] Setting hasSubscription to:', hasActiveSubscription, 'based on status:', statusValue);
       setHasSubscription(hasActiveSubscription);
@@ -85,7 +87,7 @@ const SuperwallEnabledIntegration: React.FC<{ children: ReactNode }> = ({ childr
           webViewLoadDuration: info?.webViewLoadDuration + 's'
         });
       },
-      onDismiss: async (info: any, result: any) => {
+      onDismiss: (info: any, result: any) => {
         console.log('[SuperwallIntegration] Paywall dismissed:', info, result);
         
         // ATOMIC: Clear presentation lock
@@ -96,27 +98,9 @@ const SuperwallEnabledIntegration: React.FC<{ children: ReactNode }> = ({ childr
         if (result?.purchased === true || result?.type === 'purchased') {
           console.log('[SuperwallIntegration] Purchase successful:', result);
           setHasSubscription(true);
-          
-          // Spolehlivý sync po nákupu
-          try {
-            const { Superwall } = require('expo-superwall');
-            await Superwall.syncPurchases?.().catch(() => {});
-            console.log('[SuperwallIntegration] Purchase synced successfully');
-          } catch (error) {
-            console.log('[SuperwallIntegration] Purchase sync skipped (not available)');
-          }
         } else if (result?.type === 'restored') {
           console.log('[SuperwallIntegration] Purchase restored:', result);  
           setHasSubscription(true);
-          
-          // Spolehlivý sync po restore
-          try {
-            const { Superwall } = require('expo-superwall');
-            await Superwall.syncPurchases?.().catch(() => {});
-            console.log('[SuperwallIntegration] Restore synced successfully');
-          } catch (error) {
-            console.log('[SuperwallIntegration] Restore sync skipped (not available)');
-          }
         } else {
           console.log('[SuperwallIntegration] Paywall dismissed without purchase:', result);
         }
@@ -170,27 +154,9 @@ const SuperwallEnabledIntegration: React.FC<{ children: ReactNode }> = ({ childr
       return promise;
     }, [registerPlacement, setHasSubscription]);
 
-    // Nepřetržité hlídání subscription - při ztrátě sub okamžitě na paywall
-    const prevStatusRef = React.useRef<string | undefined>(subscriptionStatus?.status);
-
-    useEffect(() => {
-      const prev = prevStatusRef.current;
-      const curr = subscriptionStatus?.status;
-
-      const wasActive = prev === 'ACTIVE' || prev === 'TRIAL';
-      const isActive  = curr === 'ACTIVE' || curr === 'TRIAL';
-
-      if (wasActive && !isActive) {
-        // user ztratil entitlement → vyvolej paywall
-        console.log('[SuperwallIntegration] Subscription lost - presenting paywall');
-        presentPaywall().catch(() => {});
-      }
-      prevStatusRef.current = curr;
-    }, [subscriptionStatus?.status, presentPaywall]);
-
     const contextValue: SuperwallContextType = {
       presentPaywall,
-      isSubscribed: subscriptionStatus?.status === 'ACTIVE' || subscriptionStatus?.status === 'TRIAL',
+      isSubscribed: subscriptionStatus?.status === 'ACTIVE',
       subscriptionStatus: subscriptionStatus?.status || 'UNKNOWN'
     };
 
@@ -226,19 +192,18 @@ const SuperwallDisabledIntegration: React.FC<{ children: ReactNode }> = ({ child
   const { setHasSubscription } = useAuth() as any;
 
   useEffect(() => {
-    // V prostředí bez Superwall NEPOVOLIT přístup - žádné falešné "OK"
-    // Without Superwall, maintain proper access control - no false access
-    setHasSubscription(false);
+    // V prostředí bez Superwall povolit přístup, aby nedošlo k deadlock
+    // In dev environment without Superwall, allow access to prevent deadlock
+    setHasSubscription(true); // OPRAVA: Nastav na true místo false, aby se předešlo deadlock
   }, [setHasSubscription]);
 
   const contextValue: SuperwallContextType = {
     presentPaywall: async () => {
-      // V dev prostředí bez Superwall nemůžeme prezentovat paywall
-      console.log('[SuperwallIntegration] Superwall disabled - cannot present paywall');
-      return false;
+      // In dev environment, allow access without paywall
+      return true; // OPRAVA: Vrať true místo false
     },
-    isSubscribed: false,
-    subscriptionStatus: 'DISABLED'
+    isSubscribed: true, // OPRAVA: true místo false
+    subscriptionStatus: 'DISABLED_ALLOWED'
   };
 
   return (
