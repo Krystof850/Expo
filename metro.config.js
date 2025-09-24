@@ -5,7 +5,7 @@ const isWeb = process.env.EXPO_OS === 'web' || process.env.EAS_BUILD_PLATFORM ==
 
 /** @type {import('expo/metro-config').MetroConfig} */
 const config = getDefaultConfig(__dirname, {
-  isCSSEnabled: isWeb,
+  isCSSEnabled: true, // Always enable CSS to fix modal.module.css issue
 });
 
 // SVG transformer support
