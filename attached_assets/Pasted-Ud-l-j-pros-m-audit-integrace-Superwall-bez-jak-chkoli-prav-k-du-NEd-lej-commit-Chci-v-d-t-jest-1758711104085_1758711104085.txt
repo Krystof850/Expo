@@ -1,0 +1,30 @@
+Udělěj prosím audit integrace Superwall bez jakýchkoli úprav kódu (NEdělej commit). Chci vědět, jestli platí některá z těchto příčin, proč v TestFlightu nevidím nové eventy/nezobrazí se paywall:
+
+A) API key mismatch / špatná aplikace v Superwallu  
+   - Ověř v `eas.json` (profile "production"), že `EXPO_PUBLIC_SUPERWALL_API_KEY` čerpá z `$SUPERWALL_API_KEY`.  
+   - Z `app.config.ts` potvrď, že klíč jde do `extra.SUPERWALL_API_KEY` a že root provider čte právě `Constants.expoConfig?.extra?.SUPERWALL_API_KEY`.  
+   - Zkontroluj, zda v repu neexistuje žádný jiný zdroj apiKey (hardcode, jiný provider, jiné env proměnné).  
+   - Výstup: uveď přesný prefix klíče (prvních 8 znaků) z kódu a potvrď, že je to jediný použitý klíč.
+
+B) Provider se nespustí v prod (SDK neinicializované)  
+   - Najdi skutečný ROOT render (App.tsx / _layout.tsx) a potvrď, že přesně JEDEN `SuperwallProvider` obaluje celý strom (router, auth, atd.).  
+   - Zkontroluj, že se nikde nepřekrývá dalším Providerm a že k rootu vždy dojde i login/loader flow.  
+   - Ověř, že `isSuperwallSupported()` vrací TRUE pro `ExecutionEnvironment.Standalone` (kontrola v `utils/environment.ts`).  
+   - Výstup: PASS/FAIL + proč.
+
+C) identify() se nevolá / UID je undefined  
+   - Vyhledej `identify(` a ukaž přesně kde se volá. Potvrď, že se volá po přihlášení s neprázdným `user.uid`.  
+   - Zkontroluj, jestli nějaká podmínka/timing nezabrání volání v prod (např. chybějící deps v `useEffect`, race condition).  
+   - Výstup: PASS/FAIL + konkrétní řádek/komponenta.
+
+D) Trigger/paywall se v kódu neodpálí při „no subscription“  
+   - Projdi flow: po přihlášení a zjištění, že sub není aktivní, musí kód zavolat `presentPaywall()` (resp. `registerPlacement`).  
+   - Ukaž přesné místo, kde se to volá (soubor + řádek) a jaká je defaultní hodnota `placement` (ID).  
+   - Zkontroluj, že **není** žádná branch, která skončí na „loading page“ bez volání paywallu (např. chybějící return/await).  
+   - Výstup: PASS/FAIL + soubor/řádek.
+
+E) Verze/konflikt SDK  
+   - Z `package.json` potvrď verzi `expo-superwall` a zda se nenačítají jiné peer závislosti, které by v release dělaly jiný behavior.  
+   - Výstup: info-only.
+
+Formátuj výsledek jako tabulku „Kontrola | Stav | Detail | Soubor/řádek“. Pokud najdeš FAIL, přidej stručné doporučení (max 1–2 věty), ale nic neupravuj. Chci jen verdict, jestli je příčina A/B/C/D reálná v kódu, nebo je problém spíš v Superwall dashboardu (audience/placement).

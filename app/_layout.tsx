@@ -36,6 +36,10 @@ export default function RootLayout() {
     Poppins_800ExtraBold,
   });
 
+  // Přidání logování prefixu klíče pro ověření v production
+  const swKey = Constants.expoConfig?.extra?.SUPERWALL_API_KEY;
+  console.log('[Superwall] Key prefix:', (swKey ?? '').slice(0,8));
+
   useEffect(() => {
     if (loaded) {
       // FORCE REDIRECT TO ROOT - aby se vždy spustil flow z index.tsx
