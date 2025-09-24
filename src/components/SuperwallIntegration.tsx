@@ -192,18 +192,19 @@ const SuperwallDisabledIntegration: React.FC<{ children: ReactNode }> = ({ child
   const { setHasSubscription } = useAuth() as any;
 
   useEffect(() => {
-    // V prostředí bez Superwall povolit přístup, aby nedošlo k deadlock
-    // In dev environment without Superwall, allow access to prevent deadlock
-    setHasSubscription(true); // OPRAVA: Nastav na true místo false, aby se předešlo deadlock
+    // V prostředí bez Superwall NEPOVOLIT přístup - žádné falešné "OK"
+    // Without Superwall, maintain proper access control - no false access
+    setHasSubscription(false);
   }, [setHasSubscription]);
 
   const contextValue: SuperwallContextType = {
     presentPaywall: async () => {
-      // In dev environment, allow access without paywall
-      return true; // OPRAVA: Vrať true místo false
+      // V dev prostředí bez Superwall nemůžeme prezentovat paywall
+      console.log('[SuperwallIntegration] Superwall disabled - cannot present paywall');
+      return false;
     },
-    isSubscribed: true, // OPRAVA: true místo false
-    subscriptionStatus: 'DISABLED_ALLOWED'
+    isSubscribed: false,
+    subscriptionStatus: 'DISABLED'
   };
 
   return (
