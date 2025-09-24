@@ -42,10 +42,8 @@ const SuperwallEnabledIntegration: React.FC<{ children: ReactNode }> = ({ childr
       // Mapuj Superwall subscription status na boolean hodnotu pro AuthContext
       // subscriptionStatus je objekt s vlastností status: {"status": "ACTIVE", "entitlements": [...]}
       const statusValue = subscriptionStatus?.status;
-      const hasActiveSubscription = statusValue === 'ACTIVE' || 
-                                   statusValue === 'TRIAL' ||
-                                   statusValue === 'GRACE_PERIOD' ||
-                                   statusValue === 'ON_HOLD';
+      // Pouze ACTIVE a TRIAL jako aktivní - GRACE_PERIOD/ON_HOLD jsou neaktivní
+      const hasActiveSubscription = statusValue === 'ACTIVE' || statusValue === 'TRIAL';
       
       console.log('[SuperwallIntegration] Setting hasSubscription to:', hasActiveSubscription, 'based on status:', statusValue);
       setHasSubscription(hasActiveSubscription);
