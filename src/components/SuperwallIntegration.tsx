@@ -152,6 +152,24 @@ const SuperwallEnabledIntegration: React.FC<{ children: ReactNode }> = ({ childr
       return promise;
     }, [registerPlacement, setHasSubscription]);
 
+    // Nepřetržité hlídání subscription - při ztrátě sub okamžitě na paywall
+    const prevStatusRef = React.useRef<string | undefined>(subscriptionStatus?.status);
+
+    useEffect(() => {
+      const prev = prevStatusRef.current;
+      const curr = subscriptionStatus?.status;
+
+      const wasActive = prev === 'ACTIVE' || prev === 'TRIAL';
+      const isActive  = curr === 'ACTIVE' || curr === 'TRIAL';
+
+      if (wasActive && !isActive) {
+        // user ztratil entitlement → vyvolej paywall
+        console.log('[SuperwallIntegration] Subscription lost - presenting paywall');
+        presentPaywall().catch(() => {});
+      }
+      prevStatusRef.current = curr;
+    }, [subscriptionStatus?.status, presentPaywall]);
+
     const contextValue: SuperwallContextType = {
       presentPaywall,
       isSubscribed: subscriptionStatus?.status === 'ACTIVE',
