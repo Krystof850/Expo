@@ -35,7 +35,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     ...(config.ios ?? {}),
     supportsTablet: false,
     requireFullScreen: false,
-    bundleIdentifier: "com.unloop.dev",
+    bundleIdentifier: "com.unloopapp.dev",
     infoPlist: {
       ...(config.ios?.infoPlist ?? {}),
       ITSAppUsesNonExemptEncryption: false,
@@ -57,7 +57,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       foregroundImage: './assets/images/app-icon.png',
       backgroundColor: '#ffffff',
     },
-    package: "com.unloop.dev",
+    package: "com.unloopapp.dev",
     versionCode: 1,
     permissions: [],
     blockedPermissions: [
