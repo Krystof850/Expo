@@ -50,9 +50,10 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
       return;
     }
 
-    console.log('[AuthContext] Checking subscription status...');
-    // The actual subscription checking is now handled by useSuperwallUser hook
-    // This function remains for API compatibility but the real logic is in SuperwallIntegration
+    // DŮLEŽITÉ: Neprovádíme žádnou akci - subscription status je automaticky
+    // aktualizován v SuperwallIntegration.tsx pomocí useUser() hooku
+    // Tato funkce existuje pouze pro API kompatibilitu s komponentami
+    console.log('[AuthContext] checkSubscriptionStatus called - status handled by SuperwallIntegration');
   }, [superwallSupported]);
 
   // Present paywall using Superwall - delegated to SuperwallIntegration

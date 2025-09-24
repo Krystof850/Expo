@@ -25,7 +25,8 @@ const ProtectedWithMonitoring: React.FC<React.PropsWithChildren> = ({ children }
       intervalRef.current = setInterval(async () => {
         try {
           console.log('[SUBSCRIPTION-MONITOR] Checking subscription status...');
-          await checkSubscriptionStatus();
+          // NEPOUŽÍVAT checkSubscriptionStatus() - způsobuje race condition!
+          // Superwall automaticky aktualizuje hasSubscription v SuperwallIntegration.tsx
           
           if (!hasSubscription) {
             console.log('[SUBSCRIPTION-MONITOR] ❌ Subscription expired - presenting paywall');
