@@ -23,7 +23,7 @@ export function useSuperwall() {
 
 // Komponenta s aktivním Superwall pro native platformy
 const SuperwallEnabledIntegration: React.FC<{ children: ReactNode }> = ({ children }: { children: ReactNode }) => {
-  const { user, setHasSubscription, setSubscriptionLoading } = useAuth() as any;
+  const { user, setHasSubscription } = useAuth() as any;
   
   // ATOMIC paywall presentation lock using useRef (synchronní)
   const presentingRef = React.useRef(false);
@@ -42,19 +42,6 @@ const SuperwallEnabledIntegration: React.FC<{ children: ReactNode }> = ({ childr
       // Mapuj Superwall subscription status na boolean hodnotu pro AuthContext
       // subscriptionStatus je objekt s vlastností status: {"status": "ACTIVE", "entitlements": [...]}
       const statusValue = subscriptionStatus?.status;
-      
-      // PRODUCTION FIX: V production buildu nastavovat loading state správně
-      if (statusValue === 'UNKNOWN') {
-        // Během inicializace - zachovat loading state
-        console.log('[SuperwallIntegration] Subscription status still initializing...');
-        setSubscriptionLoading(true);
-        setHasSubscription(false);
-        return;
-      }
-      
-      // Status je stabilní - ukončit loading
-      setSubscriptionLoading(false);
-      
       const hasActiveSubscription = statusValue === 'ACTIVE' || 
                                    statusValue === 'TRIAL' ||
                                    statusValue === 'GRACE_PERIOD' ||
@@ -62,7 +49,7 @@ const SuperwallEnabledIntegration: React.FC<{ children: ReactNode }> = ({ childr
       
       console.log('[SuperwallIntegration] Setting hasSubscription to:', hasActiveSubscription, 'based on status:', statusValue);
       setHasSubscription(hasActiveSubscription);
-    }, [subscriptionStatus, setHasSubscription, setSubscriptionLoading]);
+    }, [subscriptionStatus, setHasSubscription]);
     
     // Hook pro prezentaci paywall - JEDNODUCHÉ
     const { registerPlacement } = usePlacement({
