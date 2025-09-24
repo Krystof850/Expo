@@ -10,7 +10,7 @@
       "autoIncrement": true,
       "ios": {
         "image": "latest",
-        "resourceClass": "m1-medium",
+        "resourceClass": "m-medium",
         "node": "20.19.4"
       },
       "android": {
@@ -33,7 +33,7 @@
       "autoIncrement": true,
       "ios": {
         "image": "latest",
-        "resourceClass": "m1-medium",
+        "resourceClass": "m-medium",
         "node": "20.19.4"
       },
       "android": {
