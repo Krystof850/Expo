@@ -1,0 +1,81 @@
+Zkopíruj celý blok do Replit agenta:
+
+Uděláme několik oprav, které spojí funkční stav (kdy se session_start správně posílal do Superwallu) a logiku pro práci s chráněnou zónou.
+
+1. EAS JSON + app.config.ts
+- V souboru `eas.json` se ujisti, že máme nastavený `EXPO_PUBLIC_SUPERWALL_API_KEY` přímo pro oba profily:
+  - development → testovací public key (začíná na pk_b…)
+  - production → produkční public key (začíná na pk_f…)
+- Klíč musí být přímo zapsaný v `eas.json.env`, žádné `$SUPERWALL_API_KEY`. Tím zajistíme, že se runtime vždy inicializuje s validním klíčem.
+- V `app.config.ts` zůstane čtení přes:
+  ```ts
+  const superwallApiKey = process.env.SUPERWALL_API_KEY || process.env.EXPO_PUBLIC_SUPERWALL_API_KEY;
+
+
+a v exportu musí být v extra: { SUPERWALL_API_KEY: superwallApiKey }.
+
+app/_layout.tsx
+
+Ujisti se, že ConditionalSuperwallProvider obaluje celý strom (to už tam je). Nic neměnit.
+
+ConditionalSuperwallProvider.tsx
+
+Zachovej aktuální implementaci s SuperwallProvider a předáním klíče.
+
+Přidej log:
+
+console.log('[Superwall] Using API key prefix:', superwallApiKey?.slice(0, 8));
+
+
+pro kontrolu, že klíč je opravdu načten.
+
+SuperwallIntegration.tsx
+
+Ujisti se, že používáme useUser a usePlacement.
+
+Doplň mapování statusu:
+
+const statusValue = subscriptionStatus?.status;
+const hasActiveSubscription = ['ACTIVE','TRIAL','GRACE_PERIOD','ON_HOLD'].includes(statusValue);
+setHasSubscription(hasActiveSubscription);
+
+
+(už tam je, jen se ujisti, že to zůstane).
+
+AuthContext.tsx
+
+canAccessProtected = isAuthenticated && hasSubscription; (už tam je).
+
+checkSubscriptionStatus neřešíme ručně, jen loguje, protože se řeší v SuperwallIntegration.
+
+Protected.tsx
+
+Logika chráněné zóny:
+
+Pokud isAuthenticated && !hasSubscription, spustit presentPaywall().
+
+Pokud isAuthenticated && hasSubscription, povolit přístup.
+
+Pokud !isAuthenticated, redirect na login.
+
+Zajisti, aby to NIKDY nepadalo do deadlocku. Pokud uživatel zavře paywall bez nákupu, zkusí se znovu (už tam máš retry mechanismus → zachovej).
+
+Debug logging
+
+Všude zachovej logy: [SuperwallIntegration], [HARD-PAYWALL], [SUBSCRIPTION-MONITOR]. Tyhle logy potřebujeme vidět i v TestFlight console.
+
+Reset identity
+
+Zachovej utils/resetSuperwall.ts (už tam je), to nám umožní čistý test identity.
+
+Shrnutí:
+
+Klíč musí být přímo v eas.json → to je nejdůležitější.
+
+Provider je v rootu.
+
+SuperwallIntegration spravuje subscription a update do AuthContextu.
+
+Protected se stará o tvrdý paywall a retry.
+
+Až tyto změny aplikuješ, udělej nový production build. V Superwall dashboardu → Users musíš vidět session_start hned po otevření appky a paywall_open když se paywall ukáže.

@@ -27,6 +27,8 @@ const ConditionalSuperwallProvider: React.FC<ConditionalSuperwallProviderProps> 
   try {
     const { SuperwallProvider, CustomPurchaseControllerProvider, Superwall } = require('expo-superwall');
     const superwallApiKey = Constants.expoConfig?.extra?.SUPERWALL_API_KEY;
+    
+    console.log('[Superwall] Using API key prefix:', superwallApiKey?.slice(0, 8));
 
     const handlePurchaseRestore = async () => {
       console.log('[RESTORE] Starting restore purchases...');

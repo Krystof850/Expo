@@ -42,8 +42,7 @@ const SuperwallEnabledIntegration: React.FC<{ children: ReactNode }> = ({ childr
       // Mapuj Superwall subscription status na boolean hodnotu pro AuthContext
       // subscriptionStatus je objekt s vlastností status: {"status": "ACTIVE", "entitlements": [...]}
       const statusValue = subscriptionStatus?.status;
-      // Pouze ACTIVE a TRIAL jako aktivní - GRACE_PERIOD/ON_HOLD jsou neaktivní
-      const hasActiveSubscription = statusValue === 'ACTIVE' || statusValue === 'TRIAL';
+      const hasActiveSubscription = ['ACTIVE','TRIAL','GRACE_PERIOD','ON_HOLD'].includes(statusValue);
       
       console.log('[SuperwallIntegration] Setting hasSubscription to:', hasActiveSubscription, 'based on status:', statusValue);
       setHasSubscription(hasActiveSubscription);
@@ -177,8 +176,8 @@ const SuperwallEnabledIntegration: React.FC<{ children: ReactNode }> = ({ childr
       const prev = prevStatusRef.current;
       const curr = subscriptionStatus?.status;
 
-      const wasActive = prev === 'ACTIVE' || prev === 'TRIAL';
-      const isActive  = curr === 'ACTIVE' || curr === 'TRIAL';
+      const wasActive = prev ? ['ACTIVE','TRIAL','GRACE_PERIOD','ON_HOLD'].includes(prev) : false;
+      const isActive  = curr ? ['ACTIVE','TRIAL','GRACE_PERIOD','ON_HOLD'].includes(curr) : false;
 
       if (wasActive && !isActive) {
         // user ztratil entitlement → vyvolej paywall
@@ -190,7 +189,7 @@ const SuperwallEnabledIntegration: React.FC<{ children: ReactNode }> = ({ childr
 
     const contextValue: SuperwallContextType = {
       presentPaywall,
-      isSubscribed: subscriptionStatus?.status === 'ACTIVE' || subscriptionStatus?.status === 'TRIAL',
+      isSubscribed: subscriptionStatus?.status ? ['ACTIVE','TRIAL','GRACE_PERIOD','ON_HOLD'].includes(subscriptionStatus.status) : false,
       subscriptionStatus: subscriptionStatus?.status || 'UNKNOWN'
     };
 

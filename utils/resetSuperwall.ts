@@ -18,12 +18,12 @@ async function resetSuperwallIdentity() {
     const superwall = superwallModule.default || superwallModule;
     
     // Zkusíme dostupné metody pro reset
-    if (typeof superwall?.reset === 'function') {
-      await superwall.reset();
+    if (typeof (superwall as any)?.reset === 'function') {
+      await (superwall as any).reset();
       console.log('[RESET] identity cleared');
-    } else if (typeof superwall?.identify === 'function') {
+    } else if (typeof (superwall as any)?.identify === 'function') {
       // Reset identity pomocí identify(null)
-      await superwall.identify(null);
+      await (superwall as any).identify(null);
       console.log('[RESET] identity cleared (via identify reset)');
     } else {
       // Alternativní přístup - simulujeme reset
