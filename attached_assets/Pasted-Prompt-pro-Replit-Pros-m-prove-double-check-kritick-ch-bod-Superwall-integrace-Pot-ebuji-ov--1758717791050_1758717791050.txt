@@ -1,0 +1,80 @@
+Prompt pro Replit
+Prosím proveď **double-check** kritických bodů Superwall integrace. Potřebuji ověřit, že vše je nastaveno správně pro produkční build a že se session_start a paywall eventy opravdu odešlou.
+
+Ověř postupně:
+
+1. **EAS JSON**
+- V souboru `eas.json` ověř, že:
+  - `build.production.env.EXPO_PUBLIC_SUPERWALL_API_KEY` začíná na `pk_f9ba2`
+  - `build.development.env.EXPO_PUBLIC_SUPERWALL_API_KEY` začíná na `pk_b`
+- Žádné `$SUPERWALL_API_KEY`, klíče musí být přímo vložené.
+
+2. **app.config.ts**
+- Ověř, že se načítá přes:
+  ```ts
+  const superwallApiKey = process.env.SUPERWALL_API_KEY || process.env.EXPO_PUBLIC_SUPERWALL_API_KEY;
+
+
+Že v exportu je extra: { SUPERWALL_API_KEY: superwallApiKey }.
+
+ConditionalSuperwallProvider.tsx
+
+Ověř, že se používá:
+
+<SuperwallProvider apiKeys={{ ios: superwallApiKey, android: superwallApiKey }}>
+
+
+A že je tam debug log:
+
+console.log('[Superwall] Using API key prefix:', superwallApiKey?.slice(0, 8));
+
+
+app/_layout.tsx
+
+Ujisti se, že <ConditionalSuperwallProvider> obaluje celý strom (nad AuthProvider a SuperwallIntegration).
+
+SuperwallIntegration.tsx
+
+Ověř:
+
+Používá se useUser a identify(user.uid).
+
+Subscription status se mapuje na ACTIVE, TRIAL, GRACE_PERIOD, ON_HOLD.
+
+setHasSubscription se volá podle statusu.
+
+presentPaywall používá placement zario-template-3a85-2025-09-10.
+
+AuthContext.tsx
+
+canAccessProtected = isAuthenticated && hasSubscription;
+
+checkSubscriptionStatus pouze loguje a spoléhá na SuperwallIntegration.
+
+Protected.tsx
+
+Logika:
+
+Pokud isAuthenticated && hasSubscription → pustí do protected.
+
+Pokud isAuthenticated && !hasSubscription → presentPaywall() + blokace přístupu, retry mechanizmus.
+
+Pokud !isAuthenticated → redirect na login.
+
+Debug logs
+
+Ujisti se, že zůstaly všechny console.log prefixy:
+
+[Superwall]
+
+[SuperwallIntegration]
+
+[HARD-PAYWALL]
+
+[SUBSCRIPTION-MONITOR]
+
+Output
+
+Na závěr napiš shrnutí ✅/❌ u každého bodu a vypsat prefix klíče, který se bude v runtime načítat (vezmi z eas.json.production.env.EXPO_PUBLIC_SUPERWALL_API_KEY prvních 8 znaků).
+
+Nedělej žádné úpravy kódu, jen proveď ověření a vypiš výsledek.
