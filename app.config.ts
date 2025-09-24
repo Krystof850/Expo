@@ -9,11 +9,6 @@ const reversedIosClientId = process.env.REVERSED_IOS_CLIENT_ID || process.env.EX
 const supportEmail = process.env.SUPPORT_EMAIL || process.env.EXPO_PUBLIC_SUPPORT_EMAIL || 'unloop.app.tech@gmail.com';
 const easProjectId = process.env.EAS_PROJECT_ID || 'd16233eb-856f-4dc5-bef9-bb94b5e13eb6';
 
-// Production vs Development Bundle ID configuration
-const isProduction = process.env.NODE_ENV === 'production';
-const bundleId = isProduction ? 'com.unloopapp.unoop' : 'com.unloopapp.dev';
-const androidPackage = isProduction ? 'com.unloopapp.unoop' : 'com.unloopapp.dev';
-
 console.log('🔧 Loading environment variables:', {
   firebaseApiKey: firebaseApiKey ? 'loaded' : 'missing',
   superwallApiKey: superwallApiKey ? 'loaded' : 'missing',
@@ -21,10 +16,7 @@ console.log('🔧 Loading environment variables:', {
   iosGoogleClientId: iosGoogleClientId ? 'loaded' : 'missing',
   reversedIosClientId: reversedIosClientId ? 'loaded' : 'missing',
   supportEmail: supportEmail ? 'loaded' : 'missing',
-  easProjectId: easProjectId ? 'loaded' : 'missing',
-  isProduction: isProduction,
-  bundleId: bundleId,
-  androidPackage: androidPackage
+  easProjectId: easProjectId ? 'loaded' : 'missing'
 });
 
 export default ({ config }: ConfigContext): ExpoConfig => ({
@@ -43,7 +35,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     ...(config.ios ?? {}),
     supportsTablet: false,
     requireFullScreen: false,
-    bundleIdentifier: bundleId,
+    bundleIdentifier: "com.unloopapp.dev",
     infoPlist: {
       ...(config.ios?.infoPlist ?? {}),
       ITSAppUsesNonExemptEncryption: false,
@@ -65,7 +57,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       foregroundImage: './assets/images/app-icon.png',
       backgroundColor: '#ffffff',
     },
-    package: androidPackage,
+    package: "com.unloopapp.dev",
     versionCode: 1,
     permissions: [],
     blockedPermissions: [
