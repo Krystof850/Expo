@@ -85,7 +85,7 @@ const SuperwallEnabledIntegration: React.FC<{ children: ReactNode }> = ({ childr
           webViewLoadDuration: info?.webViewLoadDuration + 's'
         });
       },
-      onDismiss: (info: any, result: any) => {
+      onDismiss: async (info: any, result: any) => {
         console.log('[SuperwallIntegration] Paywall dismissed:', info, result);
         
         // ATOMIC: Clear presentation lock
@@ -96,9 +96,27 @@ const SuperwallEnabledIntegration: React.FC<{ children: ReactNode }> = ({ childr
         if (result?.purchased === true || result?.type === 'purchased') {
           console.log('[SuperwallIntegration] Purchase successful:', result);
           setHasSubscription(true);
+          
+          // Spolehlivý sync po nákupu
+          try {
+            const { Superwall } = require('expo-superwall');
+            await Superwall.syncPurchases?.().catch(() => {});
+            console.log('[SuperwallIntegration] Purchase synced successfully');
+          } catch (error) {
+            console.log('[SuperwallIntegration] Purchase sync skipped (not available)');
+          }
         } else if (result?.type === 'restored') {
           console.log('[SuperwallIntegration] Purchase restored:', result);  
           setHasSubscription(true);
+          
+          // Spolehlivý sync po restore
+          try {
+            const { Superwall } = require('expo-superwall');
+            await Superwall.syncPurchases?.().catch(() => {});
+            console.log('[SuperwallIntegration] Restore synced successfully');
+          } catch (error) {
+            console.log('[SuperwallIntegration] Restore sync skipped (not available)');
+          }
         } else {
           console.log('[SuperwallIntegration] Paywall dismissed without purchase:', result);
         }
@@ -172,7 +190,7 @@ const SuperwallEnabledIntegration: React.FC<{ children: ReactNode }> = ({ childr
 
     const contextValue: SuperwallContextType = {
       presentPaywall,
-      isSubscribed: subscriptionStatus?.status === 'ACTIVE',
+      isSubscribed: subscriptionStatus?.status === 'ACTIVE' || subscriptionStatus?.status === 'TRIAL',
       subscriptionStatus: subscriptionStatus?.status || 'UNKNOWN'
     };
 

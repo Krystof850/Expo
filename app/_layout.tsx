@@ -20,7 +20,6 @@ import { useColorScheme } from '@/hooks/useColorScheme';
 import { AuthProvider } from '../src/context/AuthContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect } from 'react';
-import { SuperwallProvider } from 'expo-superwall';
 import ConditionalSuperwallProvider from '../src/components/ConditionalSuperwallProvider';
 import SuperwallIntegration from '../src/components/SuperwallIntegration';
 import { ErrorProvider } from '../src/components/UserFriendlyErrorHandler';
@@ -37,11 +36,8 @@ export default function RootLayout() {
     Poppins_800ExtraBold,
   });
 
-  // Načtení Superwall API klíče z Constants
-  const swKey = Constants.expoConfig?.extra?.SUPERWALL_API_KEY;
-  if (!swKey) console.warn('[Superwall] Missing SUPERWALL_API_KEY in extra');
-  
   // Přidání logování prefixu klíče pro ověření v production
+  const swKey = Constants.expoConfig?.extra?.SUPERWALL_API_KEY;
   console.log('[Superwall] Key prefix:', (swKey ?? '').slice(0,8));
 
   useEffect(() => {
@@ -67,77 +63,70 @@ export default function RootLayout() {
   }
 
   return (
-    <SuperwallProvider 
-      apiKeys={{
-        ios: swKey,
-        android: swKey,
-      }}
-    >
-      <ConditionalSuperwallProvider>
-        <AuthProvider>
-          <SuperwallIntegration>
-            <ErrorProvider>
-              <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-              <Stack
-                screenOptions={{
-                  headerShown: false,
-                  animation: 'slide_from_right',
-                  animationDuration: 300,
-                  fullScreenGestureEnabled: true,
-                  gestureDirection: 'horizontal',
-                }}
-              >
+    <ConditionalSuperwallProvider>
+      <AuthProvider>
+        <SuperwallIntegration>
+          <ErrorProvider>
+            <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+            <Stack
+              screenOptions={{
+                headerShown: false,
+                animation: 'slide_from_right',
+                animationDuration: 300,
+                fullScreenGestureEnabled: true,
+                gestureDirection: 'horizontal',
+              }}
+            >
+              <Stack.Screen 
+                name="(onboarding)" 
+                options={{ 
+                  headerShown: false, 
+                  gestureEnabled: false, 
+                  fullScreenGestureEnabled: false 
+                }} 
+              />
+              <Stack.Screen 
+                name="(tabs)" 
+                options={{ 
+                  headerShown: false, 
+                  gestureEnabled: false, 
+                  fullScreenGestureEnabled: false 
+                }} 
+              />
+              <Stack.Screen 
+                name="(auth)" 
+                options={{ 
+                  headerShown: false, 
+                  gestureEnabled: false, 
+                  fullScreenGestureEnabled: false 
+                }} 
+              />
+              <Stack.Screen 
+                name="(protected)" 
+                options={{ 
+                  headerShown: false, 
+                  gestureEnabled: false, 
+                  fullScreenGestureEnabled: false 
+                }} 
+              />
+              {/* Hidden debug screen - pouze v dev módu */}
+              {__DEV__ && (
                 <Stack.Screen 
-                  name="(onboarding)" 
+                  name="subscription-debug" 
                   options={{ 
-                    headerShown: false, 
-                    gestureEnabled: false, 
-                    fullScreenGestureEnabled: false 
+                    headerShown: true, 
+                    title: 'Subscription Debug'
                   }} 
                 />
-                <Stack.Screen 
-                  name="(tabs)" 
-                  options={{ 
-                    headerShown: false, 
-                    gestureEnabled: false, 
-                    fullScreenGestureEnabled: false 
-                  }} 
-                />
-                <Stack.Screen 
-                  name="(auth)" 
-                  options={{ 
-                    headerShown: false, 
-                    gestureEnabled: false, 
-                    fullScreenGestureEnabled: false 
-                  }} 
-                />
-                <Stack.Screen 
-                  name="(protected)" 
-                  options={{ 
-                    headerShown: false, 
-                    gestureEnabled: false, 
-                    fullScreenGestureEnabled: false 
-                  }} 
-                />
-                {/* Hidden debug screen - pouze v dev módu */}
-                {__DEV__ && (
-                  <Stack.Screen 
-                    name="subscription-debug" 
-                    options={{ 
-                      headerShown: true, 
-                      title: 'Subscription Debug'
-                    }} 
-                  />
-                )}
-                <Stack.Screen name="+not-found" />
-              </Stack>
-              <StatusBar style="auto" />
-            </ThemeProvider>
-          </ErrorProvider>
-          </SuperwallIntegration>
-        </AuthProvider>
-      </ConditionalSuperwallProvider>
-    </SuperwallProvider>
+              )}
+              <Stack.Screen name="+not-found" />
+            </Stack>
+            <StatusBar style="auto" />
+          </ThemeProvider>
+        </ErrorProvider>
+        </SuperwallIntegration>
+      </AuthProvider>
+    </ConditionalSuperwallProvider>
   );
 
 }
