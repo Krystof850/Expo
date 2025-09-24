@@ -35,6 +35,20 @@ const SuperwallEnabledIntegration: React.FC<{ children: ReactNode }> = ({ childr
     // Hook pro správu uživatele a subscription status (MINIMÁLNÍ)
     const { subscriptionStatus, identify } = useUser();
     
+    // Automaticky aktualizuj AuthContext při změně subscription status
+    useEffect(() => {
+      console.log('[SuperwallIntegration] Subscription status changed:', subscriptionStatus);
+      
+      // Mapuj Superwall subscription status na boolean hodnotu pro AuthContext
+      const hasActiveSubscription = subscriptionStatus === 'ACTIVE' || 
+                                   subscriptionStatus === 'TRIAL' ||
+                                   subscriptionStatus === 'GRACE_PERIOD' ||
+                                   subscriptionStatus === 'ON_HOLD';
+      
+      console.log('[SuperwallIntegration] Setting hasSubscription to:', hasActiveSubscription, 'based on status:', subscriptionStatus);
+      setHasSubscription(hasActiveSubscription);
+    }, [subscriptionStatus, setHasSubscription]);
+    
     // Hook pro prezentaci paywall - JEDNODUCHÉ
     const { registerPlacement } = usePlacement({
       onError: (error: any) => {
@@ -91,11 +105,6 @@ const SuperwallEnabledIntegration: React.FC<{ children: ReactNode }> = ({ childr
       },
     });
 
-    // Aktualizuj subscription status při změnách (JEDNODUŠE)
-    useEffect(() => {
-      const isActive = subscriptionStatus?.status === 'ACTIVE';
-      setHasSubscription(isActive);
-    }, [subscriptionStatus?.status, setHasSubscription]);
 
     // Identifikuj uživatele JEDNOU
     useEffect(() => {
