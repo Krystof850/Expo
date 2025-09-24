@@ -1,4 +1,4 @@
-import * as Constants from 'expo-constants';
+import Constants, { ExecutionEnvironment } from 'expo-constants';
 import { Platform } from 'react-native';
 
 // Global __DEV__ declaration for TypeScript
@@ -13,20 +13,18 @@ export interface AppEnvironment {
 
 export const detectAppEnvironment = (): AppEnvironment => {
   const env = Constants.executionEnvironment;
-  const ownership = Constants.appOwnership;
   
   // Debug log for troubleshooting
   console.log('[Environment] Detection:', { 
     executionEnvironment: env, 
-    appOwnership: ownership, 
     platform: Platform.OS 
   });
   
   return {
-    isExpoGo: ownership === 'expo',
-    isDevelopmentBuild: ownership === 'guest' || env === 'bare',
-    isProduction: ownership === 'standalone' || env === 'standalone',
-    environment: ownership || env || 'unknown'
+    isExpoGo: env === ExecutionEnvironment.StoreClient,
+    isDevelopmentBuild: env === ExecutionEnvironment.Bare,
+    isProduction: env === ExecutionEnvironment.Standalone,
+    environment: env || 'unknown'
   };
 };
 
@@ -36,13 +34,13 @@ export const isSuperwallSupported = (): boolean => {
     return false;
   }
   
-  const ownership = Constants.appOwnership;
-  // Use appOwnership directly for more reliable detection
-  const supported = ownership !== 'expo';
+  const env = Constants.executionEnvironment;
+  // Superwall works in development builds and production builds, not in Expo Go
+  const supported = env !== ExecutionEnvironment.StoreClient;
   
   console.log('[Superwall] Support check:', { 
     platform: Platform.OS, 
-    appOwnership: ownership, 
+    executionEnvironment: env, 
     supported 
   });
   
