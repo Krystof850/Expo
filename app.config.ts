@@ -8,7 +8,7 @@ const googleClientId = process.env.GOOGLE_CLIENT_ID || process.env.EXPO_PUBLIC_G
 const iosGoogleClientId = process.env.IOS_GOOGLE_CLIENT_ID || process.env.EXPO_PUBLIC_IOS_GOOGLE_CLIENT_ID;
 const reversedIosClientId = process.env.REVERSED_IOS_CLIENT_ID || process.env.EXPO_PUBLIC_REVERSED_IOS_CLIENT_ID;
 const supportEmail = process.env.SUPPORT_EMAIL || process.env.EXPO_PUBLIC_SUPPORT_EMAIL || 'unloop.app.tech@gmail.com';
-const easProjectId = process.env.EAS_PROJECT_ID || 'd16233eb-856f-4dc5-bef9-bb94b5e13eb6';
+const easProjectId = process.env.EAS_PROJECT_ID || 'c20ccca2-7bab-4dd4-a5f7-3ccef8014d7a';
 
 console.log('🔧 Loading environment variables:', {
   firebaseApiKey: firebaseApiKey ? 'loaded' : 'missing',
@@ -23,8 +23,8 @@ console.log('🔧 Loading environment variables:', {
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
   name: config.name ?? "Unoop",
-  slug: config.slug ?? "unoop",
-  owner: "pepahruby08",
+  slug: config.slug ?? "unoop-app",
+  owner: "krystofkapka60",
   version: '1.0.0',
   orientation: 'portrait',
   icon: './assets/images/app-icon.png',
