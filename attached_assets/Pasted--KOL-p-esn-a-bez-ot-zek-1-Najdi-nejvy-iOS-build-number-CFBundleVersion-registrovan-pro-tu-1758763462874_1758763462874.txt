@@ -1,0 +1,71 @@
+ÚKOL (přesně a bez otázek):
+1) Najdi nejvyšší iOS build number (CFBundleVersion) registrovaný pro tuto appu v App Store Connect a zvyš lokální build number na číslo, které tam ještě není zaregistrováno (nejlépe max_remote+1). Pokud k App Store Connect nemáš přístup, jako fallback nastav build number na unikátní timestamp (formát YYYYMMDDHHMMSS), který velmi pravděpodobně nebude v ASC.
+
+POŘADÍ KROKŮ (spouštěj přesně):
+
+A) PŘÍPRAVA A Ověření přístupu
+1. Ověř že `eas` CLI a `fastlane` (nebo `asc` pokud používáš App Store Connect API) jsou dostupné.
+   - `eas whoami` → ulož výstup. Pokud není přihlášený, napiš chybu a zastav.
+   - Pokud máš App Store Connect service account JSON uložený pro EAS, ujisti se, že ho lze použít.
+
+B) Získání remote build čísla (preferovaně)
+2. Pokus se synchronizovat verzi z App Store přes EAS:
+   - `eas build:version:sync --platform ios`
+   - Po vykonání přečti výstup, najdi nejvyšší `buildNumber` nebo `CFBundleVersion` které EAS/ASC vrací.
+   - Pokud `eas build:version:sync` vrátí seznam nebo potvrdí aktuální build, ulož `remoteMax`.
+
+   (Pokud výše nefunguje nebo dává chybový výstup pokračuj do kroku C fallback.)
+
+C) Fallback (když není přístup k App Store Connect)
+3. Vytvoř bezpečný timestamp build number:
+   - `TIMESTAMP=$(date +%Y%m%d%H%M%S)`  (příklad: 20250924184530)
+   - Použij `TIMESTAMP` jako návrh na `buildNumber` — to prakticky nikdy nebude kolidovat.
+
+D) Určení finálního build čísla
+4. Pokud máš `remoteMax` z kroku B, nastav `NEW_BUILD_NUMBER = remoteMax + 1`.
+   Jinak nastav `NEW_BUILD_NUMBER = TIMESTAMP` z kroku C.
+
+E) Aplikuj změnu v repu
+5. Otevři `app.config.ts` (projekt používá expo config jako TS).
+   - Najdi sekci `ios: { ... }`.
+   - Přidej / uprav `buildNumber` na string verzi nového čísla:
+     ```
+     ios: {
+       ...,
+       bundleIdentifier: "com.unloopapp.dev",
+       buildNumber: "<NEW_BUILD_NUMBER>",
+       ...
+     }
+     ```
+   - Pokud existuje `app.json` nebo `app.json.backup` (nepoužívaný), NECH je beze změny, ale výstup zaznamenej.
+
+6. (Volitelné ale doporučené) Pokud používáš `eas-cli` variantu verze/remote sync, spusť:
+   - `eas build:version:set --platform ios --build-number <NEW_BUILD_NUMBER>`
+   - Pokud příkaz není dostupný nebo selže, je OK — změna v `app.config.ts` stačí pro nový build.
+
+F) Commit + push
+7. Commituj a pushni změnu:
+   - `git add app.config.ts`
+   - `git commit -m "chore: bump ios buildNumber -> <NEW_BUILD_NUMBER> (automated)"`
+   - `git push origin HEAD`
+
+G) Výstupy, které chci vidět v odpovědi:
+8. Po dokončení vrať přesnou odpověď s těmito položkami:
+   - `eas whoami` výstup.
+   - Výsledek `eas build:version:sync --platform ios` nebo důvod, proč selhal.
+   - Pokud byl použit remoteMax: ukaž `remoteMax` a `NEW_BUILD_NUMBER = remoteMax + 1`.
+   - Pokud fallback: ukaž `TIMESTAMP` a `NEW_BUILD_NUMBER = TIMESTAMP`.
+   - Ukázka změněného bloku v `app.config.ts` (nevkládej celý soubor, jen upravenou část).
+   - Git commit hash a `git show --name-only <commit>` (nebo `git log -1 --pretty=fuller`).
+   - Návod co spustit dál pro vytvoření nového buildu (přesně: `eas build -p ios --profile production` a pak `eas submit -p ios --latest`).
+
+H) Bezpečnost + fallback pravidla:
+9. NIKDY nepřepisuj nebo neukládej App Store Connect přihlašovací údaje do repozitáře. Pokud je potřeba ASC service key, použij bezpečný secrets mechanismus Replit/EAS.
+10. Pokud `eas whoami` není přihlášen nebo nemáš ASC přístup, proveď pouze kroky C + E + F a vysvětli v odpovědi, že se zvolil timestamp fallback a že build musí následně spustit někdo s přístupem k ASC.
+
+I) Časová náročnost:
+11. Očekávám, že celý proces bude trvat maximálně ~10–15 minut pokud je přístup k EAS/ASC k dispozici; pokud je nutné zřizovat credentials, bude to déle a dej mi přesný error.
+
+--- Konec promptu ---
+
+Pošli mi prosím přesný výstup (logs) z kroků B/C/E/F (výstupy příkazů). Pokud Replit selže nebo narazí na chybu, chci kompletní stdout+stderr, abych mohl poradit dál.
