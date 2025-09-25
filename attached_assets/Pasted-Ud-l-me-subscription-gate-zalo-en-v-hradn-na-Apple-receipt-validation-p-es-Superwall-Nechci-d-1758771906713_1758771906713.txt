@@ -1,0 +1,167 @@
+Uděláme “subscription gate” založený výhradně na Apple receipt validation přes Superwall. Nechci žádné lokální heuristiky. Proveď následující, přesně:
+
+1) src/context/AuthContext.tsx
+
+Rozšiř typ AuthState o:
+
+subscriptionResolved: boolean;
+setSubscriptionLoading: (v: boolean) => void;
+setSubscriptionResolved: (v: boolean) => void;
+
+
+Při inicializaci stavů nastav:
+
+const superwallSupported = isSuperwallSupported();
+
+const [subscriptionLoading, setSubscriptionLoading] = useState(superwallSupported);
+
+const [subscriptionResolved, setSubscriptionResolved] = useState(false);
+
+Tzn. ve standalone/dev build (kde Superwall běží) startujeme v subscriptionLoading=true a teprve až dorazí status ze Superwallu, nastavíme false.
+
+checkSubscriptionStatus ponech, pouze uprav komentář, že skutečnou hodnotu plní SuperwallIntegration.
+
+Do value přidej nové položky:
+
+subscriptionResolved,
+setSubscriptionLoading,
+setSubscriptionResolved,
+
+2) src/components/SuperwallIntegration.tsx
+
+Ujisti se, že mapování subscription je jen na ACTIVE/TRIAL:
+
+const statusValue = subscriptionStatus?.status;
+const hasActiveSubscription = statusValue === 'ACTIVE' || statusValue === 'TRIAL';
+setHasSubscription(hasActiveSubscription);
+
+
+Odstraň GRACE_PERIOD/ON_HOLD z “aktivních”.
+
+Importuj z useAuth() i nové settery:
+
+const { user, setHasSubscription, setSubscriptionLoading, setSubscriptionResolved } = useAuth() as any;
+
+
+Po identify(user.uid) udělej jednorázový sync Apple receipt, aby byl backend Superwallu v souladu s App Storem hned na startu:
+
+useEffect(() => {
+  let cancelled = false;
+  (async () => {
+    try {
+      const { Superwall } = require('expo-superwall');
+      await Superwall.syncPurchases?.().catch(() => {});
+    } finally {
+      if (!cancelled) {
+        // nic – čekáme na subscriptionStatus z hooku
+      }
+    }
+  })();
+  return () => { cancelled = true; };
+}, [user?.uid]);
+
+
+Jakmile poprvé dorazí validní subscriptionStatus?.status (cokoliv z ACTIVE|TRIAL|EXPIRED|UNKNOWN…), ukonči loading a označ “resolved”:
+
+const firstStatusSeenRef = React.useRef(false);
+useEffect(() => {
+  if (!firstStatusSeenRef.current && subscriptionStatus?.status) {
+    firstStatusSeenRef.current = true;
+    setSubscriptionLoading(false);
+    setSubscriptionResolved(true);
+  }
+}, [subscriptionStatus?.status, setSubscriptionLoading, setSubscriptionResolved]);
+
+
+contextValue.isSubscribed ponech dle ACTIVE|TRIAL.
+
+Disabled varianta (Expo Go/web): vrať zpět správné chování – žádné obcházení paywallu:
+
+const SuperwallDisabledIntegration ... {
+  useEffect(() => { setHasSubscription(false); }, [setHasSubscription]);
+  const contextValue = {
+    presentPaywall: async () => false,
+    isSubscribed: false,
+    subscriptionStatus: 'DISABLED'
+  };
+  ...
+}
+
+
+(Tj. zruš předchozí hacky, které vracely true.)
+
+3) src/components/Protected.tsx
+
+Načti nové hodnoty:
+
+const { loading, subscriptionLoading, subscriptionResolved, canAccessProtected, isAuthenticated, hasSubscription } = useAuth();
+
+
+Gate: zobrazuj cokoliv až po tom, co máme auth hotové a subscriptionResolved===true:
+
+if (loading || subscriptionLoading || !subscriptionResolved) {
+  return <CenteredSpinner />;
+}
+
+
+Vytvoř klidně lokální CenteredSpinner (komponenta s ActivityIndicator), ať to není rozepsané víckrát.
+
+Paywall vyvolej jen pokud isAuthenticated === true a zároveň hasSubscription === false (tj. po resolve), přes náš existující presentPaywall('zario-template-3a85-2025-09-10'). Retry logika může zůstat, ale spouštěj ji až po resolve:
+
+useEffect(() => {
+  if (!subscriptionResolved) return;
+  const run = async () => {
+    if (isAuthenticated && !hasSubscription && !paywallInFlight) {
+      setPaywallInFlight(true);
+      try {
+        const success = await presentPaywall('zario-template-3a85-2025-09-10');
+        if (!success) setTimeout(() => setPaywallRetryTick(p => p+1), 1000);
+      } finally {
+        setPaywallInFlight(false);
+      }
+    }
+  };
+  run();
+}, [subscriptionResolved, isAuthenticated, hasSubscription, paywallInFlight, paywallRetryTick, presentPaywall]);
+
+
+“Monitoring každou minutu” může zůstat, ale ať není zdrojem rozhodnutí. Decision je pouze hasSubscription z Superwall (což je Apple receipt → Superwall backend). V monitoru jen hlídej ztrátu stavu a vyvolej paywall – nic nepřepisuj ručně.
+
+4) src/components/ConditionalSuperwallProvider.tsx
+
+Ponech stávající init, jen přidej debug log prefixu klíče (už je).
+
+Nic dalšího neměň.
+
+5) Odstranění zbytkových “bypassů”
+
+Zkontroluj, že nikde není setHasSubscription(true) jako “dočasný hack” (zejména SuperwallDisabledIntegration a případné test komponenty).
+
+Z kontingenčních míst (po onDismiss) nechej pouze setHasSubscription(true) v případě result.purchased === true || result.type === 'purchased' || result.type === 'restored' a hned pak:
+
+try {
+  const { Superwall } = require('expo-superwall');
+  await Superwall.syncPurchases?.().catch(() => {});
+} catch {}
+
+6) Kontrola kampaně v Superwall dashboardu (pro info do reportu)
+
+Zapiš do reportu (nevykonávej v kódu): Audience = Unsubscribed users, Filters = none, Limit = none, Placement = zario-template-3a85-2025-09-10.
+
+To jen ověř a vytiskni do závěrečného summary.
+
+7) Krátký self-test (logy)
+
+Po startu (po přihlášení) uvidíme v konzoli:
+
+[Superwall] Using API key prefix: pk_…
+
+[SuperwallIntegration] Subscription status changed: …
+
+… setSubscriptionLoading(false); setSubscriptionResolved(true)
+
+Pokud user bez sub → po resolve následuje [HARD-PAYWALL] a v Superwallu session_start → placement_match → paywall_open.
+
+Pokud user se sub → do protected flow bez paywallu.
+
+Cíl: Rozhodnutí o zobrazení paywallu je pouze na základě subscriptionStatus ze Superwall (který vychází z reálného Apple receipt/entitlements). Žádné lokální “zelené” zkratky. Zpoždění před rozhodnutím řeší subscriptionLoading + subscriptionResolved.
