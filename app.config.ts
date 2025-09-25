@@ -22,7 +22,7 @@ console.log('🔧 Loading environment variables:', {
 
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
-  name: config.name ?? "Unoop",
+  name: config.name ?? "unloop",
   slug: "unoop-app",
   owner: "krystofkapka60",
   version: '1.0.0',
@@ -41,7 +41,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     infoPlist: {
       ...(config.ios?.infoPlist ?? {}),
       ITSAppUsesNonExemptEncryption: false,
-      CFBundleDisplayName: "Unoop",
+      CFBundleDisplayName: "unloop",
       LSApplicationCategoryType: "public.app-category.productivity",
       UIRequiredDeviceCapabilities: ['arm64'],
       UISupportedInterfaceOrientations: [
