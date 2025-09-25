@@ -37,7 +37,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     supportsTablet: false,
     requireFullScreen: true,
     bundleIdentifier: "com.unloopapp.dev",
-    buildNumber: "38",
+    buildNumber: "40",
     infoPlist: {
       ...(config.ios?.infoPlist ?? {}),
       ITSAppUsesNonExemptEncryption: false,
