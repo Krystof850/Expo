@@ -3,7 +3,6 @@
     "version": ">= 3.0.0",
     "appVersionSource": "local"
   },
-  "projectId": "c20ccca2-7bab-4dd4-a5f7-3ccef8014d7a",
   "build": {
     "development": {
       "developmentClient": true,
