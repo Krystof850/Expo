@@ -49,11 +49,11 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
   // OFICIÁLNÍ ZPŮSOB: Logout podle example aplikace
   async function logout() {
     try {
-      // SUPERWALL RESET: Vymaže user identity v Superwall
-      superwallSignOut();
+      // OFICIÁLNÍ ZPŮSOB: Superwall signOut podle hooks
+      await superwallSignOut();
       console.log('[AuthContext] Superwall signOut completed');
       
-      // Firebase logout - tím se vymaže i Firebase persistence
+      // Firebase logout
       await signOut(auth);
       console.log('[AuthContext] Firebase logout completed successfully');
     } catch (error) {
