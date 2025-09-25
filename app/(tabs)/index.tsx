@@ -9,11 +9,7 @@ import {
   TouchableOpacity,
   Modal,
   TextInput,
-  ScrollView,
-  KeyboardAvoidingView,
-  Platform,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
@@ -379,7 +375,7 @@ function Homepage() {
 
   return (
     <Protected>
-      <SafeAreaView style={styles.container} edges={['top']}>
+      <View style={[styles.container, { paddingTop: insets.top }]}>
         <StatusBar barStyle="dark-content" backgroundColor="transparent" translucent />
         
         {/* Background Gradient */}
@@ -390,144 +386,128 @@ function Homepage() {
           style={styles.background}
         />
 
-        <KeyboardAvoidingView 
-          style={styles.keyboardContainer}
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        >
-          {/* Header with Logo and Settings */}
-          <View style={styles.header}>
-            {/* Logo - positioned absolutely in top left */}
-            <View style={styles.logoContainer}>
-              <Image
-                source={require('../../assets/images/unloop-logo.png')}
-                style={styles.logo}
-                contentFit="contain"
-              />
+        {/* Header with Logo and Settings */}
+        <View style={styles.header}>
+          {/* Logo - positioned absolutely in top left */}
+          <View style={styles.logoContainer}>
+            <Image
+              source={require('../../assets/images/unloop-logo.png')}
+              style={styles.logo}
+              contentFit="contain"
+            />
+          </View>
+          
+          {/* Streak button - maintains original position */}
+          <TouchableOpacity style={styles.settingsButton}>
+            <Ionicons name="flame" size={22} color="#EF4444" />
+            <View style={styles.badgeContainer}>
+              <Text style={styles.badgeText}>{time.days}</Text>
             </View>
-            
-            {/* Streak button - maintains original position */}
-            <TouchableOpacity style={styles.settingsButton}>
-              <Ionicons name="flame" size={22} color="#EF4444" />
-              <View style={styles.badgeContainer}>
-                <Text style={styles.badgeText}>{time.days}</Text>
-              </View>
+          </TouchableOpacity>
+        </View>
+
+        {/* Main Content */}
+        <View style={styles.main}>
+          {/* Orb Section */}
+          <View style={styles.orbSection}>
+            <TouchableOpacity 
+              onPress={handleOrbPress}
+              activeOpacity={0.9}
+              accessibilityLabel="View achievements"
+            >
+              <Animated.View style={[styles.orbContainer, orbAnimatedStyle]}>
+                <DynamicOrb orbType={currentOrbType} size={192} />
+              </Animated.View>
             </TouchableOpacity>
+
+            {/* Timer Display */}
+            <View style={styles.timerSection}>
+              <Text style={styles.timerLabel}>Procrastination-free for</Text>
+              
+              {/* Main Timer */}
+              <View style={styles.timerRow}>
+                <View style={styles.timeUnit}>
+                  <Text style={styles.timeNumber}>{formatNumber(time.days)}</Text>
+                  <Text style={styles.timeLabel}>days</Text>
+                </View>
+                <Text style={styles.separator}>:</Text>
+                <View style={styles.timeUnit}>
+                  <Text style={styles.timeNumber}>{formatNumber(time.hours)}</Text>
+                  <Text style={styles.timeLabel}>hours</Text>
+                </View>
+                <Text style={styles.separator}>:</Text>
+                <View style={styles.timeUnit}>
+                  <Text style={styles.timeNumber}>{formatNumber(time.minutes)}</Text>
+                  <Text style={styles.timeLabel}>mins</Text>
+                </View>
+              </View>
+
+              {/* Seconds Box */}
+              <View style={styles.secondsContainer}>
+                <View style={styles.secondsBox}>
+                  <Text style={styles.secondsText}>{time.seconds}s</Text>
+                </View>
+              </View>
+            </View>
           </View>
 
-          {/* Scrollable Main Content */}
-          <ScrollView 
-            style={styles.scrollView}
-            contentContainerStyle={[styles.scrollContent, { paddingBottom: insets.bottom + 24 }]}
-            showsVerticalScrollIndicator={false}
-          >
-            {/* Orb Section */}
-            <View style={styles.orbSection}>
+          {/* I Feel Tempted Button */}
+          <View style={styles.buttonSection}>
+            <TouchableOpacity
+              style={styles.temptedButton}
+              onPress={handleTempted}
+              activeOpacity={0.95}
+            >
+              <LinearGradient
+                colors={['#0EA5E9', '#0284C7']}
+                style={styles.temptedButtonGradient}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+              >
+                <Text style={styles.temptedButtonText}>I Feel Tempted</Text>
+              </LinearGradient>
+            </TouchableOpacity>
+
+            {/* Action Buttons */}
+            <View style={styles.actionButtons}>
               <TouchableOpacity 
-                onPress={handleOrbPress}
-                activeOpacity={0.9}
-                accessibilityLabel="View achievements"
+                style={styles.actionButton}
+                onPress={handleResetTimer}
+                activeOpacity={0.8}
               >
-                <Animated.View style={[styles.orbContainer, orbAnimatedStyle]}>
-                  <DynamicOrb orbType={currentOrbType} size={192} />
-                </Animated.View>
+                <Ionicons name="refresh" size={28} color="#30475e" />
               </TouchableOpacity>
-
-              {/* Timer Display */}
-              <View style={styles.timerSection}>
-                <Text style={styles.timerLabel}>Procrastination-free for</Text>
-                
-                {/* Main Timer */}
-                <View style={styles.timerRow}>
-                  <View style={styles.timeUnit}>
-                    <Text style={styles.timeNumber}>{formatNumber(time.days)}</Text>
-                    <Text style={styles.timeLabel}>days</Text>
-                  </View>
-                  <Text style={styles.separator}>:</Text>
-                  <View style={styles.timeUnit}>
-                    <Text style={styles.timeNumber}>{formatNumber(time.hours)}</Text>
-                    <Text style={styles.timeLabel}>hours</Text>
-                  </View>
-                  <Text style={styles.separator}>:</Text>
-                  <View style={styles.timeUnit}>
-                    <Text style={styles.timeNumber}>{formatNumber(time.minutes)}</Text>
-                    <Text style={styles.timeLabel}>mins</Text>
-                  </View>
-                </View>
-
-                {/* Seconds Box */}
-                <View style={styles.secondsContainer}>
-                  <View style={styles.secondsBox}>
-                    <Text style={styles.secondsText}>{time.seconds}s</Text>
-                  </View>
-                </View>
-              </View>
-            </View>
-
-            {/* I Feel Tempted Button */}
-            <View style={styles.buttonSection}>
-              <TouchableOpacity
-                style={styles.temptedButton}
-                onPress={handleTempted}
-                activeOpacity={0.95}
+              <TouchableOpacity 
+                style={styles.actionButton}
+                onPress={handleGoalEdit}
+                activeOpacity={0.8}
               >
-                <LinearGradient
-                  colors={['#0EA5E9', '#0284C7']}
-                  style={styles.temptedButtonGradient}
-                  start={{ x: 0, y: 0 }}
-                  end={{ x: 1, y: 1 }}
-                >
-                  <Text style={styles.temptedButtonText}>I Feel Tempted</Text>
-                </LinearGradient>
+                <Ionicons name="create-outline" size={28} color="#30475e" />
               </TouchableOpacity>
             </View>
-
-            {/* Progress Card */}
-            <View style={styles.progressSection}>
-              <View style={styles.progressCard}>
-                <View style={styles.progressHeader}>
-                  <Text style={styles.progressTitle}>Brain Rewiring</Text>
-                  <Text style={styles.progressPercentage}>{Math.round(((userProgress?.currentStreak || convertTimeToDays(time)) / goalDays) * 100)}%</Text>
-                </View>
-                <View style={styles.progressBarContainer}>
-                  <View style={styles.progressBarBackground}>
-                    <LinearGradient
-                      colors={['#34D399', '#10B981']}
-                      style={[styles.progressBarFill, { width: `${Math.min(((userProgress?.currentStreak || convertTimeToDays(time)) / goalDays) * 100, 100)}%` }]}
-                      start={{ x: 0, y: 0 }}
-                      end={{ x: 1, y: 0 }}
-                    />
-                  </View>
-                </View>
-              </View>
-            </View>
-          </ScrollView>
-
-          {/* Fixed Footer with CTA Buttons */}
-          <View style={[styles.footer, { paddingBottom: insets.bottom + 12 }]}>
-            <TouchableOpacity 
-              style={styles.ctaButton}
-              onPress={handleResetTimer}
-              activeOpacity={0.8}
-            >
-              <View style={styles.ctaButtonContent}>
-                <Ionicons name="refresh" size={24} color="#30475e" />
-                <Text style={styles.ctaButtonText}>Reset Timer</Text>
-              </View>
-            </TouchableOpacity>
-            
-            <TouchableOpacity 
-              style={styles.ctaButton}
-              onPress={handleGoalEdit}
-              activeOpacity={0.8}
-            >
-              <View style={styles.ctaButtonContent}>
-                <Ionicons name="create-outline" size={24} color="#30475e" />
-                <Text style={styles.ctaButtonText}>Set Your Goal</Text>
-              </View>
-            </TouchableOpacity>
           </View>
-        </KeyboardAvoidingView>
-      </SafeAreaView>
+
+          {/* Progress Card */}
+          <View style={styles.progressSection}>
+            <View style={styles.progressCard}>
+              <View style={styles.progressHeader}>
+                <Text style={styles.progressTitle}>Brain Rewiring</Text>
+                <Text style={styles.progressPercentage}>{Math.round(((userProgress?.currentStreak || convertTimeToDays(time)) / goalDays) * 100)}%</Text>
+              </View>
+              <View style={styles.progressBarContainer}>
+                <View style={styles.progressBarBackground}>
+                  <LinearGradient
+                    colors={['#34D399', '#10B981']}
+                    style={[styles.progressBarFill, { width: `${Math.min(((userProgress?.currentStreak || convertTimeToDays(time)) / goalDays) * 100, 100)}%` }]}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 1, y: 0 }}
+                  />
+                </View>
+              </View>
+            </View>
+          </View>
+        </View>
+      </View>
       
       {/* Goal Setting Modal */}
       <Modal
@@ -589,7 +569,7 @@ function Homepage() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'transparent',
+    position: 'relative',
   },
   background: {
     position: 'absolute',
@@ -597,9 +577,6 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-  },
-  keyboardContainer: {
-    flex: 1,
   },
   header: {
     flexDirection: 'row',
@@ -624,14 +601,13 @@ const styles = StyleSheet.create({
     padding: 6,
     marginRight: 10,
   },
-  scrollView: {
+  main: {
     flex: 1,
-  },
-  scrollContent: {
-    flexGrow: 1,
     paddingHorizontal: 24,
-    paddingTop: 20,
+    paddingBottom: 100,
+    justifyContent: 'flex-start',
     alignItems: 'center',
+    paddingTop: 20,
   },
   orbSection: {
     alignItems: 'center',
@@ -762,42 +738,22 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     color: '#FFFFFF',
   },
-  footer: {
-    paddingHorizontal: 16,
-    paddingTop: 8,
-    backgroundColor: 'rgba(255, 255, 255, 0.95)',
-    borderTopWidth: 1,
-    borderTopColor: 'rgba(203, 213, 225, 0.3)',
+  actionButtons: {
     flexDirection: 'row',
-    gap: 12,
+    gap: 20,
   },
-  ctaButton: {
-    flex: 1,
-    minHeight: 48,
-    backgroundColor: 'rgba(222, 230, 255, 0.9)',
-    borderRadius: 12,
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    shadowColor: 'rgba(0, 0, 0, 0.1)',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 1,
-    shadowRadius: 8,
-    elevation: 4,
-    flexShrink: 0,
-  },
-  ctaButtonContent: {
-    flexDirection: 'row',
+  actionButton: {
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    backgroundColor: 'rgba(222, 230, 255, 0.8)',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 8,
-  },
-  ctaButtonText: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#30475e',
-    textAlign: 'center',
-    numberOfLines: 1,
-    flexShrink: 1,
+    shadowColor: 'rgba(0, 0, 0, 0.1)',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 1,
+    shadowRadius: 16,
+    elevation: 8,
   },
   progressSection: {
     width: '100%',
