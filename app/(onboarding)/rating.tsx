@@ -110,7 +110,7 @@ export default function RatingScreen() {
     // Add a small delay to let the page fully load first
     const timer = setTimeout(() => {
       requestReview();
-    }, 1000);
+    }, 2000);
     
     return () => clearTimeout(timer);
   }, []);
