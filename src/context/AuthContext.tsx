@@ -8,6 +8,7 @@ type AuthState = {
   loading: boolean;
   hasSubscription: boolean;
   subscriptionLoading: boolean;
+  subscriptionResolved: boolean;
   isAuthenticated: boolean;
   canAccessProtected: boolean;
   logout: () => Promise<void>;
@@ -15,6 +16,8 @@ type AuthState = {
   presentPaywall: (placement?: string) => Promise<boolean>;
   restorePurchases: () => Promise<boolean>;
   setHasSubscription: (hasSubscription: boolean) => void;
+  setSubscriptionLoading: (v: boolean) => void;
+  setSubscriptionResolved: (v: boolean) => void;
 };
 
 const AuthCtx = createContext<AuthState>({
@@ -22,6 +25,7 @@ const AuthCtx = createContext<AuthState>({
   loading: true,
   hasSubscription: false,
   subscriptionLoading: false,
+  subscriptionResolved: false,
   isAuthenticated: false,
   canAccessProtected: false,
   logout: async () => {},
@@ -29,14 +33,18 @@ const AuthCtx = createContext<AuthState>({
   presentPaywall: async () => false,
   restorePurchases: async () => false,
   setHasSubscription: () => {},
+  setSubscriptionLoading: () => {},
+  setSubscriptionResolved: () => {},
 });
 
 export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [hasSubscription, setHasSubscription] = useState(false);
-  const [subscriptionLoading, setSubscriptionLoading] = useState(false);
+  
   const superwallSupported = isSuperwallSupported();
+  const [subscriptionLoading, setSubscriptionLoading] = useState(superwallSupported);
+  const [subscriptionResolved, setSubscriptionResolved] = useState(false);
 
   // Derived state for easier access control
   const isAuthenticated = user !== null;
@@ -122,6 +130,7 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
     loading,
     hasSubscription,
     subscriptionLoading,
+    subscriptionResolved,
     isAuthenticated,
     canAccessProtected,
     logout,
@@ -129,6 +138,8 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
     presentPaywall,
     restorePurchases,
     setHasSubscription,
+    setSubscriptionLoading,
+    setSubscriptionResolved,
   };
 
   return (

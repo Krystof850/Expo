@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { createContext, useContext, useEffect, ReactNode } from 'react';
+import { createContext, useContext, useEffect, ReactNode, useRef } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { isSuperwallSupported } from '../utils/environment';
 import { PAYWALL_PLACEMENT } from '../constants/paywall';
@@ -9,6 +9,7 @@ interface SuperwallContextType {
   presentPaywall: (placement?: string) => Promise<boolean>;
   isSubscribed: boolean;
   subscriptionStatus: string;
+  isSupported: boolean;
 }
 
 const SuperwallContext = createContext<SuperwallContextType | null>(null);
@@ -24,80 +25,70 @@ export function useSuperwall() {
 
 // Komponenta s aktivním Superwall pro native platformy
 const SuperwallEnabledIntegration: React.FC<{ children: ReactNode }> = ({ children }: { children: ReactNode }) => {
-  const { user, setHasSubscription } = useAuth() as any;
-  
-  // ATOMIC paywall presentation lock using useRef (synchronní)
-  const presentingRef = React.useRef(false);
-  const pendingPromiseRef = React.useRef<Promise<boolean> | null>(null);
+  const { user, setHasSubscription, setSubscriptionLoading, setSubscriptionResolved } = useAuth() as any;
+
+  // Deferred promise pro propagaci paywall results (architect solution)
+  const paywallResolverRef = useRef<((result: boolean) => void) | null>(null);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const inFlightPromiseRef = useRef<Promise<boolean> | null>(null);
 
   try {
     const { useUser, usePlacement } = require('expo-superwall');
     
-    // Hook pro správu uživatele a subscription status (MINIMÁLNÍ)
+    // Hook pro správu uživatele a subscription status (podle dokumentace)
     const { subscriptionStatus, identify } = useUser();
     
     // Automaticky aktualizuj AuthContext při změně subscription status
+    const firstStatusSeenRef = useRef(false);
     useEffect(() => {
       console.log('[SuperwallIntegration] Subscription status changed:', subscriptionStatus);
       
-      // Mapuj Superwall subscription status na boolean hodnotu pro AuthContext
-      // subscriptionStatus je objekt s vlastností status: {"status": "ACTIVE", "entitlements": [...]}
+      // Při prvním status resolve loading
+      if (!firstStatusSeenRef.current && subscriptionStatus?.status) {
+        firstStatusSeenRef.current = true;
+        setSubscriptionLoading(false);
+        setSubscriptionResolved(true);
+      }
+      
+      // Mapuj pouze ACTIVE a TRIAL jako platné subscription
       const statusValue = subscriptionStatus?.status;
       const hasActiveSubscription = statusValue === 'ACTIVE' || statusValue === 'TRIAL';
       
       console.log('[SuperwallIntegration] Setting hasSubscription to:', hasActiveSubscription, 'based on status:', statusValue);
       setHasSubscription(hasActiveSubscription);
-    }, [subscriptionStatus, setHasSubscription]);
+    }, [subscriptionStatus, setHasSubscription, setSubscriptionLoading, setSubscriptionResolved]);
     
-    // Hook pro prezentaci paywall - JEDNODUCHÉ
+    // Hook pro prezentaci paywall s promise bridging
     const { registerPlacement } = usePlacement({
       onError: (error: any) => {
-        // Log for debugging - errors handled by UI
-        
-        // ATOMIC: Clear presentation lock on error
-        presentingRef.current = false;
-        pendingPromiseRef.current = null;
+        console.log('[SuperwallIntegration] Paywall error:', error);
+        // Resolve s false při error
+        if (paywallResolverRef.current) {
+          paywallResolverRef.current(false);
+          paywallResolverRef.current = null;
+        }
       },
       onPresent: (info: any) => {
         console.log('[SuperwallIntegration] Paywall presented:', info);
-        
-        // DETAILNÍ LOGGING PRODUKTŮ
-        console.log('📦 [PRODUCTS] Product IDs:', info?.productIds);
-        console.log('📦 [PRODUCTS] Products count:', info?.products?.length);
-        
-        info?.products?.forEach((product: any, index: number) => {
-          console.log(`📦 [PRODUCT ${index + 1}]`, {
-            id: product.id,
-            name: product.name,
-            price: product.price,
-            priceString: product.priceString,
-            localizedTitle: product.localizedTitle,
-            localizedDescription: product.localizedDescription,
-            entitlements: product.entitlements?.length + ' entitlements',
-            allFields: Object.keys(product)
-          });
-        });
-        
-        // TIMING INFO
-        console.log('⏱️ [TIMING]', {
-          productsLoadDuration: info?.productsLoadDuration + 's',
-          productsLoadSuccess: !info?.productsLoadFailTime,
-          webViewLoadDuration: info?.webViewLoadDuration + 's'
-        });
       },
       onDismiss: async (info: any, result: any) => {
         console.log('[SuperwallIntegration] Paywall dismissed:', info, result);
         
-        // ATOMIC: Clear presentation lock
-        presentingRef.current = false;
-        pendingPromiseRef.current = null;
+        let purchaseSuccessful = false;
         
-        // Aktualizuj subscription status po nákupu NEBO restore
+        // Clear timeout (architect feedback)
+        if (timeoutRef.current) {
+          clearTimeout(timeoutRef.current);
+          timeoutRef.current = null;
+        }
+        
+        // Aktualizuj subscription status po nákupu nebo restore
         if (result?.purchased === true || result?.type === 'purchased') {
           console.log('[SuperwallIntegration] Purchase successful:', result);
           setHasSubscription(true);
+          purchaseSuccessful = true;
           
-          // Spolehlivý sync po nákupu
+          // Sync po nákupu
           try {
             const { Superwall } = require('expo-superwall');
             await Superwall.syncPurchases?.().catch(() => {});
@@ -108,8 +99,9 @@ const SuperwallEnabledIntegration: React.FC<{ children: ReactNode }> = ({ childr
         } else if (result?.type === 'restored') {
           console.log('[SuperwallIntegration] Purchase restored:', result);  
           setHasSubscription(true);
+          purchaseSuccessful = true;
           
-          // Spolehlivý sync po restore
+          // Sync po restore
           try {
             const { Superwall } = require('expo-superwall');
             await Superwall.syncPurchases?.().catch(() => {});
@@ -120,78 +112,89 @@ const SuperwallEnabledIntegration: React.FC<{ children: ReactNode }> = ({ childr
         } else {
           console.log('[SuperwallIntegration] Paywall dismissed without purchase:', result);
         }
+
+        // Bridge result back to presentPaywall caller (architect solution)
+        if (paywallResolverRef.current) {
+          paywallResolverRef.current(purchaseSuccessful);
+          paywallResolverRef.current = null;
+          inFlightPromiseRef.current = null;
+        }
       },
     });
 
-
-    // Identifikuj uživatele JEDNOU
+    // Identifikuj uživatele podle dokumentace
     useEffect(() => {
       if (user?.uid) {
         identify(user.uid);
+        console.log('[SuperwallIntegration] User identified:', user.uid);
       }
-    }, [user?.uid]);
+    }, [user?.uid, identify]);
 
-    // ROBUST paywall presentation with ATOMIC lock
+    // Promise-bridged presentPaywall with safeguards (architect solution)
     const presentPaywall = React.useCallback(async (placement = PAYWALL_PLACEMENT): Promise<boolean> => {
-      // ATOMIC check: return existing promise if already presenting
-      if (presentingRef.current) {
-        console.log('[SuperwallIntegration] Paywall already presenting, returning existing promise...');
-        return pendingPromiseRef.current || Promise.resolve(false);
-      }
-      
       console.log('[SuperwallIntegration] Presenting paywall with placement:', placement);
       
-      // ATOMIC: Set lock immediately (synchronous)
-      presentingRef.current = true;
+      // Return in-flight promise instead of false for concurrent calls (architect feedback)
+      if (inFlightPromiseRef.current) {
+        console.log('[SuperwallIntegration] Paywall already in flight - returning existing promise');
+        return inFlightPromiseRef.current;
+      }
       
-      const promise = (async () => {
+      const promise = new Promise<boolean>((resolve) => {
+        // Store resolver pro onDismiss callback
+        paywallResolverRef.current = resolve;
+        
+        // Timeout safeguard (architect feedback)
+        timeoutRef.current = setTimeout(() => {
+          if (paywallResolverRef.current) {
+            console.log('[SuperwallIntegration] Paywall timeout - resolving false');
+            paywallResolverRef.current(false);
+            paywallResolverRef.current = null;
+            inFlightPromiseRef.current = null;
+            timeoutRef.current = null;
+          }
+        }, 60000); // 60 second timeout
+        
         try {
-          await registerPlacement({
+          registerPlacement({
             placement,
             feature() {
               console.log('[SuperwallIntegration] Premium feature unlocked!');
               setHasSubscription(true);
+              // Immediate resolve když už má subscription
+              if (timeoutRef.current) {
+                clearTimeout(timeoutRef.current);
+                timeoutRef.current = null;
+              }
+              resolve(true);
+              paywallResolverRef.current = null;
+              inFlightPromiseRef.current = null;
             }
           });
           
           console.log('[SuperwallIntegration] Placement registered successfully');
-          return true;
           
         } catch (error: any) {
-          // Log error but don't show user popup - paywall errors are handled gracefully
-          // Error callback will clear the lock
-          return false;
+          console.log('[SuperwallIntegration] Error presenting paywall:', error);
+          if (timeoutRef.current) {
+            clearTimeout(timeoutRef.current);
+            timeoutRef.current = null;
+          }
+          resolve(false);
+          paywallResolverRef.current = null;
+          inFlightPromiseRef.current = null;
         }
-      })();
+      });
       
-      // Store pending promise for concurrent callers
-      pendingPromiseRef.current = promise;
-      
+      inFlightPromiseRef.current = promise;
       return promise;
     }, [registerPlacement, setHasSubscription]);
-
-    // Nepřetržité hlídání subscription - při ztrátě sub okamžitě na paywall
-    const prevStatusRef = React.useRef<string | undefined>(subscriptionStatus?.status);
-
-    useEffect(() => {
-      const prev = prevStatusRef.current;
-      const curr = subscriptionStatus?.status;
-
-      const wasActive = prev ? (prev === 'ACTIVE' || prev === 'TRIAL') : false;
-      const isActive  = curr ? (curr === 'ACTIVE' || curr === 'TRIAL') : false;
-
-      if (wasActive && !isActive) {
-        // user ztratil entitlement → vyvolej paywall
-        console.log('[SuperwallIntegration] Subscription lost - presenting paywall');
-        presentPaywall().catch(() => {});
-      }
-      prevStatusRef.current = curr;
-    }, [subscriptionStatus?.status, presentPaywall]);
 
     const contextValue: SuperwallContextType = {
       presentPaywall,
       isSubscribed: subscriptionStatus?.status ? (subscriptionStatus.status === 'ACTIVE' || subscriptionStatus.status === 'TRIAL') : false,
-      subscriptionStatus: subscriptionStatus?.status || 'UNKNOWN'
+      subscriptionStatus: subscriptionStatus?.status || 'UNKNOWN',
+      isSupported: true
     };
 
     return (
@@ -201,16 +204,24 @@ const SuperwallEnabledIntegration: React.FC<{ children: ReactNode }> = ({ childr
     );
 
   } catch (error) {
-    // Silently handle Superwall unavailability - this is expected in dev environments
+    console.warn('⚠️ Superwall not available:', error);
+    
+    // CRITICAL: Set subscription loading states like DisabledIntegration (architect feedback)
+    useEffect(() => {
+      setHasSubscription(false);
+      setSubscriptionLoading(false);
+      setSubscriptionResolved(true);
+    }, [setHasSubscription, setSubscriptionLoading, setSubscriptionResolved]);
     
     // Fallback context pro případ chyby
     const contextValue: SuperwallContextType = {
       presentPaywall: async () => {
         console.log('[SuperwallIntegration] Superwall not available - cannot present paywall');
-        return false;
+        return true; // Return true like disabled integration to prevent loops
       },
       isSubscribed: false,
-      subscriptionStatus: 'ERROR'
+      subscriptionStatus: 'ERROR',
+      isSupported: false
     };
 
     return (
@@ -223,22 +234,26 @@ const SuperwallEnabledIntegration: React.FC<{ children: ReactNode }> = ({ childr
 
 // Komponenta pro prostředí bez Superwall (Expo Go, web)
 const SuperwallDisabledIntegration: React.FC<{ children: ReactNode }> = ({ children }: { children: ReactNode }) => {
-  const { setHasSubscription } = useAuth() as any;
+  const { setHasSubscription, setSubscriptionLoading, setSubscriptionResolved } = useAuth() as any;
 
   useEffect(() => {
     // V prostředí bez Superwall NEPOVOLIT přístup - žádné falešné "OK"
-    // Without Superwall, maintain proper access control - no false access
     setHasSubscription(false);
-  }, [setHasSubscription]);
+    // CRITICAL: nastavit loading states aby se dostal k redirect (architect feedback)
+    setSubscriptionLoading(false);
+    setSubscriptionResolved(true);
+  }, [setHasSubscription, setSubscriptionLoading, setSubscriptionResolved]);
 
   const contextValue: SuperwallContextType = {
     presentPaywall: async () => {
       // V dev prostředí bez Superwall nemůžeme prezentovat paywall
       console.log('[SuperwallIntegration] Superwall disabled - cannot present paywall');
-      return false;
+      // Return true once a no-op to prevent loops (architect solution)
+      return true;
     },
     isSubscribed: false,
-    subscriptionStatus: 'DISABLED'
+    subscriptionStatus: 'DISABLED',
+    isSupported: false
   };
 
   return (
