@@ -48,6 +48,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       ],
       // Ujisti se, že pro iPad nebudou žádné orientace generovány:
       'UISupportedInterfaceOrientations~ipad': [],
+      UIDeviceFamily: [1],
       UIBackgroundModes: [],
     },
     entitlements: {
