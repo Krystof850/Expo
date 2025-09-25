@@ -1,0 +1,88 @@
+NÁZEV ÚKOLU: iPhone-only release + fix rozbitého layoutu na iPadu (zakázat iPad/Mac) + UI safe-area/scroll hotfix pro Home
+
+CÍL: Aplikace musí být dostupná pouze pro iPhone (iOS). Žádný iPad, žádný Mac (“Designed for iPad/iPhone on Mac”). Zároveň oprav layout na Home tak, aby CTA tlačítka („Reset Timer“, „Set Your Goal“) byla vždy plně viditelná na všech iPhone velikostech (vč. iPhone SE) – bez překryvu, mimo safe-area, i při otevřené klávesnici.
+
+POSTUP (NEVYPISUJ KÓD, JEN PROVEĎ ÚPRAVY):
+
+Expo config – vypnout iPad a Mac, vynutit iPhone-only
+
+Otevři app.config.ts (nebo app.json podle projektu).
+
+Nastav:
+
+ios.supportsTablet = false
+
+ios.infoPlist.UIDeviceFamily = [1] (1 = iPhone, žádné [2])
+
+ios.requireFullScreen = true
+
+Volitelné (pro jistotu iPhone-only cílení): ios.infoPlist.UIRequiredDeviceCapabilities doplň pole alespoň s "armv7"
+
+Zkontroluj, že nikde nezůstává supportsTablet: true ani žádný UIDeviceFamily obsahující 2.
+
+Pozn.: Expo Catalyst nepoužíváme; tímto a zakázáním iPadu zabráníme také “Designed for iPad on Mac”.
+
+Home obrazovka – oprav layout CTA, safe-area, scroll
+
+V Home screen (nejspíš app/(tabs)/index.tsx nebo src/screens/Home.tsx) zaveď následující zásady:
+
+Obalte obsah do SafeAreaView.
+
+Hlavní obsah dej do ScrollView s contentContainerStyle={{paddingBottom: X}}, kde X = insets.bottom + 24 (použij useSafeAreaInsets()).
+
+Tlačítka („Reset Timer“, „Set Your Goal“) nedej absolutně k dolní hraně. Vytvoř fixní footer (běžný View) uvnitř layoutu, který respektuje safe-area: paddingBottom: insets.bottom + 12, paddingHorizontal: 16, paddingTop: 8. Footer má být mimo ScrollView a pod ním.
+
+Pokud je na stránce jakýkoli input, obal root do KeyboardAvoidingView (behavior="padding" na iOS) tak, aby footer s tlačítky nikdy nepřekryl klávesnici.
+
+Zruš pevné výšky, které můžou na menších displejích odříznout CTA (žádné fix height na containerech; používej flex).
+
+Nastav tlačítkům minHeight (např. 48), flexShrink: 0 a horizontální margin tak, aby se nezalamovala mimo obrazovku.
+
+Ověř, že texty tlačítek se na menších displejích nezalomí mimo (případně zkrať labely nebo nastav numberOfLines={1} a ellipsizeMode="tail").
+
+Responsivní testy (povinné před buildem)
+
+Spusť iOS simulátory a zkontroluj Home:
+
+iPhone SE (3rd gen), iPhone 13 mini, iPhone 15 Pro Max.
+
+Ověř:
+
+Obě CTA jsou plně viditelné bez scrollu na velkých displejích a se scrollováním dosažitelná na malých.
+
+Při aktivní klávesnici se CTA nepřekrývají a zůstávají přístupná (KeyboardAvoidingView).
+
+Žádný import ani stylování nepoužívá absolutní bottom: 0 na CTA.
+
+Nepoužívej iPad simulátor – aplikace už pro iPad nesmí být podporovaná.
+
+Čistka závislostí a build sanity check (rychlé)
+
+npx expo install --check a dorovnej verze podle SDK (zejména react-native-reanimated).
+
+Přidej .expo/ do .gitignore, ať se necommitují lokální stavy.
+
+Ujisti se, že není instalován @expo/metro-config přímo (má se importovat přes expo/metro-config).
+
+Build a ověření
+
+Smaž cache Metro bundleru a pods: rm -rf node_modules && npm i (nebo yarn), případně npx expo start -c.
+
+Vytvoř iOS development build a manuálně otestuj Home dle bodu (3).
+
+Poté spusť production build:
+eas build --platform ios --profile production
+
+Po buildu a před submittem otevři archivované Info.plist (nebo výstupné metadata) a ověř, že UIDeviceFamily = (1) a supportsTablet = false.
+
+Poznámka pro vydání (bez zásahu do kódu, jen připomeň Kryštofovi)
+
+Po nahrání nového buildu v App Store Connect ověř v Pricing and Availability, že není zaškrtnuté “Make this app available” pro iPad/Mac (iOS apps on Mac). Tím definitivně zamezíme distribuci na iPad/Mac z App Store strany.
+
+Výstup:
+
+Commit diff se změnami v app.config.ts/app.json a Home screen souborech.
+
+Screenshoty z iPhone SE, 13 mini a 15 Pro Max s viditelnými CTA.
+
+Log z eas build --platform ios --profile production s potvrzením UIDeviceFamily = [1].
