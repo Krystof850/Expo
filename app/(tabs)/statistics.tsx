@@ -8,7 +8,7 @@ import { LineChart, BarChart } from 'react-native-chart-kit';
 import { LinearGradient as ExpoLinearGradient } from 'expo-linear-gradient';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import { Protected } from '../../src/components/Protected';
+import Protected from '../../src/components/Protected';
 import AppBackground from '../../components/AppBackground';
 import { TitleText, DescriptionText } from '../../components/Text';
 import { COLORS, SPACING } from '@/constants/theme';

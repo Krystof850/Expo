@@ -11,7 +11,7 @@ import { updatePassword, EmailAuthProvider, reauthenticateWithCredential } from 
 
 import { useAuth } from '../../src/context/AuthContext';
 import { deleteUserAccount } from '../../src/services/auth';
-import { Protected } from '../../src/components/Protected';
+import Protected from '../../src/components/Protected';
 import { COLORS } from '@/constants/theme';
 
 export default function Profile() {
