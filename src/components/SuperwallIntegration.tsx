@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { createContext, useContext, useEffect, ReactNode, useRef } from 'react';
+import { createContext, useContext, useEffect, ReactNode, useRef, useCallback } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { isSuperwallSupported } from '../utils/environment';
 
@@ -31,6 +31,24 @@ const SuperwallEnabledIntegration: React.FC<{ children: ReactNode }> = ({ childr
   // OFICIÁLNÍ ZPŮSOB: useUser hook podle dokumentace
   const { subscriptionStatus, identify } = useUser();
   
+  // OFICIÁLNÍ ZPŮSOB: Pro force reset subscription cache v development/testing
+  const forceResetSubscriptionCache = useCallback(async () => {
+    try {
+      const { Superwall } = require('expo-superwall');
+      // Reset celého SDK pro vyčištění cache podle dokumentace
+      await Superwall.reset();
+      console.log('[SuperwallIntegration] Force subscription cache reset completed');
+      
+      // Znovu identify pokud je uživatel přihlášen
+      if (user?.uid) {
+        await identify(user.uid);
+        console.log('[SuperwallIntegration] User re-identified after cache reset');
+      }
+    } catch (error) {
+      console.error('[SuperwallIntegration] Failed to reset subscription cache:', error);
+    }
+  }, [user?.uid, identify]);
+  
   // OFICIÁLNÍ ZPŮSOB: Safe null checking podle Superwall best practices
   const firstStatusSeenRef = useRef(false);
   useEffect(() => {
@@ -52,21 +70,27 @@ const SuperwallEnabledIntegration: React.FC<{ children: ReactNode }> = ({ childr
     }
   }, [subscriptionStatus?.status, setSubscriptionLoading, setSubscriptionResolved]); // Safe dependency
 
-  // OFICIÁLNÍ PATTERN: Safe user identification podle dokumentace
+  // OFICIÁLNÍ PATTERN: User identification a reset podle dokumentace
   useEffect(() => {
-    const identifyUser = async () => {
+    const handleUserChange = async () => {
       try {
         if (user?.uid && typeof user.uid === 'string' && user.uid.trim()) {
+          // OFICIÁLNÍ ZPŮSOB: Nejdříve identify uživatele podle dokumentace
           await identify(user.uid);
           console.log('[SuperwallIntegration] User identified with Superwall:', user.uid);
+        } else {
+          // OFICIÁLNÍ ZPŮSOB: Reset při logout podle dokumentace
+          const { Superwall } = require('expo-superwall');
+          await Superwall.reset();
+          console.log('[SuperwallIntegration] Superwall reset completed - cache cleared');
         }
       } catch (error) {
-        console.error('[SuperwallIntegration] Failed to identify user:', error);
+        console.error('[SuperwallIntegration] Failed to handle user change:', error);
         // Continue gracefully - don't crash on identification failure
       }
     };
     
-    identifyUser();
+    handleUserChange();
   }, [user?.uid, identify]);
 
   // OFICIÁLNÍ ZPŮSOB: Safe context value podle Superwall best practices
@@ -75,6 +99,14 @@ const SuperwallEnabledIntegration: React.FC<{ children: ReactNode }> = ({ childr
     subscriptionStatus: subscriptionStatus?.status ?? 'UNKNOWN', // Nullish coalescing
     isSubscribed: subscriptionStatus?.status === 'ACTIVE', // Safe comparison
   };
+  
+  // OFICIÁLNÍ PATTERN: Expose cache reset pro debugging (development only)
+  useEffect(() => {
+    if (__DEV__) {
+      (global as any).superwallForceReset = forceResetSubscriptionCache;
+      console.log('[SuperwallIntegration] Development: Use global.superwallForceReset() to reset cache');
+    }
+  }, [forceResetSubscriptionCache]);
 
   return (
     <SuperwallContext.Provider value={contextValue}>

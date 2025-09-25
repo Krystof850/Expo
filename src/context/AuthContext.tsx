@@ -99,19 +99,39 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
 
   // Firebase auth state listener
   useEffect(() => {
-    const unsub = onAuthStateChanged(auth, (u) => {
+    const unsub = onAuthStateChanged(auth, async (u) => {
       setUser(u);
       setLoading(false);
       
-      // Check subscription status when user changes
-      if (u) {
-        checkSubscriptionStatus();
+      // OFICIÁLNÍ ZPŮSOB: Trigger placement po úspěšném přihlášení podle dokumentace
+      if (u && superwallSupported) {
+        try {
+          // Počkat na úspěšné identify v SuperwallIntegration
+          setTimeout(async () => {
+            try {
+              const { Superwall } = require('expo-superwall');
+              // OFICIÁLNÍ ZPŮSOB: Trigger placement pro nově přihlášené uživatele
+              await Superwall.register('zario-template-3a85-2025-09-10', {
+                source: 'login_flow',
+                trigger_timing: 'after_login'
+              });
+              console.log('[AuthContext] Placement triggered after successful login');
+            } catch (error) {
+              console.error('[AuthContext] Failed to trigger placement after login:', error);
+            }
+          }, 1000); // Dáme čas na identify v SuperwallIntegration
+          
+          checkSubscriptionStatus();
+        } catch (error) {
+          console.error('[AuthContext] Error handling user login:', error);
+          checkSubscriptionStatus();
+        }
       } else {
         setHasSubscription(false);
       }
     });
     return unsub;
-  }, [checkSubscriptionStatus]);
+  }, [checkSubscriptionStatus, superwallSupported]);
 
   // Check subscription status on mount if Superwall is supported
   useEffect(() => {
@@ -121,8 +141,26 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
   }, [superwallSupported, user, checkSubscriptionStatus]);
 
   async function logout() {
-    setHasSubscription(false);
-    await signOut(auth);
+    try {
+      // OFICIÁLNÍ ZPŮSOB: Reset Superwall před Firebase logout podle dokumentace
+      if (superwallSupported) {
+        const { Superwall } = require('expo-superwall');
+        await Superwall.reset();
+        console.log('[AuthContext] Superwall reset completed before logout');
+      }
+      
+      // Reset local state
+      setHasSubscription(false);
+      
+      // Firebase logout
+      await signOut(auth);
+      console.log('[AuthContext] Logout completed successfully');
+    } catch (error) {
+      console.error('[AuthContext] Error during logout:', error);
+      // Fallback - still try to sign out even if Superwall reset fails
+      setHasSubscription(false);
+      await signOut(auth);
+    }
   }
 
   const value: AuthState = {
