@@ -27,7 +27,7 @@ import Animated, {
 } from 'react-native-reanimated';
 
 import { useAuth } from '../../src/context/AuthContext';
-import { Protected } from '../../src/components/Protected';
+import Protected from '../../src/components/Protected';
 import { router } from 'expo-router';
 import { withDebugEntry } from '../../src/debug/registerDebugEntry';
 import DynamicOrb from '../../src/components/DynamicOrb';
