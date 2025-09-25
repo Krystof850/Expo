@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, { ReactNode, useEffect, useState, useCallback, useRef } from 'react';
 import { View, Text, ActivityIndicator, StyleSheet, TouchableOpacity } from 'react-native';
 import { Redirect } from 'expo-router';
 import { useAuth } from '../context/AuthContext';
@@ -28,7 +28,7 @@ const Protected: React.FC<ProtectedProps> = ({ children, placement = PAYWALL_PLA
     hasSubscription 
   } = useAuth();
   
-  const { presentPaywall, isSupported } = useSuperwall();
+  const { isSupported } = useSuperwall();
   const [paywallTriggered, setPaywallTriggered] = useState(false);
   const [paywallDismissed, setPaywallDismissed] = useState(false);
 
@@ -55,31 +55,157 @@ const Protected: React.FC<ProtectedProps> = ({ children, placement = PAYWALL_PLA
     );
   }
 
-  // Trigger paywall once pro uživatele bez subscription (architect: no auto re-trigger)
-  useEffect(() => {
-    if (subscriptionResolved && isAuthenticated && !hasSubscription && !paywallTriggered && !paywallDismissed && isSupported) {
-      console.log('[Protected] User needs subscription - triggering paywall:', placement);
+  // Oficiální Superwall hook pattern podle dokumentace
+  const SuperwallPaywallTrigger: React.FC = () => {
+    const paywallResolverRef = useRef<((result: boolean) => void) | null>(null);
+    const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+    try {
+      const { usePlacement } = require('expo-superwall');
       
-      setPaywallTriggered(true);
-      
-      presentPaywall(placement)
-        .then((success) => {
-          console.log('[Protected] Paywall result:', success);
-          if (!success) {
-            // Set dismissed state instead of auto-retry (architect: stop re-trigger loop)
-            setPaywallDismissed(true);
+      // Hook pro prezentaci paywall podle oficiální dokumentace
+      const { registerPlacement } = usePlacement({
+        onError: (error: any) => {
+          console.log('[Protected] Paywall error:', error);
+          if (paywallResolverRef.current) {
+            paywallResolverRef.current(false);
+            paywallResolverRef.current = null;
           }
-        })
-        .catch((error) => {
-          console.error('[Protected] Error presenting paywall:', error);
-          // Set dismissed state při error
-          setPaywallDismissed(true);
-        })
-        .finally(() => {
-          setPaywallTriggered(false);
+          if (timeoutRef.current) {
+            clearTimeout(timeoutRef.current);
+            timeoutRef.current = null;
+          }
+        },
+        onPresent: (info: any) => {
+          console.log('[Protected] Paywall presented:', info);
+        },
+        onDismiss: async (info: any, result: any) => {
+          console.log('[Protected] Paywall dismissed:', info, result);
+          
+          let purchaseSuccessful = false;
+          
+          // Clear timeout
+          if (timeoutRef.current) {
+            clearTimeout(timeoutRef.current);
+            timeoutRef.current = null;
+          }
+          
+          // Check purchase/restore results podle dokumentace
+          if (result?.purchased === true || result?.type === 'purchased') {
+            console.log('[Protected] Purchase successful:', result);
+            purchaseSuccessful = true;
+            
+            // Sync podle dokumentace
+            try {
+              const { Superwall } = require('expo-superwall');
+              await Superwall.syncPurchases?.().catch(() => {});
+              console.log('[Protected] Purchase synced successfully');
+            } catch (error) {
+              console.log('[Protected] Purchase sync skipped (not available)');
+            }
+          } else if (result?.type === 'restored') {
+            console.log('[Protected] Purchase restored:', result);  
+            purchaseSuccessful = true;
+            
+            // Sync podle dokumentace
+            try {
+              const { Superwall } = require('expo-superwall');
+              await Superwall.syncPurchases?.().catch(() => {});
+              console.log('[Protected] Restore synced successfully');
+            } catch (error) {
+              console.log('[Protected] Restore sync skipped (not available)');
+            }
+          } else {
+            console.log('[Protected] Paywall dismissed without purchase:', result);
+          }
+
+          // Bridge result back to caller
+          if (paywallResolverRef.current) {
+            paywallResolverRef.current(purchaseSuccessful);
+            paywallResolverRef.current = null;
+          }
+        },
+      });
+
+      // Oficiální presentPaywall podle dokumentace
+      const presentPaywall = useCallback(async (): Promise<boolean> => {
+        console.log('[Protected] Presenting paywall with placement:', placement);
+        
+        return new Promise<boolean>((resolve) => {
+          paywallResolverRef.current = resolve;
+          
+          // Timeout safeguard
+          timeoutRef.current = setTimeout(() => {
+            if (paywallResolverRef.current) {
+              console.log('[Protected] Paywall timeout - resolving false');
+              paywallResolverRef.current(false);
+              paywallResolverRef.current = null;
+            }
+          }, 60000); // 60 second timeout
+          
+          try {
+            // Oficiální registerPlacement pattern podle dokumentace
+            registerPlacement({
+              placement,
+              feature() {
+                console.log('[Protected] Premium feature unlocked!');
+                // Immediate resolve když už má subscription
+                if (timeoutRef.current) {
+                  clearTimeout(timeoutRef.current);
+                  timeoutRef.current = null;
+                }
+                resolve(true);
+                paywallResolverRef.current = null;
+              }
+            });
+            
+            console.log('[Protected] Placement registered successfully');
+            
+          } catch (error: any) {
+            console.log('[Protected] Error presenting paywall:', error);
+            if (timeoutRef.current) {
+              clearTimeout(timeoutRef.current);
+              timeoutRef.current = null;
+            }
+            resolve(false);
+            paywallResolverRef.current = null;
+          }
         });
+      }, [registerPlacement, placement]);
+
+      // Trigger paywall once pro uživatele bez subscription
+      useEffect(() => {
+        if (subscriptionResolved && isAuthenticated && !hasSubscription && !paywallTriggered && !paywallDismissed && isSupported) {
+          console.log('[Protected] User needs subscription - triggering paywall:', placement);
+          
+          setPaywallTriggered(true);
+          
+          presentPaywall()
+            .then((success) => {
+              console.log('[Protected] Paywall result:', success);
+              if (!success) {
+                // Set dismissed state instead of auto-retry (architect: stop re-trigger loop)
+                setPaywallDismissed(true);
+              }
+            })
+            .catch((error) => {
+              console.error('[Protected] Error presenting paywall:', error);
+              // Set dismissed state při error
+              setPaywallDismissed(true);
+            })
+            .finally(() => {
+              setPaywallTriggered(false);
+            });
+        }
+      }, [subscriptionResolved, isAuthenticated, hasSubscription, paywallTriggered, paywallDismissed, isSupported, presentPaywall]);
+
+      return null;
+
+    } catch (error) {
+      console.warn('⚠️ Superwall hooks not available:', error);
+      return null;
     }
-  }, [subscriptionResolved, isAuthenticated, hasSubscription, paywallTriggered, paywallDismissed, placement, presentPaywall, isSupported]);
+  };
 
   // Manual retry handler (architect: user-triggered retry instead of auto-loop)
   const handleRetryPaywall = () => {
@@ -110,8 +236,13 @@ const Protected: React.FC<ProtectedProps> = ({ children, placement = PAYWALL_PLA
     );
   }
 
-  // Loading state během paywall presentation
-  return <CenteredSpinner text={paywallTriggered ? "Loading paywall..." : "Checking subscription..."} />;
+  // Render paywall trigger component podle oficiální dokumentace
+  return (
+    <>
+      <SuperwallPaywallTrigger />
+      <CenteredSpinner text={paywallTriggered ? "Loading paywall..." : "Checking subscription..."} />
+    </>
+  );
 };
 
 const styles = StyleSheet.create({

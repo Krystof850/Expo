@@ -1,7 +1,8 @@
 import { ConfigContext, ExpoConfig } from "@expo/config";
 
-// Load environment variables with EAS Build support
+// Load environment variables with EAS Build support (podle oficiální Superwall dokumentace)
 const firebaseApiKey = process.env.FIREBASE_API_KEY || process.env.EXPO_PUBLIC_FIREBASE_API_KEY;
+// CRITICAL: Superwall API klíč pro production - v eas.json jsou hardcoded pro reliable builds
 const superwallApiKey = process.env.SUPERWALL_API_KEY || process.env.EXPO_PUBLIC_SUPERWALL_API_KEY;
 const googleClientId = process.env.GOOGLE_CLIENT_ID || process.env.EXPO_PUBLIC_GOOGLE_CLIENT_ID;
 const iosGoogleClientId = process.env.IOS_GOOGLE_CLIENT_ID || process.env.EXPO_PUBLIC_IOS_GOOGLE_CLIENT_ID;
@@ -106,10 +107,10 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       'expo-build-properties',
       {
         android: {
-          minSdkVersion: 26,
+          minSdkVersion: 26, // Superwall requirement podle dokumentace
         },
         ios: {
-          deploymentTarget: '15.1',
+          deploymentTarget: '15.1', // Project requirement (15.1+ splňuje Superwall 14.0+ requirement)
         },
       },
     ],
