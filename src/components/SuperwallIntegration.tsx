@@ -78,6 +78,18 @@ const SuperwallEnabledIntegration: React.FC<{ children: ReactNode }> = ({ childr
           // OFICIÁLNÍ ZPŮSOB: Nejdříve identify uživatele podle dokumentace
           await identify(user.uid);
           console.log('[SuperwallIntegration] User identified with Superwall:', user.uid);
+          
+          // OFICIÁLNÍ ZPŮSOB: Trigger placement immediately after successful identify
+          const { Superwall } = require('expo-superwall');
+          const { PAYWALL_PLACEMENT } = require('../constants/paywall');
+          await Superwall.register(PAYWALL_PLACEMENT, {
+            params: {
+              source: 'login_flow',
+              trigger_timing: 'after_login'
+            }
+          });
+          console.log('[SuperwallIntegration] Placement triggered after successful identify');
+          
         } else {
           // OFICIÁLNÍ ZPŮSOB: Reset při logout podle dokumentace
           const { Superwall } = require('expo-superwall');

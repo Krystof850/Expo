@@ -63,15 +63,15 @@ const SuperwallProtectedContent: React.FC<ProtectedProps> = ({ children, placeme
   // OFICIÁLNÍ ZPŮSOB: Safe null checking podle Superwall best practices
   const hasActiveSubscription = subscriptionStatus?.status === 'ACTIVE';
   
-  // OFICIÁLNÍ PATTERN: Register placement podle dokumentace
+  // OFICIÁLNÍ PATTERN: Always register placement - let SDK decide presentation according to docs
   useEffect(() => {
-    if (!hasActiveSubscription && !paywallDismissed && !placementRegisteredRef.current) {
+    if (!paywallDismissed && !placementRegisteredRef.current) {
       placementRegisteredRef.current = true;
       
       console.log('[Protected] Registering placement:', placement);
       console.log('[Protected] Current subscription status:', subscriptionStatus?.status ?? 'undefined');
       
-      // OFICIÁLNÍ ZPŮSOB: registerPlacement podle dokumentace
+      // OFICIÁLNÍ ZPŮSOB: Always register placement - SDK will handle gating
       registerPlacement({
         placement: placement || PAYWALL_PLACEMENT,
         params: {
@@ -87,7 +87,7 @@ const SuperwallProtectedContent: React.FC<ProtectedProps> = ({ children, placeme
         // Continue gracefully even if placement registration fails
       });
     }
-  }, [hasActiveSubscription, paywallDismissed, placement, registerPlacement, subscriptionStatus?.status]);
+  }, [paywallDismissed, placement, registerPlacement, subscriptionStatus?.status]);
 
   // Reset placement registration when paywall is dismissed
   useEffect(() => {
