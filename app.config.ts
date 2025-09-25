@@ -23,7 +23,7 @@ console.log('🔧 Loading environment variables:', {
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
   name: config.name ?? "Unoop",
-  slug: config.slug ?? "unoop-app",
+  slug: "unoop-app",
   owner: "krystofkapka60",
   version: '1.0.0',
   orientation: 'portrait',
