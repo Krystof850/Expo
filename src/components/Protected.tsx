@@ -20,11 +20,15 @@ const CenteredSpinner: React.FC<{ text?: string }> = ({ text = "Loading..." }) =
 
 // OFICIÁLNÍ SUPERWALL PATTERN - Komponenta pro supported environments s unconditional hooks
 const SuperwallProtectedContent: React.FC<ProtectedProps> = ({ children, placement = PAYWALL_PLACEMENT }) => {
-  // OFICIÁLNÍ ZPŮSOB: Unconditional hooks podle React rules a Superwall dokumentace
+  // OFICIÁLNÍ ZPŮSOB: Všechny hooks musí být na začátku komponenty - unconditional podle React rules
   const { useUser, usePlacement } = require('expo-superwall');
   
   // OFICIÁLNÍ PATTERN: useUser hook podle dokumentace
   const { subscriptionStatus } = useUser();
+  
+  // State hooks - musí být unconditional
+  const [paywallDismissed, setPaywallDismissed] = useState(false);
+  const placementRegisteredRef = useRef(false);
   
   // OFICIÁLNÍ PATTERN: usePlacement hook podle dokumentace s safe error handling
   const { registerPlacement, state } = usePlacement({
@@ -50,8 +54,11 @@ const SuperwallProtectedContent: React.FC<ProtectedProps> = ({ children, placeme
     },
   });
 
-  const [paywallDismissed, setPaywallDismissed] = useState(false);
-  const placementRegisteredRef = useRef(false);
+  // Callback hooks - musí být unconditional
+  const handleRetryPaywall = useCallback(() => {
+    setPaywallDismissed(false);
+    placementRegisteredRef.current = false;
+  }, []);
 
   // OFICIÁLNÍ ZPŮSOB: Safe null checking podle Superwall best practices
   const hasActiveSubscription = subscriptionStatus?.status === 'ACTIVE';
@@ -89,16 +96,11 @@ const SuperwallProtectedContent: React.FC<ProtectedProps> = ({ children, placeme
     }
   }, [paywallDismissed]);
 
+  // CRÍTICO FIX: Conditional rendering BEZ early returns - všechny hooks musí být executed
   // OFICIÁLNÍ ZPŮSOB: Pokud má active subscription, zobraz obsah
   if (hasActiveSubscription) {
     return <>{children}</>;
   }
-
-  // Manual retry handler pro dismissed paywall
-  const handleRetryPaywall = useCallback(() => {
-    setPaywallDismissed(false);
-    placementRegisteredRef.current = false;
-  }, []);
 
   // Show dismissed state with retry option
   if (paywallDismissed) {
