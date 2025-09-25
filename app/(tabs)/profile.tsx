@@ -140,35 +140,25 @@ export default function Profile() {
       const isAvailable = await StoreReview.isAvailableAsync();
       console.log('🌟 Rate App: isAvailable =', isAvailable);
       
-      if (!isAvailable) {
-        console.log('🌟 Rate App: Not available (likely Expo Go/development mode)');
-        Alert.alert(
-          'Rate App',
-          'Rating functionality is not available in development mode. In the production app, this would show the native review dialog.',
-          [{ text: 'OK', style: 'default' }]
-        );
-        return;
-      }
-      
-      // Check if platform can use requestReview()
-      const hasAction = await StoreReview.hasAction();
-      console.log('🌟 Rate App: hasAction =', hasAction);
-      
-      if (hasAction) {
-        console.log('🌟 Rate App: Requesting native review...');
-        await StoreReview.requestReview();
-        console.log('🌟 Rate App: Review request completed');
+      if (isAvailable) {
+        // Check if platform can use requestReview()
+        const hasAction = await StoreReview.hasAction();
+        console.log('🌟 Rate App: hasAction =', hasAction);
         
-        // Show feedback since native dialog might not appear
-        setTimeout(() => {
+        if (hasAction) {
+          console.log('🌟 Rate App: Requesting native review...');
+          await StoreReview.requestReview();
+          console.log('🌟 Rate App: Review request completed');
+        } else {
+          console.log('🌟 Rate App: No native action available, showing fallback');
           Alert.alert(
-            'Thank You!',
-            'Thank you for wanting to rate our app! The review dialog should have appeared, or you can rate us directly in the App Store.',
+            'Rate App',
+            'Please visit the App Store to leave a review for our app. Thank you for your support!',
             [{ text: 'OK', style: 'default' }]
           );
-        }, 1000);
+        }
       } else {
-        console.log('🌟 Rate App: No native action available, showing fallback');
+        console.log('🌟 Rate App: Not available, showing App Store fallback');
         Alert.alert(
           'Rate App',
           'Please visit the App Store to leave a review for our app. Thank you for your support!',
