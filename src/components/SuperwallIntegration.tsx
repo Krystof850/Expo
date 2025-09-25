@@ -23,7 +23,7 @@ export function useSuperwall() {
 
 // Komponenta s aktivním Superwall pro native platformy (podle oficiální dokumentace)
 const SuperwallEnabledIntegration: React.FC<{ children: ReactNode }> = ({ children }: { children: ReactNode }) => {
-  const { user, setHasSubscription, setSubscriptionLoading, setSubscriptionResolved } = useAuth() as any;
+  const { user, setSubscriptionLoading, setSubscriptionResolved } = useAuth() as any;
 
   try {
     const { useUser } = require('expo-superwall');
@@ -31,38 +31,33 @@ const SuperwallEnabledIntegration: React.FC<{ children: ReactNode }> = ({ childr
     // Hook pro správu uživatele podle oficiální dokumentace
     const { subscriptionStatus, identify } = useUser();
     
-    // Automaticky aktualizuj AuthContext při změně subscription status
+    // OFICIÁLNÍ ZPŮSOB: Pouze resolve loading states, Superwall SDK automaticky spravuje subscription status
     const firstStatusSeenRef = useRef(false);
     useEffect(() => {
-      console.log('[SuperwallIntegration] Subscription status changed:', subscriptionStatus);
+      console.log('[SuperwallIntegration] Superwall subscription status:', subscriptionStatus);
       
-      // Při prvním status resolve loading
-      if (!firstStatusSeenRef.current && subscriptionStatus?.status) {
+      // Resolve loading pouze při prvním status update od Superwall SDK
+      if (!firstStatusSeenRef.current && subscriptionStatus) {
         firstStatusSeenRef.current = true;
         setSubscriptionLoading(false);
         setSubscriptionResolved(true);
+        console.log('[SuperwallIntegration] Superwall SDK ready, subscription status resolved');
       }
-      
-      // Mapuj pouze ACTIVE a TRIAL jako platné subscription
-      const statusValue = subscriptionStatus?.status;
-      const hasActiveSubscription = statusValue === 'ACTIVE' || statusValue === 'TRIAL';
-      
-      console.log('[SuperwallIntegration] Setting hasSubscription to:', hasActiveSubscription, 'based on status:', statusValue);
-      setHasSubscription(hasActiveSubscription);
-    }, [subscriptionStatus, setHasSubscription, setSubscriptionLoading, setSubscriptionResolved]);
+    }, [subscriptionStatus, setSubscriptionLoading, setSubscriptionResolved]);
 
-    // Identifikuj uživatele podle dokumentace
+    // Identifikuj uživatele podle oficiální dokumentace
     useEffect(() => {
       if (user?.uid) {
         identify(user.uid);
-        console.log('[SuperwallIntegration] User identified:', user.uid);
+        console.log('[SuperwallIntegration] User identified with Superwall:', user.uid);
       }
     }, [user?.uid, identify]);
 
+    // OFICIÁLNÍ ZPŮSOB: Pouze expose Superwall SDK data bez custom logic
     const contextValue: SuperwallContextType = {
       isSupported: true,
       subscriptionStatus: subscriptionStatus?.status || 'UNKNOWN',
-      isSubscribed: subscriptionStatus?.status ? (subscriptionStatus.status === 'ACTIVE' || subscriptionStatus.status === 'TRIAL') : false,
+      isSubscribed: subscriptionStatus?.status === 'ACTIVE', // Pouze ACTIVE podle oficiální dokumentace
     };
 
     return (
@@ -74,12 +69,11 @@ const SuperwallEnabledIntegration: React.FC<{ children: ReactNode }> = ({ childr
   } catch (error) {
     console.warn('⚠️ Superwall not available:', error);
     
-    // CRITICAL: Set subscription loading states like DisabledIntegration (architect feedback)
+    // CRITICAL: Set loading states for error fallback
     useEffect(() => {
-      setHasSubscription(false);
       setSubscriptionLoading(false);
       setSubscriptionResolved(true);
-    }, [setHasSubscription, setSubscriptionLoading, setSubscriptionResolved]);
+    }, [setSubscriptionLoading, setSubscriptionResolved]);
     
     // Fallback context pro případ chyby
     const contextValue: SuperwallContextType = {
@@ -98,15 +92,13 @@ const SuperwallEnabledIntegration: React.FC<{ children: ReactNode }> = ({ childr
 
 // Komponenta pro prostředí bez Superwall (Expo Go, web)
 const SuperwallDisabledIntegration: React.FC<{ children: ReactNode }> = ({ children }: { children: ReactNode }) => {
-  const { setHasSubscription, setSubscriptionLoading, setSubscriptionResolved } = useAuth() as any;
+  const { setSubscriptionLoading, setSubscriptionResolved } = useAuth() as any;
 
   useEffect(() => {
-    // V prostředí bez Superwall NEPOVOLIT přístup - žádné falešné "OK"
-    setHasSubscription(false);
-    // CRITICAL: nastavit loading states aby se dostal k redirect (architect feedback)
+    // V prostředí bez Superwall - pouze resolve loading states
     setSubscriptionLoading(false);
     setSubscriptionResolved(true);
-  }, [setHasSubscription, setSubscriptionLoading, setSubscriptionResolved]);
+  }, [setSubscriptionLoading, setSubscriptionResolved]);
 
   const contextValue: SuperwallContextType = {
     isSupported: false,

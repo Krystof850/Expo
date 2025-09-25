@@ -23,16 +23,13 @@ const Protected: React.FC<ProtectedProps> = ({ children, placement = PAYWALL_PLA
     loading, 
     subscriptionLoading, 
     subscriptionResolved, 
-    canAccessProtected, 
     isAuthenticated, 
-    hasSubscription 
   } = useAuth();
   
   const { isSupported } = useSuperwall();
-  const [paywallTriggered, setPaywallTriggered] = useState(false);
   const [paywallDismissed, setPaywallDismissed] = useState(false);
 
-  // CRITICAL: Check auth first before subscription loading (architect feedback)
+  // CRITICAL: Check auth first before subscription loading
   if (!isAuthenticated) {
     return <Redirect href="/(auth)/sign-in" />;
   }
@@ -42,8 +39,8 @@ const Protected: React.FC<ProtectedProps> = ({ children, placement = PAYWALL_PLA
     return <CenteredSpinner text="Loading..." />;
   }
 
-  // CRITICAL: Handle unsupported environments (architect feedback)
-  if (subscriptionResolved && !isSupported && !hasSubscription) {
+  // CRITICAL: Handle unsupported environments
+  if (subscriptionResolved && !isSupported) {
     return (
       <View style={styles.centered}>
         <Text style={styles.unsupportedTitle}>Subscriptions not supported</Text>
@@ -55,26 +52,20 @@ const Protected: React.FC<ProtectedProps> = ({ children, placement = PAYWALL_PLA
     );
   }
 
-  // Oficiální Superwall hook pattern podle dokumentace
+  // OFICIÁLNÍ SUPERWALL PATTERN - hooks only for supported environments (architect feedback)
   const SuperwallPaywallTrigger: React.FC = () => {
-    const paywallResolverRef = useRef<((result: boolean) => void) | null>(null);
-    const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-    try {
-      const { usePlacement } = require('expo-superwall');
+    if (!isSupported) return null;
+    
+    const { usePlacement, useUser } = require('expo-superwall');
+    
+    // OFICIÁLNÍ ZPŮSOB: Číst subscription status přímo od Superwall SDK
+    const { subscriptionStatus } = useUser();
+    const hasActiveSubscription = subscriptionStatus?.status === 'ACTIVE';
       
       // Hook pro prezentaci paywall podle oficiální dokumentace
       const { registerPlacement } = usePlacement({
         onError: (error: any) => {
           console.log('[Protected] Paywall error:', error);
-          if (paywallResolverRef.current) {
-            paywallResolverRef.current(false);
-            paywallResolverRef.current = null;
-          }
-          if (timeoutRef.current) {
-            clearTimeout(timeoutRef.current);
-            timeoutRef.current = null;
-          }
         },
         onPresent: (info: any) => {
           console.log('[Protected] Paywall presented:', info);
@@ -82,144 +73,78 @@ const Protected: React.FC<ProtectedProps> = ({ children, placement = PAYWALL_PLA
         onDismiss: async (info: any, result: any) => {
           console.log('[Protected] Paywall dismissed:', info, result);
           
-          let purchaseSuccessful = false;
+          // OFICIÁLNÍ ZPŮSOB: Superwall SDK automaticky updatuje subscription status
+          // Nepotřebujeme custom logic - SDK komunikuje s Apple App Store automaticky
           
-          // Clear timeout
-          if (timeoutRef.current) {
-            clearTimeout(timeoutRef.current);
-            timeoutRef.current = null;
-          }
-          
-          // Check purchase/restore results podle dokumentace
           if (result?.purchased === true || result?.type === 'purchased') {
-            console.log('[Protected] Purchase successful:', result);
-            purchaseSuccessful = true;
+            console.log('[Protected] Purchase successful - Superwall SDK will automatically update subscription status');
             
-            // Sync podle dokumentace
+            // Sync podle dokumentace - ale Superwall SDK to dělá automaticky
             try {
               const { Superwall } = require('expo-superwall');
               await Superwall.syncPurchases?.().catch(() => {});
-              console.log('[Protected] Purchase synced successfully');
             } catch (error) {
-              console.log('[Protected] Purchase sync skipped (not available)');
+              console.log('[Protected] Purchase sync handled by SDK');
             }
           } else if (result?.type === 'restored') {
-            console.log('[Protected] Purchase restored:', result);  
-            purchaseSuccessful = true;
+            console.log('[Protected] Purchase restored - Superwall SDK will automatically update subscription status');
             
-            // Sync podle dokumentace
             try {
               const { Superwall } = require('expo-superwall');
               await Superwall.syncPurchases?.().catch(() => {});
-              console.log('[Protected] Restore synced successfully');
             } catch (error) {
-              console.log('[Protected] Restore sync skipped (not available)');
+              console.log('[Protected] Restore sync handled by SDK');
             }
           } else {
-            console.log('[Protected] Paywall dismissed without purchase:', result);
-          }
-
-          // Bridge result back to caller
-          if (paywallResolverRef.current) {
-            paywallResolverRef.current(purchaseSuccessful);
-            paywallResolverRef.current = null;
+            console.log('[Protected] Paywall dismissed without purchase');
+            setPaywallDismissed(true);
           }
         },
       });
 
-      // Oficiální presentPaywall podle dokumentace
-      const presentPaywall = useCallback(async (): Promise<boolean> => {
-        console.log('[Protected] Presenting paywall with placement:', placement);
-        
-        return new Promise<boolean>((resolve) => {
-          paywallResolverRef.current = resolve;
-          
-          // Timeout safeguard
-          timeoutRef.current = setTimeout(() => {
-            if (paywallResolverRef.current) {
-              console.log('[Protected] Paywall timeout - resolving false');
-              paywallResolverRef.current(false);
-              paywallResolverRef.current = null;
-            }
-          }, 60000); // 60 second timeout
-          
-          try {
-            // Oficiální registerPlacement pattern podle dokumentace
-            registerPlacement({
-              placement,
-              feature() {
-                console.log('[Protected] Premium feature unlocked!');
-                // Immediate resolve když už má subscription
-                if (timeoutRef.current) {
-                  clearTimeout(timeoutRef.current);
-                  timeoutRef.current = null;
-                }
-                resolve(true);
-                paywallResolverRef.current = null;
-              }
-            });
-            
-            console.log('[Protected] Placement registered successfully');
-            
-          } catch (error: any) {
-            console.log('[Protected] Error presenting paywall:', error);
-            if (timeoutRef.current) {
-              clearTimeout(timeoutRef.current);
-              timeoutRef.current = null;
-            }
-            resolve(false);
-            paywallResolverRef.current = null;
-          }
-        });
-      }, [registerPlacement, placement]);
-
-      // Trigger paywall once pro uživatele bez subscription
+      // OFICIÁLNÍ PATTERN: Pokud nemá subscription, zaregistruj placement
+      const placementRegisteredRef = useRef(false);
       useEffect(() => {
-        if (subscriptionResolved && isAuthenticated && !hasSubscription && !paywallTriggered && !paywallDismissed && isSupported) {
-          console.log('[Protected] User needs subscription - triggering paywall:', placement);
+        if (!hasActiveSubscription && !paywallDismissed && isSupported && !placementRegisteredRef.current) {
+          console.log('[Protected] User needs subscription - registering placement:', placement);
+          console.log('[Protected] Current Superwall subscription status:', subscriptionStatus?.status);
           
-          setPaywallTriggered(true);
+          placementRegisteredRef.current = true;
           
-          presentPaywall()
-            .then((success) => {
-              console.log('[Protected] Paywall result:', success);
-              if (!success) {
-                // Set dismissed state instead of auto-retry (architect: stop re-trigger loop)
-                setPaywallDismissed(true);
-              }
-            })
-            .catch((error) => {
-              console.error('[Protected] Error presenting paywall:', error);
-              // Set dismissed state při error
-              setPaywallDismissed(true);
-            })
-            .finally(() => {
-              setPaywallTriggered(false);
-            });
+          // OFICIÁLNÍ ZPŮSOB: registerPlacement automaticky rozhodne, zda zobrazit paywall
+          const unregister = registerPlacement({
+            placement,
+            feature() {
+              console.log('[Protected] Premium feature unlocked by Superwall SDK!');
+              // Superwall SDK automaticky updatoval subscription status
+            }
+          });
+          
+          // Cleanup function (architect feedback)
+          return () => {
+            if (typeof unregister === 'function') {
+              unregister();
+            }
+            placementRegisteredRef.current = false;
+          };
         }
-      }, [subscriptionResolved, isAuthenticated, hasSubscription, paywallTriggered, paywallDismissed, isSupported, presentPaywall]);
+      }, [hasActiveSubscription, paywallDismissed, isSupported, placement, subscriptionStatus, registerPlacement]);
+
+      // OFICIÁLNÍ ZPŮSOB: Pokud má active subscription, zobraz obsah
+      if (hasActiveSubscription) {
+        return <>{children}</>;
+      }
 
       return null;
-
-    } catch (error) {
-      console.warn('⚠️ Superwall hooks not available:', error);
-      return null;
-    }
   };
 
-  // Manual retry handler (architect: user-triggered retry instead of auto-loop)
+  // Manual retry handler pro dismissed paywall
   const handleRetryPaywall = () => {
     setPaywallDismissed(false);
-    setPaywallTriggered(false);
   };
 
-  // Pokud má subscription, zobraz obsah
-  if (hasSubscription) {
-    return <>{children}</>;
-  }
-
-  // Show dismissed state with retry option (architect: prevent auto re-trigger loop)
-  if (paywallDismissed && !hasSubscription) {
+  // Show dismissed state with retry option
+  if (paywallDismissed) {
     return (
       <View style={styles.centered}>
         <Text style={styles.subscriptionTitle}>Subscription Required</Text>
@@ -236,11 +161,11 @@ const Protected: React.FC<ProtectedProps> = ({ children, placement = PAYWALL_PLA
     );
   }
 
-  // Render paywall trigger component podle oficiální dokumentace
+  // Render oficiální Superwall pattern
   return (
     <>
       <SuperwallPaywallTrigger />
-      <CenteredSpinner text={paywallTriggered ? "Loading paywall..." : "Checking subscription..."} />
+      <CenteredSpinner text="Checking subscription..." />
     </>
   );
 };
