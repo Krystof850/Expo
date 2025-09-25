@@ -2,7 +2,8 @@ import React, { useEffect, useState, useRef } from "react";
 import { Redirect } from "expo-router";
 import { useAuth } from "../context/AuthContext";
 import { useSuperwall } from "./SuperwallIntegration";
-import { ActivityIndicator, View } from "react-native";
+import { ActivityIndicator, View, Text, TouchableOpacity } from "react-native";
+import { PAYWALL_PLACEMENT } from "../constants/paywall";
 
 // Komponenta pro monitoring subscription v chráněné zóně
 const ProtectedWithMonitoring: React.FC<React.PropsWithChildren> = ({ children }) => {
@@ -54,7 +55,7 @@ const ProtectedWithMonitoring: React.FC<React.PropsWithChildren> = ({ children }
   useEffect(() => {
     if (subscriptionLost && !hasSubscription) {
       console.log('[SUBSCRIPTION-MONITOR] Presenting paywall for expired subscription');
-      presentPaywall('zario-template-3a85-2025-09-10')
+      presentPaywall(PAYWALL_PLACEMENT)
         .then((success) => {
           console.log('[SUBSCRIPTION-MONITOR] Paywall result:', success);
           if (success) {
@@ -88,32 +89,49 @@ export const Protected: React.FC<React.PropsWithChildren> = ({ children }) => {
   // Hard paywall state - bez možnosti obcházení
   const [paywallInFlight, setPaywallInFlight] = useState(false);
   const [paywallRetryTick, setPaywallRetryTick] = useState(0);
+  const [retryCount, setRetryCount] = useState(0);
+  const MAX_RETRY_ATTEMPTS = 5;
 
-  // Hard paywall - Present when no subscription, retry after dismissal
+  // Hard paywall - Present when no subscription, retry after dismissal with limit
   useEffect(() => {
     const showPaywall = async () => {
-      if (isAuthenticated && !hasSubscription && !subscriptionLoading && !paywallInFlight) {
-        console.log('[HARD-PAYWALL] No subscription detected - presenting hard paywall');
+      if (isAuthenticated && !hasSubscription && !subscriptionLoading && !paywallInFlight && retryCount < MAX_RETRY_ATTEMPTS) {
+        console.log('[HARD-PAYWALL] No subscription detected - presenting hard paywall (attempt', retryCount + 1, 'of', MAX_RETRY_ATTEMPTS, ')');
         
         setPaywallInFlight(true);
         
         try {
-          const success = await presentPaywall('zario-template-3a85-2025-09-10');
+          const success = await presentPaywall(PAYWALL_PLACEMENT);
           console.log('[HARD-PAYWALL] Paywall result:', success);
           
           if (!success) {
-            // Paywall was dismissed without purchase - trigger retry
-            console.log('[HARD-PAYWALL] Paywall dismissed - will retry');
-            setTimeout(() => {
-              setPaywallRetryTick(prev => prev + 1);
-            }, 1000); // Retry po 1 sekundě
+            // Paywall was dismissed without purchase - trigger retry if under limit
+            const nextRetryCount = retryCount + 1;
+            setRetryCount(nextRetryCount);
+            
+            if (nextRetryCount < MAX_RETRY_ATTEMPTS) {
+              console.log('[HARD-PAYWALL] Paywall dismissed - will retry (', nextRetryCount, 'of', MAX_RETRY_ATTEMPTS, ')');
+              setTimeout(() => {
+                setPaywallRetryTick(prev => prev + 1);
+              }, 1000); // Retry po 1 sekundě
+            } else {
+              console.log('[HARD-PAYWALL] Maximum retry attempts reached');
+            }
+          } else {
+            // Reset retry count on success
+            setRetryCount(0);
           }
         } catch (error) {
           console.error('[HARD-PAYWALL] Error presenting paywall:', error);
-          // Retry po error
-          setTimeout(() => {
-            setPaywallRetryTick(prev => prev + 1);
-          }, 2000);
+          // Retry po error if under limit
+          const nextRetryCount = retryCount + 1;
+          setRetryCount(nextRetryCount);
+          
+          if (nextRetryCount < MAX_RETRY_ATTEMPTS) {
+            setTimeout(() => {
+              setPaywallRetryTick(prev => prev + 1);
+            }, 2000);
+          }
         } finally {
           setPaywallInFlight(false);
         }
@@ -121,7 +139,7 @@ export const Protected: React.FC<React.PropsWithChildren> = ({ children }) => {
     };
 
     showPaywall();
-  }, [isAuthenticated, hasSubscription, subscriptionLoading, paywallInFlight, paywallRetryTick]);
+  }, [isAuthenticated, hasSubscription, subscriptionLoading, paywallInFlight, paywallRetryTick, retryCount, MAX_RETRY_ATTEMPTS]);
 
   // Show loading while checking auth or subscription status
   if (loading || subscriptionLoading) {
@@ -149,6 +167,36 @@ export const Protected: React.FC<React.PropsWithChildren> = ({ children }) => {
   // HARD PAYWALL: Only authenticated users WITH subscription can access
   if (canAccessProtected) {
     return <ProtectedWithMonitoring>{children}</ProtectedWithMonitoring>;
+  }
+
+  // Fallback screen when max retry attempts reached
+  if (isAuthenticated && !hasSubscription && !paywallInFlight && retryCount >= MAX_RETRY_ATTEMPTS) {
+    console.log('[HARD-PAYWALL] Max retry attempts reached - showing fallback screen');
+    return (
+      <View style={{ flex: 1, alignItems: "center", justifyContent: "center", padding: 20 }}>
+        <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 16, textAlign: 'center' }}>
+          Nemohli jsme načíst paywall. Zkuste to znovu.
+        </Text>
+        <TouchableOpacity
+          style={{
+            backgroundColor: '#2563eb',
+            paddingHorizontal: 24,
+            paddingVertical: 12,
+            borderRadius: 8,
+            marginTop: 8
+          }}
+          onPress={() => {
+            console.log('[HARD-PAYWALL] Manual retry requested - resetting counter');
+            setRetryCount(0);
+            setPaywallRetryTick(prev => prev + 1);
+          }}
+        >
+          <Text style={{ color: 'white', fontSize: 16, fontWeight: '600' }}>
+            Zkusit znovu
+          </Text>
+        </TouchableOpacity>
+      </View>
+    );
   }
 
   // No subscription = Hard paywall (no bypass allowed)

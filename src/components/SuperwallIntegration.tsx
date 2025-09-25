@@ -2,6 +2,7 @@ import * as React from 'react';
 import { createContext, useContext, useEffect, ReactNode } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { isSuperwallSupported } from '../utils/environment';
+import { PAYWALL_PLACEMENT } from '../constants/paywall';
 
 // Typ pro Superwall subscription context
 interface SuperwallContextType {
@@ -42,7 +43,7 @@ const SuperwallEnabledIntegration: React.FC<{ children: ReactNode }> = ({ childr
       // Mapuj Superwall subscription status na boolean hodnotu pro AuthContext
       // subscriptionStatus je objekt s vlastností status: {"status": "ACTIVE", "entitlements": [...]}
       const statusValue = subscriptionStatus?.status;
-      const hasActiveSubscription = ['ACTIVE','TRIAL','GRACE_PERIOD','ON_HOLD'].includes(statusValue);
+      const hasActiveSubscription = statusValue === 'ACTIVE' || statusValue === 'TRIAL';
       
       console.log('[SuperwallIntegration] Setting hasSubscription to:', hasActiveSubscription, 'based on status:', statusValue);
       setHasSubscription(hasActiveSubscription);
@@ -131,7 +132,7 @@ const SuperwallEnabledIntegration: React.FC<{ children: ReactNode }> = ({ childr
     }, [user?.uid]);
 
     // ROBUST paywall presentation with ATOMIC lock
-    const presentPaywall = React.useCallback(async (placement = 'zario-template-3a85-2025-09-10'): Promise<boolean> => {
+    const presentPaywall = React.useCallback(async (placement = PAYWALL_PLACEMENT): Promise<boolean> => {
       // ATOMIC check: return existing promise if already presenting
       if (presentingRef.current) {
         console.log('[SuperwallIntegration] Paywall already presenting, returning existing promise...');
@@ -176,8 +177,8 @@ const SuperwallEnabledIntegration: React.FC<{ children: ReactNode }> = ({ childr
       const prev = prevStatusRef.current;
       const curr = subscriptionStatus?.status;
 
-      const wasActive = prev ? ['ACTIVE','TRIAL','GRACE_PERIOD','ON_HOLD'].includes(prev) : false;
-      const isActive  = curr ? ['ACTIVE','TRIAL','GRACE_PERIOD','ON_HOLD'].includes(curr) : false;
+      const wasActive = prev ? (prev === 'ACTIVE' || prev === 'TRIAL') : false;
+      const isActive  = curr ? (curr === 'ACTIVE' || curr === 'TRIAL') : false;
 
       if (wasActive && !isActive) {
         // user ztratil entitlement → vyvolej paywall
@@ -189,7 +190,7 @@ const SuperwallEnabledIntegration: React.FC<{ children: ReactNode }> = ({ childr
 
     const contextValue: SuperwallContextType = {
       presentPaywall,
-      isSubscribed: subscriptionStatus?.status ? ['ACTIVE','TRIAL','GRACE_PERIOD','ON_HOLD'].includes(subscriptionStatus.status) : false,
+      isSubscribed: subscriptionStatus?.status ? (subscriptionStatus.status === 'ACTIVE' || subscriptionStatus.status === 'TRIAL') : false,
       subscriptionStatus: subscriptionStatus?.status || 'UNKNOWN'
     };
 
