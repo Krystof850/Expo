@@ -23,7 +23,7 @@ import LightningOrb from '../../components/LightningOrb';
 import FireOrb from '../../components/FireOrb';
 import WaveOrb from '../../components/WaveOrb';
 import NatureOrb from '../../components/NatureOrb';
-import { Protected } from '../../src/components/Protected';
+import Protected from '../../src/components/Protected';
 
 const { width } = Dimensions.get('window');
 
