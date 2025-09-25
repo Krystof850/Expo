@@ -28,8 +28,7 @@ const ConditionalSuperwallProvider: React.FC<ConditionalSuperwallProviderProps> 
     const { SuperwallProvider, CustomPurchaseControllerProvider, Superwall } = require('expo-superwall');
     // Harden API key retrieval with fallbacks (architect feedback)
     const superwallApiKey = process.env.EXPO_PUBLIC_SUPERWALL_API_KEY || 
-                           Constants.expoConfig?.extra?.SUPERWALL_API_KEY || 
-                           Constants.manifest?.extra?.SUPERWALL_API_KEY;
+                           Constants.expoConfig?.extra?.SUPERWALL_API_KEY;
     
     console.log('[Superwall] Using API key prefix:', superwallApiKey?.slice(0, 8));
     
