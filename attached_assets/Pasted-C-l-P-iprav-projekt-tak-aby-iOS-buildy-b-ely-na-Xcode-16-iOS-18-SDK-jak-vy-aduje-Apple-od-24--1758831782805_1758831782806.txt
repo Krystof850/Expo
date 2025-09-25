@@ -1,0 +1,67 @@
+Cíl: Připrav projekt tak, aby iOS buildy běžely na Xcode 16 (iOS 18 SDK), jak vyžaduje Apple od 24. 4. 2025. Proveď pouze nezbytné změny toolchainu a konfigurace buildu.
+
+Požadavky Applu (shrnutí): Build musí být sestaven pomocí Xcode 16 / iOS 18 SDK. Není nutné měnit deploymentTarget – může zůstat např. 15.1.
+
+Úkoly
+
+Zkontroluj a případně upgraduj Expo SDK na nejbližší stabilní verzi, která na EAS používá Xcode 16 / iOS 18 SDK (např. Expo SDK 51+).
+
+Použij npx expo upgrade a proveď minimální nutné změny v package.json a případných autogenerovaných config souborech.
+
+Neprováděj breaking refaktoring kódu; pokud upgrade nabízí volitelné migrace, přeskoč vše, co není nutné pro build.
+
+EAS build image: v eas.json u iOS profilů (zejména production) nastav/ověř:
+
+"ios": { "image": "latest" }
+
+
+Pokud je image už „latest“, ponech.
+
+Nesahej na resourceClass, node, ani environment proměnné.
+
+NEUPRAVUJ deploymentTarget:
+
+V app.config.ts/app.json nech "deploymentTarget": "15.1" (nebo stávající hodnotu).
+
+V žádném souboru nezvyšuj minimální iOS verzi na 18.
+
+Nesahej na: bundle identifiers, entitlementy, Superwall/Firebase klíče, IAP konfigurace, UI ani logiku.
+
+Build ověření: spusť zkušební iOS build přes EAS pro production profil. Po buildu z logů vytěž:
+
+Verzi Xcode = 16.x
+
+SDK = iOS 18.x
+
+Potvrď, že MinimumOSVersion v artefaktu odpovídá původnímu deployment targetu (např. 15.1).
+
+Výstup:
+
+Shrnutí provedených změn (balíčky/verze).
+
+Odkaz na EAS build + citace řádků z logu dokazujících Xcode 16 / iOS 18 SDK.
+
+Potvrzení, že deploymentTarget zůstal beze změny.
+
+„Do-not-touch“ seznam
+
+Neměň deploymentTarget.
+
+Neměň žádné runtime klíče, logiku paywallu, ani permissions.
+
+Neprováděj prebuild/eject, pokud to není vyžadováno upgradem.
+
+Neinstaluj experimentální verze knihoven.
+
+QC / Akceptační kritéria
+
+EAS logy jasně ukazují Xcode 16 a iOS 18 SDK.
+
+Aplikace se úspěšně sestaví v profilu production.
+
+deploymentTarget nezměněn.
+
+Žádné jiné, nadbytečné úpravy v repo.
+
+
+rekni jakmile to dokoncis
