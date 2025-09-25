@@ -34,7 +34,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   ios: {
     ...(config.ios ?? {}),
     supportsTablet: false,
-    requireFullScreen: false,
+    requireFullScreen: true,
     bundleIdentifier: "com.unloopapp.dev",
     infoPlist: {
       ...(config.ios?.infoPlist ?? {}),
@@ -42,7 +42,12 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       CFBundleDisplayName: "Unoop",
       LSApplicationCategoryType: "public.app-category.productivity",
       UIRequiredDeviceCapabilities: ['arm64'],
-      UISupportedInterfaceOrientations: ['UIInterfaceOrientationPortrait', 'UIInterfaceOrientationPortraitUpsideDown'],
+      UISupportedInterfaceOrientations: [
+        'UIInterfaceOrientationPortrait',
+        'UIInterfaceOrientationPortraitUpsideDown'
+      ],
+      // Ujisti se, že pro iPad nebudou žádné orientace generovány:
+      'UISupportedInterfaceOrientations~ipad': [],
       UIBackgroundModes: [],
     },
     entitlements: {

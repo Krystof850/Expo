@@ -1,0 +1,99 @@
+PROMPT PRO REPL.IT (zkopíruj celý blok):
+
+Cíl: Udělej aplikaci dostupnou pouze pro iPhone (zakázat iPad). Uprav konfiguraci a proveď kontroly, že se do výsledného Info.plist propíše pouze UIDeviceFamily = [1] (iPhone).
+
+Kroky:
+
+app.config.ts – povinné změny a čištění
+
+Otevři app.config.ts a v sekci ios nastav/ověř:
+
+supportsTablet: false ✅
+
+Přidej requireFullScreen: true (pro jistotu vypnutí multitaskingu na iPadu, pokud by se nějak dostal ke spuštění).
+
+V infoPlist odeber jakékoli iPad-specifické klíče, případně přidej prázdné pole pro iPad orientace, aby se nic negenerovalo:
+
+infoPlist: {
+  ITSAppUsesNonExemptEncryption: false,
+  CFBundleDisplayName: "Unoop",
+  LSApplicationCategoryType: "public.app-category.productivity",
+  UIRequiredDeviceCapabilities: ['arm64'],
+  UISupportedInterfaceOrientations: [
+    'UIInterfaceOrientationPortrait',
+    'UIInterfaceOrientationPortraitUpsideDown'
+  ],
+  // Ujisti se, že pro iPad nebudou žádné orientace generovány:
+  'UISupportedInterfaceOrientations~ipad': [],
+},
+
+
+Ujisti se, že nikde jinde v projektu nepřepisujeme supportsTablet (žádné duplicitní configy).
+
+Smaž nebo přejmenuj app.json.backup (nebo z něj odstraň supportsTablet: true), aby ho EAS ani nástroje omylem nenačetly:
+
+Pokud soubor ponecháš, změň v něm supportsTablet na false a přidej komentář // backup file – not used.
+
+Android – beze změny
+
+Nic neupravuj; cíl je omezit jen iOS na iPhone.
+
+Ověření statické konfigurace (introspekce)
+
+Spusť:
+
+npx expo config --type introspect > introspect.json
+
+V souboru introspect.json ověř:
+
+expo.ios.supportsTablet === false
+
+mods.ios.infoPlist.UIDeviceFamily existuje a je [1] (jen iPhone)
+
+mods.ios.infoPlist.UISupportedInterfaceOrientations~ipad je prázdné pole [] nebo není přítomno
+
+Žádná jiná konfigurace nepřidává iPad rodinu zařízení.
+
+Kontrola generovaného iOS projektu (bez Xcode)
+
+Spusť lokální prebuild (jen pro kontrolu šablony; změny necommituj):
+
+git stash -q --include-untracked || true
+
+npx expo prebuild --platform ios --no-install
+
+Otevři ios/*/*-Info.plist a ověř:
+
+UIDeviceFamily obsahuje jen <integer>1</integer>
+
+Není přítomno žádné iPad-specifické orientation pole
+
+Poté vrať repo do čistého stavu:
+
+git reset --hard HEAD && git clean -fd && git stash pop || true
+
+Build metadata
+
+V eas.json nic neměň, jen ověř, že není žádné skriptování, které by generovalo alternativní app.json.
+
+Zvyšte build number až když bude potřeba odeslat novou verzi (neprováděj teď).
+
+Report
+
+Vrať mi krátký report:
+
+Zda supportsTablet: false je jediná efektivní hodnota v projektu.
+
+Výstřižek z introspect.json s UIDeviceFamily.
+
+Potvrzení, že app.json.backup už nemůže ovlivnit build (smazán/opraven).
+
+Screenshot/výpis z *-Info.plist (pokud prebuild proběhl), kde je UIDeviceFamily = (1).
+
+Poznámky:
+
+Cílem je, aby App Store Connect viděl iPhone-only appku. V Expo to řídí supportsTablet: false → to má vygenerovat UIDeviceFamily = (1).
+
+requireFullScreen: true je dodatečné doporučení proti split-view, ale klíčová je rodina zařízení (UIDeviceFamily).
+
+Nedotýkej se business logiky, UI ani Superwall; jde čistě o device targeting.
